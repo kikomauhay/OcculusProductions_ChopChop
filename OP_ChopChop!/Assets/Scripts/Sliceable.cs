@@ -5,10 +5,10 @@ using UnityEngine;
 public class Sliceable : MonoBehaviour
 {
     [SerializeField]
-    GameObject ingredientPrefab;
+    GameObject currentPrefab;
 
     [SerializeField]
-    GameObject finishedPrefab;
+    GameObject nextPrefab;
 
     [SerializeField]
     GameObject sharpObject;
@@ -41,18 +41,20 @@ public class Sliceable : MonoBehaviour
 
     void Sliced()
     {
-        if(ingredientPrefab != null)
+        if(currentPrefab != null)
         {
             // Get pos and rotation of prefab and then destroy
-            Vector3 currentPosition = ingredientPrefab.transform.position;
-            Quaternion currentRotation = ingredientPrefab.transform.rotation;
+            Vector3 currentPosition = currentPrefab.transform.position;
+            Quaternion currentRotation = currentPrefab.transform.rotation;
 
-            Destroy(ingredientPrefab);
+            Destroy(currentPrefab);
 
             // insert vfx here
 
             //Instantiate new prefab with the pos and rot values from before
             Debug.Log("Sliced Ingredient has spawned");
+            
+            Instantiate(nextPrefab, currentPosition, currentRotation);
 
         }
     }

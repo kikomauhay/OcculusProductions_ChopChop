@@ -6,8 +6,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Moldable : MonoBehaviour
 {
-    public XRController left;
-    public XRController right;
+    public ActionBasedController left;
+    public ActionBasedController right;
 
     [SerializeField]
     GameObject perfectMold;
@@ -15,24 +15,32 @@ public class Moldable : MonoBehaviour
     GameObject overMold;
 
     private float totalGripValue = 0f;
-    private float minThreshold = 2.5f;
-    private float maxThreshold = 3f;
-
-    private GameObject unmoldedRice;
+    private float minThreshold = 30f;
+    private float maxThreshold = 35f;
 
     // Update is called once per frame
     void Update()
     {
-        totalGripValue = 0f;
+        
         AddGrip();
 
         if(totalGripValue >= minThreshold && totalGripValue < maxThreshold)
         {
             //delete current prefab and then instantiate perfect mold here
+            Vector3 currentPosition = this.transform.position;
+            Quaternion currentRotation = this.transform.rotation;
+
+            Destroy(this.gameObject);
+            Instantiate(perfectMold,currentPosition,currentRotation);
         }
         else if (totalGripValue >= maxThreshold)
         {
             //delete current prefab and then instantiate perfect mold here
+            Vector3 currentPosition = this.transform.position;
+            Quaternion currentRotation = this.transform.rotation;
+
+            Destroy(this.gameObject);
+            Instantiate(overMold,currentPosition,currentRotation);
         }
     }
 
@@ -40,19 +48,20 @@ public class Moldable : MonoBehaviour
     {
         if(CheckGrip(left))
         {
+            Debug.Log("left hands is gripping");
             GetGripValue(right);
             Debug.Log("Total Grip Value: " + totalGripValue);
         }
     }
 
-    private bool CheckGrip(XRController controller)
+    private bool CheckGrip(ActionBasedController controller)
     {
-        return controller.inputDevice.TryGetFeatureValue(CommonUsages.gripButton, out bool CheckGrip) && CheckGrip;
+        return controller.selectAction.action.ReadValue<float>() > 0.5f;
     }
 
-    private float GetGripValue(XRController controller)
+    private float GetGripValue(ActionBasedController controller)
     {
-        controller.inputDevice.TryGetFeatureValue(CommonUsages.grip, out float gripValue);
+        float gripValue = controller.selectAction.action.ReadValue<float>();
         Debug.Log("Current Grip Value: " + gripValue);
         totalGripValue += gripValue;
         return gripValue;
