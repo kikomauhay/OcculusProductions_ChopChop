@@ -10,7 +10,7 @@ public class Moldable : MonoBehaviour
     public ActionBasedController right;
 
     [SerializeField]
-    GameObject perfectMold;
+    GameObject perfectMold; // bakit hindi sumusunod sa coding standard :feelsbadman:
     [SerializeField]
     GameObject overMold;
 
