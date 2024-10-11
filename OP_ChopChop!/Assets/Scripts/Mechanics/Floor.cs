@@ -8,13 +8,14 @@ public class Floor : MonoBehaviour
     {
         if (other.GetComponent<ResetPos>() != null)
         {
-            DelayedReset(other);
+            Debug.Log("Detected");
+            StartCoroutine(IDelayedReset(other));
         }
     }
 
-    private IEnumerator DelayedReset(Collider other)
+    private IEnumerator IDelayedReset(Collider other)
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(5);
         Destroy(other.gameObject);
     }
 }

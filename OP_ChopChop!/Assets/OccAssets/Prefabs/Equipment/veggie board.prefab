@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6726418535248261051}
   - component: {fileID: 1932813176853770491}
   - component: {fileID: 1644753891917323528}
+  - component: {fileID: 7858306195515867307}
   m_Layer: 0
   m_Name: veggie_board
   m_TagString: Untagged
@@ -83,6 +84,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7858306195515867307
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927187781038470485}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5267465374568193978, guid: 753bab0d8fb728e4195e4148e871af20, type: 3}
 --- !u!1 &7157361182239818515
 GameObject:
   m_ObjectHideFlags: 0
