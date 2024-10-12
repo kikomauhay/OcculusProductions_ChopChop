@@ -18,7 +18,7 @@ public class Sliceable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Chop Counter: " + chopCounter);
+        //Debug.Log("Chop Counter: " + chopCounter);
         if (chopCounter == 5)
         {
             Sliced();
@@ -52,7 +52,7 @@ public class Sliceable : MonoBehaviour
             // insert vfx here
 
             //Instantiate new prefab with the pos and rot values from before
-            Debug.Log("Sliced Ingredient has spawned");
+            //Debug.Log("Sliced Ingredient has spawned");
             
             Instantiate(nextPrefab, currentPosition, currentRotation);
 

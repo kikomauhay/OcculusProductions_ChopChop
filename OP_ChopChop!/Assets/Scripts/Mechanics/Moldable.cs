@@ -10,7 +10,7 @@ public class Moldable : MonoBehaviour
     public ActionBasedController right;
 
     [SerializeField]
-    GameObject perfectMold; // bakit hindi sumusunod sa coding standard :feelsbadman:
+    GameObject perfectMold;
     [SerializeField]
     GameObject overMold;
 
@@ -19,19 +19,19 @@ public class Moldable : MonoBehaviour
     private float maxThreshold = 35f;
 
     // Update is called once per frame
-    void Update()
+
+    private void OnTriggerEnter(Collider other)
     {
-        
         AddGrip();
 
-        if(totalGripValue >= minThreshold && totalGripValue < maxThreshold)
+        if (totalGripValue >= minThreshold && totalGripValue < maxThreshold)
         {
             //delete current prefab and then instantiate perfect mold here
             Vector3 currentPosition = this.transform.position;
             Quaternion currentRotation = this.transform.rotation;
 
             Destroy(this.gameObject);
-            Instantiate(perfectMold,currentPosition,currentRotation);
+            Instantiate(perfectMold, currentPosition, currentRotation);
         }
         else if (totalGripValue >= maxThreshold)
         {
@@ -40,7 +40,7 @@ public class Moldable : MonoBehaviour
             Quaternion currentRotation = this.transform.rotation;
 
             Destroy(this.gameObject);
-            Instantiate(overMold,currentPosition,currentRotation);
+            Instantiate(overMold, currentPosition, currentRotation);
         }
     }
 
