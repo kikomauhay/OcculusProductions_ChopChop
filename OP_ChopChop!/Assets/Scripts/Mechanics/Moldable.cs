@@ -15,32 +15,27 @@ public class Moldable : MonoBehaviour
     GameObject overMold;
 
     private float totalGripValue = 0f;
-    private float minThreshold = 30f;
-    private float maxThreshold = 35f;
+    private float minThreshold = 3f;
+    private float maxThreshold = 3.2f;
+    private bool IsMolded = false;
 
-    // Update is called once per frame
+    private void Update()
+    {
+        AddGrip();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        AddGrip();
+        if (IsMolded)
+            return;
 
         if (totalGripValue >= minThreshold && totalGripValue < maxThreshold)
         {
-            //delete current prefab and then instantiate perfect mold here
-            Vector3 currentPosition = this.transform.position;
-            Quaternion currentRotation = this.transform.rotation;
-
-            Destroy(this.gameObject);
-            Instantiate(perfectMold, currentPosition, currentRotation);
+            MoldInstantiate(perfectMold);
         }
         else if (totalGripValue >= maxThreshold)
         {
-            //delete current prefab and then instantiate perfect mold here
-            Vector3 currentPosition = this.transform.position;
-            Quaternion currentRotation = this.transform.rotation;
-
-            Destroy(this.gameObject);
-            Instantiate(overMold, currentPosition, currentRotation);
+            MoldInstantiate(overMold);
         }
     }
 
@@ -63,7 +58,17 @@ public class Moldable : MonoBehaviour
     {
         float gripValue = controller.selectAction.action.ReadValue<float>();
         Debug.Log("Current Grip Value: " + gripValue);
-        totalGripValue += gripValue;
+        totalGripValue += gripValue * Time.deltaTime * 100f;
         return gripValue;
+    }
+
+    private void MoldInstantiate(GameObject _moldable)
+    {
+        Vector3 currentPosition = this.transform.position;
+        Quaternion currentRotation = this.transform.rotation;
+
+        Destroy(this.gameObject);
+        Instantiate(_moldable, currentPosition, currentRotation);
+        IsMolded = true;
     }
 }
