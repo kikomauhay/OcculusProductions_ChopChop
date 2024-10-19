@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8441096989708143237}
   - component: {fileID: 7640121686557230715}
   - component: {fileID: 5202725822218256598}
+  - component: {fileID: 5275697829461642703}
   m_Layer: 0
   m_Name: ref_thin_handle
   m_TagString: Untagged
@@ -93,8 +94,21 @@ MeshCollider:
   m_GameObject: {fileID: 6958917931121512606}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -7427532359604102603, guid: 1e98ccabe4c8e084c89a51ed52c474b0, type: 3}
+--- !u!65 &5275697829461642703
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6958917931121512606}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.04279913, y: 0.1648053, z: 0.024692383}
+  m_Center: {x: -0.000000014901161, y: 0, z: 0.00000002142042}

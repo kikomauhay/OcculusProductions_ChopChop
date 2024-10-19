@@ -18,30 +18,42 @@ public class Moldable : MonoBehaviour
     private float minThreshold = 3f;
     private float maxThreshold = 3.2f;
     private bool IsMolded = false;
+    private bool IsHoldingRice = false;
 
     private void Update()
     {
+        if (IsHoldingRice)
+        {
+            Debug.Log("molding");
+            return;
+        }
+
         AddGrip();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (IsMolded)
-            return;
+        if(other.GetComponent<Rice>())
+        {
+            Debug.Log("Trigger On");
+            if (IsMolded)
+                return;
+            IsHoldingRice = true;
 
-        if (totalGripValue >= minThreshold && totalGripValue < maxThreshold)
-        {
-            MoldInstantiate(perfectMold);
-        }
-        else if (totalGripValue >= maxThreshold)
-        {
-            MoldInstantiate(overMold);
+            if (totalGripValue >= minThreshold && totalGripValue < maxThreshold)
+            {
+                MoldInstantiate(perfectMold);
+            }
+            else if (totalGripValue >= maxThreshold)
+            {
+                MoldInstantiate(overMold);
+            }
         }
     }
 
     void AddGrip()
     {
-        if(CheckGrip(left))
+        if(CheckGrip(left) && CheckGrip(right))
         {
             Debug.Log("left hands is gripping");
             GetGripValue(right);
