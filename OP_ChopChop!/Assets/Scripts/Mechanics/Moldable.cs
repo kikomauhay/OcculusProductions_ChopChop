@@ -15,18 +15,15 @@ public class Moldable : MonoBehaviour
     GameObject overMold;
 
     private float totalGripValue = 0f;
-    private float minThreshold = 3f;
-    private float maxThreshold = 3.2f;
+    private float minThreshold = 0.5f;
+    private float maxThreshold = 1f;
     private bool IsMolded = false;
     private bool IsHoldingRice = false;
 
     private void Update()
     {
-        if (IsHoldingRice)
-        {
-            Debug.Log("molding");
+        if (!IsHoldingRice)
             return;
-        }
 
         AddGrip();
     }
@@ -43,10 +40,12 @@ public class Moldable : MonoBehaviour
             if (totalGripValue >= minThreshold && totalGripValue < maxThreshold)
             {
                 MoldInstantiate(perfectMold);
+                IsMolded = true;
             }
             else if (totalGripValue >= maxThreshold)
             {
                 MoldInstantiate(overMold);
+                IsMolded = true;
             }
         }
     }
@@ -70,7 +69,7 @@ public class Moldable : MonoBehaviour
     {
         float gripValue = controller.selectAction.action.ReadValue<float>();
         Debug.Log("Current Grip Value: " + gripValue);
-        totalGripValue += gripValue * Time.deltaTime * 100f;
+        totalGripValue += gripValue * Time.deltaTime * 10f;
         return gripValue;
     }
 
@@ -81,6 +80,5 @@ public class Moldable : MonoBehaviour
 
         Destroy(this.gameObject);
         Instantiate(_moldable, currentPosition, currentRotation);
-        IsMolded = true;
     }
 }
