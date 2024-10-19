@@ -980,7 +980,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 697783741}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0bf296fc962d7184ab14ad1841598d5f, type: 3}
   m_Name: 
@@ -1054,7 +1054,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 697783741}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 919e39492806b334982b6b84c90dd927, type: 3}
   m_Name: 
@@ -2613,7 +2613,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 94
   m_CollisionDetection: 0
 --- !u!1 &1426292095 stripped
 GameObject:
@@ -3526,12 +3526,12 @@ HingeJoint:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719149036}
-  m_ConnectedBody: {fileID: 0}
+  m_ConnectedBody: {fileID: 1351610557}
   m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: -0.3, y: 0, z: -0.05}
+  m_Anchor: {x: -0.3, y: 0, z: 0}
   m_Axis: {x: -1, y: 90, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: -0.3, y: 0, z: -0.050000012}
   m_UseSpring: 0
   m_Spring:
     spring: 0
@@ -3545,7 +3545,7 @@ HingeJoint:
   m_UseLimits: 0
   m_Limits:
     min: 0
-    max: 0
+    max: 90
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0
@@ -4398,7 +4398,7 @@ HingeJoint:
   m_Anchor: {x: -0.3, y: 0, z: -0.05}
   m_Axis: {x: -1, y: 90, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: -0.56826717, y: 1.2430284, z: -0.66819334}
   m_UseSpring: 0
   m_Spring:
     spring: 0
