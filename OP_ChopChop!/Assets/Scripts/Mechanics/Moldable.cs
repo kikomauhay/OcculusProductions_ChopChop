@@ -40,12 +40,10 @@ public class Moldable : MonoBehaviour
             if (totalGripValue >= minThreshold && totalGripValue < maxThreshold)
             {
                 MoldInstantiate(perfectMold);
-                IsMolded = true;
             }
             else if (totalGripValue >= maxThreshold)
             {
                 MoldInstantiate(overMold);
-                IsMolded = true;
             }
         }
     }
@@ -75,6 +73,7 @@ public class Moldable : MonoBehaviour
 
     private void MoldInstantiate(GameObject _moldable)
     {
+        IsMolded = true;
         Vector3 currentPosition = this.transform.position;
         Quaternion currentRotation = this.transform.rotation;
 
