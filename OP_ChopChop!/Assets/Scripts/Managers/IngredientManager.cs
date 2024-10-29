@@ -13,36 +13,31 @@ using UnityEngine;
 
 public class IngredientManager : Singleton<IngredientManager>
 {
-    List<GameObject> _disposedFoods, _outsideIngredients;
-
-    public List<GameObject> TrashCan { get => _disposedFoods; }
-    public List<GameObject> Ingredients { get => _outsideIngredients; }
+    public static List<GameObject> DisposedFoods { get; private set; }
+    public static List<GameObject> OutsideIngredients { get; private set; }
 
     void Start()
     {
-        _disposedFoods = new List<GameObject>();
-        _outsideIngredients = new List<GameObject>();
+        DisposedFoods = new List<GameObject>();
+        OutsideIngredients = new List<GameObject>();
     }
 
-    public void AddIngredient(GameObject food)
-    {
-        _outsideIngredients.Add(food);
-    }
-
-    public void ThrowFood(GameObject food) 
-    {
-        _disposedFoods.Add(food);
-    } 
-
-    public void Reset() // used for restarting the game 
+    public void Reset() 
     { 
-        foreach (GameObject food in _disposedFoods) 
-            Destroy(food);
-
-        foreach (GameObject food in _outsideIngredients) 
-            Destroy(food);
+        if (DisposedFoods.Count > 0) 
+        {
+            foreach (GameObject food in DisposedFoods) 
+                Destroy(food);
         
-        _disposedFoods.Clear();
-        _outsideIngredients.Clear();
+            DisposedFoods.Clear();
+        }
+        
+        if (OutsideIngredients.Count > 0)
+        {
+            foreach (GameObject food in OutsideIngredients)
+                Destroy(food);
+
+            OutsideIngredients.Clear();
+        }
     }
 }
