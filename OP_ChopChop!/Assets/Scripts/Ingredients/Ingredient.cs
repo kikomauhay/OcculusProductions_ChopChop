@@ -6,26 +6,40 @@ public class Ingredient : MonoBehaviour
 {
     public Action OnRateChanged; // ED for UI changes later on
 
+    public IngredientStats Stats => _stats;
+
     [SerializeField] GameObject[] _prefabs; // different stages of the ingredient
     [SerializeField] IngredientStats _stats;
 
-    protected virtual void Start()
+    void Start()
     {
         name = _stats.name;
         CheckRate();
-        StartCoroutine(IDecay());
+        StartCoroutine(Decay());
     }
 
-    protected void CheckRate() 
+    public void ToggleProperStorage() 
+    { 
+        _stats.IsProperlyStored = !_stats.IsProperlyStored; 
+    }
+    public void ThrewInTheTrash() 
     {
-        if (_stats.FreshnessRate < 70)      _stats.Rating = FreshnessRating.EXPIRED;
+        _stats.IsTrashed = true;
+        _stats.FreshnessRate = 0;
+        CheckRate();
+    }
+    void CheckRate() 
+    {
+        if      (_stats.FreshnessRate < 70) _stats.Rating = FreshnessRating.EXPIRED;
         else if (_stats.FreshnessRate > 87) _stats.Rating = FreshnessRating.FRESH;
         else                                _stats.Rating = FreshnessRating.LESS_FRESH;
 
         OnRateChanged?.Invoke(); 
         // Debug.Log(_stats.Rating);
     }
-    protected IEnumerator IDecay() 
+
+    
+    IEnumerator Decay() 
     {
         while (!_stats.HasExpired) 
         {

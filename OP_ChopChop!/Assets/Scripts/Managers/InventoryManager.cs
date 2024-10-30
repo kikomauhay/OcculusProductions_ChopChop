@@ -1,56 +1,88 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
+public enum StorageType { CHILLER, FREEZER } 
+
 public class InventoryManager : Singleton<InventoryManager>
-{
-    public static List<GameObject> Chiller { get; private set; }
-    public static List<GameObject> Freezer { get; private set; }
+{    
+    List<GameObject> _chiller, _freezer;
+    Ingredient ingredient;
 
     protected override void Awake() { base.Awake(); }
     void Start()
     {
-        Chiller = new List<GameObject>();
-        Freezer = new List<GameObject>();
+        _chiller = new List<GameObject>();
+        _freezer = new List<GameObject>();
+
+        ingredient = null;
     }
-
-    public void TakeOutIngredientFrom(StorageType mode, GameObject food) {
-        // takes out ingredient (will do the mode selection later)
-
-        IngredientManager.OutsideIngredients.Add(food);
-    }
-
-    public void StoreIngredientIn(StorageType mode, GameObject food) 
-    {
-        if (mode == StorageType.CHILLER) 
+    void Reset() 
+    { 
+        if (_chiller.Count > 0) 
         {
-            Chiller.Add(food);
+            foreach (GameObject food in _chiller) 
+                Destroy(food);
+        
+            _chiller.Clear();
+        }
+        
+        if (_freezer.Count > 0)
+        {
+            foreach (GameObject food in _freezer)
+                Destroy(food);
+
+            _freezer.Clear();
+        }
+    }  
+
+    public void TakeOut(StorageType mode, GameObject food) 
+    {
+        ingredient = food.GetComponent<Ingredient>();
+
+        if (ingredient.Stats.FreshnessRate == 0) 
+        {
+            ingredient = null;
+            Debug.LogError($"{ingredient.Stats.name} is unsafe to put in any storage!");
+            return;
+        }   
+
+        IngredientManager.Ingredients.Add(food);
+        if (mode == StorageType.CHILLER) _chiller.Remove(food);
+        else                             _freezer.Remove(food);        
+
+        if (ingredient.Stats.StorageType == mode)
+            ingredient.ToggleProperStorage();
+
+        StartCoroutine(TookOut(ingredient));
+        ingredient = null;
+    }
+    public void StoreIn(StorageType mode, GameObject food) 
+    {
+        ingredient = food.GetComponent<Ingredient>();
+
+        if (ingredient.Stats.FreshnessRate == 0) 
+        {
+            ingredient = null;
+            Debug.LogError($"{ingredient.Stats.name} is unsafe to put in any storage!");
             return;
         }
 
-        Freezer.Add(food);
+        IngredientManager.Ingredients.Remove(food);
+        if (mode == StorageType.CHILLER) _chiller.Add(food);
+        else                             _freezer.Add(food);
+        
+        if (ingredient.Stats.StorageType == mode)
+            ingredient.ToggleProperStorage();
+
+        ingredient = null;
     }
 
-    public void Reset() 
-    { 
-        if (Chiller.Count > 0) 
-        {
-            foreach (GameObject food in Chiller) 
-                Destroy(food);
-        
-            Chiller.Clear();
-        }
-        
-        if (Freezer.Count > 0)
-        {
-            foreach (GameObject food in Freezer)
-                Destroy(food);
-
-            Freezer.Clear();
-        }
-    }    
     protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
-}
 
-public enum StorageType { CHILLER, FREEZER } 
+    IEnumerator TookOut(Ingredient food) 
+    {
+        yield return new WaitForSecondsRealtime(3f);
+        food.ToggleProperStorage();
+    }
+}
