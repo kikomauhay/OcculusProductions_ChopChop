@@ -13,36 +13,39 @@ using UnityEngine;
 
 public class IngredientManager : Singleton<IngredientManager>
 {
-    List<GameObject> _disposedFoods, _outsideIngredients;
+    public static List<GameObject> Ingredients;
+    List<GameObject> _trashCan;
 
-    public List<GameObject> TrashCan { get => _disposedFoods; }
-    public List<GameObject> Ingredients { get => _outsideIngredients; }
-
+    protected override void Awake() { base.Awake(); }
     void Start()
     {
-        _disposedFoods = new List<GameObject>();
-        _outsideIngredients = new List<GameObject>();
+        Ingredients = new List<GameObject>();
+        _trashCan = new List<GameObject>();
     }
-
-    public void AddIngredient(GameObject food)
-    {
-        _outsideIngredients.Add(food);
-    }
-
-    public void ThrowFood(GameObject food) 
-    {
-        _disposedFoods.Add(food);
-    } 
-
-    public void Reset() // used for restarting the game 
+    void Reset() 
     { 
-        foreach (GameObject food in _disposedFoods) 
-            Destroy(food);
-
-        foreach (GameObject food in _outsideIngredients) 
-            Destroy(food);
+        if (_trashCan.Count > 0) 
+        {
+            foreach (GameObject food in _trashCan) 
+                Destroy(food);
         
-        _disposedFoods.Clear();
-        _outsideIngredients.Clear();
+            _trashCan.Clear();
+        }
+        
+        if (Ingredients.Count > 0)
+        {
+            foreach (GameObject food in Ingredients)
+                Destroy(food);
+
+            Ingredients.Clear();
+        }
     }
+
+    public void TrashIngredient(GameObject food) {
+        _trashCan.Add(food);
+        food.GetComponent<Ingredient>().ThrewInTheTrash();
+    }
+
+    protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
+
 }
