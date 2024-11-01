@@ -14,11 +14,12 @@ public class Sliceable : MonoBehaviour
     GameObject sharpObject;
 
     int chopCounter;
+    public bool IsAttached = false;
 
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log("Chop Counter: " + chopCounter);
+        Debug.Log("Chop Counter: " + chopCounter);
         if (chopCounter == 5)
         {
             Sliced();
@@ -31,6 +32,8 @@ public class Sliceable : MonoBehaviour
         Knife knife = collision.gameObject.GetComponent<Knife>();
 
         // if not null, +1 on chop counter
+        if (!IsAttached)
+            return;
         if (knife != null)
         {
             // add vfx here as well
