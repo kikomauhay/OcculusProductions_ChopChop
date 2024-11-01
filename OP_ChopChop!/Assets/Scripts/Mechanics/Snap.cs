@@ -6,24 +6,33 @@ public class Snap : MonoBehaviour
 {
     [SerializeField]
     float AttachY;
+    [SerializeField]
+    float Timer;
 
-    private Rigidbody rb;
+    public Collider SnapCollider;
+
     private void OnTriggerEnter(Collider other)
     {
        if(other.GetComponent<Sliceable>() != null)
         {
+            other.GetComponent<Sliceable>().IsAttached = true;
 
             SnapToObject(other.transform);
             DisableRigidbody(other);
             Debug.Log("Triggered");
+            SnapCollider.enabled = false;
+        }
+       else
+        {
+            StartCoroutine(IResetTrigger());
         }
     }
 
     void SnapToObject(Transform FoodObject)
     {
             FoodObject.SetParent(transform);
-            FoodObject.localPosition = new Vector3 (0,AttachY,0);
-            FoodObject.localRotation = Quaternion.identity;
+            FoodObject.localPosition = new Vector3(0, AttachY, 0);
+            FoodObject.localRotation = Quaternion.Euler(0, FoodObject.localRotation.eulerAngles.y, 0);
     }
 
     void DisableRigidbody(Collider other)
@@ -33,5 +42,11 @@ public class Snap : MonoBehaviour
         {
             rb.isKinematic = true;
         }
+    }
+
+    private IEnumerator IResetTrigger()
+    {
+        yield return new WaitForSeconds(Timer);
+        SnapCollider.enabled = true;
     }
 }

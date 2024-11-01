@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
+    [SerializeField]
+    float timer;
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<ResetPos>() != null)
@@ -15,7 +17,7 @@ public class Floor : MonoBehaviour
 
     private IEnumerator IDelayedReset(Collider other)
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(timer);
         Destroy(other.gameObject);
     }
 }
