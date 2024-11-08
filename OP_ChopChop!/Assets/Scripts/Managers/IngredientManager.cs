@@ -13,14 +13,17 @@ using UnityEngine;
 
 public class IngredientManager : Singleton<IngredientManager>
 {
-    public static List<GameObject> Ingredients;
-    List<GameObject> _trashCan;
+    public List<GameObject> Ingredients => _ingredients;
+    public int GarbageCount => _trashCan.Count;
+    
+    List<GameObject> _trashCan, _ingredients;
 
     protected override void Awake() { base.Awake(); }
     void Start()
     {
-        Ingredients = new List<GameObject>();
+        _ingredients = new List<GameObject>();
         _trashCan = new List<GameObject>();
+
     }
     void Reset() 
     { 
