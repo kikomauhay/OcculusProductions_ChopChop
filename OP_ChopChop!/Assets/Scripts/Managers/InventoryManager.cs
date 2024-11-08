@@ -42,7 +42,7 @@ public class InventoryManager : Singleton<InventoryManager>
         if (ingredient == null) return;
 
         // prevents contaminated food from entering the fridge
-        if (ingredient.Stats.FreshnessRate == 0) 
+        if (ingredient.FreshnessRate == 0) 
         {
             IngredientManager.Instance.TrashIngredient(food);
             Debug.LogError($"{ingredient.Stats.name} is already expired! It's unsafe to put in any storage!");
@@ -54,7 +54,7 @@ public class InventoryManager : Singleton<InventoryManager>
         _fridge.Add(food);    
         
         if (ingredient.Stats.StorageType == mode)
-            ingredient.ToggleProperStorage();
+            ingredient.IsProperlyStored = true;
     }
 
     protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
@@ -62,6 +62,6 @@ public class InventoryManager : Singleton<InventoryManager>
     IEnumerator TookOut(Ingredient food) 
     {
         yield return new WaitForSecondsRealtime(10f);
-        food.ToggleProperStorage();
+        food.IsProperlyStored = false;
     }
 }

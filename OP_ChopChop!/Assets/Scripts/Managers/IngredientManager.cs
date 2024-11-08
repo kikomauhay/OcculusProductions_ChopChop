@@ -23,7 +23,6 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         _ingredients = new List<GameObject>();
         _trashCan = new List<GameObject>();
-
     }
     void Reset() 
     { 

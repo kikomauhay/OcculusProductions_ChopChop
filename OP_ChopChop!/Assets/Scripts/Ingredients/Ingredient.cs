@@ -1,12 +1,18 @@
 using System.Collections;
 using UnityEngine;
-using System;
 
 public class Ingredient : MonoBehaviour 
 {
-    public Action OnRateChanged; // ED for UI changes later on
-
+    public FreshnessRating Rating { get; private set; }
     public IngredientStats Stats => _stats;
+
+#region Getters
+    public int FreshnessRate { get; private set; }
+    public bool IsExpired { get; private set; } 
+    public bool IsContaminated { get; private set; }
+    public bool IsTrashed { get; private set; }
+    public bool IsProperlyStored { get; set; }
+#endregion
 
     [SerializeField] GameObject[] _prefabs; // different stages of the ingredient
     [SerializeField] IngredientStats _stats;
@@ -14,42 +20,43 @@ public class Ingredient : MonoBehaviour
     void Start()
     {
         name = _stats.name;
+        FreshnessRate = 100;
+        Rating = FreshnessRating.FRESH;
+
+        IsTrashed = false;
+        IsExpired = false;
+        IsContaminated = false;
+        IsProperlyStored = false;
+        
         CheckRate();
         StartCoroutine(Decay());
     }
-
-    public void ToggleProperStorage() 
-    { 
-        _stats.IsProperlyStored = !_stats.IsProperlyStored; 
-    }
     public void ThrewInTheTrash() 
     {
-        _stats.IsTrashed = true;
-        _stats.FreshnessRate = 0;
+        IsTrashed = true;
+        FreshnessRate = 0;
         CheckRate();
     }
     void CheckRate() 
     {
-        if      (_stats.FreshnessRate < 70) _stats.Rating = FreshnessRating.EXPIRED;
-        else if (_stats.FreshnessRate > 87) _stats.Rating = FreshnessRating.FRESH;
-        else                                _stats.Rating = FreshnessRating.LESS_FRESH;
-
-        OnRateChanged?.Invoke(); 
-        // Debug.Log(_stats.Rating);
+        if      (FreshnessRate < 70) Rating = FreshnessRating.EXPIRED;
+        else if (FreshnessRate > 87) Rating = FreshnessRating.FRESH;
+        else                         Rating = FreshnessRating.LESS_FRESH;
     }
 
     
     IEnumerator Decay() 
     {
-        while (!_stats.HasExpired) 
+        while (!IsExpired) 
         {
             int rate, speed;
-            if (_stats.IsContaminated) 
+
+            if (IsContaminated) 
             {
                 rate = _stats.Contaminated.Rate;
                 speed =  _stats.Contaminated.Speed;
             }
-            else if (_stats.IsProperlyStored) 
+            else if (IsProperlyStored) 
             {
                 rate = _stats.Stored.Rate;
                 speed = _stats.Stored.Speed;
@@ -63,21 +70,17 @@ public class Ingredient : MonoBehaviour
 
 
             yield return new WaitForSecondsRealtime(speed);
-            _stats.FreshnessRate -= rate;
-            Debug.Log($"Freshness of {name} has been reduced to {_stats.FreshnessRate}");
+            FreshnessRate -= rate;
+            Debug.Log($"Freshness of {name} has been reduced to {FreshnessRate}");
 
-            if (_stats.FreshnessRate < 1) 
+            if (FreshnessRate < 1) 
             {
-                _stats.FreshnessRate = 0;
-                _stats.HasExpired = true;
+                FreshnessRate = 0;
+                IsExpired = true;
             }
-            
             CheckRate();
         }
-
-        // Debug.Log($"{name} has expired!");
         Destroy(gameObject); // test
-        yield break;
     }
 }
 
