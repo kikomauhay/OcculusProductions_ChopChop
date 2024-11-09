@@ -12,7 +12,7 @@ public class NigiriAssembly : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //for now use Sliceable Component since we're waiting for the ingredient base class
-        if(other.gameObject.GetComponent<Sliceable>())
+        if(other.gameObject.GetComponent<SalmonSlice>())
         {
             Vector3 currentPosition = this.transform.position;
             Quaternion currentRotation = this.transform.rotation;
@@ -20,7 +20,7 @@ public class NigiriAssembly : MonoBehaviour
             //Insert Smoke Vfx
             Instantiate(SalmonNigiri, currentPosition, currentRotation);
         }
-        if(other.gameObject.GetComponent<Sliceable>())
+        if(other.gameObject.GetComponent<TunaSlice>())
         {
             Vector3 currentPosition = this.transform.position;
             Quaternion currentRotation = this.transform.rotation;
