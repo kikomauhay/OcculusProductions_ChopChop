@@ -6,7 +6,7 @@ public enum StorageType { CHILLER, FREEZER }
 
 public class InventoryManager : Singleton<InventoryManager>
 {    
-    public List<GameObject> Fridge => _fridge;
+    public List<GameObject> Fridge => _fridge; // change to fridge.count 
     
     List<GameObject> _fridge = new List<GameObject>();
 

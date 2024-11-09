@@ -3,18 +3,15 @@ using UnityEngine;
 
 public class Ingredient : MonoBehaviour 
 {
+#region Getters
     public FreshnessRating Rating { get; private set; }
     public IngredientStats Stats => _stats;
-
-#region Getters
     public int FreshnessRate { get; private set; }
     public bool IsExpired { get; private set; } 
     public bool IsContaminated { get; private set; }
     public bool IsTrashed { get; private set; }
     public bool IsProperlyStored { get; set; }
 #endregion
-
-    [SerializeField] GameObject[] _prefabs; // different stages of the ingredient
     [SerializeField] IngredientStats _stats;
 
     void Start()
@@ -39,12 +36,29 @@ public class Ingredient : MonoBehaviour
     }
     void CheckRate() 
     {
-        if      (FreshnessRate < 70) Rating = FreshnessRating.EXPIRED;
-        else if (FreshnessRate > 87) Rating = FreshnessRating.FRESH;
-        else                         Rating = FreshnessRating.LESS_FRESH;
+        Material m;
+
+        if (FreshnessRate < 70) 
+        {
+            Rating = FreshnessRating.EXPIRED;
+            m = _stats.Materials[2];    
+        }
+        else if (FreshnessRate > 87) 
+        {
+            Rating = FreshnessRating.FRESH;
+            m = _stats.Materials[0];
+        }
+        else
+        {
+            Rating = FreshnessRating.LESS_FRESH;
+            m = _stats.Materials[1];
+        }
+
+        if (m != null)
+            GetComponent<MeshRenderer>().material = m;
     }
 
-    
+#region Enumerators
     IEnumerator Decay() 
     {
         while (!IsExpired) 
@@ -82,5 +96,6 @@ public class Ingredient : MonoBehaviour
         }
         Destroy(gameObject); // test
     }
+#endregion
 }
 

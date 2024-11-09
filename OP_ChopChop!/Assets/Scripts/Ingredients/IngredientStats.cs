@@ -7,13 +7,15 @@ public enum FreshnessRating { FRESH, LESS_FRESH, EXPIRED }
 public class IngredientStats : ScriptableObject
 {   
     public StorageType StorageType => _type;
-
+    public Material[] Materials => _materials;
+            
     public Timer Decay => _decay; // default rate
     public Timer Contaminated => _contaminated;
     public Timer Stored => _stored;
 
 #region Private
     [SerializeField] StorageType _type;
+    [SerializeField] Material[] _materials;
 
     [Header("Timers")]
     [SerializeField] Timer _decay;
