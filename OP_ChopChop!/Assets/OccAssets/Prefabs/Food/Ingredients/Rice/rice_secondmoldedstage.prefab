@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8541207282402297395}
   - component: {fileID: 4799078081479011161}
   - component: {fileID: 6385173976066235990}
+  - component: {fileID: 2153321190136699875}
   m_Layer: 0
   m_Name: rice_secondmoldedstage
   m_TagString: Untagged
@@ -268,3 +269,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1148566707986635418, guid: 16811466f5a392e45b0c24cafd67b7cb, type: 3}
+--- !u!114 &2153321190136699875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2676402527227102874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e00eb263530bec4eb6143aa750c83a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  left: {fileID: 0}
+  right: {fileID: 0}
+  perfectMold: {fileID: 4680095818279271676, guid: b5605ab2d45db3f47a9d6774a7a58eaf,
+    type: 3}
+  MoldLimit: 3

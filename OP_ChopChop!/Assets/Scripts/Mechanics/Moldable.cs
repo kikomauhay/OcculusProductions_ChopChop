@@ -12,13 +12,24 @@ public class Moldable : MonoBehaviour
     [SerializeField]
     GameObject perfectMold;
     [SerializeField]
-    float MoldCounter;
+    float MoldLimit;
    
-    private float MoldLimit;
+    private float MoldCounter;
 
+/*    private void Awake()
+    {
+        left = ControllerManager.instance.leftController;
+        right = ControllerManager.instance.rightController;
+    }
+    private void Start()
+    {
+        left = ControllerManager.instance.leftController;
+        right = ControllerManager.instance.rightController;
+    }*/
     private void Update()
     {
-        if (MoldCounter == MoldLimit)
+        Debug.Log(MoldCounter);
+        if (MoldCounter >= MoldLimit)
         {
             MoldInstantiate(perfectMold);
         }
@@ -26,9 +37,12 @@ public class Moldable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<Rice>()&&CheckGrip(left))
+        if(CheckGrip(left))
         {
-            MoldCounter++;
+            if (other.GetComponent<Rice>() & CheckGrip(right))
+            {
+                MoldCounter++;
+            }
         }
     }
 
