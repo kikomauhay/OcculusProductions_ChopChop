@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3252782098382446286}
   - component: {fileID: 8596449564140215453}
   - component: {fileID: 5632396223959195961}
+  - component: {fileID: 7044096410794896769}
   m_Layer: 0
   m_Name: rice_perfectmold
   m_TagString: Untagged
@@ -295,7 +296,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203383e7d03157242bcd54154b2b67c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SalmonNigiri: {fileID: 4589956664313330515, guid: 4bbc105ebcb83b74194926534380f4ac,
+  SalmonNigiri: {fileID: 5778702139965393049, guid: ee59e60ddd11e66429b96b45594c629e,
     type: 3}
   TunaNigiri: {fileID: 2301816562093265014, guid: 089c1a3cb3769044bbfdb54d7cd09499,
     type: 3}
+--- !u!114 &7044096410794896769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4680095818279271676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e00eb263530bec4eb6143aa750c83a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  left: {fileID: 0}
+  right: {fileID: 0}
+  perfectMold: {fileID: 1486641473219176102, guid: f0854a7719c9f3e40aa774c6318a612d,
+    type: 3}
+  MoldLimit: 1

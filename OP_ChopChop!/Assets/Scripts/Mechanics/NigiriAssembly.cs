@@ -17,6 +17,7 @@ public class NigiriAssembly : MonoBehaviour
             Vector3 currentPosition = this.transform.position;
             Quaternion currentRotation = this.transform.rotation;
             Destroy(this.gameObject);
+            Destroy(other.gameObject);
             //Insert Smoke Vfx
             Instantiate(SalmonNigiri, currentPosition, currentRotation);
         }

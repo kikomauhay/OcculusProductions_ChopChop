@@ -19,7 +19,6 @@ public class Sliceable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Chop Counter: " + chopCounter);
         if (chopCounter == 5)
         {
             Sliced();

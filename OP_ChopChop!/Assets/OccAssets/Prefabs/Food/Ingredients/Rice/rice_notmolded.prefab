@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6097973745205322983}
   - component: {fileID: 7905164593238242779}
   - component: {fileID: -3277974651327617314}
+  - component: {fileID: 4462309512230441132}
   m_Layer: 0
   m_Name: rice_notmolded
   m_TagString: Untagged
@@ -268,3 +269,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1218369611395158969, guid: 74c7eec64039fcb44989d5f74c270525, type: 3}
+--- !u!114 &4462309512230441132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3478607691739755957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e00eb263530bec4eb6143aa750c83a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  left: {fileID: 0}
+  right: {fileID: 0}
+  perfectMold: {fileID: 2676402527227102874, guid: c8c397a250ff7a540a315b3611401eb2,
+    type: 3}
+  MoldLimit: 5
