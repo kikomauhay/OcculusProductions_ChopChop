@@ -12,49 +12,37 @@ public class Moldable : MonoBehaviour
     [SerializeField]
     GameObject perfectMold;
     [SerializeField]
-    GameObject overMold;
+    float MoldLimit;
+   
+    private float MoldCounter;
 
-    private float totalGripValue = 0f;
-    private float minThreshold = 0.5f;
-    private float maxThreshold = 1f;
-    private bool IsMolded = false;
-    private bool IsHoldingRice = false;
-
+/*    private void Awake()
+    {
+        left = ControllerManager.instance.leftController;
+        right = ControllerManager.instance.rightController;
+    }
+    private void Start()
+    {
+        left = ControllerManager.instance.leftController;
+        right = ControllerManager.instance.rightController;
+    }*/
     private void Update()
     {
-        if (!IsHoldingRice)
-            return;
-
-        AddGrip();
+        Debug.Log(MoldCounter);
+        if (MoldCounter >= MoldLimit)
+        {
+            MoldInstantiate(perfectMold);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<Rice>())
+        if(CheckGrip(left))
         {
-            Debug.Log("Trigger On");
-            if (IsMolded)
-                return;
-            IsHoldingRice = true;
-
-            if (totalGripValue >= minThreshold && totalGripValue < maxThreshold)
+            if (other.GetComponent<Rice>() & CheckGrip(right))
             {
-                MoldInstantiate(perfectMold);
+                MoldCounter++;
             }
-            else if (totalGripValue >= maxThreshold)
-            {
-                MoldInstantiate(overMold);
-            }
-        }
-    }
-
-    void AddGrip()
-    {
-        if(CheckGrip(left) && CheckGrip(right))
-        {
-            Debug.Log("left hands is gripping");
-            GetGripValue(right);
-            Debug.Log("Total Grip Value: " + totalGripValue);
         }
     }
 
@@ -63,20 +51,10 @@ public class Moldable : MonoBehaviour
         return controller.selectAction.action.ReadValue<float>() > 0.5f;
     }
 
-    private float GetGripValue(ActionBasedController controller)
-    {
-        float gripValue = controller.selectAction.action.ReadValue<float>();
-        Debug.Log("Current Grip Value: " + gripValue);
-        totalGripValue += gripValue * Time.deltaTime * 10f;
-        return gripValue;
-    }
-
     private void MoldInstantiate(GameObject _moldable)
     {
-        IsMolded = true;
         Vector3 currentPosition = this.transform.position;
         Quaternion currentRotation = this.transform.rotation;
-
         Destroy(this.gameObject);
         Instantiate(_moldable, currentPosition, currentRotation);
     }

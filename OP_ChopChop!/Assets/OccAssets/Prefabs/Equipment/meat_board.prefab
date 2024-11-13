@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &806237948229817083
+--- !u!1 &2312735039514650289
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,51 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8731191698057543393}
-  - component: {fileID: 5966667073806690799}
-  - component: {fileID: 760317602331789652}
-  - component: {fileID: 751093571354560008}
-  - component: {fileID: 320869768721545249}
+  - component: {fileID: 3312339349620729252}
+  - component: {fileID: 7736325331390011836}
+  - component: {fileID: 6824591665502737439}
+  - component: {fileID: 9044446812653460753}
+  - component: {fileID: 495466999619550544}
+  - component: {fileID: 3546764030831052603}
+  - component: {fileID: 3112276502376764470}
+  - component: {fileID: 3612484567718395507}
   m_Layer: 0
-  m_Name: nigiri_salmon
+  m_Name: meat_board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8731191698057543393
+--- !u!4 &3312339349620729252
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806237948229817083}
+  m_GameObject: {fileID: 2312735039514650289}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3817115045274673641}
+  m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5966667073806690799
+--- !u!33 &7736325331390011836
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806237948229817083}
-  m_Mesh: {fileID: 2210904197583878124, guid: a0024432db7ea8a43a3c021d0cfc51cb, type: 3}
---- !u!23 &760317602331789652
+  m_GameObject: {fileID: 2312735039514650289}
+  m_Mesh: {fileID: -1052148556465550213, guid: c42d5ec66e7c1fe409e7e27010b50d3c, type: 3}
+--- !u!23 &6824591665502737439
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806237948229817083}
+  m_GameObject: {fileID: 2312735039514650289}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -63,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f0d9ab4df796de44c8819560c1238d76, type: 2}
+  - {fileID: 2100000, guid: 356fe598a8eac214e9b8f5794f2191e3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,73 +88,55 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &751093571354560008
+--- !u!64 &9044446812653460753
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806237948229817083}
+  m_GameObject: {fileID: 2312735039514650289}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 2210904197583878124, guid: a0024432db7ea8a43a3c021d0cfc51cb, type: 3}
---- !u!114 &320869768721545249
+  m_Mesh: {fileID: -1052148556465550213, guid: c42d5ec66e7c1fe409e7e27010b50d3c, type: 3}
+--- !u!114 &495466999619550544
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806237948229817083}
+  m_GameObject: {fileID: 2312735039514650289}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed7b0fa036f5fa54b8d0147120f5ba35, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ad87fad55387c441ba7bdcbbc3603c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &4589956664313330515
-GameObject:
+  AttachY: 0.01
+  Timer: 3
+  SnapCollider: {fileID: 3546764030831052603}
+--- !u!65 &3546764030831052603
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3817115045274673641}
-  - component: {fileID: 5116880586414610611}
-  - component: {fileID: 7639641072667908594}
-  m_Layer: 0
-  m_Name: nigiri salmon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3817115045274673641
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4589956664313330515}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 8731191698057543393}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &5116880586414610611
+  m_GameObject: {fileID: 2312735039514650289}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.49, y: 0.16, z: 0.4}
+  m_Center: {x: 0, y: 0.12, z: 0}
+--- !u!54 &3112276502376764470
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4589956664313330515}
+  m_GameObject: {fileID: 2312735039514650289}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -161,13 +146,13 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7639641072667908594
+--- !u!114 &3612484567718395507
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4589956664313330515}
+  m_GameObject: {fileID: 2312735039514650289}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
@@ -271,7 +256,7 @@ MonoBehaviour:
   m_SnapToColliderVolume: 1
   m_ReinitializeDynamicAttachEverySingleGrab: 1
   m_AttachEaseInTime: 0.15
-  m_MovementType: 1
+  m_MovementType: 0
   m_VelocityDamping: 1
   m_VelocityScale: 1
   m_AngularVelocityDamping: 1
