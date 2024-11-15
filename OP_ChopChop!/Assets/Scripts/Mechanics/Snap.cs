@@ -18,7 +18,7 @@ public class Snap : MonoBehaviour
             other.gameObject.GetComponent<Sliceable>().IsAttached = true;
 
             SnapToObject(other.transform);
-            DisableRigidbody(other);
+            SetCollider(other);
             Debug.Log("Triggered");
             SnapCollider.enabled = false;
         }
@@ -35,12 +35,11 @@ public class Snap : MonoBehaviour
             FoodObject.localRotation = Quaternion.Euler(0, FoodObject.localRotation.eulerAngles.y, 0);
     }
 
-    void DisableRigidbody(Collider other)
+    void SetCollider(Collider other)
     {
-        Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null)
+        if(other.GetComponent<Collider>() != null)
         {
-            rb.isKinematic = true;
+            other.GetComponent<Collider>().isTrigger = true;
         }
     }
 

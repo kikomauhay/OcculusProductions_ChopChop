@@ -16,16 +16,11 @@ public class Moldable : MonoBehaviour
    
     private float MoldCounter;
 
-/*    private void Awake()
+    private void Awake()
     {
         left = ControllerManager.instance.leftController;
         right = ControllerManager.instance.rightController;
     }
-    private void Start()
-    {
-        left = ControllerManager.instance.leftController;
-        right = ControllerManager.instance.rightController;
-    }*/
     private void Update()
     {
         Debug.Log(MoldCounter);
@@ -39,8 +34,10 @@ public class Moldable : MonoBehaviour
     {
         if(CheckGrip(left))
         {
+            Debug.Log("Left Detected");
             if (other.GetComponent<Rice>() & CheckGrip(right))
             {
+                Debug.Log("Molding");
                 MoldCounter++;
             }
         }

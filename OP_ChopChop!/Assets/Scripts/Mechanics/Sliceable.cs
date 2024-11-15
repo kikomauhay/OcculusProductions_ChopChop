@@ -25,10 +25,10 @@ public class Sliceable : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         // check other gameobject if it has a knife script
-        Knife knife = collision.gameObject.GetComponent<Knife>();
+        Knife knife = other.gameObject.GetComponent<Knife>();
 
         // if not null, +1 on chop counter
         if (!IsAttached)
