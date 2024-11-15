@@ -9,7 +9,7 @@ public class OrderManager : Singleton<OrderManager>
     protected override void Awake() { base.Awake(); }
 
     [SerializeField] private GameObject[] dishPrefabs; //prefabs of dishes UI to appear
-    //[SerializeField] private GameObject[] prefabSpawnLocations;  //idea is to lock the positions of spawning, prob
+    [SerializeField] private Transform[] prefabSpawnLocations;  //idea is to lock the positions of spawning, prob
     [SerializeField] private List<GameObject> dishList; //List for the dishes UI to appear on screen
 
 
@@ -20,14 +20,19 @@ public class OrderManager : Singleton<OrderManager>
 
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.W))
+        {
+            SpawnDishUI();
+        }
     }
 
     private void SpawnDishUI()   //Spawning of the dishes on screen
     {
         //int ranNum = Random.Range(0, 1); //For spawning either Nigiri or Maki
 
-        GameObject  dishToSpawn = Instantiate(dishPrefabs[0]);
+        Debug.Log(prefabSpawnLocations[0].position);
+
+        GameObject dishToSpawn = Instantiate(dishPrefabs[0], prefabSpawnLocations[0].position, prefabSpawnLocations[0].rotation); //testings
 
         dishList.Add(dishToSpawn);
     }
