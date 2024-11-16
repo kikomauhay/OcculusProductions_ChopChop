@@ -12,11 +12,18 @@ public class RiceSpawn : MonoBehaviour
     [SerializeField]
     GameObject UnmoldedRice;
 
+    private void Awake()
+    {
+        left = ControllerManager.instance.leftController;
+        right = ControllerManager.instance.rightController;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (CheckGrip(left) && other.gameObject.GetComponent<ActionBasedController>()
             || CheckGrip(right) && other.gameObject.GetComponent<ActionBasedController>())
         {
+            Debug.Log("Triggered, Rice spawned");
             InstantiateRice(UnmoldedRice);
         }
     }
