@@ -411,8 +411,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sashimiCheck: {fileID: 5310049217524152839}
   riceCheck: {fileID: 5310049218177955216}
-  timerRectBar: {fileID: 0}
-  timer: 0
+  timerRectBar: {fileID: 2169132806848715034}
+  timeLeft: 0
+  maxTime: 0
 --- !u!1 &5310049218177955216
 GameObject:
   m_ObjectHideFlags: 0
