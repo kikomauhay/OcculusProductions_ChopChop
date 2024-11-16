@@ -19,6 +19,7 @@ public class Snap : MonoBehaviour
 
             SnapToObject(other.transform);
             SetCollider(other);
+            DisableRigidBody(other);
             Debug.Log("Triggered");
             SnapCollider.enabled = false;
         }
@@ -40,6 +41,15 @@ public class Snap : MonoBehaviour
         if(other.GetComponent<Collider>() != null)
         {
             other.GetComponent<Collider>().isTrigger = true;
+        }
+    }
+
+    void DisableRigidBody(Collider other)
+    {
+        Rigidbody rb = other.GetComponent<Rigidbody>();
+        if(rb != null)
+        {
+            rb.isKinematic = true;
         }
     }
 
