@@ -35,6 +35,7 @@ public class Sliceable : MonoBehaviour
             return;
         if (knife != null)
         {
+            Debug.Log("Chopping");
             // add vfx here as well
             chopCounter++;
         }
