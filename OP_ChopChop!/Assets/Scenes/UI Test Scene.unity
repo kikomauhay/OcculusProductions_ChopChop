@@ -122,6 +122,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &982121565 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2169132806848715034, guid: df266eaa3df82b645bd33953b7f90413,
+    type: 3}
+  m_PrefabInstance: {fileID: 5310049217035609990}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1150156256
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,6 +408,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5310049217035609992, guid: df266eaa3df82b645bd33953b7f90413,
+        type: 3}
+      propertyPath: maxTime
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5310049217035609992, guid: df266eaa3df82b645bd33953b7f90413,
+        type: 3}
+      propertyPath: timerRectBar
+      value: 
+      objectReference: {fileID: 982121565}
     - target: {fileID: 5310049217961757309, guid: df266eaa3df82b645bd33953b7f90413,
         type: 3}
       propertyPath: m_Pivot.x
