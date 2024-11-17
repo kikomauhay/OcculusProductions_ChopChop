@@ -512,11 +512,12 @@ MonoBehaviour:
   dishPrefabs:
   - {fileID: 5310049217961757311, guid: df266eaa3df82b645bd33953b7f90413, type: 3}
   prefabSpawnLocations:
-  - {fileID: 1208806714}
-  - {fileID: 1788229919}
-  - {fileID: 483592239}
-  dishList: []
-  orderTimer: 20
+  - {fileID: 1208806713}
+  - {fileID: 1788229918}
+  - {fileID: 483592238}
+  orderList: []
+  timeToMakeOrder: 26
+  nextOrderTimer: 8
 --- !u!1 &215900580 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6786887230358626773, guid: 866565e8a80e26b4c9eecdf15876ed2c,
@@ -793,6 +794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 483592239}
   - component: {fileID: 483592240}
+  - component: {fileID: 483592241}
   m_Layer: 5
   m_Name: SpawnLocation3
   m_TagString: Untagged
@@ -842,6 +844,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &483592241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483592238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrefabPresent: 0
 --- !u!1001 &512564890
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2930,6 +2945,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1208806714}
   - component: {fileID: 1208806715}
+  - component: {fileID: 1208806716}
   m_Layer: 5
   m_Name: SpawnLocation1
   m_TagString: Untagged
@@ -2979,6 +2995,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1208806716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208806713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrefabPresent: 0
 --- !u!1 &1214087873 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5722392891316959377, guid: 866565e8a80e26b4c9eecdf15876ed2c,
@@ -4500,6 +4529,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1788229919}
   - component: {fileID: 1788229920}
+  - component: {fileID: 1788229921}
   m_Layer: 5
   m_Name: SpawnLocation2
   m_TagString: Untagged
@@ -4549,6 +4579,19 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1788229921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788229918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPrefabPresent: 0
 --- !u!1 &1800754159
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,72 +5,97 @@ using UnityEngine;
 
 public class OrderManager : Singleton<OrderManager>
 {
-
     protected override void Awake() { base.Awake(); }
 
     [Header("Arrays of Prefabs and Locations")]
     [SerializeField] private GameObject[] dishPrefabs; //prefabs of dishes UI to appear
-    [SerializeField] private Transform[] prefabSpawnLocations;  //idea is to lock the positions of spawning, prob
+    [SerializeField] private GameObject[] prefabSpawnLocations;  //idea is to lock the positions of spawning, prob
+
+    public GameObject[] _PrefabSpawnLocations
+    {
+        get { return prefabSpawnLocations; }
+    }
 
     [Header("Orders on Screen")]
-    [SerializeField] private List<GameObject> dishList; //List for the dishes UI to appear on screen
-    //Use this to check against the prefabSpawnLocations, if there is 3 more or more do not instantiate
+    [SerializeField] private List<GameObject> orderList; //List for the dishes UI to appear on screen
 
     [Header("Set Timer for Order")]
-    [SerializeField] private float orderTimer; //how long customer's patiences
+    [SerializeField] private float timeToMakeOrder; //how long customer's patiences //This needs to be balanced based on the Play Testing
+    [SerializeField] private float nextOrderTimer;
 
 
    void Start()
     {
-        
+        StartCoroutine(TimerForNextOrder());
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W))
-        {
-            SpawnDishUI();
-        }
+               
     }
 
-    private void SpawnDishUI()   //Spawning of the dishes on screen
+    private void DoSpawningDishOrder()
     {
         //int ranNum = Random.Range(0, 1); //For spawning either Nigiri or Maki
 
-        Debug.Log(prefabSpawnLocations[0].position);
+        for( int x = 0; x < prefabSpawnLocations.Length; x++)
+        {
+            if (!prefabSpawnLocations[x].GetComponent<SpawnLocationScript>()._IsPrefabPresent) //there is a empty slot
+            {
+                GameObject spawnOrder = Instantiate(dishPrefabs[0],
+                                             prefabSpawnLocations[x].gameObject.transform.position,
+                                             prefabSpawnLocations[x].gameObject.transform.rotation);
 
-        GameObject dishToSpawn = Instantiate(dishPrefabs[0], prefabSpawnLocations[0].position, prefabSpawnLocations[0].rotation); //testings
+                orderList.Add(spawnOrder);
 
-        dishToSpawn.GetComponent<NigiriDish>().maxTime = orderTimer; //Set Timer
-        Debug.Log(dishToSpawn.GetComponent<NigiriDish>().maxTime);
-        //dishToSpawn.GetComponent<NigiriDish>().StartTimer();
+                spawnOrder.GetComponent<NigiriDish>()._OrderLocation = prefabSpawnLocations[x].gameObject;
 
-        dishList.Add(dishToSpawn);
+                prefabSpawnLocations[x].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent = true;
+
+                spawnOrder.GetComponent<NigiriDish>().maxTime = timeToMakeOrder; //Set Timer
+
+                break;
+            }
+           
+        }
+
+        StartCoroutine(TimerForNextOrder());
     }
 
-    private void DishComplete(GameObject dishToRemove)
+    public bool IsEmptySpawnLocation()
     {
-        // Find the index of the dish to remove
-        int index = dishList.IndexOf(dishToRemove);
-
-        // Destroy the GameObject
-        Destroy(dishToRemove);
-
-        // Remove from the list
-        if (index >= 0)
+        Debug.Log("isEmptyPlaying");
+        for (int i = 0; i < prefabSpawnLocations.Length; i++)
         {
-            dishList.RemoveAt(index);
+            if (prefabSpawnLocations[i].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent == false)
+            {
+                Debug.Log("IsEmpty True");
+                return true;
+            }
+        }
+        Debug.Log("IsEmpty False");
+        return false;
+    }
+
+    public IEnumerator TimerForNextOrder()
+    {
+        yield return new WaitForSeconds(nextOrderTimer);
+
+        if (IsEmptySpawnLocation())
+        {
+            DoSpawningDishOrder();
         }
     }
 
-    /*
-    To do
-    - spawning the UI
-    - Ticking of the box when ingredient place on plate is correct
-    - Rectangle bar timer decreasing and changing color
-    - Deleting and shifting the UIs if an order is complete and there are more orders
-    
-    */
+    public void RemoveDishFromList(GameObject dishToRemove)
+    {
+        orderList.Remove(dishToRemove);
+    }
+
+    public void OrderComplete(GameObject orderToRemove)
+    {
+       orderToRemove.GetComponent<NigiriDish>().DestroyPrefab();
+    }
 
     protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
 

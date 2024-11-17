@@ -7,6 +7,14 @@ public class NigiriDish : MonoBehaviour
 {
     [SerializeField] private GameObject sashimiCheck;  //Upon checking of plating, see if Ingredients are place correctly
     [SerializeField] private GameObject riceCheck;
+    [SerializeField] private GameObject orderLocation;
+
+    public GameObject _OrderLocation
+    {
+        get { return orderLocation; }
+        set { orderLocation = value; }
+    }
+
     [SerializeField] private Image timerRectBar;
     [SerializeField] private float timeLeft;
     [SerializeField] public float maxTime;
@@ -30,7 +38,11 @@ public class NigiriDish : MonoBehaviour
         if(maxTime > 0)
         {
             StartTimer();
-        }         
+        }
+        if (timeLeft <= 0)
+        {
+            DestroyPrefab();
+        }
     }
 
     private void ActivateSashimiCheck() //Upon successful placement of ingredient on plate, check On
@@ -55,6 +67,19 @@ public class NigiriDish : MonoBehaviour
                 timerRectBar.color = Color.red;
             }
         }
+    }
+
+    public void DestroyPrefab()
+    {
+        OrderManager.Instance.RemoveDishFromList(this.gameObject);
+        
+        if(!OrderManager.Instance.IsEmptySpawnLocation())
+        {
+            OrderManager.Instance.StartCoroutine("TimerForNextOrder");
+        }
+
+        orderLocation.GetComponent<SpawnLocationScript>()._IsPrefabPresent = false;
+        Destroy(this.gameObject); 
     }
 
 }
