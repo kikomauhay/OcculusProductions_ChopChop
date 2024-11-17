@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26e27a61e5fd1aa4bb3f1bfe40cdffe4, type: 3}
+  m_Name: door opened 02
+  m_EditorClassIdentifier: Assembly-CSharp::Sound
+  clip: {fileID: 8300000, guid: 9cd1bf2101055aa4fa275f40e61c8dbe, type: 3}
+  loop: 0
+  volume: 0.8
+  source: {fileID: 0}

@@ -32,6 +32,7 @@ public class Ingredient : MonoBehaviour
     {
         IsTrashed = true;
         FreshnessRate = 0;
+        SoundManager.Instance.PlaySound("dispose food");
         CheckRate();
     }
     void CheckRate() 
