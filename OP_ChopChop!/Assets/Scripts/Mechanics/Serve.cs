@@ -8,7 +8,9 @@ public class Serve : MonoBehaviour
     {
        if(other.gameObject.GetComponent<Plate>()!= null)
        {
+            //OrderManager.Instance.OrderComplete(other.gameObject);
             Destroy(other.gameObject);
+            
        }
     }
 }
