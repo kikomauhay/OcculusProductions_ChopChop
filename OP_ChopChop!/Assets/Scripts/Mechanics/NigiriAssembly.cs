@@ -9,6 +9,9 @@ public class NigiriAssembly : MonoBehaviour
 
     [SerializeField]
     GameObject TunaNigiri;
+
+    [SerializeField]
+    GameObject SmokeVFX;
     private void OnTriggerEnter(Collider other)
     {
         //for now use Sliceable Component since we're waiting for the ingredient base class
@@ -18,7 +21,7 @@ public class NigiriAssembly : MonoBehaviour
             Quaternion currentRotation = this.transform.rotation;
             Destroy(this.gameObject);
             Destroy(other.gameObject);
-            //Insert Smoke Vfx
+            SpawnVFX(SmokeVFX, currentPosition, currentRotation);
             Instantiate(SalmonNigiri, currentPosition, currentRotation);
         }
         if(other.gameObject.GetComponent<TunaSlice>())
@@ -26,8 +29,17 @@ public class NigiriAssembly : MonoBehaviour
             Vector3 currentPosition = this.transform.position;
             Quaternion currentRotation = this.transform.rotation;
             Destroy(this.gameObject);
-            //Insert Smoke Vfx
+            SpawnVFX(SmokeVFX, currentPosition, currentRotation);
             Instantiate(TunaNigiri, currentPosition, currentRotation);
+        }
+    }
+
+    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
+    {
+        if (vfxPrefab != null)
+        {
+            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
+            Destroy(VFXInstance, 2f);
         }
     }
 }
