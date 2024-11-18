@@ -56,6 +56,11 @@ public class Snap : MonoBehaviour
     private IEnumerator IResetTrigger()
     {
         yield return new WaitForSeconds(Timer);
+        ResetSnap();
+    }
+
+    public void ResetSnap()
+    {
         SnapCollider.enabled = true;
     }
 }

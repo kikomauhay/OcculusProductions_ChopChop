@@ -13,6 +13,9 @@ public class Sliceable : MonoBehaviour
     [SerializeField]
     GameObject sharpObject;
 
+    [SerializeField]
+    GameObject SmokeVFX;
+
     int chopCounter;
     public bool IsAttached = false;
 
@@ -31,15 +34,18 @@ public class Sliceable : MonoBehaviour
         Knife knife = other.gameObject.GetComponent<Knife>();
 
         // if not null, +1 on chop counter
-        if (!IsAttached)
-            return;
-        if (knife != null)
+        if (IsAttached)
         {
-            Debug.Log("Chopping");
-            // add vfx here as well
-            chopCounter++;
-        }
+            if (knife != null)
+            {
+                Vector3 currentPosition = currentPrefab.transform.position;
+                Quaternion currentRotation = currentPrefab.transform.rotation;
+                Debug.Log("Chopping");
+                SpawnVFX(SmokeVFX, currentPosition, currentRotation);
+                chopCounter++;
+            }
 
+        }
     }
 
     void Sliced()
@@ -51,14 +57,18 @@ public class Sliceable : MonoBehaviour
             Quaternion currentRotation = currentPrefab.transform.rotation;
 
             Destroy(currentPrefab);
-
-            // insert vfx here
-
-            //Instantiate new prefab with the pos and rot values from before
-            //Debug.Log("Sliced Ingredient has spawned");
-            
+            SpawnVFX(SmokeVFX, currentPosition, currentRotation);
             Instantiate(nextPrefab, currentPosition, currentRotation);
 
         }
+    }
+
+    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
+    {
+        if(vfxPrefab != null)
+        {
+            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
+            Destroy(VFXInstance, 2f);
+        }    
     }
 }

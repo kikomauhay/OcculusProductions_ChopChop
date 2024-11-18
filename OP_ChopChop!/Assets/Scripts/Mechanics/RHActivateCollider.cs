@@ -14,7 +14,7 @@ public class RHActivateCollider : MonoBehaviour
 
     private void Update()
     {
-        if(CheckGrip(left) && CheckGrip(right))
+        if(CheckGrip(left) || CheckGrip(right))
         {
             MidCollider.enabled = true;
         }
