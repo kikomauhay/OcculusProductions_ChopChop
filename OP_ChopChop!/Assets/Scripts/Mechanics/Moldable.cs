@@ -35,7 +35,8 @@ public class Moldable : MonoBehaviour
         if(CheckGrip(left))
         {
             Debug.Log("Left Detected");
-            if (other.GetComponent<Rice>() & CheckGrip(right))
+            Rice rice = other.GetComponent<Rice>();
+            if (rice != null && CheckGrip(right))
             {
                 Debug.Log("Molding");
                 MoldCounter++;

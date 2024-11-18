@@ -12,6 +12,12 @@ public class RiceSpawn : MonoBehaviour
     [SerializeField]
     GameObject UnmoldedRice;
 
+    [SerializeField]
+    Collider InstantiateCollider;
+
+    [SerializeField]
+    float Timer;
+
     private void Awake()
     {
         left = ControllerManager.instance.leftController;
@@ -20,11 +26,26 @@ public class RiceSpawn : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (CheckGrip(left) && other.gameObject.GetComponent<ActionBasedController>()
-            || CheckGrip(right) && other.gameObject.GetComponent<ActionBasedController>())
+        IXRSelectInteractor interactor = null;
+        if (CheckGrip(left) && other.gameObject.GetComponent<ActionBasedController>())
+        {
+            interactor = left.GetComponent<XRDirectInteractor>(); 
+        }
+        if (CheckGrip(right) && other.gameObject.GetComponent<ActionBasedController>())
+        {
+            interactor = right.GetComponent<XRDirectInteractor>();
+        }
+        if (interactor != null)
         {
             Debug.Log("Triggered, Rice spawned");
-            InstantiateRice(UnmoldedRice);
+            GameObject SpawnedRice = InstantiateRice(UnmoldedRice);
+            InstantiateCollider.enabled = false;
+            AttachToHand(SpawnedRice, interactor);
+            IResetTrigger();
+        }
+        else
+        {
+            Debug.Log("Interactor null");
         }
     }
 
@@ -33,10 +54,41 @@ public class RiceSpawn : MonoBehaviour
         return controller.selectAction.action.ReadValue<float>() > 0.5f;
     }
 
-    private void InstantiateRice(GameObject _rice)
+    private GameObject InstantiateRice(GameObject _rice)
     {
         Vector3 currentPosition = this.transform.position;
         Quaternion currentRotation = this. transform.rotation;
-        Instantiate(_rice, currentPosition, currentRotation);
+        return Instantiate(_rice, currentPosition, currentRotation);
+    }
+
+    private void AttachToHand(GameObject spawnedRice, IXRSelectInteractor interactor)
+    {
+        XRGrabInteractable grabInteractable = spawnedRice.GetComponent<XRGrabInteractable>();
+        XRInteractionManager interactionManager = grabInteractable.interactionManager as XRInteractionManager;
+        if (interactionManager == null 
+            && interactor is MonoBehaviour interactorObject)
+        {
+            interactionManager = interactorObject.GetComponentInParent<XRInteractionManager>();
+        }
+        if (grabInteractable != null 
+            && interactionManager != null)
+        {
+            interactionManager.SelectEnter(interactor, grabInteractable);
+        }
+        else
+        {
+            Debug.LogError("Spawned object does not have an XRGrabInteractable component.");
+        }
+    }
+
+    private IEnumerator IResetTrigger()
+    {
+        yield return new WaitForSeconds(Timer);
+        ResetCollider();
+    }
+
+    private void ResetCollider()
+    {
+        InstantiateCollider.enabled = true;
     }
 }

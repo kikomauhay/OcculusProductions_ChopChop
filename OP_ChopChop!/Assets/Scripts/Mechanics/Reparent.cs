@@ -24,6 +24,7 @@ public class Reparent : MonoBehaviour
         {
             transform.SetParent(null);
 
+            this.gameObject.GetComponent<Rigidbody>().isKinematic = false;
             this.gameObject.GetComponent<Collider>().isTrigger = false;
             this.gameObject.GetComponent<Sliceable>().IsAttached = false;
         }
