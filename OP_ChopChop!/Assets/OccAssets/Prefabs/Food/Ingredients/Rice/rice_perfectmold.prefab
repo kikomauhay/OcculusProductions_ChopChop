@@ -301,7 +301,8 @@ MonoBehaviour:
   right: {fileID: 0}
   perfectMold: {fileID: 4758083971582321263, guid: f0854a7719c9f3e40aa774c6318a612d,
     type: 3}
-  MoldLimit: 1
+  SmokeVFX: {fileID: 0}
+  MoldLimit: 15
 --- !u!114 &-5347047959501992964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,4 +318,6 @@ MonoBehaviour:
   SalmonNigiri: {fileID: 5778702139965393049, guid: ee59e60ddd11e66429b96b45594c629e,
     type: 3}
   TunaNigiri: {fileID: 962565321575026586, guid: bc29908154ef6634d90d1996069d24e8,
+    type: 3}
+  SmokeVFX: {fileID: 2611135798559895553, guid: 03277cac3d95b3d46a37879aea695411,
     type: 3}

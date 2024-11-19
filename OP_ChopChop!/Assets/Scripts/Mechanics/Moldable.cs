@@ -12,6 +12,8 @@ public class Moldable : MonoBehaviour
     [SerializeField]
     GameObject perfectMold;
     [SerializeField]
+    GameObject SmokeVFX;
+    [SerializeField]
     float MoldLimit;
    
     private float MoldCounter;
@@ -35,8 +37,7 @@ public class Moldable : MonoBehaviour
         if(CheckGrip(left))
         {
             Debug.Log("Left Detected");
-            Rice rice = other.GetComponent<Rice>();
-            if (rice != null && CheckGrip(right))
+            if (right != null && CheckGrip(right))
             {
                 Debug.Log("Molding");
                 MoldCounter++;

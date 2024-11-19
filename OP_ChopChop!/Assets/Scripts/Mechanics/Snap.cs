@@ -15,6 +15,7 @@ public class Snap : MonoBehaviour
     {
        if(other.gameObject.GetComponent<Sliceable>() != null)
         {
+            
             other.gameObject.GetComponent<Sliceable>().IsAttached = true;
 
             SnapToObject(other.transform);
@@ -55,6 +56,7 @@ public class Snap : MonoBehaviour
 
     private IEnumerator IResetTrigger()
     {
+        Debug.Log(Timer);
         yield return new WaitForSeconds(Timer);
         ResetSnap();
     }
