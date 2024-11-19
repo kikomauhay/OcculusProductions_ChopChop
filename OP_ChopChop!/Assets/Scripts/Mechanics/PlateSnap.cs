@@ -8,6 +8,10 @@ public class PlateSnap : MonoBehaviour
     float AttachY;
     [SerializeField]
     float Timer;
+    [SerializeField]
+    float VFXScale;
+    [SerializeField]
+    GameObject BubblesVFX;
 
     public Collider SnapCollider;
     private void OnTriggerEnter(Collider other)
@@ -17,6 +21,13 @@ public class PlateSnap : MonoBehaviour
             SnapToObject(other.transform);
             DisableRigidbody(other);
             SnapCollider.enabled = false;
+        }
+        else if(other.GetComponent<Sponge>() != null)
+        {
+            Vector3 currentPosition = this.transform.position;
+            Quaternion currentRotation = this.transform.rotation;
+
+            SpawnVFX(BubblesVFX, currentPosition, currentRotation);
         }
         else
         {
@@ -45,5 +56,14 @@ public class PlateSnap : MonoBehaviour
     {
         yield return new WaitForSeconds(Timer);
         SnapCollider.enabled = true;
+    }
+    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
+    {
+        if (vfxPrefab != null)
+        {
+            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
+            VFXInstance.transform.localScale *= VFXScale; 
+            Destroy(VFXInstance, 2f);
+        }
     }
 }

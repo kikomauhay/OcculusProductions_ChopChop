@@ -14,17 +14,28 @@ public class Sliceable : MonoBehaviour
     GameObject sharpObject;
 
     [SerializeField]
+    GameObject MeatBoard;
+
+    [SerializeField]
     GameObject SmokeVFX;
 
     int chopCounter;
     public bool IsAttached = false;
 
+    private void Start()
+    {
+        sharpObject = EquipmentManager.Instance?.Knife;
+        MeatBoard = EquipmentManager.Instance?.MeatBoard;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (chopCounter == 5)
+        if (chopCounter >= 5)
         {
+            Debug.Log("SLICED");
             Sliced();
+            MeatBoard.gameObject.GetComponent<Snap>().ResetSnap();
         }
     }
 
