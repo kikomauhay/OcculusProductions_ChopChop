@@ -16,7 +16,7 @@ public class PlateSnap : MonoBehaviour
     public Collider SnapCollider;
     private void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<SalmonNigiri>() != null)
+        if(other.GetComponent<Sushi>() != null)
         {
             SnapToObject(other.transform);
             DisableRigidbody(other);
@@ -66,4 +66,6 @@ public class PlateSnap : MonoBehaviour
             Destroy(VFXInstance, 2f);
         }
     }
+
+
 }

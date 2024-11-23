@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 5310049217961757304}
   - component: {fileID: 5310049217035609992}
   m_Layer: 0
-  m_Name: NigiriDish
+  m_Name: NigiriSalmonUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -411,6 +411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sashimiCheck: {fileID: 5310049217524152839}
   riceCheck: {fileID: 5310049218177955216}
+  orderLocation: {fileID: 0}
   timerRectBar: {fileID: 2169132806848715034}
   timeLeft: 0
   maxTime: 0
