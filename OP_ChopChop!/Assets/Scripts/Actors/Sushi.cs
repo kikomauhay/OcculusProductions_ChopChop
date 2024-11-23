@@ -2,8 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SalmonNigiri : MonoBehaviour
+public enum DishType
 {
+    Nigiri_Salmon,
+    Nigiri_Tuna,
+    Maki_Salmon,
+    Maki_Tuna,
+}
+
+public class Sushi : MonoBehaviour
+{
+    [SerializeField] public DishType dishType;
     // Start is called before the first frame update
     void Start()
     {

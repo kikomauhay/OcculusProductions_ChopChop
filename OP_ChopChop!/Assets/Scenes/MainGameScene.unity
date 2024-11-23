@@ -417,7 +417,7 @@ PrefabInstance:
     - target: {fileID: 844519555582926990, guid: 9359124f10d8b73428ac1f36c5ba3904,
         type: 3}
       propertyPath: m_Name
-      value: Screen
+      value: BigScreen
       objectReference: {fileID: 0}
     - target: {fileID: 881539844550339268, guid: 9359124f10d8b73428ac1f36c5ba3904,
         type: 3}
@@ -506,6 +506,13 @@ MonoBehaviour:
   orderList: []
   timeToMakeOrder: 26
   nextOrderTimer: 8
+  preFabCompletedDishes:
+  - {fileID: 5778702139965393049, guid: ee59e60ddd11e66429b96b45594c629e, type: 3}
+  - {fileID: 962565321575026586, guid: bc29908154ef6634d90d1996069d24e8, type: 3}
+  - {fileID: 8172771486685568476, guid: b43a8f2af624eb54099140d55bd5b90d, type: 3}
+  - {fileID: 3752841408385658200, guid: c0b54832d7b5c3044b17b3b0b06963f0, type: 3}
+  plateToServe: {fileID: 110817272790873094, guid: c131d2719f0f65640b507063b829bd6c,
+    type: 3}
 --- !u!1 &206490415 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5686134208185362818, guid: 1fd3a7c43c8190f4d8c167ebde694364,

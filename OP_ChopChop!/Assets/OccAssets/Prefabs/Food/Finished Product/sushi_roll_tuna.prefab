@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7413522663131784913}
   - component: {fileID: 2669498125010204385}
   - component: {fileID: 3470512965703933503}
+  - component: {fileID: 875113319965592437}
   m_Layer: 0
   m_Name: sushi_roll_tuna
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &875113319965592437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3752841408385658200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c26682cf61d708a49b4ed8d31f1addb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dishType: 3
