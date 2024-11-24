@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6532223389640209242}
   - component: {fileID: 6976775310343011826}
   - component: {fileID: 1243059897119990552}
+  - component: {fileID: 7481451270785601687}
   m_Layer: 0
   m_Name: nigiri_tuna
   m_TagString: Untagged
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7481451270785601687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962565321575026586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c26682cf61d708a49b4ed8d31f1addb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dishType: 1

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+
 public class OrderManager : Singleton<OrderManager>
 {
     protected override void Awake() { base.Awake(); }
@@ -22,6 +24,10 @@ public class OrderManager : Singleton<OrderManager>
     [Header("Set Timer for Order")]
     [SerializeField] private float timeToMakeOrder; //how long customer's patiences //This needs to be balanced based on the Play Testing
     [SerializeField] private float nextOrderTimer;
+
+    [Header("For Sushi checking")]
+    [SerializeField] private GameObject[] preFabCompletedDishes;
+    [SerializeField] private GameObject plateToServe;
 
 
    void Start()
@@ -59,7 +65,8 @@ public class OrderManager : Singleton<OrderManager>
            
         }
 
-        StartCoroutine(TimerForNextOrder());
+            StartCoroutine(TimerForNextOrder());
+        
     }
 
     public bool IsEmptySpawnLocation()
@@ -87,6 +94,30 @@ public class OrderManager : Singleton<OrderManager>
         }
     }
 
+
+
+    void CheckOrder()
+    {
+        //Upon serving the plate, this system checks against the list if there are any matching Orders. If there is, yeet that one
+        //If there are duplicates, check against which one's timer is about to be run out. Yeet the one with the lesser timer 
+        
+        for(int i = 0; i < orderList.Count;i++) 
+        {
+            //USE ENUMS TO CHECK
+            if (plateToServe.GetComponentInChildren<Plate>().gameObject.name.Contains("nigri_salmon") 
+                == orderList[i].name.Contains("NigiriSalmonUI"))
+            {
+                OrderComplete(orderList[0]);
+                RemoveDishFromList(orderList[0]);
+
+                orderList.RemoveAt(i);
+                break;
+            }
+        }
+
+        //if(plateToServe.GetComponent<Plate>().GetComponentInChildren)
+    }
+
     public void RemoveDishFromList(GameObject dishToRemove)
     {
         orderList.Remove(dishToRemove);
@@ -96,6 +127,9 @@ public class OrderManager : Singleton<OrderManager>
     {
        orderToRemove.GetComponent<NigiriDish>().DestroyPrefab();
     }
+
+    
+
 
     protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
 
