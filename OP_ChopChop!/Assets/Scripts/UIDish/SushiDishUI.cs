@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NigiriDish : MonoBehaviour
+public enum UIDishType
 {
-    [SerializeField] private GameObject sashimiCheck;  //Upon checking of plating, see if Ingredients are place correctly
-    [SerializeField] private GameObject riceCheck;
+    Nigiri_Salmon,
+    Nigiri_Tuna,
+    Maki_Salmon,
+    Maki_Tuna,
+}
+
+public class SushiDishUI : MonoBehaviour
+{
+    [SerializeField] public UIDishType dishType;
     [SerializeField] private GameObject orderLocation;
 
     public GameObject _OrderLocation
@@ -19,6 +26,10 @@ public class NigiriDish : MonoBehaviour
     [SerializeField] private float timeLeft;
     [SerializeField] public float maxTime;
 
+    public float GetTimeLeft
+    {
+        get { { return timeLeft; } }
+    }
     public float MaxTime //value to be set via OrderManger
     {
         get { { return maxTime; } }
@@ -43,16 +54,6 @@ public class NigiriDish : MonoBehaviour
         {
             DestroyPrefab();
         }
-    }
-
-    private void ActivateSashimiCheck() //Upon successful placement of ingredient on plate, check On
-    {
-        sashimiCheck.SetActive(true);
-    }
-
-    private void ActivateRiceCheck()
-    {
-        riceCheck.SetActive(true);
     }
 
     public void StartTimer() //Timer to start moving

@@ -54,11 +54,11 @@ public class OrderManager : Singleton<OrderManager>
 
                 orderList.Add(spawnOrder);
 
-                spawnOrder.GetComponent<NigiriDish>()._OrderLocation = prefabSpawnLocations[x].gameObject;
+                spawnOrder.GetComponent<SushiDishUI>()._OrderLocation = prefabSpawnLocations[x].gameObject;
 
                 prefabSpawnLocations[x].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent = true;
 
-                spawnOrder.GetComponent<NigiriDish>().maxTime = timeToMakeOrder; //Set Timer
+                spawnOrder.GetComponent<SushiDishUI>().maxTime = timeToMakeOrder; //Set Timer
 
                 break;
             }
@@ -95,27 +95,40 @@ public class OrderManager : Singleton<OrderManager>
     }
 
 
-
-    void CheckOrder()
+    /// <summary>
+    /// Upon serving the plate, this system checks against the list if there are any matching Orders. 
+    /// If there is, yeet that one
+    /// If there are duplicates, check against which one's timer is about to be run out. Yeet the one with the lesser timer 
+    /// </summary>
+    public void CheckOrder()
     {
-        //Upon serving the plate, this system checks against the list if there are any matching Orders. If there is, yeet that one
-        //If there are duplicates, check against which one's timer is about to be run out. Yeet the one with the lesser timer 
-        
         for(int i = 0; i < orderList.Count;i++) 
         {
-            //USE ENUMS TO CHECK
-            if (plateToServe.GetComponentInChildren<Plate>().gameObject.name.Contains("nigri_salmon") 
-                == orderList[i].name.Contains("NigiriSalmonUI"))
+            Sushi sushiComponent = plateToServe.GetComponentInChildren<Sushi>(); 
+            //^To Get Enum of the Sushi attached to the plate^
+            SushiDishUI dishUIComponent = orderList[i].GetComponent<SushiDishUI>(); 
+            //^To Get the Enum of the Sushi of the order^
+
+            if (sushiComponent != null && dishUIComponent != null && 
+                sushiComponent.dishType.Equals(dishUIComponent.dishType))
             {
-                OrderComplete(orderList[0]);
-                RemoveDishFromList(orderList[0]);
-
-                orderList.RemoveAt(i);
+                if (i > 0 && orderList[i].GetComponent<SushiDishUI>().GetTimeLeft < orderList[0].GetComponent<SushiDishUI>().GetTimeLeft)
+                {
+                    OrderComplete(orderList[0]);
+                    RemoveDishFromList(orderList[0]);
+                    orderList.RemoveAt(0);
+                    Debug.Log("Removed Current Order");
+                }
+                else
+                {
+                    OrderComplete(orderList[i]);
+                    RemoveDishFromList(orderList[i]);
+                    orderList.RemoveAt(i);
+                    Debug.Log("Removed Other Order");
+                }
                 break;
-            }
+            }   
         }
-
-        //if(plateToServe.GetComponent<Plate>().GetComponentInChildren)
     }
 
     public void RemoveDishFromList(GameObject dishToRemove)
@@ -125,7 +138,7 @@ public class OrderManager : Singleton<OrderManager>
 
     public void OrderComplete(GameObject orderToRemove)
     {
-       orderToRemove.GetComponent<NigiriDish>().DestroyPrefab();
+       orderToRemove.GetComponent<SushiDishUI>().DestroyPrefab();
     }
 
     
