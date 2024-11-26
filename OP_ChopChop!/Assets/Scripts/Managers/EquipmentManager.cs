@@ -16,6 +16,5 @@ public class EquipmentManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-        //gg
     }
 }
