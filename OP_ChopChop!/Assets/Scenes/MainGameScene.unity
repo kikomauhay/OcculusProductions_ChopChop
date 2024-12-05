@@ -1486,6 +1486,11 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5292572580293083120, guid: 9359124f10d8b73428ac1f36c5ba3904,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7425128121141821761, guid: 9359124f10d8b73428ac1f36c5ba3904,
         type: 3}
       propertyPath: m_Camera
@@ -2372,17 +2377,17 @@ PrefabInstance:
     - target: {fileID: 2256566160567747343, guid: 5ab3e672be634b5419c451c218720ae4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.078
+      value: 0.808
       objectReference: {fileID: 0}
     - target: {fileID: 2256566160567747343, guid: 5ab3e672be634b5419c451c218720ae4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.842
+      value: 0.818
       objectReference: {fileID: 0}
     - target: {fileID: 2256566160567747343, guid: 5ab3e672be634b5419c451c218720ae4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.234
+      value: -0.179
       objectReference: {fileID: 0}
     - target: {fileID: 2256566160567747343, guid: 5ab3e672be634b5419c451c218720ae4,
         type: 3}
@@ -3124,6 +3129,11 @@ PrefabInstance:
       propertyPath: right
       value: 
       objectReference: {fileID: 2123746474}
+    - target: {fileID: 9070508986696023524, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9070508986851495208, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3281,6 +3291,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: StoreMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 9070508986851495211, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9070508986895017176, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -3326,6 +3341,11 @@ PrefabInstance:
       propertyPath: right
       value: 
       objectReference: {fileID: 2123746474}
+    - target: {fileID: 9070508987573380331, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9070508988136877107, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
         type: 3}
       propertyPath: left
