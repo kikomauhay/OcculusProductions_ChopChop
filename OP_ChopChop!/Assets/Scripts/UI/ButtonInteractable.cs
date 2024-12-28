@@ -15,8 +15,8 @@ public class ButtonInteractable : MonoBehaviour
 
     private void Awake()
     {
-        left = ControllerManager.instance.leftController;
-        right = ControllerManager.instance.rightController;
+        //left = ControllerManager.instance.leftController;
+        //right = ControllerManager.instance.rightController;
     }
 
     // Start is called before the first frame update
