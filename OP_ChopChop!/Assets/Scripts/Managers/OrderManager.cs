@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
-
 public class OrderManager : Singleton<OrderManager>
 {
     protected override void Awake() { base.Awake(); }
 
     [Header("Arrays of Prefabs and Locations")]
     [SerializeField] private GameObject[] dishPrefabs; //prefabs of dishes UI to appear
-    [SerializeField] private GameObject[] prefabSpawnLocations;  //idea is to lock the positions of spawning, prob
+    [SerializeField] private GameObject[] prefabSpawnLocations;  //idea is to lock the positions of spawning
 
     public GameObject[] _PrefabSpawnLocations
     {
