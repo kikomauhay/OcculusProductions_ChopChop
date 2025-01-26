@@ -5,14 +5,14 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class ControllerManager : MonoBehaviour
 {
-    public static ControllerManager instance;
-    public ActionBasedController leftController;
-    public ActionBasedController rightController;
+    public static ControllerManager Instance;
+    public ActionBasedController LeftController;
+    public ActionBasedController RightController;
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
+        if (Instance == null)
+            Instance = this;
         else
             Destroy(gameObject);
     }

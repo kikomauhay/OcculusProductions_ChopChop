@@ -5,22 +5,27 @@ using UnityEngine;
 public class Snap : MonoBehaviour
 {
     [SerializeField]
-    float AttachY;
+    float _attachY;
     [SerializeField]
-    float Timer;
+    float timer;
 
     public Collider SnapCollider;
 
-    private void OnTriggerEnter(Collider other)
+    public void ResetSnap()
     {
-       if(other.gameObject.GetComponent<Sliceable>() != null)
+        SnapCollider.enabled = true;
+    }
+
+    private void OnTriggerEnter(Collider _other)
+    {
+       if(_other.gameObject.GetComponent<Sliceable>() != null)
         {
             
-            other.gameObject.GetComponent<Sliceable>().IsAttached = true;
+            _other.gameObject.GetComponent<Sliceable>().IsAttached = true;
 
-            SnapToObject(other.transform);
-            SetCollider(other);
-            DisableRigidBody(other);
+            SnapToObject(_other.transform);
+            SetCollider(_other);
+            DisableRigidBody(_other);
             Debug.Log("Triggered");
             SnapCollider.enabled = false;
         }
@@ -30,18 +35,18 @@ public class Snap : MonoBehaviour
         }
     }
 
-    void SnapToObject(Transform FoodObject)
+    void SnapToObject(Transform _foodObject)
     {
-            FoodObject.SetParent(transform);
-            FoodObject.localPosition = new Vector3(0, AttachY, 0);
-            FoodObject.localRotation = Quaternion.Euler(0, FoodObject.localRotation.eulerAngles.y, 0);
+            _foodObject.SetParent(transform);
+            _foodObject.localPosition = new Vector3(0, _attachY, 0);
+            _foodObject.localRotation = Quaternion.Euler(0, _foodObject.localRotation.eulerAngles.y, 0);
     }
 
-    void SetCollider(Collider other)
+    void SetCollider(Collider _other)
     {
-        if(other.GetComponent<Collider>() != null)
+        if(_other.GetComponent<Collider>() != null)
         {
-            other.GetComponent<Collider>().isTrigger = true;
+            _other.GetComponent<Collider>().isTrigger = true;
         }
     }
 
@@ -56,13 +61,8 @@ public class Snap : MonoBehaviour
 
     private IEnumerator IResetTrigger()
     {
-        Debug.Log(Timer);
-        yield return new WaitForSeconds(Timer);
+        Debug.Log(timer);
+        yield return new WaitForSeconds(timer);
         ResetSnap();
-    }
-
-    public void ResetSnap()
-    {
-        SnapCollider.enabled = true;
     }
 }

@@ -6,41 +6,40 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Moldable : MonoBehaviour
 {
-    public ActionBasedController left;
-    public ActionBasedController right;
+    public ActionBasedController Left, Right;
 
     [SerializeField]
-    GameObject perfectMold;
+    GameObject _perfectMold;
     [SerializeField]
-    GameObject SmokeVFX;
+    GameObject _smokeVFX;
     [SerializeField]
-    float MoldLimit;
+    float _moldLimit;
    
-    private float MoldCounter;
+    private float _moldCounter;
 
     private void Awake()
     {
-        left = ControllerManager.instance.leftController;
-        right = ControllerManager.instance.rightController;
+        Left = ControllerManager.Instance.LeftController;
+        Right = ControllerManager.Instance.RightController;
     }
     private void Update()
     {
-        Debug.Log(MoldCounter);
-        if (MoldCounter >= MoldLimit)
+        Debug.Log(_moldCounter);
+        if (_moldCounter >= _moldLimit)
         {
-            MoldInstantiate(perfectMold);
+            MoldInstantiate(_perfectMold);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider _other)
     {
-        if(CheckGrip(left))
+        if(CheckGrip(Left))
         {
             Debug.Log("Left Detected");
-            if (right != null && CheckGrip(right))
+            if (Right != null && CheckGrip(Right))
             {
                 Debug.Log("Molding");
-                MoldCounter++;
+                _moldCounter++;
             }
         }
     }

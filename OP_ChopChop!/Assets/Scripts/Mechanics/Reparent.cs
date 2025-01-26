@@ -5,17 +5,17 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Reparent : MonoBehaviour
 {
-    private XRGrabInteractable grabInteractable;
+    private XRGrabInteractable _grabInteractable;
 
     private void Awake()
     {
-        grabInteractable = GetComponent<XRGrabInteractable>();
-        grabInteractable.selectEntered.AddListener(DetachFromBoard);
+        _grabInteractable = GetComponent<XRGrabInteractable>();
+        _grabInteractable.selectEntered.AddListener(DetachFromBoard);
     }
 
     private void OnDestroy()
     {
-        grabInteractable.selectEntered.RemoveListener(DetachFromBoard);
+        _grabInteractable.selectEntered.RemoveListener(DetachFromBoard);
     }
 
     void DetachFromBoard(SelectEnterEventArgs args)

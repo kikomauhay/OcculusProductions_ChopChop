@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Trash : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider _other)
     {
-        if (other.gameObject.GetComponent<Destructable>() != null)
+        if (_other.gameObject.GetComponent<Destructable>() != null)
         {
-            Destroy(other.gameObject);
+            Destroy(_other.gameObject);
         }
     }
 }

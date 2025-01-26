@@ -5,41 +5,41 @@ using UnityEngine;
 public class NigiriAssembly : MonoBehaviour
 {
     [SerializeField]
-    GameObject SalmonNigiri;
+    GameObject _salmonNigiri;
 
     [SerializeField]
-    GameObject TunaNigiri;
+    GameObject _tunaNigiri;
 
     [SerializeField]
-    GameObject SmokeVFX;
-    private void OnTriggerEnter(Collider other)
+    GameObject _smokeVFX;
+    private void OnTriggerEnter(Collider _other)
     {
         //for now use Sliceable Component since we're waiting for the ingredient base class
-        if(other.gameObject.GetComponent<SalmonSlice>())
+        if(_other.gameObject.GetComponent<SalmonSlice>())
         {
-            Vector3 currentPosition = this.transform.position;
-            Quaternion currentRotation = this.transform.rotation;
+            Vector3 _currentPosition = this.transform.position;
+            Quaternion _currentRotation = this.transform.rotation;
             Destroy(this.gameObject);
-            Destroy(other.gameObject);
-            SpawnVFX(SmokeVFX, currentPosition, currentRotation);
-            Instantiate(SalmonNigiri, currentPosition, currentRotation);
+            Destroy(_other.gameObject);
+            SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
+            Instantiate(_salmonNigiri, _currentPosition, _currentRotation);
         }
-        if(other.gameObject.GetComponent<TunaSlice>())
+        if(_other.gameObject.GetComponent<TunaSlice>())
         {
-            Vector3 currentPosition = this.transform.position;
-            Quaternion currentRotation = this.transform.rotation;
+            Vector3 _currentPosition = this.transform.position;
+            Quaternion _currentRotation = this.transform.rotation;
             Destroy(this.gameObject);
-            SpawnVFX(SmokeVFX, currentPosition, currentRotation);
-            Instantiate(TunaNigiri, currentPosition, currentRotation);
+            SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
+            Instantiate(_tunaNigiri, _currentPosition, _currentRotation);
         }
     }
 
-    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
+    void SpawnVFX(GameObject _vfxPrefab, Vector3 _position, Quaternion _rotation)
     {
-        if (vfxPrefab != null)
+        if (_vfxPrefab != null)
         {
-            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
-            Destroy(VFXInstance, 2f);
+            GameObject _VFXInstance = Instantiate(_vfxPrefab, _position, _rotation);
+            Destroy(_VFXInstance, 2f);
         }
     }
 }

@@ -5,29 +5,29 @@ using UnityEngine;
 public class PlateSnap : MonoBehaviour
 {
     [SerializeField]
-    float AttachY;
+    float _attachY;
     [SerializeField]
-    float Timer;
+    float _timer;
     [SerializeField]
-    float VFXScale;
+    float _VFXScale;
     [SerializeField]
-    GameObject BubblesVFX;
+    GameObject _bubblesVFX;
 
     public Collider SnapCollider;
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider _other)
     {
-        if(other.GetComponent<Sushi>() != null)
+        if(_other.GetComponent<Sushi>() != null)
         {
-            SnapToObject(other.transform);
-            DisableRigidbody(other);
+            SnapToObject(_other.transform);
+            DisableRigidbody(_other);
             SnapCollider.enabled = false;
         }
-        else if(other.GetComponent<Sponge>() != null)
+        else if(_other.GetComponent<Sponge>() != null)
         {
-            Vector3 currentPosition = this.transform.position;
-            Quaternion currentRotation = this.transform.rotation;
+            Vector3 _currentPosition = this.transform.position;
+            Quaternion _currentRotation = this.transform.rotation;
 
-            SpawnVFX(BubblesVFX, currentPosition, currentRotation);
+            SpawnVFX(_bubblesVFX, _currentPosition, _currentRotation);
         }
         else
         {
@@ -35,37 +35,36 @@ public class PlateSnap : MonoBehaviour
         }
     }
 
-    void SnapToObject(Transform FoodObject)
+    void SnapToObject(Transform _foodObject
+        )
     {
-        FoodObject.SetParent(transform);
-        FoodObject.localPosition = new Vector3(0, AttachY, 0);
-        FoodObject.localRotation = Quaternion.Euler(0, FoodObject.localRotation.eulerAngles.y, 0);
-
+        _foodObject.SetParent(transform);
+        _foodObject.localPosition = new Vector3(0, _attachY, 0);
+        _foodObject.localRotation = Quaternion.Euler(0, _foodObject.localRotation.eulerAngles.y, 0);
     }
 
-    void DisableRigidbody(Collider other)
+    void DisableRigidbody(Collider _other)
     {
-        Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null)
+        Rigidbody _rb = _other.GetComponent<Rigidbody>();
+        if (_rb != null)
         {
-            rb.isKinematic = true;
+            _rb.isKinematic = true;
+        }
+    }
+
+    void SpawnVFX(GameObject _vfxPrefab, Vector3 _position, Quaternion _rotation)
+    {
+        if (_vfxPrefab != null)
+        {
+            GameObject VFXInstance = Instantiate(_vfxPrefab, _position, _rotation);
+            VFXInstance.transform.localScale *= _VFXScale;
+            Destroy(VFXInstance, 2f);
         }
     }
 
     private IEnumerator IResetTrigger()
     {
-        yield return new WaitForSeconds(Timer);
+        yield return new WaitForSeconds(_timer);
         SnapCollider.enabled = true;
     }
-    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
-    {
-        if (vfxPrefab != null)
-        {
-            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
-            VFXInstance.transform.localScale *= VFXScale; 
-            Destroy(VFXInstance, 2f);
-        }
-    }
-
-
 }

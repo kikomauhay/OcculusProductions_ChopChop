@@ -5,37 +5,37 @@ using UnityEngine;
 public class Sliceable : MonoBehaviour
 {
     [SerializeField]
-    GameObject currentPrefab;
+    GameObject _currentPrefab;
 
     [SerializeField]
-    GameObject nextPrefab;
+    GameObject _nextPrefab;
 
     [SerializeField]
-    GameObject sharpObject;
+    GameObject _sharpObject;
 
     [SerializeField]
-    GameObject MeatBoard;
+    GameObject _meatBoard;
 
     [SerializeField]
-    GameObject SmokeVFX;
+    GameObject _smokeVFX;
 
-    int chopCounter;
+    int _chopCounter;
     public bool IsAttached = false;
 
     private void Start()
     {
-        sharpObject = EquipmentManager.Instance?.Knife;
-        MeatBoard = EquipmentManager.Instance?.MeatBoard;
+        _sharpObject = EquipmentManager.Instance?.Knife;
+        _meatBoard = EquipmentManager.Instance?.MeatBoard;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (chopCounter >= 5)
+        if (_chopCounter >= 5)
         {
             Debug.Log("SLICED");
             Sliced();
-            MeatBoard.gameObject.GetComponent<Snap>().ResetSnap();
+            _meatBoard.gameObject.GetComponent<Snap>().ResetSnap();
         }
     }
 
@@ -49,11 +49,11 @@ public class Sliceable : MonoBehaviour
         {
             if (knife != null)
             {
-                Vector3 currentPosition = currentPrefab.transform.position;
-                Quaternion currentRotation = currentPrefab.transform.rotation;
+                Vector3 _currentPosition = _currentPrefab.transform.position;
+                Quaternion _currentRotation = _currentPrefab.transform.rotation;
                 Debug.Log("Chopping");
-                SpawnVFX(SmokeVFX, currentPosition, currentRotation);
-                chopCounter++;
+                SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
+                _chopCounter++;
             }
 
         }
@@ -61,24 +61,24 @@ public class Sliceable : MonoBehaviour
 
     void Sliced()
     {
-        if(currentPrefab != null)
+        if(_currentPrefab != null)
         {
             // Get pos and rotation of prefab and then destroy
-            Vector3 currentPosition = currentPrefab.transform.position;
-            Quaternion currentRotation = currentPrefab.transform.rotation;
+            Vector3 _currentPosition = _currentPrefab.transform.position;
+            Quaternion _currentRotation = _currentPrefab.transform.rotation;
 
-            Destroy(currentPrefab);
-            SpawnVFX(SmokeVFX, currentPosition, currentRotation);
-            Instantiate(nextPrefab, currentPosition, currentRotation);
+            Destroy(_currentPrefab);
+            SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
+            Instantiate(_nextPrefab, _currentPosition, _currentRotation);
 
         }
     }
 
-    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
+    void SpawnVFX(GameObject _vfxPrefab, Vector3 _position, Quaternion _rotation)
     {
-        if(vfxPrefab != null)
+        if(_vfxPrefab != null)
         {
-            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
+            GameObject VFXInstance = Instantiate(_vfxPrefab, _position, _rotation);
             Destroy(VFXInstance, 2f);
         }    
     }
