@@ -1,78 +1,74 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 
 public class OrderManager : Singleton<OrderManager>
 {
-    protected override void Awake() { base.Awake(); }
+
+#region Members
 
     [Header("Arrays of Prefabs and Locations")]
-    [SerializeField] private GameObject[] dishPrefabs; //prefabs of dishes UI to appear
-    [SerializeField] private GameObject[] prefabSpawnLocations;  //idea is to lock the positions of spawning
+    [SerializeField] private GameObject[] _dishPrefabs; // prefabs of dishes UI to appear
+    [SerializeField] private GameObject[] _prefabSpawnLocations;  // idea is to lock the positions of spawning
 
-    public GameObject[] _PrefabSpawnLocations
-    {
-        get { return prefabSpawnLocations; }
-    }
+    public GameObject[] PrefabSpawnLocations => _prefabSpawnLocations; 
 
     [Header("Orders on Screen")]
-    [SerializeField] private List<GameObject> orderList; //List for the dishes UI to appear on screen
+    [SerializeField] private List<GameObject> _orderList; // List for the dishes UI to appear on screen
 
     [Header("Set Timer for Order")]
-    [SerializeField] private float timeToMakeOrder; //how long customer's patiences //This needs to be balanced based on the Play Testing
-    [SerializeField] private float nextOrderTimer;
+    [SerializeField] private float _timeToMakeOrder; // how long customer's patiences (needs to be balanced)
+    [SerializeField] private float _nextOrderTimer;
 
     [Header("For Sushi checking")]
-    [SerializeField] private GameObject[] preFabCompletedDishes;
-    [SerializeField] private GameObject plateToServe;
+    [SerializeField] private GameObject[] _completedDishes;
+    [SerializeField] private GameObject _plateToServe;
 
+#endregion
 
-   void Start()
-    {
-        StartCoroutine(TimerForNextOrder());
-    }
+#region Methods
 
-    void Update()
-    {
-               
-    }
+    protected override void Awake() => base.Awake(); 
+    protected override void OnApplicationQuit() => base.OnApplicationQuit(); 
+    void Start() => StartCoroutine(StartNextOrder());
+
+#endregion
 
     private void DoSpawningDishOrder()
     {
         //int ranNum = Random.Range(0, 1); //For spawning either Nigiri or Maki
 
-        for( int x = 0; x < prefabSpawnLocations.Length; x++)
+        for (int i = 0; i < _prefabSpawnLocations.Length; i++)
         {
-            if (!prefabSpawnLocations[x].GetComponent<SpawnLocationScript>()._IsPrefabPresent) //there is a empty slot
+            // there is an empty slot 
+            if (!_prefabSpawnLocations[i].GetComponent<SpawnLocationScript>()._IsPrefabPresent) 
             {
-                GameObject spawnOrder = Instantiate(dishPrefabs[0],
-                                             prefabSpawnLocations[x].gameObject.transform.position,
-                                             prefabSpawnLocations[x].gameObject.transform.rotation);
+                GameObject spawnOrder = Instantiate(
+                    _dishPrefabs[0],
+                    _prefabSpawnLocations[i].gameObject.transform.position,
+                    _prefabSpawnLocations[i].gameObject.transform.rotation
+                );
 
-                orderList.Add(spawnOrder);
+                _orderList.Add(spawnOrder);
+                spawnOrder.GetComponent<SushiDishUI>()._OrderLocation = _prefabSpawnLocations[i].gameObject;
 
-                spawnOrder.GetComponent<SushiDishUI>()._OrderLocation = prefabSpawnLocations[x].gameObject;
+                // fills a slot so this doens't take any other orders
+                _prefabSpawnLocations[i].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent = true;
 
-                prefabSpawnLocations[x].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent = true;
-
-                spawnOrder.GetComponent<SushiDishUI>().maxTime = timeToMakeOrder; //Set Timer
-
+                // sets customer timer before they leave
+                spawnOrder.GetComponent<SushiDishUI>().maxTime = _timeToMakeOrder; 
                 break;
             }
-           
         }
-
-            StartCoroutine(TimerForNextOrder());
-        
+        StartCoroutine(StartNextOrder());        
     }
 
     public bool IsEmptySpawnLocation()
     {
         Debug.Log("isEmptyPlaying");
-        for (int i = 0; i < prefabSpawnLocations.Length; i++)
+        for (int i = 0; i < _prefabSpawnLocations.Length; i++)
         {
-            if (prefabSpawnLocations[i].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent == false)
+            if (_prefabSpawnLocations[i].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent == false)
             {
                 Debug.Log("IsEmpty True");
                 return true;
@@ -82,47 +78,51 @@ public class OrderManager : Singleton<OrderManager>
         return false;
     }
 
-    public IEnumerator TimerForNextOrder()
-    {
-        yield return new WaitForSeconds(nextOrderTimer);
+    public IEnumerator StartNextOrder()
+    {   
+        yield return new WaitForSeconds(_nextOrderTimer);
 
         if (IsEmptySpawnLocation())
-        {
             DoSpawningDishOrder();
-        }
     }
 
 
-    /// <summary>
-    /// Upon serving the plate, this system checks against the list if there are any matching Orders. 
-    /// If there is, yeet that one
-    /// If there are duplicates, check against which one's timer is about to be run out. Yeet the one with the lesser timer 
-    /// </summary>
+#region Order_Checking
+
+/// <summary>
+/// Upon serving the plate, this system checks against the list if there are any matching orders. 
+/// If there is, yeet that one
+/// If there are duplicates, check against which one's timer is about to be run out. 
+/// Yeet the one with the lesser timer. 
+/// </summary>
+
     public void CheckOrder()
     {
-        for(int i = 0; i < orderList.Count;i++) 
+        for(int i = 0; i < _orderList.Count; i++) 
         {
-            Sushi sushiComponent = plateToServe.GetComponentInChildren<Sushi>(); 
-            //^To Get Enum of the Sushi attached to the plate^
-            SushiDishUI dishUIComponent = orderList[i].GetComponent<SushiDishUI>(); 
-            //^To Get the Enum of the Sushi of the order^
+            // gets the type of the sushi attached to the plate
+            Sushi sushiComponent = _plateToServe.GetComponentInChildren<Sushi>(); 
 
-            if (sushiComponent != null && dishUIComponent != null && 
+            // gets the type of sushi from the order
+            SushiDishUI dishUIComponent = _orderList[i].GetComponent<SushiDishUI>(); 
+
+            if (sushiComponent != null && 
+                dishUIComponent != null && 
                 sushiComponent.dishType.Equals(dishUIComponent.dishType))
             {
-                if (i > 0 && orderList[i].GetComponent<SushiDishUI>().GetTimeLeft < orderList[0].GetComponent<SushiDishUI>().GetTimeLeft)
+                if (i > 0 && _orderList[i].GetComponent<SushiDishUI>().GetTimeLeft < _orderList[0].GetComponent<SushiDishUI>().GetTimeLeft)
                 {
-                    OrderComplete(orderList[0]);
-                    RemoveDishFromList(orderList[0]);
-                    orderList.RemoveAt(0);
-                    Debug.Log("Removed Current Order");
+                    OrderComplete(_orderList[0]);
+                    RemoveDishFromList(_orderList[0]);
+                    _orderList.RemoveAt(0);
+                    Debug.Log($"Removed {_orderList[0].name}");
                 }
                 else
                 {
-                    OrderComplete(orderList[i]);
-                    RemoveDishFromList(orderList[i]);
-                    orderList.RemoveAt(i);
-                    Debug.Log("Removed Other Order");
+                    OrderComplete(_orderList[i]);
+                    RemoveDishFromList(_orderList[i]);
+                    _orderList.RemoveAt(i);
+                    Debug.Log($"Removed {_orderList[i].name}");
                 }
                 break;
             }   
@@ -131,17 +131,12 @@ public class OrderManager : Singleton<OrderManager>
 
     public void RemoveDishFromList(GameObject dishToRemove)
     {
-        orderList.Remove(dishToRemove);
+        _orderList.Remove(dishToRemove);
     }
-
     public void OrderComplete(GameObject orderToRemove)
     {
        orderToRemove.GetComponent<SushiDishUI>().DestroyPrefab();
     }
 
-    
-
-
-    protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
-
+#endregion
 }
