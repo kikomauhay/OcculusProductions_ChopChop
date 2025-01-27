@@ -5,13 +5,15 @@ using UnityEngine;
 public enum StorageType { CHILLER, FREEZER } 
 
 public class InventoryManager : Singleton<InventoryManager>
-{    
-    public List<GameObject> Fridge => _fridge; // change to fridge.count 
-    
-    List<GameObject> _fridge = new List<GameObject>();
+{
+    public int FridgeCapacity => _fridge.Count; // how many food items are in the ref 
+    private List<GameObject> _fridge = new List<GameObject>();
 
-    protected override void Awake() { base.Awake(); }
-    void Reset() 
+#region Methods
+
+    protected override void Awake() => base.Awake();
+    protected override void OnApplicationQuit() => base.OnApplicationQuit(); 
+    void Reset() // removes all the food after testing 
     {         
         if (_fridge.Count > 0)
         {
@@ -21,6 +23,8 @@ public class InventoryManager : Singleton<InventoryManager>
             _fridge.Clear();
         }
     }  
+
+#endregion endregion
 
     public void TakeOut(GameObject food) 
     {
@@ -56,9 +60,7 @@ public class InventoryManager : Singleton<InventoryManager>
         if (ingredient.Stats.StorageType == mode)
             ingredient.IsProperlyStored = true;
     }
-
-    protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
-
+    
     IEnumerator TookOut(Ingredient food) 
     {
         yield return new WaitForSecondsRealtime(10f);

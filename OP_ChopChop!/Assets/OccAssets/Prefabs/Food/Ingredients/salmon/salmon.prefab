@@ -283,9 +283,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPrefab: {fileID: 9223341567872474545}
-  nextPrefab: {fileID: 1988033829592453110, guid: 7731d235a05dc9e49b98d175e7790c3d,
+  nextPrefab: {fileID: 4045151705470340862, guid: 9df1f14a4977b5040aef63cc1fb2eb7f,
     type: 3}
   sharpObject: {fileID: 0}
+  MeatBoard: {fileID: 0}
+  SmokeVFX: {fileID: 2611135798559895553, guid: 03277cac3d95b3d46a37879aea695411,
+    type: 3}
   IsAttached: 0
 --- !u!114 &3783701488481336857
 MonoBehaviour:

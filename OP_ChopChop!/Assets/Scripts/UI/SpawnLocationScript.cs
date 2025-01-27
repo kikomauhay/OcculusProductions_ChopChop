@@ -1,25 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnLocationScript : MonoBehaviour
 {
-    [SerializeField] private bool isPrefabPresent;
+    // what the fuck does this mean
+    [SerializeField] private bool _isPrefabPresent;
 
-    public bool _IsPrefabPresent
+    public bool IsPrefabPresent
     {
-        get { return isPrefabPresent; }
-        set { isPrefabPresent = value; }  
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        get { return _isPrefabPresent; }
+        set { _isPrefabPresent = value; }  
     }
 }

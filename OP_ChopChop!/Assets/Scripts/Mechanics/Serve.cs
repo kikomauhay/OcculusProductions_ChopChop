@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class Serve : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    // needs an explanation
+    private void OnTriggerEnter(Collider _other)
     {
-       if(other.gameObject.GetComponent<Plate>()!= null)
+       if(_other.gameObject.GetComponent<Plate>()!= null)
        {
             //OrderManager.Instance.OrderComplete(other.gameObject);
-            Destroy(other.gameObject);     
+            Destroy(_other.gameObject);     
        }
     }
 }

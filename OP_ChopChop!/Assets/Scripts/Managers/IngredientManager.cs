@@ -18,7 +18,9 @@ public class IngredientManager : Singleton<IngredientManager>
     
     List<GameObject> _trashCan, _ingredients;
 
-    protected override void Awake() { base.Awake(); }
+    protected override void Awake() => base.Awake(); 
+    protected override void OnApplicationQuit() => base.OnApplicationQuit(); 
+
     void Start()
     {
         _ingredients = new List<GameObject>();
@@ -42,12 +44,9 @@ public class IngredientManager : Singleton<IngredientManager>
             Ingredients.Clear();
         }
     }
-
+ 
     public void TrashIngredient(GameObject food) {
         _trashCan.Add(food);
-        food.GetComponent<Ingredient>().ThrewInTheTrash();
+        food.GetComponent<Ingredient>().ThrowInTrash();
     }
-
-    protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
-
 }
