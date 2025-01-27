@@ -1,19 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class ControllerManager : MonoBehaviour
+public class ControllerManager : Singleton<ControllerManager>
 {
-    public static ControllerManager Instance;
-    public ActionBasedController LeftController;
-    public ActionBasedController RightController;
+    public ActionBasedController LeftController, RightController;
 
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
+    protected override void Awake() => base.Awake();
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();
 }

@@ -79,7 +79,7 @@ public class SushiDishUI : MonoBehaviour
             OrderManager.Instance.StartCoroutine("TimerForNextOrder");
         }
 
-        orderLocation.GetComponent<SpawnLocationScript>()._IsPrefabPresent = false;
+        orderLocation.GetComponent<SpawnLocationScript>().IsPrefabPresent = false;
         Destroy(this.gameObject); 
     }
 
