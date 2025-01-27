@@ -12,7 +12,7 @@ public class Rollable : MonoBehaviour
     [SerializeField]
     GameObject _testPrefab;
 
-    // Update is called once per frame
+    // needs an explanation
     private void OnTriggerEnter(Collider _other)
     {
         if (_other.GetComponent<ActionBasedController>() != null)

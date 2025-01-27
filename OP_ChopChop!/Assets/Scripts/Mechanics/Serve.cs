@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Serve : MonoBehaviour
 {
+    // needs an explanation
     private void OnTriggerEnter(Collider _other)
     {
        if(_other.gameObject.GetComponent<Plate>()!= null)

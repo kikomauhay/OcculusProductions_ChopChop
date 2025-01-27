@@ -1,14 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Trash : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider _other)
+
+    // needs an explanation
+    // Kiko will make fixes to this
+    // "Reparent the physics" - Sir G
+
+    void OnTriggerEnter(Collider other)
     {
-        if (_other.gameObject.GetComponent<Destructable>() != null)
+        if (other.gameObject.GetComponent<Destructable>() != null)
         {
-            Destroy(_other.gameObject);
+            Destroy(other.gameObject);
+            SoundManager.Instance.PlaySound("dispose food");
         }
     }
 }

@@ -1,45 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Sliceable : MonoBehaviour
 {
-    [SerializeField]
-    GameObject _currentPrefab;
+#region Members
+    
+    [SerializeField] private GameObject _currentPrefab, _nextPrefab;
+    [SerializeField] private GameObject _sharpObject, _meatBoard;
+    [SerializeField] private GameObject _smokeVFX;
+    private int _chopCounter;
+    public bool IsAttached;
 
-    [SerializeField]
-    GameObject _nextPrefab;
+#endregion
 
-    [SerializeField]
-    GameObject _sharpObject;
+#region Methods
 
-    [SerializeField]
-    GameObject _meatBoard;
-
-    [SerializeField]
-    GameObject _smokeVFX;
-
-    int _chopCounter;
-    public bool IsAttached = false;
-
-    private void Start()
+    void Start()
     {
         _sharpObject = EquipmentManager.Instance?.Knife;
         _meatBoard = EquipmentManager.Instance?.MeatBoard;
+        IsAttached = false;
+        _chopCounter = 0;
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (_chopCounter >= 5)
         {
-            Debug.Log("SLICED");
             Sliced();
+
+            // needs an explanation
             _meatBoard.gameObject.GetComponent<Snap>().ResetSnap();
         }
     }
-
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         // check other gameobject if it has a knife script
         Knife knife = other.gameObject.GetComponent<Knife>();
@@ -51,34 +43,38 @@ public class Sliceable : MonoBehaviour
             {
                 Vector3 _currentPosition = _currentPrefab.transform.position;
                 Quaternion _currentRotation = _currentPrefab.transform.rotation;
-                Debug.Log("Chopping");
-                SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
                 _chopCounter++;
-            }
 
+                SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
+                SoundManager.Instance.PlaySound(Random.value > 0.5f ? "fish slice 01" : "fish slice 02");
+                Debug.Log("Chopping");
+            }
         }
-    }
+    }   
+
+#endregion
 
     void Sliced()
     {
-        if(_currentPrefab != null)
+        if (_currentPrefab != null)
         {
-            // Get pos and rotation of prefab and then destroy
+            // gets the position and rotation of prefab and then destroys it
             Vector3 _currentPosition = _currentPrefab.transform.position;
             Quaternion _currentRotation = _currentPrefab.transform.rotation;
 
             Destroy(_currentPrefab);
             SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
             Instantiate(_nextPrefab, _currentPosition, _currentRotation);
-
+            
+            SoundManager.Instance.PlaySound("knife chop");
+            Debug.Log("SLICED!");
         }
     }
-
-    void SpawnVFX(GameObject _vfxPrefab, Vector3 _position, Quaternion _rotation)
+    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
     {
-        if(_vfxPrefab != null)
+        if(vfxPrefab != null)
         {
-            GameObject VFXInstance = Instantiate(_vfxPrefab, _position, _rotation);
+            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
             Destroy(VFXInstance, 2f);
         }    
     }
