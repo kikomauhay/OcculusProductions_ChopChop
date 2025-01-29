@@ -46,19 +46,21 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
         for(int i = 0; i < customerSpawnPoints.Length; i++)
         {
-            if(!customerSpawnPoints[i].GetComponent<SpawnLocationScript>()._IsPrefabPresent)
+            GameObject createdCustomer = Instantiate(customerModelPrefab[0],
+                                                       customerSpawnPoints[i].transform.position,
+                                                       Quaternion.identity);
+
+
+            currentCustomerCount++;
+            /*
+            if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>()._IsPrefabPresent)
             {
-                GameObject createdCustomer = Instantiate(customerModelPrefab[0], 
-                                                        customerSpawnPoints[i].transform.position, 
-                                                        Quaternion.identity);
-                    
-                   
+               
 
-                currentCustomerCount++;
-
-                customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent = true;
+                //customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent = true;
                 break;
             }
+            */
         }
 
         StartCoroutine(ITimerForNextCustomerSpawn());
@@ -84,11 +86,13 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
         Debug.Log("isEmptyPlaying");
         for (int i = 0; i < customerSpawnPoints.Length; i++)
         {
+            /*
             if (customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent == false)
             {
                 Debug.Log("IsEmpty True");
                 return true;
             }
+            */
         }
         Debug.Log("IsEmpty False");
         return false;
