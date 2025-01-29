@@ -1,28 +1,35 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 {
-#region Members
+    protected override void Awake() { base.Awake(); }
 
-    [Header("Customer Components")]
-    [SerializeField] private GameObject[] _customerSpawnPoints; // AJ has plans for this
-    [SerializeField] private GameObject[] _customerModelPrefab; // this is the prefab for the customers
-    [SerializeField] private int _maxCustomerToSpawn, _currentCustomerCount;
-    [SerializeField] private float _nextCustomerTimer; // delay time when the next customer will arrive
+    [Header("Arrays")]
+    [SerializeField] private GameObject[] customerSpawnPoints;
+    [SerializeField] private Transform[] customerSeatingPoints;
+   
 
-#endregion
+    [Header("CustomerVariable")]
+    [SerializeField] private GameObject[] customerModelPrefab; //This is the prefab for the Customer itself
+    [SerializeField] private float customerSpeed;
 
-#region Methods
+    [Header("Variable Counts")]
+    [SerializeField] private int maxCustomerToSpawn;
+    [SerializeField] private int currentCustomerCount;
 
-    protected override void Awake() => base.Awake(); 
-    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+    [Header("Timer")]
+    [SerializeField] private float nextCustomerTimer;
 
+    // Start is called before the first frame update
     void Start()
     {
-        // add a condition over this once testing is done
-        StartCoroutine(SpawnNextCustomer()); 
+        StartCoroutine(ITimerForNextCustomerSpawn()); //Pls put this under a condition once testing is done
+        customerSpeed = customerSpeed * Time.deltaTime;
     }
+
+    // Update is called once per frame
     void Update()
     {
         /*
@@ -33,39 +40,51 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
         */
     }
 
-#endregion
-
-    private void SpawnCustomer()
+    private void DoSpawnCustomer()
     {
         //int ranNum = Random.Range(0, 1); //for spawning customer variant
 
-        for (int i = 0; i < _customerSpawnPoints.Length; i++)
+        for(int i = 0; i < customerSpawnPoints.Length; i++)
         {
-            if (!_customerSpawnPoints[i].GetComponent<SpawnLocationScript>().IsPrefabPresent)
+            if(!customerSpawnPoints[i].GetComponent<SpawnLocationScript>()._IsPrefabPresent)
             {
-                GameObject createCustomer = Instantiate(
-                    _customerModelPrefab[0], 
-                    _customerSpawnPoints[i].transform.position, 
-                    Quaternion.identity
-                );
+                GameObject createdCustomer = Instantiate(customerModelPrefab[0], 
+                                                        customerSpawnPoints[i].transform.position, 
+                                                        Quaternion.identity);
+                    
+                   
 
-                // the customer is now seated 
-                _currentCustomerCount++;
-                _customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().IsPrefabPresent = true;
+                currentCustomerCount++;
 
+                customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent = true;
                 break;
             }
         }
-        StartCoroutine(SpawnNextCustomer());
+
+        StartCoroutine(ITimerForNextCustomerSpawn());
     }
 
-    public bool IsLocationEmpty()
+    /*
+    private void CustomerMoveToSeat(GameObject createdCustomer)
+    {
+        customerSpeed = customerSpeed * Time.deltaTime;
+
+        for (int x = 0; x < customerSeatingPoints.Length; x++)
+        {
+           
+        }
+
+        createdCustomer.GetComponent<CustomerOrder>().SpawnCustomerOrder();
+        
+    }
+    */
+
+    public bool IsEmptySpawnLocation()
     {
         Debug.Log("isEmptyPlaying");
-        for (int i = 0; i < _customerSpawnPoints.Length; i++)
+        for (int i = 0; i < customerSpawnPoints.Length; i++)
         {
-            // what the fuck does this mean
-            if (_customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().IsPrefabPresent == false)
+            if (customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._IsPrefabPresent == false)
             {
                 Debug.Log("IsEmpty True");
                 return true;
@@ -73,15 +92,17 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
         }
         Debug.Log("IsEmpty False");
         return false;
-
-        // you can do return customer.IsPrefabPresent since that's also a boolean
     }
 
-    IEnumerator SpawnNextCustomer()
+    IEnumerator ITimerForNextCustomerSpawn()
     {
-        yield return new WaitForSeconds(_nextCustomerTimer);
+        yield return new WaitForSeconds(nextCustomerTimer);
 
-        if(IsLocationEmpty())
-            SpawnCustomer();        
+        if(IsEmptySpawnLocation())
+        {
+            DoSpawnCustomer();
+        }
     }
+
+    protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
 }

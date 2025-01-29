@@ -36,51 +36,55 @@ public class SushiDishUI : MonoBehaviour
         set { MaxTime = Mathf.Clamp(value, 0.0f, Mathf.Infinity); }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    /*
+// Start is called before the first frame update
+void Start()
+{
+
+    timeLeft = maxTime;
+}
+
+// Update is called once per frame
+void Update()
+{
+    if(maxTime > 0)
     {
-        
-        timeLeft = maxTime;
+        StartTimer();
+    }
+    if (timeLeft <= 0)
+    {
+        DestroyPrefab();
+    }
+}
+
+
+public void StartTimer() //Timer to start moving
+{
+    if(timeLeft > 0)
+    {
+        timeLeft -= Time.deltaTime;
+        timerRectBar.fillAmount = timeLeft/maxTime;
+
+        if(timeLeft <= maxTime/3.0)
+        {
+            timerRectBar.color = Color.red;
+        }
+    }
+}
+
+
+public void DestroyPrefab()
+{
+    //OrderManager.Instance.RemoveDishFromList(this.gameObject);
+
+    if(!OrderManager.Instance.IsEmptySpawnLocation())
+    {
+        OrderManager.Instance.StartCoroutine("TimerForNextOrder");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(maxTime > 0)
-        {
-            StartTimer();
-        }
-        if (timeLeft <= 0)
-        {
-            DestroyPrefab();
-        }
-    }
-
-    public void StartTimer() //Timer to start moving
-    {
-        if(timeLeft > 0)
-        {
-            timeLeft -= Time.deltaTime;
-            timerRectBar.fillAmount = timeLeft/maxTime;
-
-            if(timeLeft <= maxTime/3.0)
-            {
-                timerRectBar.color = Color.red;
-            }
-        }
-    }
-
-    public void DestroyPrefab()
-    {
-        OrderManager.Instance.RemoveDishFromList(this.gameObject);
-        
-        if(!OrderManager.Instance.IsEmptySpawnLocation())
-        {
-            OrderManager.Instance.StartCoroutine("TimerForNextOrder");
-        }
-
-        orderLocation.GetComponent<SpawnLocationScript>().IsPrefabPresent = false;
-        Destroy(this.gameObject); 
-    }
+    orderLocation.GetComponent<SpawnLocationScript>()._IsPrefabPresent = false;
+    Destroy(this.gameObject); 
+}
+*/
 
 }
