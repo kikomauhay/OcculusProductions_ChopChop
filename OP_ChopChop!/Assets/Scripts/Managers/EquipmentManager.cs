@@ -2,19 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentManager : MonoBehaviour
+public class EquipmentManager : Singleton<EquipmentManager>
 {
-    public static EquipmentManager Instance;
-    [SerializeField]
-    public GameObject Knife;
-    [SerializeField]
-    public GameObject MeatBoard;
+    public GameObject Knife, MeatBoard;
 
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
+    protected override void Awake() => base.Awake();
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();   
 }

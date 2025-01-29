@@ -6,18 +6,18 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Rollable : MonoBehaviour
 {
-    public ActionBasedController left;
-    public ActionBasedController right;
+    public ActionBasedController Left;
+    public ActionBasedController Right;
 
     [SerializeField]
-    GameObject testPrefab;
+    GameObject _testPrefab;
 
-    // Update is called once per frame
-    private void OnTriggerEnter(Collider other)
+    // needs an explanation
+    private void OnTriggerEnter(Collider _other)
     {
-        if (other.GetComponent<ActionBasedController>() != null)
+        if (_other.GetComponent<ActionBasedController>() != null)
         {
-            if(CheckGrip(left) && CheckGrip(right))
+            if(CheckGrip(Left) && CheckGrip(Right))
             {
                 Roll();
             }
@@ -28,15 +28,15 @@ public class Rollable : MonoBehaviour
     {
         // play animation and pause at intervals
         // instantiate new prefab for now
-        Vector3 currentPosition = this.transform.position;
-        Quaternion currentRotation = this.transform.rotation;
+        Vector3 _currentPosition = this.transform.position;
+        Quaternion _currentRotation = this.transform.rotation;
 
         Destroy(this.gameObject);
-        Instantiate(testPrefab, currentPosition, currentRotation);
+        Instantiate(_testPrefab, _currentPosition, _currentRotation);
     }
 
-    private bool CheckGrip(ActionBasedController controller)
+    private bool CheckGrip(ActionBasedController _controller)
     {
-        return controller.selectAction.action.ReadValue<float>() > 0.5f;
+        return _controller.selectAction.action.ReadValue<float>() > 0.5f;
     }
 }

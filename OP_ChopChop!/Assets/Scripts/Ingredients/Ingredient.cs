@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Ingredient : MonoBehaviour 
 {
-#region Getters
+#region Members
+
     public FreshnessRating Rating { get; private set; }
     public IngredientStats Stats => _stats;
     public int FreshnessRate { get; private set; }
@@ -11,7 +12,9 @@ public class Ingredient : MonoBehaviour
     public bool IsContaminated { get; private set; }
     public bool IsTrashed { get; private set; }
     public bool IsProperlyStored { get; set; }
+
 #endregion
+
     [SerializeField] IngredientStats _stats;
 
     void Start()
@@ -28,8 +31,11 @@ public class Ingredient : MonoBehaviour
         CheckRate();
         StartCoroutine(Decay());
     }
-    public void ThrewInTheTrash() 
+    public void ThrowInTrash() 
     {
+        // removes the food form the game entirely
+        // could add more punishment later on 
+
         IsTrashed = true;
         FreshnessRate = 0;
         SoundManager.Instance.PlaySound("dispose food");
@@ -37,6 +43,9 @@ public class Ingredient : MonoBehaviour
     }
     void CheckRate() 
     {
+        // material of the ingredient changes based on how fresh it is
+        // the lower the number, the worse it is
+
         Material m;
 
         if (FreshnessRate < 70) 
@@ -64,6 +73,8 @@ public class Ingredient : MonoBehaviour
     {
         while (!IsExpired) 
         {
+            // rate & speed will change depending on the state of the ingredient
+
             int rate, speed;
 
             if (IsContaminated) 
@@ -76,7 +87,7 @@ public class Ingredient : MonoBehaviour
                 rate = _stats.Stored.Rate;
                 speed = _stats.Stored.Speed;
             }
-            else
+            else // just outside the fridge and not contaminated
             {
                 rate = _stats.Decay.Rate;
                 speed = _stats.Decay.Speed;
@@ -86,6 +97,8 @@ public class Ingredient : MonoBehaviour
 
             yield return new WaitForSecondsRealtime(speed);
             FreshnessRate -= rate;
+
+            // test
             Debug.Log($"Freshness of {name} has been reduced to {FreshnessRate}");
 
             if (FreshnessRate < 1) 
