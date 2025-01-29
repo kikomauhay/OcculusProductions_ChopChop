@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Destructable : MonoBehaviour
+public enum TrashTypes { Food, Ingredients, Equipment };
+
+public class Trashable : MonoBehaviour
 {
+    [SerializeField] TrashTypes _trashTypes;
+
     // Start is called before the first frame update
     void Start()
     {

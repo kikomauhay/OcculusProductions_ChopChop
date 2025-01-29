@@ -497,22 +497,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f45ab2fa4ad57544983d488348905fb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dishPrefabs:
-  - {fileID: 5310049217961757311, guid: df266eaa3df82b645bd33953b7f90413, type: 3}
-  prefabSpawnLocations:
-  - {fileID: 1208806713}
-  - {fileID: 1788229918}
-  - {fileID: 483592238}
-  orderList: []
-  timeToMakeOrder: 26
-  nextOrderTimer: 8
-  preFabCompletedDishes:
-  - {fileID: 5778702139965393049, guid: ee59e60ddd11e66429b96b45594c629e, type: 3}
-  - {fileID: 962565321575026586, guid: bc29908154ef6634d90d1996069d24e8, type: 3}
-  - {fileID: 8172771486685568476, guid: b43a8f2af624eb54099140d55bd5b90d, type: 3}
-  - {fileID: 3752841408385658200, guid: c0b54832d7b5c3044b17b3b0b06963f0, type: 3}
-  plateToServe: {fileID: 110817272790873094, guid: c131d2719f0f65640b507063b829bd6c,
-    type: 3}
+  _dishPrefabs: []
+  _prefabSpawnLocations: []
+  _orderList: []
+  _timeToMakeOrder: 0
+  _nextOrderTimer: 0
+  _completedDishes: []
+  _plateToServe: {fileID: 0}
 --- !u!1 &206490415 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5686134208185362818, guid: 1fd3a7c43c8190f4d8c167ebde694364,
@@ -766,7 +757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPrefabPresent: 0
+  _isPrefabPresent: 0
 --- !u!1 &509466639 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 109434732395284589, guid: 65847589f926b734d9eaed6e25f0046b,
@@ -955,6 +946,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba797919c82adff4496e76c87131c561, type: 3}
+--- !u!1 &531767182 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8873129294027024833, guid: ba797919c82adff4496e76c87131c561,
+    type: 3}
+  m_PrefabInstance: {fileID: 531767181}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &531767183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531767182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashTypes: 0
 --- !u!64 &571976422
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1388,11 +1398,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f2604428d05c964d91552baa102fc0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttachY: 0.04
-  Timer: 5
-  VFXScale: 0.001
-  BubblesVFX: {fileID: 3705749208384381419, guid: 984e7a81c0309d3489b75951ee1fbb35,
-    type: 3}
+  _attachY: 0
+  _timer: 0
+  _VFXScale: 0
+  _bubblesVFX: {fileID: 0}
   SnapCollider: {fileID: 719617980}
 --- !u!1001 &771831435
 PrefabInstance:
@@ -2906,7 +2915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPrefabPresent: 0
+  _isPrefabPresent: 0
 --- !u!1 &1214087873 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5722392891316959377, guid: 866565e8a80e26b4c9eecdf15876ed2c,
@@ -4629,7 +4638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPrefabPresent: 0
+  _isPrefabPresent: 0
 --- !u!1 &1800754159
 GameObject:
   m_ObjectHideFlags: 0
@@ -4674,8 +4683,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ca4597cc44a77c43ac494cd28684498, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftController: {fileID: 1694521429}
-  rightController: {fileID: 2123746474}
+  LeftController: {fileID: 0}
+  RightController: {fileID: 0}
 --- !u!64 &1815700481
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4767,12 +4776,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a30f08b07a0e9044ab03a779bc9194fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  left: {fileID: 1694521429}
-  right: {fileID: 2123746474}
-  UnmoldedRice: {fileID: 5821176368316166534, guid: 2222bdfaa7d2bc44e92938ab59e05114,
-    type: 3}
-  InstantiateCollider: {fileID: 0}
-  Timer: 0
+  Left: {fileID: 0}
+  Right: {fileID: 0}
+  _unmoldedRice: {fileID: 0}
+  _instantiateCollider: {fileID: 0}
+  _timer: 0
 --- !u!65 &1893254855
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5543,8 +5551,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad87fad55387c441ba7bdcbbc3603c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttachY: 0.05
-  Timer: 3
+  _attachY: 0
+  timer: 0
   SnapCollider: {fileID: 2118202439}
 --- !u!65 &2118202439
 BoxCollider:

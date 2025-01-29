@@ -9,7 +9,7 @@ public class Trash : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Destructable>() != null)
+        if (other.gameObject.GetComponent<Trashable>() != null)
         {
             Destroy(other.gameObject);
             SoundManager.Instance.PlaySound("dispose food");
