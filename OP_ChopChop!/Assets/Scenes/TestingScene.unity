@@ -510,6 +510,7 @@ GameObject:
   m_Component:
   - component: {fileID: 301500744}
   - component: {fileID: 301500745}
+  - component: {fileID: 301500746}
   m_Layer: 0
   m_Name: Seat3
   m_TagString: Untagged
@@ -545,6 +546,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &301500746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301500743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPrefabPresent: 0
 --- !u!1 &377553395
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,7 +568,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 377553396}
-  - component: {fileID: 377553397}
   - component: {fileID: 377553398}
   m_Layer: 0
   m_Name: Right_SpawnPoint
@@ -578,20 +591,6 @@ Transform:
   m_Father: {fileID: 1235066012}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -0.237, z: 0}
---- !u!136 &377553397
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377553395}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &377553398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,7 +603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPrefabPresent: 0
+  _isPrefabPresent: 0
 --- !u!1 &439441877
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,7 +994,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 566271073}
-  - component: {fileID: 566271074}
   - component: {fileID: 566271075}
   m_Layer: 0
   m_Name: RightExtm_SpawnPoint
@@ -1019,20 +1017,6 @@ Transform:
   m_Father: {fileID: 1235066012}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 38.956, z: 0}
---- !u!136 &566271074
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 566271072}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &566271075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1045,7 +1029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPrefabPresent: 0
+  _isPrefabPresent: 0
 --- !u!1 &591233011
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,7 +1241,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 595973763}
-  - component: {fileID: 595973764}
   - component: {fileID: 595973765}
   m_Layer: 0
   m_Name: Left_SpawnPoint
@@ -1281,20 +1264,6 @@ Transform:
   m_Father: {fileID: 1235066012}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &595973764
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 595973762}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &595973765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1307,7 +1276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPrefabPresent: 0
+  _isPrefabPresent: 0
 --- !u!1 &668910209
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,6 +1287,7 @@ GameObject:
   m_Component:
   - component: {fileID: 668910210}
   - component: {fileID: 668910211}
+  - component: {fileID: 668910212}
   m_Layer: 0
   m_Name: Seat1
   m_TagString: Untagged
@@ -1353,6 +1323,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &668910212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668910209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPrefabPresent: 0
 --- !u!1001 &766475685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1573,8 +1556,7 @@ MonoBehaviour:
   - {fileID: 1941565541}
   customerModelPrefab:
   - {fileID: 1612216498062132536, guid: 264f09be874a8c445b30ded8dff5bdc4, type: 3}
-  customerSpeed: 5
-  maxCustomerToSpawn: 0
+  maxCustomerToSpawn: 4
   currentCustomerCount: 0
   nextCustomerTimer: 5
 --- !u!1 &1246274158
@@ -1632,7 +1614,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1264204303}
-  - component: {fileID: 1264204304}
   - component: {fileID: 1264204305}
   m_Layer: 0
   m_Name: LftExtm_SpawnPoint
@@ -1656,20 +1637,6 @@ Transform:
   m_Father: {fileID: 1235066012}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -33.754, z: 0}
---- !u!136 &1264204304
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1264204302}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1264204305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1682,7 +1649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPrefabPresent: 0
+  _isPrefabPresent: 0
 --- !u!1 &1675748769
 GameObject:
   m_ObjectHideFlags: 0
@@ -1916,6 +1883,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1941565541}
   - component: {fileID: 1941565542}
+  - component: {fileID: 1941565543}
   m_Layer: 0
   m_Name: Seat4
   m_TagString: Untagged
@@ -1951,6 +1919,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1941565543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941565540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPrefabPresent: 0
 --- !u!1 &1965651622
 GameObject:
   m_ObjectHideFlags: 0
@@ -2440,6 +2421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2138183696}
   - component: {fileID: 2138183697}
+  - component: {fileID: 2138183698}
   m_Layer: 0
   m_Name: Seat2
   m_TagString: Untagged
@@ -2475,3 +2457,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2138183698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138183695}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae1d13b131bea04399a628bf8c66493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isPrefabPresent: 0
