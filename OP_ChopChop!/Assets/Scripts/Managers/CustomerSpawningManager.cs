@@ -57,6 +57,8 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
                                                        customerSpawnPoints[i].transform.position,
                                                        Quaternion.identity);
 
+                createdCustomer.GetComponent<CustomerOrder>()._getSetSeatNumber = customerSpawnPoints[i];
+
                 currentCustomerCount++;
 
                     
