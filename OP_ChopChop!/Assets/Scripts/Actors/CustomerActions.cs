@@ -23,6 +23,6 @@ public class CustomerActions : MonoBehaviour
     {
         customerSpeed = customerSpeed * Time.deltaTime;
 
-        this.transform.position = Vector3.MoveTowards(this.transform.position, targetLocation[0].transform.position, customerSpeed);
+        //this.transform.position = Vector3.MoveTowards(this.transform.position, targetLocation[0].transform.position, customerSpeed);
     }
 }

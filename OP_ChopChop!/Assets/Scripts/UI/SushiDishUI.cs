@@ -36,6 +36,7 @@ public class SushiDishUI : MonoBehaviour
         set { MaxTime = Mathf.Clamp(value, 0.0f, Mathf.Infinity); }
     }
 
+
     /*
 // Start is called before the first frame update
 void Start()
