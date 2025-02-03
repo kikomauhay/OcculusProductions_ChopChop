@@ -135,7 +135,7 @@ public class OrderManager : Singleton<OrderManager>
     }
     public void OrderComplete(GameObject orderToRemove)
     {
-       orderToRemove.GetComponent<SushiDishUI>().DestroyPrefab();
+       //orderToRemove.GetComponent<SushiDishUI>().DestroyPrefab();
     }
 
 #endregion

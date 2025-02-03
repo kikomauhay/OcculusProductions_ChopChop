@@ -3,7 +3,7 @@ using UnityEngine;
 public class SpawnLocationScript : MonoBehaviour
 {
     // what the fuck does this mean
-    [SerializeField] private bool _isPrefabPresent;
+    [SerializeField] public bool _isPrefabPresent;
 
     public bool IsPrefabPresent
     {

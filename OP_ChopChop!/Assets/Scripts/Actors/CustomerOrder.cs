@@ -1,0 +1,141 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public enum OrderType
+{
+    Nigiri_Salmon,
+    //Nigiri_Tuna,
+    //Maki_Salmon,
+    //Maki_Tuna,
+}
+
+public class CustomerOrder : MonoBehaviour
+{
+    [SerializeField] private OrderType dishType; //eNum variable of above
+    [SerializeField] private BoxCollider customerBoxCollider;
+    [SerializeField] private GameObject[] sushiOrder; //theOrder of the customer
+    [SerializeField] private Transform customerOrderSpawnLocation; //Spawning of the order
+
+    [SerializeField] private float currentCustomerPaitenceTimer; //use this to take the score for the customer rating
+    [SerializeField] private float maxCustomerPaitenceTimer;
+
+    [SerializeField] public float customerSatisfactionRating; //value that we'll use to check the dish decay value against the food
+    [SerializeField] private float maxCustomerSR; //SR = SatisfactionRating
+    [SerializeField] private float minCustomerSR;
+
+    [SerializeField] private GameObject seatNumber;
+    [SerializeField] private float customerDeleteTimer;
+
+
+    public GameObject _getSetSeatNumber 
+    { 
+        get { return seatNumber; } 
+        set { seatNumber = value; }  
+    }
+
+    private void Awake()
+    { 
+        dishType = (OrderType)UnityEngine.Random.Range(0, System.Enum.GetValues(typeof(OrderType)).Length);
+        //set a random dishType
+        customerSatisfactionRating = UnityEngine.Random.Range(minCustomerSR, maxCustomerSR);
+        // at start, each customer will have a random value for their taste value
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        SpawnCustomerOrder();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Debug.Log(dishType.ToString());
+        //For Debugging
+        if(Input.GetKeyDown(KeyCode.W))
+        {
+            MakeSeatEmpty();
+            Destroy(this.gameObject);
+        }
+    }
+
+    private GameObject SetCustomerOrder()
+    {
+        switch (dishType)
+        {
+            case OrderType.Nigiri_Salmon:
+                return sushiOrder[0];
+
+            /*
+           case DishType.Nigiri_Tuna: 
+               return sushiOrder[1];
+
+           case DishType.Maki_Salmon: 
+               return sushiOrder[2];
+
+           case DishType.Maki_Tuna: 
+               return sushiOrder[3];
+            */
+            default:
+                return null;
+        }
+    }
+
+    public void SpawnCustomerOrder()
+    {
+        GameObject customerOrder = Instantiate(SetCustomerOrder(),
+                                               customerOrderSpawnLocation.position,
+                                               customerOrderSpawnLocation.rotation);
+
+        //customerOrder.GetComponent<SushiDishUI>().MaxTime = maxCustomerPaitenceTimer; //setting the timer
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (CheckDishServed(other.gameObject)) 
+        {
+            Destroy(other.gameObject);
+
+            StartCoroutine(CustomerDeleteTimer());
+        }
+    }
+
+   bool CheckDishServed(GameObject dishServedToCustomer)
+    { 
+        if(dishServedToCustomer == null)
+        {
+            return false;
+        }
+
+        Sushi dishServed = dishServedToCustomer.GetComponent<Sushi>(); //To gets the enum of the sushi dish
+
+        if(dishServed.dishType.Equals(dishType)) //check if the Enum of the dish matches to customer's Enum
+        {
+            return true;
+        }
+        else
+        {
+            Debug.Log("Wrong Order");
+            return false;
+        }
+    }
+
+    IEnumerator CustomerDeleteTimer()
+    {
+        yield return new WaitForSeconds(customerDeleteTimer);
+
+        MakeSeatEmpty();
+        Destroy(this.gameObject);
+    }
+
+    private void MakeSeatEmpty()
+    {
+        seatNumber.GetComponent<SpawnLocationScript>()._isPrefabPresent = false;
+    }
+
+
+}
