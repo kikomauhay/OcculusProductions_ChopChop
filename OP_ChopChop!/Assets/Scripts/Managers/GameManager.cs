@@ -2,68 +2,99 @@ using UnityEngine;
 using System;
 
 /// <summary>
-/// Oversees all the actions of other managers.
-/// Uses a StateMachine to determine the next action in the game.
+
+/// Acts as the head of the game.
+/// Also rates the restaurant quality once the day is done.
+
 /// </summary>
+
 
 public class GameManager : Singleton<GameManager>
 {
+
+#region Events
+    public Action OnCustomerSpawned, OnFoodThrown, OnFoodServed;
+
+#endregion
+
+#region Members 
+
+    // Player References
     [SerializeField] GameObject _player;
-    public GameState CurrentState { get; private set; }
-    public GameObject Player { get => _player; }
+    public GameObject Player => _player; 
 
-    // I'll learn how events work when I need to
-    // public static event Action<GameState> OnBeforeStateChanged;
-    // public static event Action<GameState> OnAfterStateChanged;
+    // Rating System
+    public int CleanlinessRate { get; private set; } // the dirtier it gets, the less the value it wil be
+    public int DisposeCount { get; private set; } // when anything is thrown, this value increases
+    private float _avgCustomerSatisfactionRating;
+    private float _avgFoodScore; 
 
-    protected override void Awake() { base.Awake(); }
-    void Start() => ChangeState(GameState.STARTING);
 
-    
-    public void ChangeState(GameState state)
+    // Counters for average rates
+    public int CustomerCounter { get; private set; }
+    public int FoodServedCounter { get; private set; }
+
+#endregion
+
+#region Methods
+
+    protected override void Awake() => base.Awake(); 
+    protected override void OnApplicationQuit() 
     {
-        if (state == CurrentState) return;
+        base.OnApplicationQuit(); 
+        Reset();
+    }
+    void Start() 
+    {
+        CleanlinessRate = 100;
+        FoodServedCounter = 0;
+        CustomerCounter = 0;
+        DisposeCount = 0;
 
-        // OnBeforeStateChanged?.Invoke(state);
-        CurrentState = state;
+        _avgCustomerSatisfactionRating = 0f;
+        _avgFoodScore = 0f;
 
-        switch (state) 
-        {
-            case GameState.STARTING:
-                StartGame();
-                break;
-            case GameState.WINNING:
-                DoWinningLogic();
-                break;
-            case GameState.LOOSING:
-                DoLoosingLogic();
-                break;
-            case GameState.QUITTING:
-                DoQuit();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(state), state, null);
-        }
-        
-        // OnAfterStateChanged?.Invoke(state);
+        OnCustomerSpawned += AddCustomerCount;
+        OnFoodThrown += AddDisposedFood;
+        OnFoodServed += AddFoodServedCount;
+    }
+    void Reset() // unsubsribing from events to prevent null referencing 
+    {
+        OnCustomerSpawned -= AddCustomerCount;
+        OnFoodThrown -= AddDisposedFood;
+        OnFoodServed -= AddFoodServedCount;
     }
 
-    void StartGame() {
+    void RateRestaurant() 
+    {
+    /// <summary> rating formula issues
+    /// 
+    /// so far, we're using a simple formula
+    /// there are a lot of variables that we need to look into
+    /// 
+    /// </summary>
+    
 
+
+
+        // restaurant rate = avg (CleanlinessRate + 
+        //                        Avg of Customers' Satisfaction Rating + 
+        //                        Food Score of All dishes served - 
+        //                        DisposeRate)
     }
+    
+#endregion
 
-    void DoWinningLogic() {
+#region Event_Methods 
 
-    }
+    // GameObjects don't call the GameManager's things, just calls the events for it
 
-    void DoLoosingLogic() {
+    void AddCustomerCount() => CustomerCounter++;
+    void AddFoodServedCount() => FoodServedCounter++;
+    void AddDisposedFood() => DisposeCount++;
+    
 
-    }
 
-    void DoQuit() { UIHandler.Instance.Quit(); }
+#endregion
 
-    protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
 }
-
-// will add more states the more the game gets developed
-public enum GameState { STARTING, WINNING, LOOSING, QUITTING }

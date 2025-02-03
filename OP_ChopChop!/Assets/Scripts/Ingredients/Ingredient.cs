@@ -4,18 +4,18 @@ using UnityEngine;
 public class Ingredient : MonoBehaviour 
 {
 #region Members
-
-    public FreshnessRating Rating { get; private set; }
+    [SerializeField] IngredientStats _stats;
     public IngredientStats Stats => _stats;
+    public FreshnessRating Rating { get; private set; }
     public int FreshnessRate { get; private set; }
-    public bool IsExpired { get; private set; } 
+    public bool IsExpired { get; private set; }
     public bool IsContaminated { get; private set; }
     public bool IsTrashed { get; private set; }
     public bool IsProperlyStored { get; set; }
 
 #endregion
 
-    [SerializeField] IngredientStats _stats;
+#region Members
 
     void Start()
     {
@@ -68,6 +68,8 @@ public class Ingredient : MonoBehaviour
             GetComponent<MeshRenderer>().material = m;
     }
 
+#endregion
+
 #region Enumerators
     IEnumerator Decay() 
     {
@@ -92,9 +94,10 @@ public class Ingredient : MonoBehaviour
                 rate = _stats.Decay.Rate;
                 speed = _stats.Decay.Speed;
             }
+
+            // test
             Debug.Log($"Rate: {rate}; Speed: {speed}");
-
-
+            
             yield return new WaitForSecondsRealtime(speed);
             FreshnessRate -= rate;
 

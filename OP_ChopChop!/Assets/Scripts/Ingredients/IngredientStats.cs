@@ -20,6 +20,7 @@ public class IngredientStats : ScriptableObject
     [Header("Timers")]
     [SerializeField] Timer _decay;
     [SerializeField] Timer _contaminated, _stored;
+    
 #endregion
 }
 
