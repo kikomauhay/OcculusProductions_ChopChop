@@ -37,55 +37,6 @@ public class SushiDishUI : MonoBehaviour
     }
 
 
-    /*
-// Start is called before the first frame update
-void Start()
-{
 
-    timeLeft = maxTime;
-}
-
-// Update is called once per frame
-void Update()
-{
-    if(maxTime > 0)
-    {
-        StartTimer();
-    }
-    if (timeLeft <= 0)
-    {
-        DestroyPrefab();
-    }
-}
-
-
-public void StartTimer() //Timer to start moving
-{
-    if(timeLeft > 0)
-    {
-        timeLeft -= Time.deltaTime;
-        timerRectBar.fillAmount = timeLeft/maxTime;
-
-        if(timeLeft <= maxTime/3.0)
-        {
-            timerRectBar.color = Color.red;
-        }
-    }
-}
-
-
-public void DestroyPrefab()
-{
-    //OrderManager.Instance.RemoveDishFromList(this.gameObject);
-
-    if(!OrderManager.Instance.IsEmptySpawnLocation())
-    {
-        OrderManager.Instance.StartCoroutine("TimerForNextOrder");
-    }
-
-    orderLocation.GetComponent<SpawnLocationScript>()._IsPrefabPresent = false;
-    Destroy(this.gameObject); 
-}
-*/
 
 }

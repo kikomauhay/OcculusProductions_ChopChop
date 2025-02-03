@@ -10,6 +10,7 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
     [Header("Arrays")]
     [SerializeField] private GameObject[] customerSpawnPoints;
     [SerializeField] private Transform[] customerSeatingPoints;
+    [SerializeField] private List<GameObject> listOfCustomersInWaiting;
    
 
     [Header("CustomerVariable")]
@@ -51,17 +52,18 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
         for (int i = 0; i < customerSpawnPoints.Length; i++)
         {
+
             if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>()._isPrefabPresent)
             {
                 GameObject createdCustomer = Instantiate(customerModelPrefab[0],
                                                        customerSpawnPoints[i].transform.position,
                                                        Quaternion.identity);
 
-                createdCustomer.GetComponent<CustomerOrder>()._getSetSeatNumber = customerSpawnPoints[i];
+                //createdCustomer.GetComponent<CustomerOrder>()._getSetSeatNumber = customerSpawnPoints[i];
 
                 currentCustomerCount++;
+                listOfCustomersInWaiting.Add(createdCustomer);
 
-                    
                 customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._isPrefabPresent = true;
                 break;
             }
@@ -97,6 +99,11 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
         {
             DoSpawnCustomer();
         }
+    }
+
+    public void RemoveCustomer(GameObject customer)
+    {
+        listOfCustomersInWaiting.Remove(customer);
     }
 
     protected override void OnApplicationQuit() { base.OnApplicationQuit(); }

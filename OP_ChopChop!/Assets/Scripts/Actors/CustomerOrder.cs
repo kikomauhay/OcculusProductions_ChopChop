@@ -26,15 +26,8 @@ public class CustomerOrder : MonoBehaviour
     [SerializeField] private float maxCustomerSR; //SR = SatisfactionRating
     [SerializeField] private float minCustomerSR;
 
-    [SerializeField] private GameObject seatNumber;
     [SerializeField] private float customerDeleteTimer;
 
-
-    public GameObject _getSetSeatNumber 
-    { 
-        get { return seatNumber; } 
-        set { seatNumber = value; }  
-    }
 
     private void Awake()
     { 
@@ -54,12 +47,7 @@ public class CustomerOrder : MonoBehaviour
     void Update()
     {
         //Debug.Log(dishType.ToString());
-        //For Debugging
-        if(Input.GetKeyDown(KeyCode.W))
-        {
-            MakeSeatEmpty();
-            Destroy(this.gameObject);
-        }
+        //For Debuggin
     }
 
     private GameObject SetCustomerOrder()
@@ -98,8 +86,6 @@ public class CustomerOrder : MonoBehaviour
     {
         if (CheckDishServed(other.gameObject)) 
         {
-            Destroy(other.gameObject);
-
             StartCoroutine(CustomerDeleteTimer());
         }
     }
@@ -129,12 +115,21 @@ public class CustomerOrder : MonoBehaviour
         yield return new WaitForSeconds(customerDeleteTimer);
 
         MakeSeatEmpty();
-        Destroy(this.gameObject);
     }
 
     private void MakeSeatEmpty()
     {
-        seatNumber.GetComponent<SpawnLocationScript>()._isPrefabPresent = false;
+        CustomerSpawningManager.Instance.RemoveCustomer(this.gameObject);
+
+        CustomerSpawningManager.Instance.GetComponent<SpawnLocationScript>()._isPrefabPresent = false;
+
+        Destroy(this.gameObject);
+    }
+
+    private void CustomerPaitenceZero()
+    { 
+        //insert code to give bad review etc.
+        MakeSeatEmpty();
     }
 
 
