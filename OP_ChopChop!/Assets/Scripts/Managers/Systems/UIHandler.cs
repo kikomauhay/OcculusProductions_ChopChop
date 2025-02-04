@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class UIHandler : Singleton<UIHandler> {
 
-    protected override void Awake() { base.Awake(); }
+    protected override void Awake() => base.Awake();
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+
 
     public void SwitchSceneTo(string name) 
     {
@@ -15,11 +17,12 @@ public class UIHandler : Singleton<UIHandler> {
     public void Quit() 
     {
         Application.Quit();
+
+        // debug is only here to test if quit actually works
         Debug.LogWarning("Quitted the game!");
     }
 
 
-    protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
 
     
 

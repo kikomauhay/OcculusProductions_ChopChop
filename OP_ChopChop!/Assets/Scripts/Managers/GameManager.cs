@@ -2,68 +2,89 @@ using UnityEngine;
 using System;
 
 /// <summary>
-/// Oversees all the actions of other managers.
-/// Uses a StateMachine to determine the next action in the game.
+///
+/// Acts as the head of the game.
+/// Also rates the restaurant once it reaches the end of the day.
+///
 /// </summary>
+
 
 public class GameManager : Singleton<GameManager>
 {
+
+#region Events
+    public Action OnCustomerSpawned;
+    public Action OnFoodDisposed, OnFoodServed;
+
+#endregion
+
+#region Members 
+
+    // Player References
     [SerializeField] GameObject _player;
-    public GameState CurrentState { get; private set; }
-    public GameObject Player { get => _player; }
+    public GameObject Player => _player; 
 
-    // I'll learn how events work when I need to
-    // public static event Action<GameState> OnBeforeStateChanged;
-    // public static event Action<GameState> OnAfterStateChanged;
+    int _customerCount, _foodServed;
 
-    protected override void Awake() { base.Awake(); }
-    void Start() => ChangeState(GameState.STARTING);
 
-    
-    public void ChangeState(GameState state)
+#endregion
+
+#region Methods
+
+    protected override void Awake() => base.Awake(); 
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();   
+
+#endregion
+
+#region Rating_Calculations
+
+/// <summary>
+/// 
+/// 1. Calculate the Food Score, then add it to the foodCounter
+/// 2. Get Customer SR
+/// 
+/// </summary>
+
+    float CalculateFoodScore(Ingredient ing1, Ingredient ing2) 
     {
-        if (state == CurrentState) return;
-
-        // OnBeforeStateChanged?.Invoke(state);
-        CurrentState = state;
-
-        switch (state) 
-        {
-            case GameState.STARTING:
-                StartGame();
-                break;
-            case GameState.WINNING:
-                DoWinningLogic();
-                break;
-            case GameState.LOOSING:
-                DoLoosingLogic();
-                break;
-            case GameState.QUITTING:
-                DoQuit();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(state), state, null);
-        }
+        // once the dish is made, this gets both the freshness rates of the ingredients
+        // this is only made for nigiris atm, idk if the maki has more than 2 ingredients
         
-        // OnAfterStateChanged?.Invoke(state);
+        return (ing1.FreshnessRate + ing2.FreshnessRate) / 2f;
     }
 
-    void StartGame() {
+    float CalculateCustomerSR(float rawCustomerSR, float timeToFinish) 
+    {
 
+        return 0f;
     }
 
-    void DoWinningLogic() {
-
+    float CalculateRestartantRating(float avgCustomerSR, float avgFoodScore) // this only triggers once it's the shift ends 
+    {
+    /// <summary> rating formula issues
+    /// 
+    /// so far, we're using a simple formula
+    /// there are a lot of variables that we need to look into
+    /// so for now, we won't cover the waste counter & cleanliness of the resto
+    /// 
+    /// This is an idea for the final calculations, but some of it hasn't been implemented yet
+    /// restaurant rate = avg (CleanlinessRate + 
+    ///                        Avg of Customers' Satisfaction Rating + 
+    ///                        Food Score of All dishes served - 
+    ///                        DisposeRate)
+    /// </summary>
+    
+        return (avgCustomerSR + avgFoodScore) / 2f;
     }
+    
+#endregion
 
-    void DoLoosingLogic() {
+#region Event_Methods 
 
-    }
+    // GameObjects don't call the GameManager's things, just calls the events for it
 
-    void DoQuit() { UIHandler.Instance.Quit(); }
 
-    protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
+
+#endregion
+
 }
-
-// will add more states the more the game gets developed
-public enum GameState { STARTING, WINNING, LOOSING, QUITTING }
