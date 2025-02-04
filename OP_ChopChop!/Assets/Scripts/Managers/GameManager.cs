@@ -2,10 +2,10 @@ using UnityEngine;
 using System;
 
 /// <summary>
-
+///
 /// Acts as the head of the game.
-/// Also rates the restaurant quality once the day is done.
-
+/// Also rates the restaurant once it reaches the end of the day.
+///
 /// </summary>
 
 
@@ -13,7 +13,8 @@ public class GameManager : Singleton<GameManager>
 {
 
 #region Events
-    public Action OnCustomerSpawned, OnFoodThrown, OnFoodServed;
+    public Action OnCustomerSpawned;
+    public Action OnFoodDisposed, OnFoodServed;
 
 #endregion
 
@@ -23,64 +24,57 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject _player;
     public GameObject Player => _player; 
 
-    // Rating System
-    public int CleanlinessRate { get; private set; } // the dirtier it gets, the less the value it wil be
-    public int DisposeCount { get; private set; } // when anything is thrown, this value increases
-    private float _avgCustomerSatisfactionRating;
-    private float _avgFoodScore; 
+    int _customerCount, _foodServed;
 
-
-    // Counters for average rates
-    public int CustomerCounter { get; private set; }
-    public int FoodServedCounter { get; private set; }
 
 #endregion
 
 #region Methods
 
     protected override void Awake() => base.Awake(); 
-    protected override void OnApplicationQuit() 
-    {
-        base.OnApplicationQuit(); 
-        Reset();
-    }
-    void Start() 
-    {
-        CleanlinessRate = 100;
-        FoodServedCounter = 0;
-        CustomerCounter = 0;
-        DisposeCount = 0;
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();   
 
-        _avgCustomerSatisfactionRating = 0f;
-        _avgFoodScore = 0f;
+#endregion
 
-        OnCustomerSpawned += AddCustomerCount;
-        OnFoodThrown += AddDisposedFood;
-        OnFoodServed += AddFoodServedCount;
-    }
-    void Reset() // unsubsribing from events to prevent null referencing 
+#region Rating_Calculations
+
+/// <summary>
+/// 
+/// 1. Calculate the Food Score, then add it to the foodCounter
+/// 2. Get Customer SR
+/// 
+/// </summary>
+
+    float CalculateFoodScore(Ingredient ing1, Ingredient ing2) 
     {
-        OnCustomerSpawned -= AddCustomerCount;
-        OnFoodThrown -= AddDisposedFood;
-        OnFoodServed -= AddFoodServedCount;
+        // once the dish is made, this gets both the freshness rates of the ingredients
+        // this is only made for nigiris atm, idk if the maki has more than 2 ingredients
+        
+        return (ing1.FreshnessRate + ing2.FreshnessRate) / 2f;
     }
 
-    void RateRestaurant() 
+    float CalculateCustomerSR(float rawCustomerSR, float timeToFinish) 
+    {
+
+        return 0f;
+    }
+
+    float CalculateRestartantRating(float avgCustomerSR, float avgFoodScore) // this only triggers once it's the shift ends 
     {
     /// <summary> rating formula issues
     /// 
     /// so far, we're using a simple formula
     /// there are a lot of variables that we need to look into
+    /// so for now, we won't cover the waste counter & cleanliness of the resto
     /// 
+    /// This is an idea for the final calculations, but some of it hasn't been implemented yet
+    /// restaurant rate = avg (CleanlinessRate + 
+    ///                        Avg of Customers' Satisfaction Rating + 
+    ///                        Food Score of All dishes served - 
+    ///                        DisposeRate)
     /// </summary>
     
-
-
-
-        // restaurant rate = avg (CleanlinessRate + 
-        //                        Avg of Customers' Satisfaction Rating + 
-        //                        Food Score of All dishes served - 
-        //                        DisposeRate)
+        return (avgCustomerSR + avgFoodScore) / 2f;
     }
     
 #endregion
@@ -89,10 +83,6 @@ public class GameManager : Singleton<GameManager>
 
     // GameObjects don't call the GameManager's things, just calls the events for it
 
-    void AddCustomerCount() => CustomerCounter++;
-    void AddFoodServedCount() => FoodServedCounter++;
-    void AddDisposedFood() => DisposeCount++;
-    
 
 
 #endregion
