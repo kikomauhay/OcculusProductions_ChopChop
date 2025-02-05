@@ -119,11 +119,13 @@ public class CustomerOrder : MonoBehaviour
         MakeSeatEmpty();
     }
 
-    private void MakeSeatEmpty()
+    private void MakeSeatEmpty() //Use this if customer is happy with the dish or he runs out of patience
     {
         CustomerSpawningManager.Instance.RemoveCustomer(this.gameObject);
 
         CustomerSpawningManager.Instance.GetComponent<SpawnLocationScript>()._isPrefabPresent = false;
+
+        CustomerSpawningManager.Instance.StartCoroutine("ITimerForNextCustomerSpawn");
 
         Destroy(this.gameObject);
     }
