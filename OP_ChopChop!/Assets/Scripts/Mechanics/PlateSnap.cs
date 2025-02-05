@@ -16,13 +16,13 @@ public class PlateSnap : MonoBehaviour
     public Collider SnapCollider;
     private void OnTriggerEnter(Collider _other)
     {
-        if(_other.GetComponent<Sushi>() != null)
-        {
-            SnapToObject(_other.transform);
-            DisableRigidbody(_other);
-            SnapCollider.enabled = false;
-        }
-        else if(_other.GetComponent<Sponge>() != null)
+        //if(_other.GetComponent<Sushi>() != null)
+        //{
+        //    SnapToObject(_other.transform);
+        //    DisableRigidbody(_other);
+        //    SnapCollider.enabled = false;
+        //}
+        if(_other.GetComponent<Sponge>() != null)
         {
             Vector3 _currentPosition = this.transform.position;
             Quaternion _currentRotation = this.transform.rotation;

@@ -108,7 +108,7 @@ public class OrderManager : Singleton<OrderManager>
 
             if (sushiComponent != null && 
                 dishUIComponent != null && 
-                sushiComponent.dishType.Equals(dishUIComponent.dishType))
+                sushiComponent.DishType.Equals(dishUIComponent.dishType))
             {
                 if (i > 0 && _orderList[i].GetComponent<SushiDishUI>().GetTimeLeft < _orderList[0].GetComponent<SushiDishUI>().GetTimeLeft)
                 {

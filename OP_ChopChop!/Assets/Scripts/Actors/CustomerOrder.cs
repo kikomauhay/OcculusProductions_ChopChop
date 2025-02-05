@@ -14,19 +14,21 @@ public enum OrderType
 
 public class CustomerOrder : MonoBehaviour
 {
-    [SerializeField] private OrderType dishType; //eNum variable of above
+    [SerializeField] private OrderType dishType; // differernt types of dishes
     [SerializeField] private BoxCollider customerBoxCollider;
     [SerializeField] private GameObject[] sushiOrder; //theOrder of the customer
     [SerializeField] private Transform customerOrderSpawnLocation; //Spawning of the order
+    [SerializeField] private float customerDeleteTimer;
 
+    [Header("Patience Rating")]
     [SerializeField] private float currentCustomerPaitenceTimer; //use this to take the score for the customer rating
     [SerializeField] private float maxCustomerPaitenceTimer;
 
+    [Header("Satisfaction Rating")]
     [SerializeField] public float customerSatisfactionRating; //value that we'll use to check the dish decay value against the food
     [SerializeField] private float maxCustomerSR; //SR = SatisfactionRating
     [SerializeField] private float minCustomerSR;
 
-    [SerializeField] private float customerDeleteTimer;
 
 
     private void Awake()
@@ -99,7 +101,7 @@ public class CustomerOrder : MonoBehaviour
 
         Sushi dishServed = dishServedToCustomer.GetComponent<Sushi>(); //To gets the enum of the sushi dish
 
-        if(dishServed.dishType.Equals(dishType)) //check if the Enum of the dish matches to customer's Enum
+        if(dishServed.DishType.Equals(dishType)) //check if the Enum of the dish matches to customer's Enum
         {
             return true;
         }

@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class CustomerActions : MonoBehaviour
@@ -7,17 +7,7 @@ public class CustomerActions : MonoBehaviour
     [SerializeField] private float customerSpeed;
     [SerializeField] private Transform[] targetLocation;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-       
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        CustomerMoveToSeat();
-    }
+    void Update() => CustomerMoveToSeat();
 
     private void CustomerMoveToSeat()
     {

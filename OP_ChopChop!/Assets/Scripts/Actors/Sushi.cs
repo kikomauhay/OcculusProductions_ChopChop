@@ -1,27 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum DishType
-{
-    Nigiri_Salmon,
-    Nigiri_Tuna,
-    Maki_Salmon,
-    Maki_Tuna,
-}
+public enum DishType { NIGIRI_SALMON, NIGIRI_TUNA, MAKI_SALMON, MAKI_TUNA, }
 
 public class Sushi : MonoBehaviour
 {
-    [SerializeField] public DishType dishType;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] DishType _dishType;
+    public DishType DishType => _dishType;
 }

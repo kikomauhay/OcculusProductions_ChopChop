@@ -1,37 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
+using System.Collections;
+using UnityEngine;
 
 public class Moldable : MonoBehaviour
 {
     public ActionBasedController Left, Right;
 
-    [SerializeField]
-    GameObject _perfectMold;
-    [SerializeField]
-    GameObject _smokeVFX;
-    [SerializeField]
-    float _moldLimit;
-   
-    private float _moldCounter;
+    [SerializeField] GameObject[] _moldedStages;
 
-    private void Awake()
+
+    [SerializeField] GameObject _perfectMold, _smokeVFX;
+    [SerializeField] Rice _rice;
+    [SerializeField] int _moldLimitPerStage;
+   
+    int _moldCounter, _moldStageIndex;
+
+    void Awake()
     {
         Left = ControllerManager.Instance.LeftController;
         Right = ControllerManager.Instance.RightController;
     }
-    private void Update()
+    void Start()
     {
-        Debug.Log(_moldCounter);
-        if (_moldCounter >= _moldLimit)
+        _moldCounter = 0;
+        _moldStageIndex = 0;
+
+        _moldLimitPerStage = 5; // test
+        StartCoroutine(test()); // test
+    }
+
+    void Update()
+    {
+
+        // "levels up" the molded rice and resets the mold count
+        if (_moldCounter >= _moldLimitPerStage)
         {
-            MoldInstantiate(_perfectMold);
+            _moldCounter = 0;
+
+            if (_moldStageIndex < _moldedStages.Length)
+            { // prevents out of range errors
+                _moldStageIndex++;
+                _rice.OnRiceMolded?.Invoke(_moldStageIndex);
+            }
+
+            MoldInstantiate(_moldedStages[_moldStageIndex]);
         }
     }
 
-    private void OnTriggerEnter(Collider _other)
+    private void OnTriggerEnter(Collider other)
     {
         if(CheckGrip(Left))
         {
@@ -44,16 +60,22 @@ public class Moldable : MonoBehaviour
         }
     }
 
-    private bool CheckGrip(ActionBasedController controller)
+    bool CheckGrip(ActionBasedController controller) 
     {
         return controller.selectAction.action.ReadValue<float>() > 0.5f;
     }
 
-    private void MoldInstantiate(GameObject _moldable)
+    void MoldInstantiate(GameObject moldPrefab)
     {
-        Vector3 currentPosition = this.transform.position;
-        Quaternion currentRotation = this.transform.rotation;
-        Destroy(this.gameObject);
-        Instantiate(_moldable, currentPosition, currentRotation);
+        Vector3 pos = transform.position;
+        Quaternion rot = transform.rotation;
+        Destroy(gameObject);
+        Instantiate(moldPrefab, pos, rot);
+    }
+
+    IEnumerator test()
+    {
+        yield return new WaitForSeconds(2f);
+        Debug.Log($"Mold counter: {_moldCounter}");
     }
 }

@@ -8,7 +8,7 @@ public class Sliceable : MonoBehaviour
     [SerializeField] private GameObject _sharpObject, _meatBoard;
     [SerializeField] private GameObject _smokeVFX;
     private int _chopCounter;
-    public bool IsAttached;
+    public bool IsAttached { get; set; }
 
 #endregion
 
@@ -16,10 +16,10 @@ public class Sliceable : MonoBehaviour
 
     void Start()
     {
+        _chopCounter = 0;
+        IsAttached = false;
         _sharpObject = EquipmentManager.Instance?.Knife;
         _meatBoard = EquipmentManager.Instance?.MeatBoard;
-        IsAttached = false;
-        _chopCounter = 0;
     }
     void Update()
     {
