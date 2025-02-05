@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
-    [SerializeField]
-    float timer;
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<ResetPos>() != null)
+        if (other.gameObject.GetComponent<Trashable>() != null)
         {
-            Debug.Log("Detected");
-            StartCoroutine(IDelayedReset(other));
+            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Ingredients)
+            {
+                //Increase Decay Rate
+                //Call public function from ingredient
+            }
+            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Food)
+            {
+                //Increase Decay Rate
+                //Call public function from ingredient
+            }
+            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Equipment)
+            {
+                //Reset Equipment here
+            }
         }
-    }
-
-    private IEnumerator IDelayedReset(Collider other)
-    {
-        yield return new WaitForSeconds(timer);
-        Destroy(other.gameObject);
     }
 }
