@@ -1,13 +1,33 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// 
+/// acts as the base class for the different ingredients
+/// all children of Ingredent only needs the stats before being destroyed
+/// 
+/// </summary>
+
+public enum IngredientType { RICE, TUNA, SALMON, SEAWEED }
+public enum SliceType { THICK, THIN, SLAB }
+
 public class Ingredient : MonoBehaviour 
 {
+
+    public Action OnIngredientContaminated;
+
 #region Members
-    [SerializeField] IngredientStats _stats;
+
+    [Header("Ingredients")]
+    [SerializeField] protected IngredientStats _stats;
+    [SerializeField] protected IngredientType _type;
+    
     public IngredientStats Stats => _stats;
+    public IngredientType Type => _type;
+
     public FreshnessRating Rating { get; private set; }
-    public int FreshnessRate { get; private set; }
+    public float FreshnessRate { get; private set; }
     public bool IsExpired { get; private set; }
     public bool IsContaminated { get; private set; }
     public bool IsTrashed { get; private set; }
@@ -17,9 +37,8 @@ public class Ingredient : MonoBehaviour
 
 #region Members
 
-    void Start()
+    protected virtual void Start() 
     {
-        name = _stats.name;
         FreshnessRate = 100;
         Rating = FreshnessRating.FRESH;
 
@@ -27,10 +46,11 @@ public class Ingredient : MonoBehaviour
         IsExpired = false;
         IsContaminated = false;
         IsProperlyStored = false;
-        
+
         CheckRate();
         StartCoroutine(Decay());
     }
+    
     public void ThrowInTrash() 
     {
         // removes the food form the game entirely
@@ -41,19 +61,19 @@ public class Ingredient : MonoBehaviour
         SoundManager.Instance.PlaySound("dispose food");
         CheckRate();
     }
-    void CheckRate() 
+    protected void CheckRate() 
     {
         // material of the ingredient changes based on how fresh it is
         // the lower the number, the worse it is
 
         Material m;
 
-        if (FreshnessRate < 70) 
+        if (FreshnessRate < 70f) 
         {
             Rating = FreshnessRating.EXPIRED;
             m = _stats.Materials[2];    
         }
-        else if (FreshnessRate > 87) 
+        else if (FreshnessRate > 87f) 
         {
             Rating = FreshnessRating.FRESH;
             m = _stats.Materials[0];
@@ -67,6 +87,8 @@ public class Ingredient : MonoBehaviour
         if (m != null)
             GetComponent<MeshRenderer>().material = m;
     }
+
+    public void ContaminateFood() => IsContaminated = true;
 
 #endregion
 
@@ -82,7 +104,7 @@ public class Ingredient : MonoBehaviour
             if (IsContaminated) 
             {
                 rate = _stats.Contaminated.Rate;
-                speed =  _stats.Contaminated.Speed;
+                speed = _stats.Contaminated.Speed;
             }
             else if (IsProperlyStored) 
             {
@@ -104,9 +126,9 @@ public class Ingredient : MonoBehaviour
             // test
             Debug.Log($"Freshness of {name} has been reduced to {FreshnessRate}");
 
-            if (FreshnessRate < 1) 
+            if (FreshnessRate < 1f) 
             {
-                FreshnessRate = 0;
+                FreshnessRate = 0f;
                 IsExpired = true;
             }
             CheckRate();

@@ -13,8 +13,10 @@ public class GameManager : Singleton<GameManager>
 {
 
 #region Events
+
     public Action OnCustomerSpawned;
-    public Action OnFoodDisposed, OnFoodServed;
+    public Action OnFoodDisposed;
+    public Action<float, float> OnDishCreated;
 
 #endregion
 
@@ -24,7 +26,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] GameObject _player;
     public GameObject Player => _player; 
 
-    int _customerCount, _foodServed;
+    int _foodServed;
+
+    float _totalFoodScore, _totalCustomerSR;
 
 
 #endregion
@@ -32,31 +36,48 @@ public class GameManager : Singleton<GameManager>
 #region Methods
 
     protected override void Awake() => base.Awake(); 
-    protected override void OnApplicationQuit() => base.OnApplicationQuit();   
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();
 
-#endregion
-
-#region Rating_Calculations
-
-/// <summary>
-/// 
-/// 1. Calculate the Food Score, then add it to the foodCounter
-/// 2. Get Customer SR
-/// 
-/// </summary>
-
-    float CalculateFoodScore(Ingredient ing1, Ingredient ing2) 
+    private void Start()
     {
-        // once the dish is made, this gets both the freshness rates of the ingredients
-        // this is only made for nigiris atm, idk if the maki has more than 2 ingredients
-        
-        return (ing1.FreshnessRate + ing2.FreshnessRate) / 2f;
+        _totalFoodScore = 0f;
+        _totalCustomerSR = 0f;
     }
 
-    float CalculateCustomerSR(float rawCustomerSR, float timeToFinish) 
-    {
+    #endregion
 
-        return 0f;
+    #region Rating_Calculations
+
+    /// <summary>
+    /// 
+    /// 1. Calculate the Food Score, then add it to the foodCounter
+    /// 2. Get Customer SR
+    /// 
+    /// </summary>
+
+
+    void AddFoodScore(float ing1Score, float ing2Score) => _totalFoodScore += (ing1Score  + ing2Score) / 2f;
+    void AddCustomerSR(float rawCustomerSR, float timeToFinish) => _totalCustomerSR += (rawCustomerSR + timeToFinish) / 2f;
+
+
+    float CalculateTotalFoodScore(float foodScore)
+    {
+        if (_foodServed == 0)
+        {
+            Debug.LogError("No food was served!");
+            return 0f;
+        }
+        return foodScore / _foodServed;
+    }
+
+    float CalculateTotalCustomerSR(float customerSR) 
+    {
+        if (_foodServed == 0)
+        {
+            Debug.LogError("No customer was served!");
+            return 0f;
+        }
+        return customerSR / _foodServed;
     }
 
     float CalculateRestartantRating(float avgCustomerSR, float avgFoodScore) // this only triggers once it's the shift ends 

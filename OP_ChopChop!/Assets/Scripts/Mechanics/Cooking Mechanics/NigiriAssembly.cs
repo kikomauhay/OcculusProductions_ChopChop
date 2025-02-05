@@ -1,30 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class NigiriAssembly : MonoBehaviour
 {
-    [SerializeField]
-    GameObject _salmonNigiri;
+    [SerializeField] GameObject _salmonNigiri, _tunaNigiri, _smokeVFX;
 
-    [SerializeField]
-    GameObject _tunaNigiri;
-
-    [SerializeField]
-    GameObject _smokeVFX;
-    private void OnTriggerEnter(Collider _other)
+    private void OnTriggerEnter(Collider other)
     {
-        //for now use Sliceable Component since we're waiting for the ingredient base class
-        if(_other.gameObject.GetComponent<SalmonSlice>())
+        // for now use Sliceable Component since we're waiting for the ingredient base class
+        if (other.gameObject.GetComponent<Salmon>())
         {
             Vector3 _currentPosition = this.transform.position;
             Quaternion _currentRotation = this.transform.rotation;
             Destroy(this.gameObject);
-            Destroy(_other.gameObject);
+            Destroy(other.gameObject);
             SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
             Instantiate(_salmonNigiri, _currentPosition, _currentRotation);
         }
-        if(_other.gameObject.GetComponent<TunaSlice>())
+        if (other.gameObject.GetComponent<Tuna>())
         {
             Vector3 _currentPosition = this.transform.position;
             Quaternion _currentRotation = this.transform.rotation;
