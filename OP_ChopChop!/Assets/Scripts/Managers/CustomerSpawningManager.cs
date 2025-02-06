@@ -52,21 +52,23 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
         for (int i = 0; i < customerSpawnPoints.Length; i++)
         {
-
-            if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>()._isPrefabPresent)
+            if(currentCustomerCount <= maxCustomerToSpawn)
             {
-                GameObject createdCustomer = Instantiate(customerModelPrefab[0],
-                                                       customerSpawnPoints[i].transform.position,
-                                                       Quaternion.identity);
+                if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>()._isPrefabPresent)
+                {
+                    GameObject createdCustomer = Instantiate(customerModelPrefab[0],
+                                                           customerSpawnPoints[i].transform.position,
+                                                           Quaternion.identity);
 
-                //createdCustomer.GetComponent<CustomerOrder>()._getSetSeatNumber = customerSpawnPoints[i];
+                    //createdCustomer.GetComponent<CustomerOrder>()._getSetSeatNumber = customerSpawnPoints[i];
 
-                currentCustomerCount++;
-                listOfCustomersInWaiting.Add(createdCustomer);
+                    currentCustomerCount++;
+                    listOfCustomersInWaiting.Add(createdCustomer);
 
-                customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._isPrefabPresent = true;
-                break;
-            }
+                    customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._isPrefabPresent = true;
+                    break;
+                }
+            } 
         }
 
 
