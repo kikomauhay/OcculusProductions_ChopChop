@@ -8,6 +8,15 @@ using UnityEngine;
 /// This is also the prefab that will be served to the customers
 /// 
 /// </summary>
+/// 
+
+public enum EnumCompletedDishType
+{
+    Nigiri_Salmon,
+    //Nigiri_Tuna,
+    //Maki_Salmon,
+    //Maki_Tuna,
+}
 
 public abstract class Dish : MonoBehaviour
 {   
@@ -15,6 +24,8 @@ public abstract class Dish : MonoBehaviour
     public float DishScore { get; set; }
 
     public OrderType OrderType { get; set; }
+
+    public EnumCompletedDishType EnumCompletedDishType { get; set; }
 
     // Start is called before the first frame update
     void Start()
