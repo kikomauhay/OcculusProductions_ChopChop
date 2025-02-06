@@ -10,13 +10,11 @@ public class Floor : MonoBehaviour
         {
             if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Ingredients)
             {
-                //Increase Decay Rate
-                //Call public function from ingredient
+                other.gameObject.GetComponent<Ingredient>().ContaminateFood();
             }
             if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Food)
             {
-                //Increase Decay Rate
-                //Call public function from ingredient
+                other.gameObject.GetComponent<Ingredient>().ContaminateFood();
             }
             if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Equipment)
             {

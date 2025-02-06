@@ -1,85 +1,68 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class RiceSpawn : MonoBehaviour
+public class PlateSpawn : MonoBehaviour
 {
     public ActionBasedController Left;
     public ActionBasedController Right;
 
-    [SerializeField]
-    GameObject _unmoldedRice;
-
-    [SerializeField]
-    Collider _spwnCollider;
-
-    [SerializeField]
-    float _timer;
-
+    [SerializeField] GameObject _plate;
+    [SerializeField] Collider _spwnCollider;
+    [SerializeField] float _timer;
+    // Start is called before the first frame update
     private void Awake()
     {
         Left = ControllerManager.Instance.LeftController;
         Right = ControllerManager.Instance.RightController;
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         IXRSelectInteractor _interactor = null;
         if (CheckGrip(Left) && other.gameObject.GetComponent<ActionBasedController>())
         {
-            _interactor = Left.GetComponent<XRDirectInteractor>(); 
+            _interactor = Left.GetComponent<XRDirectInteractor>();
         }
-        if (CheckGrip(Right) && other.gameObject.GetComponent<ActionBasedController>())
+        else if (CheckGrip(Right) && other.gameObject.GetComponent<ActionBasedController>())
         {
             _interactor = Right.GetComponent<XRDirectInteractor>();
         }
+
         if (_interactor != null)
         {
-            _interactor.selectEntered.AddListener(Yes);
+            Debug.Log("Triggered, Plate Spawned");
+            GameObject _spawnedPlate = InstantiatePlate(_plate);
+            _spwnCollider.enabled = false;
+            AttachToHand(_spawnedPlate,_interactor);
+            IResetTrigger();
         }
         else
         {
             Debug.Log("Interactor null");
         }
     }
-    private void OnTriggerExit(Collider other)
-    {
-    }
-
-
-    private void Yes(SelectEnterEventArgs args)
-    { 
-            Debug.Log("Triggered, Rice spawned");
-            GameObject _spawnedRice = InstantiateRice(_unmoldedRice);
-            _spwnCollider.enabled = false;
-            //AttachToHand(_spawnedRice, _interactor);
-            IResetTrigger();    
-    }
 
     private bool CheckGrip(ActionBasedController _controller)
     {
         return _controller.selectAction.action.ReadValue<float>() > 0.5f;
     }
-
-    private GameObject InstantiateRice(GameObject _rice)
+    private GameObject InstantiatePlate(GameObject _plate)
     {
         Vector3 _currentPosition = this.transform.position;
-        Quaternion _currentRotation = this. transform.rotation;
-        return Instantiate(_rice, _currentPosition, _currentRotation);
+        Quaternion _currentRotation = this.transform.rotation;
+        return Instantiate(_plate, _currentPosition, _currentRotation);
     }
-
-    private void AttachToHand(GameObject _spawnedRice, IXRSelectInteractor _interactor)
+    private void AttachToHand(GameObject _spawnedPlate, IXRSelectInteractor _interactor)
     {
-        XRGrabInteractable _grabInteractable = _spawnedRice.GetComponent<XRGrabInteractable>();
+        XRGrabInteractable _grabInteractable = _spawnedPlate.GetComponent<XRGrabInteractable>();
         XRInteractionManager _interactionManager = _grabInteractable.interactionManager as XRInteractionManager;
-        if (_interactionManager == null 
+        if (_interactionManager == null
             && _interactor is MonoBehaviour interactorObject)
         {
             _interactionManager = interactorObject.GetComponentInParent<XRInteractionManager>();
         }
-        if (_grabInteractable != null 
+        if (_grabInteractable != null
             && _interactionManager != null)
         {
             _interactionManager.SelectEnter(_interactor, _grabInteractable);
@@ -89,7 +72,6 @@ public class RiceSpawn : MonoBehaviour
             Debug.LogError("Spawned object does not have an XRGrabInteractable component.");
         }
     }
-
     private void ResetCollider()
     {
         _spwnCollider.enabled = true;

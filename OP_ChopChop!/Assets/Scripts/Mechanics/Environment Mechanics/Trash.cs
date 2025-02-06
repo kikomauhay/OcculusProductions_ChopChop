@@ -18,6 +18,7 @@ public class Trash : MonoBehaviour
             if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Equipment)
             {
                 //Reset Equipment here
+                //Set Reset Points
             }
         }
     }
