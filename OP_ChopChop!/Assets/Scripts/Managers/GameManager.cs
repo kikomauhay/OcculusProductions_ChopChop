@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using JetBrains.Annotations;
 
 /// <summary>
 ///
@@ -12,10 +13,10 @@ using System;
 public class GameManager : Singleton<GameManager>
 {
 
-#region Events
+    #region Events
 
-    public Action OnCustomerSpawned;
     public Action OnFoodDisposed;
+    public Action<float> OnCustomerServed;
     public Action<float, float> OnDishCreated;
 
 #endregion
@@ -35,18 +36,27 @@ public class GameManager : Singleton<GameManager>
 
 #region Methods
 
-    protected override void Awake() => base.Awake(); 
-    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+    protected override void Awake() => base.Awake();
+    protected override void OnApplicationQuit() {
+        base.OnApplicationQuit();
+        Reset();
+    }
+    protected void Reset()
+    {
+        OnCustomerServed -= AddToFoodScore;
+    }
 
     private void Start()
     {
         _totalFoodScore = 0f;
         _totalCustomerSR = 0f;
+
+        OnCustomerServed += AddToFoodScore;
     }
 
-    #endregion
+#endregion
 
-    #region Rating_Calculations
+#region Rating_Calculations
 
     /// <summary>
     /// 
@@ -56,7 +66,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
 
 
-    void AddFoodScore(float ing1Score, float ing2Score) => _totalFoodScore += (ing1Score  + ing2Score) / 2f;
+    // void AddFoodScore(float ing1Score, float ing2Score) => _totalFoodScore += (ing1Score  + ing2Score) / 2f;
     void AddCustomerSR(float rawCustomerSR, float timeToFinish) => _totalCustomerSR += (rawCustomerSR + timeToFinish) / 2f;
 
 
@@ -97,15 +107,16 @@ public class GameManager : Singleton<GameManager>
     
         return (avgCustomerSR + avgFoodScore) / 2f;
     }
-    
-#endregion
 
-#region Event_Methods 
+    #endregion
+
+    #region Event_Methods 
 
     // GameObjects don't call the GameManager's things, just calls the events for it
 
+    void AddToFoodScore(float foodScore) => Debug.Log("Added food score"); // fix later
+        
 
-
-#endregion
+    #endregion
 
 }

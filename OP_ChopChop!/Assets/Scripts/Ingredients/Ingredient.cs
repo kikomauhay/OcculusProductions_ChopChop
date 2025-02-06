@@ -10,10 +10,10 @@ using UnityEngine;
 /// </summary>
 
 public enum IngredientType { RICE, TUNA, SALMON, SEAWEED }
-public enum SliceType { THICK, THIN, SLAB }
 
 public class Ingredient : MonoBehaviour 
 {
+
 
     public Action OnIngredientContaminated;
 
@@ -88,7 +88,11 @@ public class Ingredient : MonoBehaviour
             GetComponent<MeshRenderer>().material = m;
     }
 
-    public void ContaminateFood() => IsContaminated = true;
+    public void ContaminateFood()
+    {
+        Debug.LogWarning($"{name} has been contaminated!");
+        IsContaminated = true;
+    }
 
 #endregion
 
@@ -111,7 +115,7 @@ public class Ingredient : MonoBehaviour
                 rate = _stats.Stored.Rate;
                 speed = _stats.Stored.Speed;
             }
-            else // just outside the fridge and not contaminated
+            else // just outside the fridge AND not contaminated
             {
                 rate = _stats.Decay.Rate;
                 speed = _stats.Decay.Speed;
@@ -120,7 +124,7 @@ public class Ingredient : MonoBehaviour
             // test
             Debug.Log($"Rate: {rate}; Speed: {speed}");
             
-            yield return new WaitForSecondsRealtime(speed);
+            yield return new WaitForSeconds(speed);
             FreshnessRate -= rate;
 
             // test

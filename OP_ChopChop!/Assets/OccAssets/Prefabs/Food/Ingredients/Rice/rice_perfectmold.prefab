@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3212721795751061307}
   - component: {fileID: 8191402079242806178}
   - component: {fileID: -7561628223210829928}
-  - component: {fileID: -5347047959501992964}
+  - component: {fileID: 2882677213413718296}
   m_Layer: 0
   m_Name: rice_perfectmold
   m_TagString: Untagged
@@ -297,13 +297,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e00eb263530bec4eb6143aa750c83a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  left: {fileID: 0}
-  right: {fileID: 0}
-  perfectMold: {fileID: 4758083971582321263, guid: f0854a7719c9f3e40aa774c6318a612d,
-    type: 3}
-  SmokeVFX: {fileID: 0}
-  MoldLimit: 15
---- !u!114 &-5347047959501992964
+  Left: {fileID: 0}
+  Right: {fileID: 0}
+  _moldedStages: []
+  _perfectMold: {fileID: 0}
+  _smokeVFX: {fileID: 0}
+  _rice: {fileID: 0}
+  _moldLimitPerStage: 0
+--- !u!114 &2882677213413718296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -312,12 +313,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3295433493239435334}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 203383e7d03157242bcd54154b2b67c7, type: 3}
+  m_Script: {fileID: 11500000, guid: a66126108b4485a44b12f6cb792ce21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SalmonNigiri: {fileID: 5778702139965393049, guid: ee59e60ddd11e66429b96b45594c629e,
+  _stats: {fileID: 0}
+  _type: 0
+  _dishPrefabs: []
+  _smokeVFX: {fileID: 7776776499507976363, guid: 0e1dbc6ca33bbb8459e962129922155d,
     type: 3}
-  TunaNigiri: {fileID: 962565321575026586, guid: bc29908154ef6634d90d1996069d24e8,
-    type: 3}
-  SmokeVFX: {fileID: 2611135798559895553, guid: 03277cac3d95b3d46a37879aea695411,
-    type: 3}
+  _vfxDestroyTime: 0
+  _moldType: 0
