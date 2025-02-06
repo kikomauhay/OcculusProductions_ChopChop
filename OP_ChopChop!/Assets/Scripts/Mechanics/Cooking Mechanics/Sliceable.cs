@@ -3,10 +3,11 @@ using UnityEngine;
 public class Sliceable : MonoBehaviour
 {
 #region Members
-    
-    [SerializeField] private GameObject _currentPrefab, _nextPrefab;
-    [SerializeField] private GameObject _sharpObject, _meatBoard;
+
+    [SerializeField] private GameObject _currentPrefab, _nextPrefab; // make this an array 
+    [SerializeField] private GameObject _sharpObject, _meatBoard; // references for the ingredient
     [SerializeField] private GameObject _smokeVFX;
+    
     private int _chopCounter;
     public bool IsAttached { get; set; }
 

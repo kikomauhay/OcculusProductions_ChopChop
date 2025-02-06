@@ -10,7 +10,7 @@ public class Moldable : MonoBehaviour
 
 
     [SerializeField] GameObject _perfectMold, _smokeVFX;
-    [SerializeField] Rice _rice;
+    [SerializeField] RiceIngredient _rice;
     [SerializeField] int _moldLimitPerStage;
    
     int _moldCounter, _moldStageIndex;

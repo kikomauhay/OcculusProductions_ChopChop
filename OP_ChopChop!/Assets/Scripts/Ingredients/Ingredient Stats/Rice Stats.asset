@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65fa9444b317f0c459f38ad5a9c29e0d, type: 3}
-  m_Name: Seafood
+  m_Name: Rice Stats
   m_EditorClassIdentifier: 
-  _type: 1
+  _type: 0
+  _materials: []
   _decay:
-    Rate: 8
-    Speed: 7
+    Rate: 2
+    Speed: 5
   _contaminated:
-    Rate: 25
+    Rate: 5
     Speed: 2
   _stored:
-    Rate: 2
-    Speed: 3
+    Rate: 1
+    Speed: 10
