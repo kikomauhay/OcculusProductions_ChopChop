@@ -9,10 +9,9 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
     [Header("Arrays")]
     [SerializeField] private GameObject[] customerSpawnPoints;
-    [SerializeField] private Transform[] customerSeatingPoints;
+    [SerializeField] private BoxCollider[] customerCollisionPoints;
     [SerializeField] private List<GameObject> listOfCustomersInWaiting;
    
-
     [Header("CustomerVariable")]
     [SerializeField] private GameObject[] customerModelPrefab; //This is the prefab for the Customer itself
 
@@ -60,8 +59,12 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
                                                            customerSpawnPoints[i].transform.position,
                                                            Quaternion.identity);
 
-                    //createdCustomer.GetComponent<CustomerOrder>()._getSetSeatNumber = customerSpawnPoints[i];
-
+                    for(int j = 0; j < customerSpawnPoints.Length; j++)
+                    {
+                       createdCustomer.GetComponent<CustomerOrder>()._getSetCustomerCollider = customerCollisionPoints[i]; 
+                       //assigning of collosion box to customer
+                    }
+                  
                     currentCustomerCount++;
                     listOfCustomersInWaiting.Add(createdCustomer);
 

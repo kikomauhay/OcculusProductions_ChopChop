@@ -14,8 +14,15 @@ public enum OrderType
 
 public class CustomerOrder : MonoBehaviour
 {
+    [SerializeField] private Collider customerServeCollider;
+    public Collider _getSetCustomerCollider 
+    {
+        get { return customerServeCollider; }
+        set { customerServeCollider = value; }
+    }
+
     [SerializeField] private OrderType dishType; // differernt types of dishes
-    [SerializeField] private BoxCollider customerBoxCollider;
+    
     [SerializeField] private GameObject[] sushiOrder; //theOrder of the customer
     [SerializeField] private Transform customerOrderSpawnLocation; //Spawning of the order
     [SerializeField] private float customerDeleteTimer;
@@ -84,11 +91,11 @@ public class CustomerOrder : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (CheckDishServed(other.gameObject)) 
+        if(CheckDishServed(collision.gameObject))
         {
-            StartCoroutine(CustomerDeleteTimer());
+          StartCoroutine(CustomerDeleteTimer());
         }
     }
 
@@ -99,9 +106,9 @@ public class CustomerOrder : MonoBehaviour
             return false;
         }
 
-        Sushi dishServed = dishServedToCustomer.GetComponent<Sushi>(); //To gets the enum of the sushi dish
+        Dish dishServed = dishServedToCustomer.GetComponent<Dish>(); //To gets the enum of the sushi dish
 
-        if(dishServed.DishType.Equals(dishType)) //check if the Enum of the dish matches to customer's Enum
+        if(dishServed.CompletedDishType.Equals(dishType)) //check if the Enum of the dish matches to customer's Enum
         {
             return true;
         }
