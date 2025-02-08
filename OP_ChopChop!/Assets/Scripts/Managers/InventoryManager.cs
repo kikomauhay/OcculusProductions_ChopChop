@@ -49,7 +49,7 @@ public class InventoryManager : Singleton<InventoryManager>
         if (ingredient.FreshnessRate == 0) 
         {
             IngredientManager.Instance.TrashIngredient(food);
-            Debug.LogError($"{ingredient.Stats.name} is already expired! It's unsafe to put in any storage!");
+            Debug.LogError($"{ingredient.IngredientStats.name} is already expired! It's unsafe to put in any storage!");
             return;
         }
 
@@ -57,7 +57,7 @@ public class InventoryManager : Singleton<InventoryManager>
         IngredientManager.Instance.Ingredients.Remove(food);
         _fridge.Add(food);    
         
-        if (ingredient.Stats.StorageType == mode)
+        if (ingredient.IngredientStats.StorageType == mode)
             ingredient.IsProperlyStored = true;
     }
     

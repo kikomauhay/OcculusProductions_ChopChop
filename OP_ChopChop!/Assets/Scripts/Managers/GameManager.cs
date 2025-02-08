@@ -1,98 +1,95 @@
+using System.Collections.Generic;
 using UnityEngine;
 using System;
-using JetBrains.Annotations;
 
-/// <summary>
+/// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
-/// Acts as the head of the game.
-/// Also rates the restaurant once it reaches the end of the day.
+/// Acts as the brains of the game.
+/// Stores all the scores of the food served and customerSR.
+/// Rates the Restaurant Quality once the shift ends.
 ///
 /// </summary>
-
 
 public class GameManager : Singleton<GameManager>
 {
 
-    #region Events
+#region Members
 
+    // Events
     public Action OnFoodDisposed;
     public Action<float> OnCustomerServed;
-    public Action<float, float> OnDishCreated;
 
-#endregion
-
-#region Members 
-
-    // Player References
+    // Player references
     [SerializeField] GameObject _player;
-    public GameObject Player => _player; 
+    public GameObject Player => _player;
 
-    int _foodServed;
-
-    float _totalFoodScore, _totalCustomerSR;
-
+    // Scores to keep track of
+    List<float> _foodScores, _customerSRScores;
 
 #endregion
 
 #region Methods
 
     protected override void Awake() => base.Awake();
-    protected override void OnApplicationQuit() {
+    protected override void OnApplicationQuit() 
+    {
         base.OnApplicationQuit();
         Reset();
     }
-    protected void Reset()
+    void Reset()
     {
         OnCustomerServed -= AddToFoodScore;
     }
 
-    private void Start()
+    void Start()
     {
-        _totalFoodScore = 0f;
-        _totalCustomerSR = 0f;
+        _foodScores = new List<float>();
+        _customerSRScores = new List<float>();
 
         OnCustomerServed += AddToFoodScore;
     }
+    void Update() => test();
 
+    void test() {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            float rndm = UnityEngine.Random.Range(80f, 100f);
+            _foodScores.Add(rndm);
+
+            Debug.Log($"Score: {rndm}; Count: {_foodScores.Count}");
+        }        
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
+    }  
 #endregion
 
 #region Rating_Calculations
 
-    /// <summary>
+    /// </summary> -RATING PROCESS-
     /// 
-    /// 1. Calculate the Food Score, then add it to the foodCounter
-    /// 2. Get Customer SR
+    /// 1. Calculate the Food Score, then add it to the proper list
+    /// 2. Calculate Customer SR, then add it to the proper list
+    /// 3. At the end of the day, calculate the restaurant
     /// 
     /// </summary>
 
-
-    // void AddFoodScore(float ing1Score, float ing2Score) => _totalFoodScore += (ing1Score  + ing2Score) / 2f;
-    void AddCustomerSR(float rawCustomerSR, float timeToFinish) => _totalCustomerSR += (rawCustomerSR + timeToFinish) / 2f;
-
-
-    float CalculateTotalFoodScore(float foodScore)
+    float GetAverageOf(List<float> list) 
     {
-        if (_foodServed == 0)
-        {
-            Debug.LogError("No food was served!");
-            return 0f;
-        }
-        return foodScore / _foodServed;
-    }
+        // prevents a div/0 case
+        if (list.Count < 1) return 0f;
 
-    float CalculateTotalCustomerSR(float customerSR) 
-    {
-        if (_foodServed == 0)
-        {
-            Debug.LogError("No customer was served!");
-            return 0f;
-        }
-        return customerSR / _foodServed;
+        float n = 0f;
+
+        for (int i = 0; i < list.Count; i++) 
+            n += list[i];
+
+        return n / _foodScores.Count;
     }
 
     float CalculateRestartantRating(float avgCustomerSR, float avgFoodScore) // this only triggers once it's the shift ends 
     {
-    /// <summary> rating formula issues
+    ///<summary> -RATING FORMULA ISSUES-
     /// 
     /// so far, we're using a simple formula
     /// there are a lot of variables that we need to look into
@@ -105,18 +102,17 @@ public class GameManager : Singleton<GameManager>
     ///                        DisposeRate)
     /// </summary>
     
-        return (avgCustomerSR + avgFoodScore) / 2f;
+        return (avgCustomerSR + avgFoodScore) / 2f; // will make this more complex after midterms
     }
 
-    #endregion
+#endregion
 
-    #region Event_Methods 
+#region Event_Methods 
 
-    // GameObjects don't call the GameManager's things, just calls the events for it
+    // other GameObjects don't call the GameManager's methods, the just call the events for it
 
-    void AddToFoodScore(float foodScore) => Debug.Log("Added food score"); // fix later
-        
+    void AddToFoodScore(float foodScore) => _foodScores.Add(foodScore);
+    void AddToCustomerSRScore(float srScore) => _customerSRScores.Add(srScore);
 
-    #endregion
-
+#endregion
 }

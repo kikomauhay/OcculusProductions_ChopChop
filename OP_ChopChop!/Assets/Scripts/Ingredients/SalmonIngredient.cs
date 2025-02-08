@@ -9,8 +9,7 @@ public class SalmonIngredient : FishIngredient
     {
         base.Start();
 
-        _type = IngredientType.SALMON;
+        _ingredientType = IngredientType.SALMON;
         name = "Salmon";
     }
-
 }

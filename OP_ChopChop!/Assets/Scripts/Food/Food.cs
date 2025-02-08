@@ -2,18 +2,18 @@ using UnityEngine;
 
 /// <summary>
 /// 
-/// This will act as the unplated version of the food
+/// This will act as the UNPLATED version of the food
 /// This needs to be combined with a plate to make it into a dish
 /// 
 /// </summary>
 
 public abstract class Food : MonoBehaviour
 {
+    public float FoodScore { get; set; } 
+    public EnumCompletedDishType FoodType { get; set; }
+
     [SerializeField] protected GameObject _dishPrefab;
-
-    public float FoodScore { get; set; }
-
-
+    
     protected void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Plate>() == null) return;
@@ -26,6 +26,7 @@ public abstract class Food : MonoBehaviour
         CreateDish(pos, rot);
 
         Destroy(gameObject);
+        Destroy(other.gameObject);
         Debug.Log("Created a dish"); // test
     }
 

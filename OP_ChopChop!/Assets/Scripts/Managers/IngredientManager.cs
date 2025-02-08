@@ -1,13 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// IngredientManager is for foods that are OUTSIDE the fridge
+/// <summary> -WHAT DOES THIS SCRIPT DO-
 /// 
-/// The player has 3 options with the ingredient:
-///     - use it
-///     - dispose it (if it's rotten or something)
-///     - put it back in the fridge 
+/// IngredientManager is basically a List with extra features
+///
+/// -FOOD NAMING SCHEME-
+///     Ingredient -> combines with another ingredient to make the unplated food
+///     Food -> UNPLATED prefab that has the average score of the 2 ingredients
+///     Dish -> PLATED prefab that also has the score and needs to be served to the customer  
+/// 
+/// The player has 3 options with an ingredient:
+///     1. use it
+///     2. dispose it (if it's expireds)
+///     3. put it back in the fridge (as long as it's not contaminated) 
 ///     
 /// </summary>
 
@@ -25,24 +31,6 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         _ingredients = new List<GameObject>();
         _trashCan = new List<GameObject>();
-    }
-    void Reset() 
-    { 
-        if (_trashCan.Count > 0) 
-        {
-            foreach (GameObject food in _trashCan) 
-                Destroy(food);
-        
-            _trashCan.Clear();
-        }
-        
-        if (Ingredients.Count > 0)
-        {
-            foreach (GameObject food in Ingredients)
-                Destroy(food);
-
-            Ingredients.Clear();
-        }
     }
  
     public void TrashIngredient(GameObject food) {

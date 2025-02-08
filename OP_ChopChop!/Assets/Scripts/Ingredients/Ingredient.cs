@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// 
@@ -11,20 +11,18 @@ using UnityEngine;
 
 public enum IngredientType { RICE, TUNA, SALMON, SEAWEED }
 
-public class Ingredient : MonoBehaviour 
+public abstract class Ingredient : MonoBehaviour 
 {
-
-
     public Action OnIngredientContaminated;
 
 #region Members
 
     [Header("Ingredients")]
-    [SerializeField] protected IngredientStats _stats;
-    [SerializeField] protected IngredientType _type;
+    [SerializeField] protected IngredientStats _ingredientStats;
+    [SerializeField] protected IngredientType _ingredientType;
     
-    public IngredientStats Stats => _stats;
-    public IngredientType Type => _type;
+    public IngredientStats IngredientStats => _ingredientStats;
+    public IngredientType IngredientType => _ingredientType;
 
     public FreshnessRating Rating { get; private set; }
     public float FreshnessRate { get; private set; }
@@ -71,17 +69,17 @@ public class Ingredient : MonoBehaviour
         if (FreshnessRate < 70f) 
         {
             Rating = FreshnessRating.EXPIRED;
-            m = _stats.Materials[2];    
+            m = _ingredientStats.Materials[2];    
         }
         else if (FreshnessRate > 87f) 
         {
             Rating = FreshnessRating.FRESH;
-            m = _stats.Materials[0];
+            m = _ingredientStats.Materials[0];
         }
         else
         {
             Rating = FreshnessRating.LESS_FRESH;
-            m = _stats.Materials[1];
+            m = _ingredientStats.Materials[1];
         }
 
         if (m != null)
@@ -97,6 +95,7 @@ public class Ingredient : MonoBehaviour
 #endregion
 
 #region Enumerators
+
     IEnumerator Decay() 
     {
         while (!IsExpired) 
@@ -107,18 +106,18 @@ public class Ingredient : MonoBehaviour
 
             if (IsContaminated) 
             {
-                rate = _stats.Contaminated.Rate;
-                speed = _stats.Contaminated.Speed;
+                rate = _ingredientStats.Contaminated.Rate;
+                speed = _ingredientStats.Contaminated.Speed;
             }
             else if (IsProperlyStored) 
             {
-                rate = _stats.Stored.Rate;
-                speed = _stats.Stored.Speed;
+                rate = _ingredientStats.Stored.Rate;
+                speed = _ingredientStats.Stored.Speed;
             }
             else // just outside the fridge AND not contaminated
             {
-                rate = _stats.Decay.Rate;
-                speed = _stats.Decay.Speed;
+                rate = _ingredientStats.Decay.Rate;
+                speed = _ingredientStats.Decay.Speed;
             }
 
             // test
