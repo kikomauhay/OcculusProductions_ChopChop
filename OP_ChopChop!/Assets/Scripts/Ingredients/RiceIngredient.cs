@@ -41,7 +41,7 @@ public class RiceIngredient : Ingredient
         // gets the freshness rates of both ingredients before deleting them
         Destroy(gameObject);
         Destroy(other.gameObject);
-        GameManager.Instance.OnDishCreated?.Invoke(FreshnessRate, ing.FreshnessRate);
+        // GameManager.Instance.OnDishCreated?.Invoke(FreshnessRate, ing.FreshnessRate);
         SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.SMOKE, pos, rot);
         
         // sets up the food's appearance & value

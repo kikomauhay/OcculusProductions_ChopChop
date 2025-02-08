@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// 
-/// This will act as the unplated version of the food
+/// This will act as the UNPLATED version of the food
 /// This needs to be combined with a plate to make it into a dish
 /// 
 /// </summary>

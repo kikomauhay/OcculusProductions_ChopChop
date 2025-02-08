@@ -97,6 +97,7 @@ public class Ingredient : MonoBehaviour
 #endregion
 
 #region Enumerators
+
     IEnumerator Decay() 
     {
         while (!IsExpired) 

@@ -3,18 +3,23 @@ using System.Collections;
 using UnityEngine;
 using System;
 
+/// </summary> -WHAT DOES THIS SCRIPT DO-
+///
+/// Spawns anything that comes out of the game
+/// Uses events to handle different spawning types
+///
+///
+/// </summary>
+
 public enum VFXType { SMOKE, BUBBLE, SPARKLE , STINKY }
 
 public class SpawnManager : Singleton<SpawnManager>
 {
-#region Events 
-
-    public Action<VFXType, Vector3, Quaternion> OnSpawnVFX; // other scripts call this and selects a VFX type
-    public Action OnSpawnCustomer;
-
-#endregion
-
 #region Members
+
+    // Events
+    public Action<VFXType, Vector3, Quaternion> OnSpawnVFX; // other scripts call this and selects a VFX type
+    public Action OnSpawnCustomer, OnSpawnFood;
 
     [Header("Prefabs to Spawn")]
     [SerializeField] GameObject[] _vfxPrefabs; // 0 = smoke, 1 = bubble, 2 = sparkle, 3 = stinky
@@ -22,15 +27,14 @@ public class SpawnManager : Singleton<SpawnManager>
 
 #endregion
 
-#region Methods
-    
-#endregion
-
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit()
     {
         base.OnApplicationQuit();
-
+        Reset();
+    }
+    void Reset() 
+    {
         OnSpawnVFX -= SpawnVFX;
     }
 
@@ -45,7 +49,7 @@ public class SpawnManager : Singleton<SpawnManager>
     void SpawnVFX(VFXType type, Vector3 pos, Quaternion rot)
     {
         GameObject _VFXInstance = Instantiate(_vfxPrefabs[(int)type], pos, rot);
-        Destroy(_VFXInstance, 2f);
+        Destroy(_VFXInstance, 2f); // destory time could also be variable
     }
 
 

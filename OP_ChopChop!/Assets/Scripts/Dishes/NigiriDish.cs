@@ -6,7 +6,7 @@ public enum FishType { SALMON, TUNA }
 
 public class NigiriDish : Dish
 {
-    
     public FishType FishType { get; set; }
 
+    
 }
