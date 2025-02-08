@@ -17,7 +17,7 @@ public class GameManager : Singleton<GameManager>
 
     // Events
     public Action OnFoodDisposed;
-    public Action<float> OnCustomerServed, OnCustomerScored;
+    public Action<float> OnCustomerServed;
 
     // Player references
     [SerializeField] GameObject _player;
@@ -39,7 +39,6 @@ public class GameManager : Singleton<GameManager>
     void Reset()
     {
         OnCustomerServed -= AddToFoodScore;
-        OnCustomerScored -= AddToCustomerSRScore;
     }
 
     void Start()
@@ -48,18 +47,16 @@ public class GameManager : Singleton<GameManager>
         _customerSRScores = new List<float>();
 
         OnCustomerServed += AddToFoodScore;
-        OnCustomerScored += AddToCustomerSRScore;
     }
-
     void Update() => test();
 
     void test() {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            float rnd = UnityEngine.Random.Range(80f, 100f);
-            _foodScores.Add(rnd);
+            float rndm = UnityEngine.Random.Range(80f, 100f);
+            _foodScores.Add(rndm);
 
-            Debug.Log($"Score: {rnd}; Count: {_foodScores.Count}");
+            Debug.Log($"Score: {rndm}; Count: {_foodScores.Count}");
         }        
 
         if (Input.GetKeyDown(KeyCode.Space))

@@ -9,15 +9,21 @@ using System;
 
 public enum SliceType { THICK, THIN, SLAB }
 
+public enum FishType { SALMON, TUNA }
+
 public class FishIngredient : Ingredient
 {
     public Action<int> OnFishSliced;
-
-    [Header("Fish Slices")]
-    [SerializeField] protected GameObject _fishSlices;
-    [SerializeField] SliceType _sliceType;
     public SliceType SliceType => _sliceType;
+    public FishType FishType => _fishType;
 
+    [Tooltip("Types of Slices Available")]
+    [SerializeField] protected GameObject _fishSlices;
+    
+    [Header("Food Attributes")]
+    [SerializeField] protected SliceType _sliceType;
+    [SerializeField] protected FishType _fishType; 
+    
 
     protected override void Start()
     {
@@ -30,5 +36,6 @@ public class FishIngredient : Ingredient
     protected void UpdateSlice(int i)
     {
         _sliceType = (SliceType)i;
+        // change to incrementing index so it's easier to change (and prevents backtracking)
     }
 }

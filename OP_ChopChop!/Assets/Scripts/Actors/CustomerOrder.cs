@@ -108,7 +108,7 @@ public class CustomerOrder : MonoBehaviour
 
         Dish dishServed = dishServedToCustomer.GetComponent<Dish>(); //To gets the enum of the sushi dish
 
-        if(dishServed.CompletedDishType.Equals(dishType)) //check if the Enum of the dish matches to customer's Enum
+        if(dishServed.DishType.Equals(dishType)) //check if the Enum of the dish matches to customer's Enum
         {
             return true;
         }

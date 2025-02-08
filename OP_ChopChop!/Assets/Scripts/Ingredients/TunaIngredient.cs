@@ -9,7 +9,7 @@ public class TunaIngredient : FishIngredient
     {
         base.Start();
 
-        _type = IngredientType.TUNA;
+        _ingredientType = IngredientType.TUNA;
         name = "Tuna";
     }
 }

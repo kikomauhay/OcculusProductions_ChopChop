@@ -1,13 +1,12 @@
 using UnityEngine;
 using System;
-using UnityEngine.Rendering.Universal;
 
 public enum MoldType { UNMOLDED, GOOD, PERFECT, BAD }
 
 public class RiceIngredient : Ingredient
 {
     [Header("Finished Dishes"), Tooltip("Possible dishes the rice can combine with.")]
-    [SerializeField] GameObject[] _foodPrefabs; // 0 = salmon, 1 = tuna
+    [SerializeField] GameObject[] _foodPrefabs; // 0 = salmon nigiri, 1 = tuna nigiri
 
     [Header("VFX Settings")]
     [SerializeField] GameObject _smokeVFX;
@@ -28,10 +27,8 @@ public class RiceIngredient : Ingredient
 
     void OnTriggerEnter(Collider other) // combination of the food
     {
-        // prevents mixing the same ingredients together
         if (other.gameObject.name == name) return;
 
-        // only perfectly-molded rice is allowed
         if (_moldType != MoldType.PERFECT) return;
 
         Ingredient ing = other.GetComponent<Ingredient>();
@@ -41,56 +38,30 @@ public class RiceIngredient : Ingredient
         // gets the freshness rates of both ingredients before deleting them
         Destroy(gameObject);
         Destroy(other.gameObject);
-        // GameManager.Instance.OnDishCreated?.Invoke(FreshnessRate, ing.FreshnessRate);
         SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.SMOKE, pos, rot);
         
-        // sets up the food's appearance & value
+        // only nigiris for now (makis will be added after midterms)
         if (ing.GetComponent<FishIngredient>().SliceType == SliceType.THIN)
         {
             GameObject foodToSpawn;
             Food food = null;
-            
-            if (ing.Type == IngredientType.SALMON)
-            {
+
+            // idk if you need VFX when you combine the ingredients into the food
+            if (ing.IngredientType == IngredientType.SALMON)
                 foodToSpawn = Instantiate(_foodPrefabs[0], pos, rot);
-                food = foodToSpawn.GetComponent<Food>();
-
-                // sets the food stats in the Food that the Dish will use
-                //food.OrderType = OrderType.Nigiri_Salmon;
-            }
-            else if (ing.Type == IngredientType.TUNA)
-            {
+            
+            else if (ing.IngredientType == IngredientType.TUNA)
                 foodToSpawn = Instantiate(_foodPrefabs[1], pos, rot);
-                food = foodToSpawn.GetComponent<Food>();
+            
+            else return;
 
-                // sets the food stats in the Food that the Dish will use
-                //food.OrderType = OrderType.Nigiri_Salmon; // change to tuna later
-            }
-
+            // sets up the food's score
+            food = foodToSpawn.GetComponent<Food>();
             food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
+            food.FoodType = EnumCompletedDishType.NIGIRI_SALMON;
         }
-
-        //// different types of nigiri can be made
-        //if (ing.Type == IngredientType.SALMON &&
-        //    ing.GetComponent<SalmonIngredient>().SliceType == SliceType.THIN)
-        //{
-        //    food = Instantiate(_foodPrefabs[0], pos, rot); // salmon nigiri
-        //    nigiri = food.GetComponent<NigiriFood>();
-
-
-
-        //}
-        //else if (ing.Type == IngredientType.TUNA &&
-        //         ing.GetComponent<TunaIngredient>().SliceType == SliceType.THIN)
-        //{
-
-        //    food = Instantiate(_foodPrefabs[1], pos, rot); // tuna nigiri
-        //    nigiri = food.GetComponent<NigiriFood>();
-        //}
-
-        //// gets the average of the two ingredients and adds them as the food score
-        //nigiri.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
     }
 
     void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;
+    // change to incrementing index so you don't need to get a parameter
 }
