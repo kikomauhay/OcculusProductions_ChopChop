@@ -226,7 +226,7 @@ MonoBehaviour:
   m_MatchAttachPosition: 1
   m_MatchAttachRotation: 1
   m_SnapToColliderVolume: 1
-  m_ReinitializeDynamicAttachEverySingleGrab: 1
+  m_ReinitializeDynamicAttachEverySingleGrab: 0
   m_AttachEaseInTime: 0.15
   m_MovementType: 0
   m_VelocityDamping: 1
@@ -282,14 +282,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPrefab: {fileID: 9223341567872474545}
-  nextPrefab: {fileID: 4045151705470340862, guid: 9df1f14a4977b5040aef63cc1fb2eb7f,
-    type: 3}
-  sharpObject: {fileID: 0}
-  MeatBoard: {fileID: 0}
-  SmokeVFX: {fileID: 2611135798559895553, guid: 03277cac3d95b3d46a37879aea695411,
-    type: 3}
-  IsAttached: 0
+  _currentPrefab: {fileID: 0}
+  _nextPrefab: {fileID: 0}
+  _sharpObject: {fileID: 0}
+  _meatBoard: {fileID: 0}
+  _smokeVFX: {fileID: 0}
 --- !u!114 &3783701488481336857
 MonoBehaviour:
   m_ObjectHideFlags: 0

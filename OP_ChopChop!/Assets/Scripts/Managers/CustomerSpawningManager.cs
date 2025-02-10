@@ -9,7 +9,7 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
     [Header("Arrays")]
     [SerializeField] private GameObject[] customerSpawnPoints;
-    [SerializeField] private BoxCollider[] customerCollisionPoints;
+    [SerializeField] private GameObject[] customerCollisionPoints;
     [SerializeField] private List<GameObject> listOfCustomersInWaiting;
    
     [Header("CustomerVariable")]
@@ -20,7 +20,9 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
     [SerializeField] private int currentCustomerCount;
 
     [Header("Timer")]
-    [SerializeField] private float nextCustomerTimer;
+    [SerializeField] private float minCustomerTimer;
+    [SerializeField] private float maxCustomerTimer;
+    private float nextCustomerTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -56,15 +58,17 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
                 if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>()._isPrefabPresent)
                 {
                     GameObject createdCustomer = Instantiate(customerModelPrefab[0],
-                                                             customerSpawnPoints[i].transform.position,
-                                                             Quaternion.identity);
+                                                           customerSpawnPoints[i].transform.position,
+                                                           customerSpawnPoints[i].transform.rotation);
 
-                    for(int j = 0; j < customerSpawnPoints.Length; j++)
-                    {
-                       // assigning of collosion box to customer
-                       // createdCustomer.GetComponent<CustomerOrder>()._getSetCustomerCollider = customerCollisionPoints[i]; 
-                    }
-                  
+
+                    //Region wait
+                    
+                    customerCollisionPoints[i].GetComponent<CustomerColliderCheck>().customerOrder = createdCustomer.GetComponent<CustomerOrder>();
+                    Debug.Log("Added script from createdCustomer to ColliderCheck");
+                    //assigning of collosion box to customer
+
+
                     currentCustomerCount++;
                     listOfCustomersInWaiting.Add(createdCustomer);
 
@@ -98,6 +102,8 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
     IEnumerator ITimerForNextCustomerSpawn()
     {
+        nextCustomerTimer = Random.Range(minCustomerTimer, maxCustomerTimer);
+        //Debug.Log("Enum CUSTOMER TIMER: " + nextCustomerTimer);
         yield return new WaitForSeconds(nextCustomerTimer);
 
         if(IsEmptySpawnLocation())
