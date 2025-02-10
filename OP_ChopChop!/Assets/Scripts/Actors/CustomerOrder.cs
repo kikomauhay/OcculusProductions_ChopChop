@@ -23,7 +23,7 @@ public class CustomerOrder : MonoBehaviour
 
     [SerializeField] private OrderType dishType; // differernt types of dishes
     
-    [SerializeField] private GameObject[] sushiOrder; //theOrder of the customer
+    [SerializeField] private GameObject[] sushiOrderUI; //theOrder of the customer
     [SerializeField] private Transform customerOrderSpawnLocation; //Spawning of the order
     [SerializeField] private float customerDeleteTimer;
 
@@ -64,17 +64,17 @@ public class CustomerOrder : MonoBehaviour
         switch (dishType)
         {
             case OrderType.Nigiri_Salmon:
-                return sushiOrder[0];
+                return sushiOrderUI[0];
 
             /*
            case DishType.Nigiri_Tuna: 
-               return sushiOrder[1];
+               return sushiOrderUI[1];
 
            case DishType.Maki_Salmon: 
-               return sushiOrder[2];
+               return sushiOrderUI[2];
 
            case DishType.Maki_Tuna: 
-               return sushiOrder[3];
+               return sushiOrderUI[3];
             */
             default:
                 return null;

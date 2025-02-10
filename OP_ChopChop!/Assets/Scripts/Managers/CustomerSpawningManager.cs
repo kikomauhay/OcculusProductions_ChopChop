@@ -20,7 +20,9 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
     [SerializeField] private int currentCustomerCount;
 
     [Header("Timer")]
-    [SerializeField] private float nextCustomerTimer;
+    [SerializeField] private float minCustomerTimer;
+    [SerializeField] private float maxCustomerTimer;
+    private float nextCustomerTimer;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +59,7 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
                 {
                     GameObject createdCustomer = Instantiate(customerModelPrefab[0],
                                                            customerSpawnPoints[i].transform.position,
-                                                           Quaternion.identity);
+                                                           customerSpawnPoints[i].transform.rotation);
 
                     for(int j = 0; j < customerSpawnPoints.Length; j++)
                     {
@@ -98,6 +100,8 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
     IEnumerator ITimerForNextCustomerSpawn()
     {
+        nextCustomerTimer = Random.Range(minCustomerTimer, maxCustomerTimer);
+        //Debug.Log("Enum CUSTOMER TIMER: " + nextCustomerTimer);
         yield return new WaitForSeconds(nextCustomerTimer);
 
         if(IsEmptySpawnLocation())
