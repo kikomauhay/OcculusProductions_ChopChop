@@ -8,6 +8,6 @@ public class NigiriFood : Food
         GameObject dishToSpawn = Instantiate(_dishPrefab, pos, rot);
         Dish dish = dishToSpawn.GetComponent<Dish>();
         dish.DishScore = FoodScore;
-        dish.DishType = FoodType;
+        dish.OrderDishType = FoodType;
     }
 }

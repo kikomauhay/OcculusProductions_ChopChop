@@ -198,14 +198,13 @@ GameObject:
   - component: {fileID: 139234581}
   - component: {fileID: 139234580}
   - component: {fileID: 139234579}
-  - component: {fileID: 139234578}
   m_Layer: 0
   m_Name: Fish Ingedient
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &139234577
 Transform:
   m_ObjectHideFlags: 0
@@ -221,26 +220,6 @@ Transform:
   m_Father: {fileID: 968520236}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &139234578
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 139234576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04ce8303de4c475499b81e9237effd89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stats: {fileID: 11400000, guid: 8d861586e0d7fd446913bed80f383061, type: 2}
-  _type: 0
-  <Rating>k__BackingField: 0
-  <FreshnessRate>k__BackingField: 0
-  <IsExpired>k__BackingField: 0
-  <IsContaminated>k__BackingField: 0
-  <IsTrashed>k__BackingField: 0
-  <IsProperlyStored>k__BackingField: 0
 --- !u!65 &139234579
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -451,7 +430,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603271144}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 751203f66fcea3c42a0bc8f14436e30b, type: 3}
   m_Name: 
@@ -477,8 +456,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0fc3ab7847f24046b32e85f9847eeb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customerSpeed: 0
-  targetLocation: []
+  _customerSpeed: 0
+  _targetLocations: []
 --- !u!114 &603271148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,21 +465,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 603271144}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 903670385a651ec41a5d1158f8ad715a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customerServeCollider: {fileID: 0}
-  dishType: 0
-  sushiOrder: []
-  customerOrderSpawnLocation: {fileID: 0}
-  customerDeleteTimer: 0
-  currentCustomerPaitenceTimer: 0
-  maxCustomerPaitenceTimer: 0
-  customerSatisfactionRating: 0
-  maxCustomerSR: 0
-  minCustomerSR: 0
+  _dishOrdersUI: []
+  _orderUITransform: {fileID: 0}
 --- !u!1 &713347972
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,14 +484,13 @@ GameObject:
   - component: {fileID: 713347977}
   - component: {fileID: 713347976}
   - component: {fileID: 713347975}
-  - component: {fileID: 713347978}
   m_Layer: 0
   m_Name: Fresh Ingedient
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &713347973
 Transform:
   m_ObjectHideFlags: 0
@@ -599,26 +569,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 713347972}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &713347978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713347972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04ce8303de4c475499b81e9237effd89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stats: {fileID: 11400000, guid: bbf9d3fa04269974b982ad2b8476d67b, type: 2}
-  _type: 0
-  <Rating>k__BackingField: 0
-  <FreshnessRate>k__BackingField: 0
-  <IsExpired>k__BackingField: 0
-  <IsContaminated>k__BackingField: 0
-  <IsTrashed>k__BackingField: 0
-  <IsProperlyStored>k__BackingField: 0
 --- !u!1 &777500098
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,7 +815,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &968520236
 Transform:
   m_ObjectHideFlags: 0

@@ -1,31 +1,29 @@
 using System.Collections;
 using UnityEngine;
-using System;
 
 /// <summary>
 /// 
-/// acts as the base class for the different ingredients
-/// all children of Ingredent only needs the stats before being destroyed
+/// Acts as the base class for the different ingredients
+/// All children of Ingredent.cs only needs the stats before being destroyed
 /// 
 /// </summary>
 
-public enum IngredientType { RICE, TUNA, SALMON, SEAWEED }
+public enum IngredientType { RICE, TUNA, SALMON, SEAWEED } // will expand later 
 
 public abstract class Ingredient : MonoBehaviour 
 {
-    public Action OnIngredientContaminated;
-
 #region Members
 
     [Header("Ingredients")]
     [SerializeField] protected IngredientStats _ingredientStats;
     [SerializeField] protected IngredientType _ingredientType;
-    
+
     public IngredientStats IngredientStats => _ingredientStats;
     public IngredientType IngredientType => _ingredientType;
-
     public FreshnessRating Rating { get; private set; }
     public float FreshnessRate { get; private set; }
+
+    // will change these to an enum after midterms
     public bool IsExpired { get; private set; }
     public bool IsContaminated { get; private set; }
     public bool IsTrashed { get; private set; }
@@ -40,6 +38,7 @@ public abstract class Ingredient : MonoBehaviour
         FreshnessRate = 100;
         Rating = FreshnessRating.FRESH;
 
+        // will change to enums after midterms
         IsTrashed = false;
         IsExpired = false;
         IsContaminated = false;
@@ -61,7 +60,7 @@ public abstract class Ingredient : MonoBehaviour
     }
     protected void CheckRate() 
     {
-        // material of the ingredient changes based on how fresh it is
+        // material of the ingredient changes based on the freshness rate
         // the lower the number, the worse it is
 
         Material m;
