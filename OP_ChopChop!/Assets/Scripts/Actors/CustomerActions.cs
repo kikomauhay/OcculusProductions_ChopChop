@@ -1,18 +1,23 @@
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
+
+/// <summary>
+/// 
+/// Anything that needs to move about the customer goes here
+/// 
+/// </summary>
 
 public class CustomerActions : MonoBehaviour
 {
-    [SerializeField] private float customerSpeed;
-    [SerializeField] private Transform[] targetLocation;
+    [SerializeField] private float _customerSpeed;
+    [SerializeField] private Transform[] _targetLocations;
 
-    void Update() => CustomerMoveToSeat();
+    void Start() => _customerSpeed = _customerSpeed * Time.deltaTime;
+    void LateUpdate() => CustomerMoveToSeat();
 
     private void CustomerMoveToSeat()
     {
-        customerSpeed = customerSpeed * Time.deltaTime;
-
-        //this.transform.position = Vector3.MoveTowards(this.transform.position, targetLocation[0].transform.position, customerSpeed);
+        transform.position = Vector3.MoveTowards(transform.position, 
+                                                 _targetLocations[0].position, 
+                                                 _customerSpeed);
     }
 }

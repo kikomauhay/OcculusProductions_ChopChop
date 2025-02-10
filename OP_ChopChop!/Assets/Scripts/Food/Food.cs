@@ -10,7 +10,7 @@ using UnityEngine;
 public abstract class Food : MonoBehaviour
 {
     public float FoodScore { get; set; } 
-    public EnumCompletedDishType FoodType { get; set; }
+    public DishType FoodType { get; set; }
 
     [SerializeField] protected GameObject _dishPrefab;
     

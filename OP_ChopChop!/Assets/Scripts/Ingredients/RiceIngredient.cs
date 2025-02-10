@@ -58,7 +58,7 @@ public class RiceIngredient : Ingredient
             // sets up the food's score
             food = foodToSpawn.GetComponent<Food>();
             food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
-            food.FoodType = EnumCompletedDishType.NIGIRI_SALMON;
+            food.FoodType = DishType.NIGIRI_SALMON;
         }
     }
 

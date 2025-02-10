@@ -1,11 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 
 public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 {
-    protected override void Awake() { base.Awake(); }
+    protected override void Awake() => base.Awake(); 
+    protected override void OnApplicationQuit() => base.OnApplicationQuit(); 
 
     [Header("Arrays")]
     [SerializeField] private GameObject[] customerSpawnPoints;
@@ -24,13 +24,11 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
     [SerializeField] private float maxCustomerTimer;
     private float nextCustomerTimer;
 
-    // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ITimerForNextCustomerSpawn()); //Pls put this under a condition once testing is done
+        StartCoroutine(SpawnNextCustomer()); // pls put this under a condition once testing is done
     }
 
-    // Update is called once per frame
     void Update()
     {   
         /*
@@ -47,7 +45,7 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
         if(currentCustomerCount >= customerSpawnPoints.Length) 
         { 
-            StopCoroutine(ITimerForNextCustomerSpawn());
+            StopCoroutine(SpawnNextCustomer());
             return;
         }
 
@@ -55,7 +53,7 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
         {
             if(currentCustomerCount <= maxCustomerToSpawn)
             {
-                if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>()._isPrefabPresent)
+                if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>().IsPrefabPresent)
                 {
                     GameObject createdCustomer = Instantiate(customerModelPrefab[0],
                                                            customerSpawnPoints[i].transform.position,
@@ -64,7 +62,7 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
                     //Region wait
                     
-                    customerCollisionPoints[i].GetComponent<CustomerColliderCheck>().customerOrder = createdCustomer.GetComponent<CustomerOrder>();
+                    customerCollisionPoints[i].GetComponent<CustomerColliderCheck>().CustomerOrder = createdCustomer.GetComponent<CustomerOrder>();
                     Debug.Log("Added script from createdCustomer to ColliderCheck");
                     //assigning of collosion box to customer
 
@@ -72,14 +70,12 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
                     currentCustomerCount++;
                     listOfCustomersInWaiting.Add(createdCustomer);
 
-                    customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._isPrefabPresent = true;
+                    customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().IsPrefabPresent = true;
                     break;
                 }
             } 
         }
-
-
-        StartCoroutine(ITimerForNextCustomerSpawn());
+        StartCoroutine(SpawnNextCustomer());
     }
     
 
@@ -89,18 +85,18 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
         for (int i = 0; i < customerSpawnPoints.Length; i++)
         {
             
-            if (customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>()._isPrefabPresent == false)
+            if (customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().IsPrefabPresent == false)
             {
                 Debug.Log("IsEmpty True");
                 return true;
-            }
-            
+            }            
         }
+
         Debug.Log("IsEmpty False");
         return false;
     }
 
-    IEnumerator ITimerForNextCustomerSpawn()
+    IEnumerator SpawnNextCustomer()
     {
         nextCustomerTimer = Random.Range(minCustomerTimer, maxCustomerTimer);
         //Debug.Log("Enum CUSTOMER TIMER: " + nextCustomerTimer);
@@ -117,5 +113,4 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
         listOfCustomersInWaiting.Remove(customer);
     }
 
-    protected override void OnApplicationQuit() { base.OnApplicationQuit(); }
 }

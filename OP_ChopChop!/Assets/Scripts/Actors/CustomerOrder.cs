@@ -1,139 +1,111 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
-public enum OrderType
-{
-    Nigiri_Salmon,
-    //Nigiri_Tuna,
-    //Maki_Salmon,
-    //Maki_Tuna,
-}
 
 public class CustomerOrder : MonoBehaviour
 {
-    [SerializeField] private Collider customerServeCollider;
-    public Collider _getSetCustomerCollider 
-    {
-        get { return customerServeCollider; }
-        set { customerServeCollider = value; }
-    }
+#region Members
 
-    [SerializeField] private OrderType dishType; // differernt types of dishes
+    public DishType CustomerDishType { get; private set; } // what dish the customer wants to order   
+    public float CustomerSR { get; set; } // (FoodScore of dish + _patienceRate) / 2   \
+    public float PatienceRate => _patienceRate;
     
-    [SerializeField] private GameObject[] sushiOrderUI; //theOrder of the customer
-    [SerializeField] private Transform customerOrderSpawnLocation; //Spawning of the order
-    [SerializeField] private float customerDeleteTimer;
+    // timers
+    private float _customerDeleteTimer; // time it takes for the customer to eat and leave
+    private float _patienceRate; // deduction rate to use
+    private float _customerScore; // starts at 100 ang decreases over time
 
-    [Header("Patience Rating")]
-    [SerializeField] private float currentCustomerPaitenceTimer; //use this to take the score for the customer rating
-    [SerializeField] private float maxCustomerPaitenceTimer;
+    [Header("Dish UI")]
+    [SerializeField] private GameObject[] _dishOrdersUI; // the different order UI for the customer 
+    [SerializeField] private Transform _orderUITransform; //Spawning of the order
 
-    [Header("Satisfaction Rating")]
-    [SerializeField] public float customerSatisfactionRating; //value that we'll use to check the dish decay value against the food
-    [SerializeField] private float maxCustomerSR; //SR = SatisfactionRating
-    [SerializeField] private float minCustomerSR;
+#endregion
 
+    private void Start()
+    {         
+        // randomizes the customer's order
+        CustomerDishType = (DishType)Random.Range(0, System.Enum.GetValues(typeof(DishType)).Length);
+        
+        _customerScore = 100f; // will decrease overtime
+        _patienceRate = 1.65f;
+        _customerDeleteTimer = 3f;
+        
+        CreateCustomerUI();
+        StartCoroutine(PatienceCountdown());
+    }
 
+#region Methods
 
-    private void Awake()
+    public bool CheckDishServed(GameObject dishServedToCustomer)
     { 
-        dishType = (OrderType)UnityEngine.Random.Range(0, System.Enum.GetValues(typeof(OrderType)).Length);
-        //set a random dishType
-        customerSatisfactionRating = UnityEngine.Random.Range(minCustomerSR, maxCustomerSR);
-        // at start, each customer will have a random value for their taste value
-    }
+        if (dishServedToCustomer == null) return false;
+        
+        Dish dishServed = dishServedToCustomer.GetComponent<Dish>(); // gets the enum of the dish
 
-    // Start is called before the first frame update
-    void Start()
+        return dishServed.OrderDishType.Equals(CustomerDishType);
+    }   
+    private void CreateCustomerUI()
     {
-        SpawnCustomerOrder();
-    }
-
-    // Update is called once per frame
-    void Update()
+        Instantiate(_dishOrdersUI[(int)CustomerDishType], // i love type-casting
+                    _orderUITransform.position,
+                    _orderUITransform.rotation);
+    }     
+    private void MakeSeatEmpty() // clears the seat of any customer references 
     {
-        //Debug.Log(dishType.ToString());
-        //For Debuggin
+        CustomerSpawningManager.Instance.RemoveCustomer(gameObject);
+        CustomerSpawningManager.Instance.GetComponent<SpawnLocationScript>().IsPrefabPresent = false;
+        CustomerSpawningManager.Instance.StartCoroutine("SpawnNextCustomer");
+
+        // adds the customer's score to the Scores list
+        GameManager.Instance.OnCustomerServed?.Invoke(CustomerSR);
+        Destroy(gameObject);
     }
 
-    private GameObject SetCustomerOrder()
+#endregion
+
+#region Enumerators
+
+    IEnumerator DoNegativeReaction() // customer looses all patience
     {
-        switch (dishType)
-        {
-            case OrderType.Nigiri_Salmon:
-                return sushiOrderUI[0];
+        Debug.LogWarning("Customer has left the restaurant leaving a bad review!");
+        Debug.Log($"Customer score: {_customerScore}");
+        
+        yield return new WaitForSeconds(_customerDeleteTimer);
+        
+        CustomerSR = 0;
 
-            /*
-           case DishType.Nigiri_Tuna: 
-               return sushiOrderUI[1];
-
-           case DishType.Maki_Salmon: 
-               return sushiOrderUI[2];
-
-           case DishType.Maki_Tuna: 
-               return sushiOrderUI[3];
-            */
-            default:
-                return null;
-        }
+        GameManager.Instance.OnCustomerLeft?.Invoke();
+        MakeSeatEmpty();
     }
-
-    public void SpawnCustomerOrder()
+    IEnumerator DoPositiveReaction() 
     {
-        GameObject customerOrder = Instantiate(SetCustomerOrder(),
-                                               customerOrderSpawnLocation.position,
-                                               customerOrderSpawnLocation.rotation);
+        Debug.Log("Customer is chowing down on the food!");
 
-        //customerOrder.GetComponent<SushiDishUI>().MaxTime = maxCustomerPaitenceTimer; //setting the timer
+        // customer eats the food before despawning
 
-    }
-
-   public bool CheckDishServed(GameObject dishServedToCustomer)
-    { 
-        if(dishServedToCustomer == null)
-        {
-            return false;
-        }
-
-        Dish dishServed = dishServedToCustomer.GetComponent<Dish>(); //To gets the enum of the sushi dish
-
-        if(dishServed.DishType.Equals(dishType)) //check if the Enum of the dish matches to customer's Enum
-        {
-            return true;
-        }
-        else
-        {
-            Debug.Log("Wrong Order");
-            return false;
-        }
-    }
-
-    IEnumerator CustomerDeleteTimer()
-    {
-        yield return new WaitForSeconds(customerDeleteTimer);
+        yield return new WaitForSeconds(_customerDeleteTimer);
 
         MakeSeatEmpty();
     }
-
-    private void MakeSeatEmpty() //Use this if customer is happy with the dish or he runs out of patience
+    IEnumerator PatienceCountdown()
     {
-        CustomerSpawningManager.Instance.RemoveCustomer(this.gameObject);
+        Debug.Log("Waiting 3 seconds before counting down");
+        yield return new WaitForSeconds(3f); // time it takes for the customer to take a seat
 
-        CustomerSpawningManager.Instance.GetComponent<SpawnLocationScript>()._isPrefabPresent = false;
+        while (_customerScore > 0f)
+        {
+            yield return new WaitForSeconds(1f);
 
-        CustomerSpawningManager.Instance.StartCoroutine("ITimerForNextCustomerSpawn");
+            _customerScore -= _patienceRate;
+            Debug.Log($"Customer score of {name} is now {_customerScore}");
 
-        Destroy(this.gameObject);
+            if (_customerScore < 1f)
+                _customerScore = 0f;
+        }
+
+        // customer lost all patience
+        _customerScore = 0f;   
+        yield return StartCoroutine(DoNegativeReaction());
     }
 
-    private void CustomerPaitenceZero()
-    { 
-        //insert code to give bad review etc.
-        MakeSeatEmpty();
-    }
-
-
+#endregion
 }

@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CustomerColliderCheck : MonoBehaviour
 {
-    public CustomerOrder customerOrder { get; set; }
+    public CustomerOrder CustomerOrder { get; set; }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(customerOrder.GetComponent<CustomerOrder>() != null) 
-        { 
-          if(customerOrder.CheckDishServed(collision.gameObject))  
-          {
-              customerOrder.StartCoroutine("CustomerDeleteTimer");
-          }
-        }
+        if (CustomerOrder.GetComponent<CustomerOrder>() == null) return; 
+
+        Dish dish = collision.gameObject.GetComponent<Dish>();
+        
+        if (CustomerOrder.CheckDishServed(collision.gameObject))
+        {
+            CustomerOrder.StartCoroutine("DoPositiveReaction"); 
+            CustomerOrder.CustomerSR = (dish.DishScore + CustomerOrder.PatienceRate) / 2f;
+        }  
     }
 }
