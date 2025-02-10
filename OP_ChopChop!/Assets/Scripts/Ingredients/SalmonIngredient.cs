@@ -1,8 +1,3 @@
-using System;
-using UnityEngine;
-
-
-
 public class SalmonIngredient : FishIngredient
 {
     protected override void Start()

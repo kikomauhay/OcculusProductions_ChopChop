@@ -7,24 +7,10 @@ using UnityEngine;
 /// 
 /// </summary>
 
-public enum EnumCompletedDishType
-{
-    NIGIRI_SALMON,
-    NIGIRI_TUNA,
-    MAKI_SALMON,
-    MAKI_TUNA
-}
+public enum DishType { NIGIRI_SALMON, NIGIRI_TUNA, MAKI_SALMON, MAKI_TUNA }
 
 public abstract class Dish : MonoBehaviour
 {   
     public float DishScore { get; set; }
-    public EnumCompletedDishType DishType { get; set; }
-
-    protected void OnTriggerEnter(Collider other)
-    {
-        if (!other.gameObject.name.Contains("Customer")) return;
-
-        GameManager.Instance.OnCustomerServed?.Invoke(DishScore);
-        Destroy(gameObject);
-    }
+    public DishType OrderDishType { get; set; }
 }

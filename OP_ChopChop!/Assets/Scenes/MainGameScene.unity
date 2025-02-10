@@ -177,6 +177,7 @@ GameObject:
   m_Component:
   - component: {fileID: 87974123}
   - component: {fileID: 87974124}
+  - component: {fileID: 87974125}
   m_Layer: 0
   m_Name: Collision3
   m_TagString: Untagged
@@ -212,6 +213,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.3889472, y: 1, z: 1.915539}
   m_Center: {x: 0.014039529, y: 0, z: 0.4577706}
+--- !u!114 &87974125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87974122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582ac001044ac8d4d87ce1b0835e676d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &97711942
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2214,6 +2227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1034883341}
   - component: {fileID: 1034883342}
+  - component: {fileID: 1034883343}
   m_Layer: 0
   m_Name: Collision1
   m_TagString: Untagged
@@ -2230,7 +2244,7 @@ Transform:
   m_GameObject: {fileID: 1034883340}
   m_LocalRotation: {x: -0, y: 0.9633855, z: -0, w: -0.26812017}
   m_LocalPosition: {x: -0.8065499, y: 1.016, z: 1.3340728}
-  m_LocalScale: {x: 0.23101997, y: 0.23102, z: 0.23101997}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1416455647}
@@ -2247,8 +2261,20 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.3889472, y: 1, z: 1.915539}
-  m_Center: {x: 0.014039529, y: 0, z: 0.4577706}
+  m_Size: {x: 0.508208, y: 0.2698223, z: 0.4849062}
+  m_Center: {x: 0.010273367, y: 0.039821893, z: 0.075856954}
+--- !u!114 &1034883343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1034883340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582ac001044ac8d4d87ce1b0835e676d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1052607095
 GameObject:
   m_ObjectHideFlags: 0
@@ -2566,10 +2592,10 @@ MonoBehaviour:
   - {fileID: 627680118}
   - {fileID: 1710550351}
   customerCollisionPoints:
-  - {fileID: 1034883342}
-  - {fileID: 1657739782}
-  - {fileID: 87974124}
-  - {fileID: 1470769016}
+  - {fileID: 1034883340}
+  - {fileID: 1657739780}
+  - {fileID: 87974122}
+  - {fileID: 1470769014}
   listOfCustomersInWaiting: []
   customerModelPrefab:
   - {fileID: 3637192811430105796, guid: eb699f2d9985a9a498571a70416aa824, type: 3}
@@ -2732,6 +2758,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1470769015}
   - component: {fileID: 1470769016}
+  - component: {fileID: 1470769017}
   m_Layer: 0
   m_Name: 'Collision4 '
   m_TagString: Untagged
@@ -2767,6 +2794,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.3889472, y: 1, z: 1.915539}
   m_Center: {x: 0.014039529, y: 0, z: 0.4577706}
+--- !u!114 &1470769017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1470769014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582ac001044ac8d4d87ce1b0835e676d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1504930557
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3091,6 +3130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1657739781}
   - component: {fileID: 1657739782}
+  - component: {fileID: 1657739783}
   m_Layer: 0
   m_Name: Collision2
   m_TagString: Untagged
@@ -3126,6 +3166,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.3889472, y: 1, z: 1.915539}
   m_Center: {x: 0.014039529, y: 0, z: 0.4577706}
+--- !u!114 &1657739783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657739780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582ac001044ac8d4d87ce1b0835e676d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1710550351
 GameObject:
   m_ObjectHideFlags: 0

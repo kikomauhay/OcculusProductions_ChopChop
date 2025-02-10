@@ -16,7 +16,7 @@ public class GameManager : Singleton<GameManager>
 #region Members
 
     // Events
-    public Action OnFoodDisposed;
+    public Action OnFoodDisposed, OnCustomerLeft;
     public Action<float> OnCustomerServed;
 
     // Player references
@@ -25,6 +25,8 @@ public class GameManager : Singleton<GameManager>
 
     // Scores to keep track of
     List<float> _foodScores, _customerSRScores;
+
+    int _customersLeftCounter;
 
 #endregion
 
@@ -39,6 +41,7 @@ public class GameManager : Singleton<GameManager>
     void Reset()
     {
         OnCustomerServed -= AddToFoodScore;
+        OnCustomerLeft -= IncrementCustomersLeft;
     }
 
     void Start()
@@ -47,6 +50,7 @@ public class GameManager : Singleton<GameManager>
         _customerSRScores = new List<float>();
 
         OnCustomerServed += AddToFoodScore;
+        OnCustomerLeft += IncrementCustomersLeft;
     }
     void Update() => test();
 
@@ -113,6 +117,7 @@ public class GameManager : Singleton<GameManager>
 
     void AddToFoodScore(float foodScore) => _foodScores.Add(foodScore);
     void AddToCustomerSRScore(float srScore) => _customerSRScores.Add(srScore);
+    void IncrementCustomersLeft() => _customersLeftCounter++;
 
 #endregion
 }
