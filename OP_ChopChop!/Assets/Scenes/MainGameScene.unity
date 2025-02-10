@@ -2521,7 +2521,7 @@ GameObject:
   m_Layer: 0
   m_Name: ~CustomerSpawnManager
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2575,7 +2575,8 @@ MonoBehaviour:
   - {fileID: 3637192811430105796, guid: eb699f2d9985a9a498571a70416aa824, type: 3}
   maxCustomerToSpawn: 4
   currentCustomerCount: 0
-  nextCustomerTimer: 5
+  minCustomerTimer: 4
+  maxCustomerTimer: 7
 --- !u!1001 &1422789390
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3060,13 +3061,13 @@ PrefabInstance:
         type: 3}
       propertyPath: tunaSlabPrefab
       value: 
-      objectReference: {fileID: 8873129294027024833, guid: ba797919c82adff4496e76c87131c561,
+      objectReference: {fileID: 286803097528491412, guid: 387c212b92acf5c4e864fd73bcea9687,
         type: 3}
     - target: {fileID: 9070508986851495209, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
         type: 3}
       propertyPath: salmonSlabPrefab
       value: 
-      objectReference: {fileID: 9223341567872474545, guid: f187849ca6808774d8c947b5df962e25,
+      objectReference: {fileID: 4027988547386331903, guid: 85226432a6d21284d80bd42edb4e23ba,
         type: 3}
     - target: {fileID: 9070508986851495209, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
         type: 3}

@@ -31,7 +31,6 @@ public class OrderInventoryUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         currentPlayerMoney = startPlayerMoney;
     }
 
@@ -39,7 +38,6 @@ public class OrderInventoryUI : MonoBehaviour
     void Update()
     {
         txtTotalPrice.text = CalculateTotalPrice().ToString();
-
         txtSalmonOrderCount.text = salmonSlabOrderCount.ToString();
         txtTotalPrice.text = totalPrice.ToString();
         txtSalmonSlabPrice.text = salmonSlabPrice.ToString();
@@ -100,6 +98,8 @@ public class OrderInventoryUI : MonoBehaviour
     {
         salmonSlabOrderCount++;
         UpdateSalmonOrderTxt();
+
+        Mathf.Clamp(salmonSlabOrderCount, 0, 99);
     }
 
     public void DecreaseSalmonSlabOrder()
@@ -116,6 +116,8 @@ public class OrderInventoryUI : MonoBehaviour
     public void IncreaseTunaSlabOrder()
     {
         tunaSlabOrderCount++;
+
+        Mathf.Clamp(tunaSlabOrderCount, 0, 99);
     }
 
     public void DecreaseTunaSlabOrder()
