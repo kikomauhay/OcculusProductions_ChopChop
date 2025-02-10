@@ -7,7 +7,7 @@ using UnityEngine;
 /// 
 /// </summary>
 
-public enum EnumCompletedDishType
+public enum DishType
 {
     NIGIRI_SALMON,
     NIGIRI_TUNA,
@@ -18,7 +18,7 @@ public enum EnumCompletedDishType
 public abstract class Dish : MonoBehaviour
 {   
     public float DishScore { get; set; }
-    public EnumCompletedDishType DishType { get; set; }
+    public DishType DishType { get; set; }
 
     protected void OnTriggerEnter(Collider other)
     {

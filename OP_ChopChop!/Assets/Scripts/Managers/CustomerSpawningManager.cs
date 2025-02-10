@@ -56,13 +56,13 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
                 if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>()._isPrefabPresent)
                 {
                     GameObject createdCustomer = Instantiate(customerModelPrefab[0],
-                                                           customerSpawnPoints[i].transform.position,
-                                                           Quaternion.identity);
+                                                             customerSpawnPoints[i].transform.position,
+                                                             Quaternion.identity);
 
                     for(int j = 0; j < customerSpawnPoints.Length; j++)
                     {
-                       createdCustomer.GetComponent<CustomerOrder>()._getSetCustomerCollider = customerCollisionPoints[i]; 
-                       //assigning of collosion box to customer
+                       // assigning of collosion box to customer
+                       // createdCustomer.GetComponent<CustomerOrder>()._getSetCustomerCollider = customerCollisionPoints[i]; 
                     }
                   
                     currentCustomerCount++;
