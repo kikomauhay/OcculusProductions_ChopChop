@@ -91,15 +91,7 @@ public class CustomerOrder : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(CheckDishServed(collision.gameObject))
-        {
-          StartCoroutine(CustomerDeleteTimer());
-        }
-    }
-
-   bool CheckDishServed(GameObject dishServedToCustomer)
+   public bool CheckDishServed(GameObject dishServedToCustomer)
     { 
         if(dishServedToCustomer == null)
         {

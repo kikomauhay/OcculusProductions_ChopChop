@@ -9,7 +9,7 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
     [Header("Arrays")]
     [SerializeField] private GameObject[] customerSpawnPoints;
-    [SerializeField] private BoxCollider[] customerCollisionPoints;
+    [SerializeField] private GameObject[] customerCollisionPoints;
     [SerializeField] private List<GameObject> listOfCustomersInWaiting;
    
     [Header("CustomerVariable")]
@@ -61,12 +61,14 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
                                                            customerSpawnPoints[i].transform.position,
                                                            customerSpawnPoints[i].transform.rotation);
 
-                    for(int j = 0; j < customerSpawnPoints.Length; j++)
-                    {
-                       createdCustomer.GetComponent<CustomerOrder>()._getSetCustomerCollider = customerCollisionPoints[i]; 
-                       //assigning of collosion box to customer
-                    }
-                  
+
+                    //Region wait
+                    
+                    customerCollisionPoints[i].GetComponent<CustomerColliderCheck>().customerOrder = createdCustomer.GetComponent<CustomerOrder>();
+                    Debug.Log("Added script from createdCustomer to ColliderCheck");
+                    //assigning of collosion box to customer
+
+
                     currentCustomerCount++;
                     listOfCustomersInWaiting.Add(createdCustomer);
 
