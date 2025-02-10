@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class Plate : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] bool _isDirty;
+
+    private void Start()
     {
-        
+        _isDirty = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Contaminated()
     {
-        
+        _isDirty = true;
     }
+
+    public void Cleaned()
+    {
+        _isDirty = false;
+    }
+
+
 }

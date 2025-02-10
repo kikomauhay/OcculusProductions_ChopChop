@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Sponge : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+   [SerializeField] public bool _isWet;
+
+    public void Dried()
     {
-        
+        _isWet = false;
+    }
+    public void Wet()
+    {
+        _isWet = true;   
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
