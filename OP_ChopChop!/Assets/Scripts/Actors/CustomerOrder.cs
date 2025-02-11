@@ -37,10 +37,10 @@ public class CustomerOrder : MonoBehaviour
 
     public bool CheckDishServed(GameObject dishServedToCustomer)
     { 
-        if (dishServedToCustomer == null) return false;
-        
         Dish dishServed = dishServedToCustomer.GetComponent<Dish>(); // gets the enum of the dish
 
+        if (dishServedToCustomer == null) return false;
+        
         return dishServed.OrderDishType.Equals(CustomerDishType);
     }   
     private void CreateCustomerUI()

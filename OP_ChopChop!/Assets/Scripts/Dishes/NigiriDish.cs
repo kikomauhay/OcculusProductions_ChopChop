@@ -6,5 +6,6 @@ using UnityEngine;
 
 public class NigiriDish : Dish
 {
-    public FishType FishType { get; set; }
+    [SerializeField] protected DishType _orderDishType;
+    /*public override DishType OrderDishType => _orderDishType;*/
 }

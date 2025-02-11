@@ -240,17 +240,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 903670385a651ec41a5d1158f8ad715a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customerServeCollider: {fileID: 0}
-  dishType: 0
-  sushiOrderUI:
+  _dishOrdersUI:
   - {fileID: 5310049217961757311, guid: df266eaa3df82b645bd33953b7f90413, type: 3}
-  customerOrderSpawnLocation: {fileID: 5196649966247348662}
-  customerDeleteTimer: 0
-  currentCustomerPaitenceTimer: 0
-  maxCustomerPaitenceTimer: 0
-  customerSatisfactionRating: 0
-  maxCustomerSR: 0
-  minCustomerSR: 0
+  _orderUITransform: {fileID: 5196649966247348662}
 --- !u!4 &6604309806890826634 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7286743390475211807, guid: 000313712cbd4ab46bd7b6d0926753fd,

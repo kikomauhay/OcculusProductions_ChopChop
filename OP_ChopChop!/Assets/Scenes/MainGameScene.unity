@@ -2258,7 +2258,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1034883340}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.508208, y: 0.2698223, z: 0.4849062}
@@ -2603,6 +2603,77 @@ MonoBehaviour:
   currentCustomerCount: 0
   minCustomerTimer: 4
   maxCustomerTimer: 7
+--- !u!1001 &1422203782
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4027988547386331903, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_Name
+      value: Dish_NigiriSalmon
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9080494305053281880, guid: 85226432a6d21284d80bd42edb4e23ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2311643842348541894, guid: 85226432a6d21284d80bd42edb4e23ba, type: 3}
+    - {fileID: 6316630526421225878, guid: 85226432a6d21284d80bd42edb4e23ba, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 85226432a6d21284d80bd42edb4e23ba, type: 3}
 --- !u!1001 &1422789390
 PrefabInstance:
   m_ObjectHideFlags: 0

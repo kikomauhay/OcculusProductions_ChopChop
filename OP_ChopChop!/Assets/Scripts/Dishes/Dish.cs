@@ -7,7 +7,7 @@ using UnityEngine;
 /// 
 /// </summary>
 
-public enum DishType { NIGIRI_SALMON, NIGIRI_TUNA, MAKI_SALMON, MAKI_TUNA }
+public enum DishType { NIGIRI_SALMON, /*NIGIRI_TUNA, MAKI_SALMON, MAKI_TUNA*/ }
 
 public abstract class Dish : MonoBehaviour
 {   
