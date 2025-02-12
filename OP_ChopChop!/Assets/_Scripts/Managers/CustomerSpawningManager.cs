@@ -49,7 +49,7 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
     private void DoSpawnCustomer()
     {
-        //int ranNum = Random.Range(0, 1); //for spawning customer variant
+        // int ranNum = Random.Range(0, 1); //for spawning customer variant
 
         if (currentCustomerCount >= customerSpawnPoints.Length) 
         { 
