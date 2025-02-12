@@ -14,6 +14,7 @@ public enum FishType { SALMON, TUNA }
 public class FishIngredient : Ingredient
 {
     public Action<int> OnFishSliced;
+
     public SliceType SliceType => _sliceType;
     public FishType FishType => _fishType;
 
@@ -32,6 +33,7 @@ public class FishIngredient : Ingredient
 
         OnFishSliced += UpdateSlice; 
     }
+    protected void Reset() => OnFishSliced -= UpdateSlice;
 
     protected void UpdateSlice(int i)
     {

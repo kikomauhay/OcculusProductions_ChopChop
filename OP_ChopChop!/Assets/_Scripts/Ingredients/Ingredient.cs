@@ -50,7 +50,7 @@ public abstract class Ingredient : MonoBehaviour
         // could add more punishment later on 
 
         IngredientState = IngredientState.TRASHED;
-        FreshnessRate = 0;
+        FreshnessRate = 0f;
         SoundManager.Instance.PlaySound("dispose food");
         CheckRate();
     }
@@ -89,7 +89,7 @@ public abstract class Ingredient : MonoBehaviour
 
 #endregion
 
-    IEnumerator Decay() 
+    protected IEnumerator Decay() 
     {        
         while (IngredientState != IngredientState.EXPIRED)
         {
@@ -114,7 +114,7 @@ public abstract class Ingredient : MonoBehaviour
                     break;
                 
                 case IngredientState.EXPIRED: break;
-                default: break;
+                default:                      break;
             }
             
             yield return new WaitForSeconds(speed);

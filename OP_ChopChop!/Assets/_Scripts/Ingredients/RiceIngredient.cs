@@ -9,18 +9,19 @@ public class RiceIngredient : Ingredient
     [SerializeField] GameObject[] _foodPrefabs; // 0 = salmon nigiri, 1 = tuna nigiri
 
     [Header("VFX Settings")]
-    [SerializeField] GameObject _smokeVFX;
     [SerializeField] float _vfxDestroyTime; // was initially at 2f  
 
     [Header("Molding Attributes")]
     [SerializeField] MoldType _moldType;
-    public Action<int> OnRiceMolded;
+    public Action<int> OnRiceMolded; // check with Moldable.cs
 
     protected override void Start() 
     {
         base.Start();
+
         OnRiceMolded += ChangeRiceMold;
         _moldType = MoldType.UNMOLDED;
+        _ingredientType = IngredientType.RICE;
     }
 
     void Reset() => OnRiceMolded -= ChangeRiceMold;
@@ -46,7 +47,6 @@ public class RiceIngredient : Ingredient
             GameObject foodToSpawn;
             Food food = null;
 
-            // idk if you need VFX when you combine the ingredients into the food
             if (ing.IngredientType == IngredientType.SALMON)
                 foodToSpawn = Instantiate(_foodPrefabs[0], pos, rot);
             
@@ -58,7 +58,7 @@ public class RiceIngredient : Ingredient
             // sets up the food's score
             food = foodToSpawn.GetComponent<Food>();
             food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
-            food.FoodType = DishType.NIGIRI_SALMON;
+            food.FoodType = DishType.NIGIRI_SALMON; // only salmon for now (will add tuna later)
         }
     }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
+// might make this a static instance and just get a reference fro SpawnMgr, so it does the actions, not this script specifically
 public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 {
 #region Methods
