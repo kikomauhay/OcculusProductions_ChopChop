@@ -9,6 +9,7 @@ public class CustomerColliderCheck : MonoBehaviour
         if (CustomerOrder.GetComponent<CustomerOrder>() == null) return;
 
         Dish collidedDish = other.gameObject.GetComponent<Dish>();
+        Plate plate = collidedDish.gameObject.GetComponentInParent<Plate>();
 
         if (CustomerOrder.OrderIsSameAs(other.gameObject.GetComponent<Dish>()))
         {
@@ -17,12 +18,9 @@ public class CustomerColliderCheck : MonoBehaviour
             // calculates the customer SR
             CustomerOrder.CustomerSR = (collidedDish.DishScore + CustomerOrder.PatienceRate) / 2f;
             Destroy(other.gameObject);
+            plate.SetContaminated();
 
             Debug.LogWarning("CORRECT ORDER");
-
-            // salmon gets eaten
-            // plate gets dirty
-
             return;
         }
 
