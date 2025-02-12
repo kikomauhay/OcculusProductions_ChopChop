@@ -9,7 +9,7 @@ public class EnvironmentCleaning : MonoBehaviour
     {
 
         if(other.gameObject.GetComponent<Sponge>() != null &&
-            other.gameObject.GetComponent<Sponge>()._isWet == true)
+            other.gameObject.GetComponent<Sponge>().IsWet == true)
         {
             Vector3 _currentPosition = this.transform.position;
             Quaternion _currentRotation = this.transform.rotation;

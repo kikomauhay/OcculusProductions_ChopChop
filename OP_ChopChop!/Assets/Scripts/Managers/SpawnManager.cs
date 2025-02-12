@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 using System;
 
@@ -8,10 +6,9 @@ using System;
 /// Spawns anything that comes out of the game
 /// Uses events to handle different spawning types
 ///
-///
 /// </summary>
 
-public enum VFXType { SMOKE, BUBBLE, SPARKLE , STINKY }
+public enum VFXType { SMOKE, BUBBLE, SPARKLE, STINKY }
 
 public class SpawnManager : Singleton<SpawnManager>
 {

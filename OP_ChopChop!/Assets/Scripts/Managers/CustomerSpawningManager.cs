@@ -4,25 +4,32 @@ using UnityEngine;
 
 public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 {
-    protected override void Awake() => base.Awake(); 
-    protected override void OnApplicationQuit() => base.OnApplicationQuit(); 
+#region Methods
 
     [Header("Arrays")]
-    [SerializeField] private GameObject[] customerSpawnPoints;
-    [SerializeField] private GameObject[] customerCollisionPoints;
-    [SerializeField] private List<GameObject> listOfCustomersInWaiting;
+    [SerializeField] private GameObject[] customerSpawnPoints;          // petition to change it to _spawnPoints
+    [SerializeField] private GameObject[] customerCollisionPoints;      // petition to change it to _collisionBoxes
+    [SerializeField] private List<GameObject> listOfCustomersInWaiting; // petition to change it to _seatedCustomers
    
-    [Header("CustomerVariable")]
-    [SerializeField] private GameObject[] customerModelPrefab; //This is the prefab for the Customer itself
+    [Header("CustomerVariable")] // This is the prefab for the Customer itself
+    [SerializeField] private GameObject[] customerModelPrefab; // petition to change to _customerPrefabs 
 
     [Header("Variable Counts")]
-    [SerializeField] private int maxCustomerToSpawn;
-    [SerializeField] private int currentCustomerCount;
+    [SerializeField] private int maxCustomerToSpawn;   // petition to change it to _maxCustomerCount
+    [SerializeField] private int currentCustomerCount; // petition to change it to _currentCustomerCount
 
-    [Header("Timer")]
+    [Header("Timer")] // just add an underscore before the text it should be good
     [SerializeField] private float minCustomerTimer;
     [SerializeField] private float maxCustomerTimer;
     private float nextCustomerTimer;
+
+#endregion
+
+#region Enumerators
+
+    protected override void Awake() => base.Awake();
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+
 
     void Start()
     {
@@ -43,7 +50,7 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
     {
         //int ranNum = Random.Range(0, 1); //for spawning customer variant
 
-        if(currentCustomerCount >= customerSpawnPoints.Length) 
+        if (currentCustomerCount >= customerSpawnPoints.Length) 
         { 
             StopCoroutine(SpawnNextCustomer());
             return;
@@ -51,26 +58,28 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
 
         for (int i = 0; i < customerSpawnPoints.Length; i++)
         {
-            if(currentCustomerCount <= maxCustomerToSpawn)
+            if (currentCustomerCount <= maxCustomerToSpawn)
             {
+                // the current box colllider is empty
                 if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>().IsPrefabPresent)
                 {
                     GameObject createdCustomer = Instantiate(customerModelPrefab[0],
-                                                           customerSpawnPoints[i].transform.position,
-                                                           customerSpawnPoints[i].transform.rotation);
+                                                             customerSpawnPoints[i].transform.position,
+                                                             customerSpawnPoints[i].transform.rotation);
 
+                    // assigns a box collider to the customer
+                    customerCollisionPoints[i].GetComponent<CustomerColliderCheck>().CustomerOrder = 
+                        createdCustomer?.GetComponent<CustomerOrder>();
 
-                    //Region wait
-                    
-                    customerCollisionPoints[i].GetComponent<CustomerColliderCheck>().CustomerOrder = createdCustomer.GetComponent<CustomerOrder>();
-                    Debug.Log("Added script from createdCustomer to ColliderCheck");
-                    //assigning of collosion box to customer
-
+                    // Debug.LogWarning("Connected CustomerOrder to CollisionCheck");
 
                     currentCustomerCount++;
                     listOfCustomersInWaiting.Add(createdCustomer);
 
-                    customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().IsPrefabPresent = true;
+                    // prevents multiple links to one box collider
+                    customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().
+                        IsPrefabPresent = true;
+                    
                     break;
                 }
             } 
@@ -78,39 +87,39 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
         StartCoroutine(SpawnNextCustomer());
     }
     
-
-    public bool IsEmptySpawnLocation()
+    public bool IsEmptySpawnLocation() // petition to change to HasAnEmptySeat()
     {
-        Debug.Log("isEmptyPlaying");
+        // Debug.Log("isEmptyPlaying");
         for (int i = 0; i < customerSpawnPoints.Length; i++)
         {
-            
-            if (customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().IsPrefabPresent == false)
+
+            // what the fuck am I looking at
+            if (customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().
+                IsPrefabPresent == false)
             {
-                Debug.Log("IsEmpty True");
+                // Debug.Log("IsEmpty True");
                 return true;
             }            
+
+
         }
 
         Debug.Log("IsEmpty False");
         return false;
     }
+    public void RemoveCustomer(GameObject customer) => listOfCustomersInWaiting.Remove(customer);
+    
+#endregion
 
     IEnumerator SpawnNextCustomer()
     {
+        // waits a random amt of seconds before spanwing a new customer
         nextCustomerTimer = Random.Range(minCustomerTimer, maxCustomerTimer);
         //Debug.Log("Enum CUSTOMER TIMER: " + nextCustomerTimer);
+
         yield return new WaitForSeconds(nextCustomerTimer);
 
-        if(IsEmptySpawnLocation())
-        {
+        if (IsEmptySpawnLocation())
             DoSpawnCustomer();
-        }
     }
-
-    public void RemoveCustomer(GameObject customer)
-    {
-        listOfCustomersInWaiting.Remove(customer);
-    }
-
 }

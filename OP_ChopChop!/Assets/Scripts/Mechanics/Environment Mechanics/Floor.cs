@@ -4,20 +4,25 @@ public class Floor : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Trashable>() != null)
+        if (other.gameObject.GetComponent<Plate>() != null)
         {
-            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Ingredients)
-            {
+            other.gameObject.GetComponent<Plate>().SetContaminated();
+            return;
+        }
+        if (other.gameObject.GetComponent<Trashable>() == null) return;
+        
+        switch (other.gameObject.GetComponent<Trashable>()._trashTypes)
+        {
+            case TrashableType.INGREDIENT:
                 other.gameObject.GetComponent<Ingredient>().ContaminateFood();
-            }
-            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Food)
-            {
+                break;
+            case TrashableType.FOOD:
                 other.gameObject.GetComponent<Ingredient>().ContaminateFood();
-            }
-            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Equipment)
-            {
-                //Reset Equipment here
-            }
+                break;
+            case TrashableType.EQUIPMENT:
+                Debug.LogWarning("Reset Equipment");
+                break;
+            default: break;
         }
     }
 }

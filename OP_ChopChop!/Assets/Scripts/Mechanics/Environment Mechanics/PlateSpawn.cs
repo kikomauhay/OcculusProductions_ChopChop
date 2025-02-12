@@ -1,16 +1,15 @@
+using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class PlateSpawn : MonoBehaviour
 {
-    public ActionBasedController Left;
-    public ActionBasedController Right;
+    public ActionBasedController Left, Right;
 
     [SerializeField] GameObject _plate;
     [SerializeField] Collider _spwnCollider;
     [SerializeField] float _timer;
-    // Start is called before the first frame update
+
     private void Awake()
     {
         Left = ControllerManager.Instance.LeftController;
@@ -20,6 +19,7 @@ public class PlateSpawn : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         IXRSelectInteractor _interactor = null;
+
         if (CheckGrip(Left) && other.gameObject.GetComponent<ActionBasedController>())
         {
             _interactor = Left.GetComponent<XRDirectInteractor>();
