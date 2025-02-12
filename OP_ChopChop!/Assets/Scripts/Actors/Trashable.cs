@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum TrashTypes { Food, Ingredients, Equipment };
+public enum TrashableType { FOOD, INGREDIENT, EQUIPMENT, PLATE };
 
 public class Trashable : MonoBehaviour
 {
-    public TrashTypes _trashTypes;
+    public TrashableType _trashTypes;
 }

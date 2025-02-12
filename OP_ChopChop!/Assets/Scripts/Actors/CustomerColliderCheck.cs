@@ -6,20 +6,25 @@ public class CustomerColliderCheck : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (CustomerOrder.GetComponent<CustomerOrder>() == null) return; 
+        if (CustomerOrder.GetComponent<CustomerOrder>() == null) return;
 
-        Dish dish = other.gameObject.GetComponent<Dish>();
-        
-        if (CustomerOrder.CheckDishServed(other.gameObject))
+        Dish collidedDish = other.gameObject.GetComponent<Dish>();
+        Plate plate = collidedDish.gameObject.GetComponentInParent<Plate>();
+
+        if (CustomerOrder.OrderIsSameAs(other.gameObject.GetComponent<Dish>()))
         {
-            Debug.Log("Dish Served");
-            CustomerOrder.StartCoroutine("DoPositiveReaction"); 
-            CustomerOrder.CustomerSR = (dish.DishScore + CustomerOrder.PatienceRate) / 2f;
+            CustomerOrder.StartCoroutine("DoPositiveReaction");
+            
+            // calculates the customer SR
+            CustomerOrder.CustomerSR = (collidedDish.DishScore + CustomerOrder.PatienceRate) / 2f;
             Destroy(other.gameObject);
-        }  
-        else
-        {
-            Debug.Log("Dish not Detected"); 
+            plate.SetContaminated();
+
+            Debug.LogWarning("CORRECT ORDER");
+            return;
         }
+
+        Debug.LogError("WRONG ORDER");
+        CustomerOrder.StartCoroutine("DoNegativeReaction");
     }
 }

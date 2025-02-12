@@ -18,6 +18,14 @@ public abstract class Food : MonoBehaviour
     {
         if (other.gameObject.GetComponent<Plate>() == null) return;
 
+        Plate plate = other.gameObject.GetComponent<Plate>();
+
+        if (plate.IsDirty)
+        {
+            Debug.LogError("The plate is contaminating the food");
+            return;
+        }
+
         Vector3 pos = other.transform.position;
         Quaternion rot = other.transform.rotation;
 

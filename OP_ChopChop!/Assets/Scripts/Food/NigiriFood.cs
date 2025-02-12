@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class NigiriFood : Food
@@ -7,6 +6,7 @@ public class NigiriFood : Food
     {
         GameObject dishToSpawn = Instantiate(_dishPrefab, pos, rot);
         Dish dish = dishToSpawn.GetComponent<Dish>();
+
         dish.DishScore = FoodScore;
         dish.OrderDishType = FoodType;
     }

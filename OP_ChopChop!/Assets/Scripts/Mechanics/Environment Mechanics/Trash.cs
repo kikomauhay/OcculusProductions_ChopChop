@@ -9,19 +9,19 @@ public class Trash : MonoBehaviour
     {
         if(other.gameObject.GetComponent<Trashable>() != null)
         {
-            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Ingredients)
+            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashableType.INGREDIENT)
             {
                 Destroy(other.gameObject);
                 SoundManager.Instance.PlaySound("dispose food");
             }
-            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Food)
+            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashableType.FOOD)
             {
                 Debug.Log("Food has been thrown out");
           /*      GameObject _DirtyPlate = InstantiatePlate();
                 AttachToHand(_DirtyPlate, _mainInteractor);*/
                 
             }
-            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashTypes.Equipment)
+            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashableType.EQUIPMENT)
             {
                 //Reset Equipment here
                 //Set Reset Points
