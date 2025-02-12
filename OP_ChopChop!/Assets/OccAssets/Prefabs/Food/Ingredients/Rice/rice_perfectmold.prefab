@@ -316,10 +316,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66126108b4485a44b12f6cb792ce21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stats: {fileID: 0}
-  _type: 0
-  _dishPrefabs: []
+  _ingredientStats: {fileID: 0}
+  _ingredientType: 0
+  _foodPrefabs: []
   _smokeVFX: {fileID: 7776776499507976363, guid: 0e1dbc6ca33bbb8459e962129922155d,
     type: 3}
   _vfxDestroyTime: 0
-  _moldType: 0
+  _moldType: 2

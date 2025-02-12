@@ -9,6 +9,8 @@ public class RiceSpawn : MonoBehaviour
     public ActionBasedController Left;
     public ActionBasedController Right;
 
+    IXRSelectInteractor _mainInteractor;
+
     [SerializeField]
     GameObject _unmoldedRice;
 
@@ -24,20 +26,22 @@ public class RiceSpawn : MonoBehaviour
         Right = ControllerManager.Instance.RightController;
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         IXRSelectInteractor _interactor = null;
         if (CheckGrip(Left) && other.gameObject.GetComponent<ActionBasedController>())
         {
             _interactor = Left.GetComponent<XRDirectInteractor>(); 
+            _mainInteractor = _interactor;
         }
         if (CheckGrip(Right) && other.gameObject.GetComponent<ActionBasedController>())
         {
             _interactor = Right.GetComponent<XRDirectInteractor>();
+            _mainInteractor = _interactor;
         }
-        if (_interactor != null)
+        if (_mainInteractor != null)
         {
-            _interactor.selectEntered.AddListener(Yes);
+            _mainInteractor.selectEntered.AddListener(RiceEvent);
         }
         else
         {
@@ -46,15 +50,17 @@ public class RiceSpawn : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        _mainInteractor.selectEntered.RemoveListener(RiceEvent);
+        _mainInteractor = null;
     }
 
 
-    private void Yes(SelectEnterEventArgs args)
+    private void RiceEvent(SelectEnterEventArgs args)
     { 
             Debug.Log("Triggered, Rice spawned");
             GameObject _spawnedRice = InstantiateRice(_unmoldedRice);
             _spwnCollider.enabled = false;
-            //AttachToHand(_spawnedRice, _interactor);
+            AttachToHand(_spawnedRice, _mainInteractor);
             IResetTrigger();    
     }
 
