@@ -1,16 +1,19 @@
-using UnityEditor.XR.Management;
 using UnityEngine;
 
-public class Plate : MonoBehaviour
+public class Plate : Equipment
 {
     public bool IsDirty => _isDirty;
     
     [SerializeField] Material _dirtyPlateMat, _cleanPlateMat;
     [SerializeField] bool _isDirty;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
+        name = "Plate";
         _isDirty = false;
+
         GetComponent<MeshRenderer>().material = _cleanPlateMat;
     }
 
@@ -32,14 +35,11 @@ public class Plate : MonoBehaviour
     public void SetContaminated()
     {
         _isDirty = true;
-        Debug.Log("Contaminated!");
         GetComponent<MeshRenderer>().material = _dirtyPlateMat;
     }
-
     public void SetCleaned()
     {
         _isDirty = false;
-        Debug.Log("Cleaned!");
         GetComponent<MeshRenderer>().material = _cleanPlateMat;
     }
 }

@@ -11,8 +11,10 @@ public abstract class Food : MonoBehaviour
 {
     public float FoodScore { get; set; } 
     public DishType FoodType { get; set; }
+    public TrashableType TrashType => _trashType;
 
     [SerializeField] protected GameObject _dishPrefab;
+    [SerializeField] protected TrashableType _trashType; 
     
     protected void OnTriggerEnter(Collider other)
     {

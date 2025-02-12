@@ -8,9 +8,11 @@ using UnityEngine;
 /// 
 /// </summary>
 
-public enum IngredientType { RICE, TUNA, SALMON, SEAWEED } // will expand later 
+public enum IngredientType { RICE, TUNA, SALMON, SEAWEED } // will expand later
 
-public abstract class Ingredient : MonoBehaviour 
+public enum IngredientState { DEFAULT, EXPIRED, CONTAMINATED, TRASHED, STORED }
+
+public abstract class Ingredient : MonoBehaviour
 {
 #region Members
 
@@ -20,13 +22,14 @@ public abstract class Ingredient : MonoBehaviour
 
     public IngredientStats IngredientStats => _ingredientStats;
     public IngredientType IngredientType => _ingredientType;
+
+    public IngredientState IngredientState { get; protected set; }
+    public TrashableType TrashableType { get; private set; }
     public FreshnessRating Rating { get; private set; }
     public float FreshnessRate { get; private set; }
 
     // will change these to an enum after midterms
-    public bool IsExpired { get; private set; }
-    public bool IsContaminated { get; private set; }
-    public bool IsTrashed { get; private set; }
+
     public bool IsProperlyStored { get; set; }
 
 #endregion
@@ -35,14 +38,11 @@ public abstract class Ingredient : MonoBehaviour
 
     protected virtual void Start() 
     {
-        FreshnessRate = 100;
-        Rating = FreshnessRating.FRESH;
-
-        // will change to enums after midterms
-        IsTrashed = false;
-        IsExpired = false;
-        IsContaminated = false;
-        IsProperlyStored = false;
+        IngredientState = IngredientState.DEFAULT; // changes inside this script
+        TrashableType = TrashableType.INGREDIENT;  // won't change 
+        Rating = FreshnessRating.FRESH;            // changes inside the enumerator
+        
+        FreshnessRate = 100; // the higher the score, the better
 
         CheckRate();
         StartCoroutine(Decay());
@@ -53,7 +53,7 @@ public abstract class Ingredient : MonoBehaviour
         // removes the food form the game entirely
         // could add more punishment later on 
 
-        IsTrashed = true;
+        IngredientState = IngredientState.TRASHED;
         FreshnessRate = 0;
         SoundManager.Instance.PlaySound("dispose food");
         CheckRate();
@@ -88,39 +88,39 @@ public abstract class Ingredient : MonoBehaviour
     public void ContaminateFood()
     {
         Debug.LogWarning($"{name} has been contaminated!");
-        IsContaminated = true;
+        IngredientState = IngredientState.CONTAMINATED;
     }
 
 #endregion
 
-#region Enumerators
-
     IEnumerator Decay() 
-    {
-        while (!IsExpired) 
+    {        
+        while (IngredientState != IngredientState.EXPIRED)
         {
-            // rate & speed will change depending on the state of the ingredient
+            // rate & speed will changes depending on the IngredientState
+            int rate = 0, speed = 0; 
 
-            int rate, speed;
+            // added "this" to reduce confusion from the datatype & variable
+            switch (this.IngredientState) 
+            {
+                case IngredientState.CONTAMINATED:
+                    rate = _ingredientStats.Contaminated.Rate;
+                    speed = _ingredientStats.Contaminated.Speed;
+                    break;
 
-            if (IsContaminated) 
-            {
-                rate = _ingredientStats.Contaminated.Rate;
-                speed = _ingredientStats.Contaminated.Speed;
+                case IngredientState.STORED:
+                    rate = _ingredientStats.Stored.Rate;
+                    speed = _ingredientStats.Stored.Speed;
+                    break;
+                
+                case IngredientState.DEFAULT: // just outside the fridge AND not contaminated
+                    rate = _ingredientStats.Decay.Rate;
+                    speed = _ingredientStats.Decay.Speed;
+                    break;
+                
+                case IngredientState.EXPIRED: break;
+                default: break;
             }
-            else if (IsProperlyStored) 
-            {
-                rate = _ingredientStats.Stored.Rate;
-                speed = _ingredientStats.Stored.Speed;
-            }
-            else // just outside the fridge AND not contaminated
-            {
-                rate = _ingredientStats.Decay.Rate;
-                speed = _ingredientStats.Decay.Speed;
-            }
-
-            // test
-            Debug.Log($"Rate: {rate}; Speed: {speed}");
             
             yield return new WaitForSeconds(speed);
             FreshnessRate -= rate;
@@ -131,12 +131,11 @@ public abstract class Ingredient : MonoBehaviour
             if (FreshnessRate < 1f) 
             {
                 FreshnessRate = 0f;
-                IsExpired = true;
+                IngredientState = IngredientState.EXPIRED;
             }
             CheckRate();
         }
         Destroy(gameObject); // test
     }
-#endregion
 }
 
