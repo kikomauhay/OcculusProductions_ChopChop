@@ -8,6 +8,7 @@ public class Sponge : Equipment
     {
         base.Start();
 
+        name = "Sponge";
         IsWet = false;
     }
 

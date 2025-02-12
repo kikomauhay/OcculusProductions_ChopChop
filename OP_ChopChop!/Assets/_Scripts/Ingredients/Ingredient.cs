@@ -9,16 +9,15 @@ using UnityEngine;
 /// </summary>
 
 public enum IngredientType { RICE, TUNA, SALMON, SEAWEED } // will expand later
-
 public enum IngredientState { DEFAULT, EXPIRED, CONTAMINATED, TRASHED, STORED }
 
 public abstract class Ingredient : MonoBehaviour
 {
 #region Members
 
-    [Header("Ingredients")]
+    [Header("Ingredient Components"), Tooltip("Anything the ingredient needs.")]
     [SerializeField] protected IngredientStats _ingredientStats;
-    [SerializeField] protected IngredientType _ingredientType;
+    [SerializeField] protected IngredientType _ingredientType; // will be used by the child classes
 
     public IngredientStats IngredientStats => _ingredientStats;
     public IngredientType IngredientType => _ingredientType;
@@ -27,10 +26,7 @@ public abstract class Ingredient : MonoBehaviour
     public TrashableType TrashableType { get; private set; }
     public FreshnessRating Rating { get; private set; }
     public float FreshnessRate { get; private set; }
-
-    // will change these to an enum after midterms
-
-    public bool IsProperlyStored { get; set; }
+    public bool IsProperlyStored { get; set; } // is changed outside the script
 
 #endregion
 
@@ -39,7 +35,7 @@ public abstract class Ingredient : MonoBehaviour
     protected virtual void Start() 
     {
         IngredientState = IngredientState.DEFAULT; // changes inside this script
-        TrashableType = TrashableType.INGREDIENT;  // won't change 
+        TrashableType = TrashableType.INGREDIENT;  // won't change at all
         Rating = FreshnessRating.FRESH;            // changes inside the enumerator
         
         FreshnessRate = 100; // the higher the score, the better
@@ -48,9 +44,9 @@ public abstract class Ingredient : MonoBehaviour
         StartCoroutine(Decay());
     }
     
-    public void ThrowInTrash() 
+    public void ThrowInTrash() // idk if we need this
     {
-        // removes the food form the game entirely
+        // removes the food from the game entirely
         // could add more punishment later on 
 
         IngredientState = IngredientState.TRASHED;
@@ -100,7 +96,6 @@ public abstract class Ingredient : MonoBehaviour
             // rate & speed will changes depending on the IngredientState
             int rate = 0, speed = 0; 
 
-            // added "this" to reduce confusion from the datatype & variable
             switch (this.IngredientState) 
             {
                 case IngredientState.CONTAMINATED:
@@ -135,7 +130,7 @@ public abstract class Ingredient : MonoBehaviour
             }
             CheckRate();
         }
-        Destroy(gameObject); // test
+        Destroy(gameObject); // test, remove this once it's properly set up
     }
 }
 

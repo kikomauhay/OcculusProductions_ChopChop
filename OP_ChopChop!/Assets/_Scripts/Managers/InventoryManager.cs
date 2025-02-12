@@ -6,8 +6,7 @@ public enum StorageType { CHILLER, FREEZER }
 
 public class InventoryManager : Singleton<InventoryManager>
 {
-    public int FridgeCapacity => _fridge.Count; // how many food items are in the ref 
-    private List<GameObject> _fridge = new List<GameObject>();
+    List<GameObject> _fridge = new List<GameObject>();
 
 #region Methods
 
@@ -28,7 +27,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void TakeOut(GameObject food) 
     {
-        Ingredient ingredient = food.GetComponent<Ingredient>();
+        Ingredient ingredient = food?.GetComponent<Ingredient>();
 
         if (ingredient == null) return;
 
@@ -36,7 +35,7 @@ public class InventoryManager : Singleton<InventoryManager>
         IngredientManager.Instance.Ingredients.Add(food);
         _fridge.Remove(food);    
         
-        // grace period before the food rots faster again
+        
         StartCoroutine(TookOut(ingredient));
     }
     public void StoreIn(StorageType mode, GameObject food) 
@@ -61,7 +60,7 @@ public class InventoryManager : Singleton<InventoryManager>
             ingredient.IsProperlyStored = true;
     }
     
-    IEnumerator TookOut(Ingredient food) 
+    IEnumerator TookOut(Ingredient food) // grace period before the food starts decaying
     {
         yield return new WaitForSecondsRealtime(10f);
         food.IsProperlyStored = false;

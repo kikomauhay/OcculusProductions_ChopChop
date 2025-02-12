@@ -17,13 +17,13 @@ public class Plate : Equipment
         GetComponent<MeshRenderer>().material = _cleanPlateMat;
     }
 
-    private void Update()
+    void Update()
     {
         if (Input.GetKeyUp(KeyCode.Space)) 
-            TogglePlateSanitation();
+            TogglePlateSanitation(); // test
     }
 
-    public void TogglePlateSanitation()
+    public void TogglePlateSanitation() 
     {
         _isDirty = !_isDirty;
 
