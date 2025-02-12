@@ -615,7 +615,6 @@ GameObject:
   - component: {fileID: 406391518}
   - component: {fileID: 406391517}
   - component: {fileID: 406391516}
-  - component: {fileID: 406391515}
   m_Layer: 0
   m_Name: RightHand
   m_TagString: Untagged
@@ -883,21 +882,6 @@ MonoBehaviour:
     m_Reference: {fileID: -6447266317303757838, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_ButtonPressPoint: 0.5
---- !u!114 &406391515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406391512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 536d39dedc3e1d14bb70f0a4efc8cfd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MidCollider: {fileID: 406391516}
-  left: {fileID: 1015803965}
-  right: {fileID: 406391514}
 --- !u!65 &406391516
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1802,7 +1786,6 @@ GameObject:
   - component: {fileID: 1015803969}
   - component: {fileID: 1015803968}
   - component: {fileID: 1015803967}
-  - component: {fileID: 1015803966}
   m_Layer: 0
   m_Name: LeftHand
   m_TagString: Untagged
@@ -2053,21 +2036,6 @@ MonoBehaviour:
     m_Reference: {fileID: -1636515391019944688, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
   m_ButtonPressPoint: 0.5
---- !u!114 &1015803966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015803964}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 536d39dedc3e1d14bb70f0a4efc8cfd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MidCollider: {fileID: 1015803967}
-  left: {fileID: 1015803965}
-  right: {fileID: 406391514}
 --- !u!65 &1015803967
 BoxCollider:
   m_ObjectHideFlags: 0
