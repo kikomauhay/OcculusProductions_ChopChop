@@ -1,11 +1,11 @@
 public class TunaIngredient : FishIngredient
 {
-
     protected override void Start()
     {
         base.Start();
 
-        _ingredientType = IngredientType.TUNA;
         name = "Tuna";
+        _ingredientType = IngredientType.TUNA;
+        _fishType = FishType.TUNA;
     }
 }

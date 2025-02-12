@@ -1,11 +1,14 @@
 using UnityEngine;
 
-public class Sponge : MonoBehaviour
+public class Sponge : Equipment
 {
     public bool IsWet;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
+        name = "Sponge";
         IsWet = false;
     }
 

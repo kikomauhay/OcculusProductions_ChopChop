@@ -18,11 +18,11 @@ public class CustomerOrder : MonoBehaviour
     [SerializeField] private GameObject[] _dishOrdersUI; // the different order UI for the customer 
     [SerializeField] private Transform _orderUITransform; //Spawning of the order
 
-    #endregion
+#endregion
 
 #region Methods
 
-    private void Start()
+    void Start()
     {
         // randomizes the customer's order
         // CustomerDishType = (DishType)Random.Range(0, System.Enum.GetValues(typeof(DishType)).Length);
@@ -30,7 +30,7 @@ public class CustomerOrder : MonoBehaviour
         CustomerDishType = DishType.NIGIRI_SALMON; // test
 
         _customerScore = 100f; // will decrease overtime
-        _patienceRate = 1.65f;
+        _patienceRate = 1.65f; 
         _customerDeleteTimer = 3f;
         
         CreateCustomerUI();
@@ -39,18 +39,15 @@ public class CustomerOrder : MonoBehaviour
         Debug.LogWarning($"{name}: {CustomerDishType}");
     }
 
-
-   
-
-
-
-    private void CreateCustomerUI()
+    void CreateCustomerUI()
     {
         Instantiate(_dishOrdersUI[(int)CustomerDishType], // i love type-casting
                     _orderUITransform.position,
                     _orderUITransform.rotation);
-    }     
-    private void MakeSeatEmpty() // clears the seat of any customer references 
+    }
+
+    // will refine with AJ's help     
+    void MakeSeatEmpty() // clears the seat of any customer references 
     {
         CustomerSpawningManager.Instance.RemoveCustomer(gameObject);
         CustomerSpawningManager.Instance.GetComponent<SpawnLocationScript>().IsPrefabPresent = false;
@@ -60,34 +57,32 @@ public class CustomerOrder : MonoBehaviour
         GameManager.Instance.OnCustomerServed?.Invoke(CustomerSR);
         Destroy(gameObject);
     }
-
-    #endregion
-
     public bool OrderIsSameAs(Dish dish) => dish?.OrderDishType == CustomerDishType;
     
+#endregion
 
 #region Enumerators
 
-    IEnumerator DoNegativeReaction() // customer lost all patience or got the wrong order
+    IEnumerator DoPositiveReaction() // customer got the correct dish
     {
+        // customer eats the food before despawning
+        // can add animation of the customer eating & sfx
+
+        yield return new WaitForSeconds(_customerDeleteTimer);
+
+        MakeSeatEmpty();
+    }
+    IEnumerator DoNegativeReaction() // customer lost all patience or got the wrong order
+    {       
         _customerScore = 0f;
-        Debug.Log($"Customer score: {_customerScore}");
-        
+
         yield return new WaitForSeconds(_customerDeleteTimer);
 
         GameManager.Instance.OnCustomerLeft?.Invoke();
         MakeSeatEmpty();
     }
-    IEnumerator DoPositiveReaction() // customer got the correct dish
-    {
-        // customer eats the food before despawning
-        yield return new WaitForSeconds(_customerDeleteTimer);
-
-        MakeSeatEmpty();
-    }
     IEnumerator PatienceCountdown()
     {
-        // Debug.Log($"{name} waits 3 seconds before counting down");
         yield return new WaitForSeconds(3f); // time it takes for the customer to take a seat
 
         while (_customerScore > 0f)
@@ -103,6 +98,8 @@ public class CustomerOrder : MonoBehaviour
 
         // customer lost all patience
         _customerScore = 0f;   
+        Debug.Log(_customerScore);
+
         yield return StartCoroutine(DoNegativeReaction());
     }
 

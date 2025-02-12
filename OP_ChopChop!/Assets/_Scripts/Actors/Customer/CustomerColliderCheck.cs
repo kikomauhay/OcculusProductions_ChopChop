@@ -13,18 +13,22 @@ public class CustomerColliderCheck : MonoBehaviour
 
         if (CustomerOrder.OrderIsSameAs(other.gameObject.GetComponent<Dish>()))
         {
+            Debug.LogWarning("CORRECT ORDER");
             CustomerOrder.StartCoroutine("DoPositiveReaction");
             
             // calculates the customer SR
             CustomerOrder.CustomerSR = (collidedDish.DishScore + CustomerOrder.PatienceRate) / 2f;
+            
+            // customer "eats" the food
             Destroy(other.gameObject);
-            plate.SetContaminated();
 
-            Debug.LogWarning("CORRECT ORDER");
+            plate.SetContaminated();            
             return;
         }
 
         Debug.LogError("WRONG ORDER");
         CustomerOrder.StartCoroutine("DoNegativeReaction");
+        
+        // idk if the customer still eats the food or skips it entirely
     }
 }
