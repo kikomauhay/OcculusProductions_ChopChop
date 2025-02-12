@@ -27,12 +27,12 @@ public class ButtonInteractable : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("NoHit");
+        // Debug.Log("NoHit");
         if (other.gameObject.GetComponent<ActionBasedController>() != null)
         {
             Debug.Log(other.gameObject.GetComponent<ActionBasedController>());
             Debug.Log("Hit");
-           button.onClick.Invoke();
+            button.onClick.Invoke();
         }
     }
 }

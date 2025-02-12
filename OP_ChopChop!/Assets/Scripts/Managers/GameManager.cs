@@ -30,7 +30,7 @@ public class GameManager : Singleton<GameManager>
 
 #endregion
 
-#region Methods
+#region Unity_Methods
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() 
@@ -54,6 +54,8 @@ public class GameManager : Singleton<GameManager>
     }
     void Update() => test();
 
+#endregion
+
     void test() {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -66,7 +68,6 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Space))
             Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
     }  
-#endregion
 
 #region Rating_Calculations
 
@@ -93,7 +94,7 @@ public class GameManager : Singleton<GameManager>
 
     float CalculateRestartantRating(float avgCustomerSR, float avgFoodScore) // this only triggers once it's the shift ends 
     {
-    ///<summary> -RATING FORMULA ISSUES-
+    /// <summary> -RATING FORMULA ISSUES-
     /// 
     /// so far, we're using a simple formula
     /// there are a lot of variables that we need to look into

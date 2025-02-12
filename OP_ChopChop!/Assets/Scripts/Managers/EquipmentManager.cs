@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EquipmentManager : Singleton<EquipmentManager>
 {
     public GameObject Knife, MeatBoard;

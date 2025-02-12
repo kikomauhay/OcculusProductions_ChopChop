@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9080494305053281880}
-  - component: {fileID: 3908433563779361389}
   - component: {fileID: 8231028914697957268}
   - component: {fileID: 385143926332191185}
   - component: {fileID: 5970642993687564184}
+  - component: {fileID: 5923755199169701721}
   m_Layer: 0
   m_Name: Dish_NigiriSalmon
   m_TagString: Untagged
@@ -36,19 +36,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3908433563779361389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4027988547386331903}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73bc3b0813aa4dc49bba7a5a37f9bf1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _orderDishType: 0
 --- !u!65 &8231028914697957268
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -230,6 +217,19 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &5923755199169701721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4027988547386331903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73bc3b0813aa4dc49bba7a5a37f9bf1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _orderDishType: 0
 --- !u!1001 &2311643843459007257
 PrefabInstance:
   m_ObjectHideFlags: 0

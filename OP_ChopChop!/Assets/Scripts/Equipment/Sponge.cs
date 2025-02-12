@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Sponge : MonoBehaviour
 {
-   [SerializeField] public bool _isWet;
+    public bool IsWet;
 
-    public void Dried()
+    void Start()
     {
-        _isWet = false;
-    }
-    public void Wet()
-    {
-        _isWet = true;   
+        IsWet = false;
     }
 
+    public void Dried() => IsWet = false;
+    public void Wet() => IsWet = true;   
 }

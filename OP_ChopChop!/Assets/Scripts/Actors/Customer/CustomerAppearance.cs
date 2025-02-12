@@ -33,5 +33,4 @@ public class CustomerAppearance : MonoBehaviour
             Debug.Log("Randomized customer face!");
         }
     }
-
 }
