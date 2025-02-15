@@ -15,7 +15,7 @@ public abstract class Ingredient : MonoBehaviour
 {
 #region Members
 
-    [Header("Ingredient Components"), Tooltip("Anything the ingredient needs.")]
+    [Header("Ingredient Components")]
     [SerializeField] protected IngredientStats _ingredientStats;
     [SerializeField] protected IngredientType _ingredientType; // will be used by the child classes
 
@@ -41,7 +41,7 @@ public abstract class Ingredient : MonoBehaviour
         FreshnessRate = 100; // the higher the score, the better
 
         CheckRate();
-        StartCoroutine(Decay());
+        StartCoroutine(DecayIngredient());
     }
     
     public void ThrowInTrash() // idk if we need this
@@ -89,13 +89,14 @@ public abstract class Ingredient : MonoBehaviour
 
 #endregion
 
-    protected IEnumerator Decay() 
+    protected IEnumerator DecayIngredient() 
     {        
         while (IngredientState != IngredientState.EXPIRED)
         {
-            // rate & speed will changes depending on the IngredientState
+            // rate & speed will change depending on the IngredientState
             int rate = 0, speed = 0; 
 
+            // added "this" to prevent mistakes form the variable name from the enum datatype
             switch (this.IngredientState) 
             {
                 case IngredientState.CONTAMINATED:

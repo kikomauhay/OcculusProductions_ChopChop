@@ -10,6 +10,14 @@ using System;
 ///
 /// </summary>
 
+/// </summary> -RATING PROCESS-
+/// 
+/// 1. Calculate the Food Score, then add it to the proper list
+/// 2. Calculate Customer SR, then add it to the proper list
+/// 3. At the end of the day, calculate the overall restaurant rate
+/// 
+/// </summary>
+
 public class GameManager : Singleton<GameManager>
 {
 
@@ -66,19 +74,27 @@ public class GameManager : Singleton<GameManager>
         }        
 
         if (Input.GetKeyDown(KeyCode.Space))
-            Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
+            throw new NullReferenceException("test");
+            //Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
     }  
 
-#region Rating_Calculations
+    void EndOfDayCalculations()
+    {
+        /* UI CODE 
+            - shows the total customers served
+            - shows the amt of customers that left
+            - shows how much money you gained
+        */ 
 
-    /// </summary> -RATING PROCESS-
-    /// 
-    /// 1. Calculate the Food Score, then add it to the proper list
-    /// 2. Calculate Customer SR, then add it to the proper list
-    /// 3. At the end of the day, calculate the restaurant
-    /// 
-    /// </summary>
+        // restaurant rating 
+        float finalScore = (CleanManager.Instance.KitchenScore + 
+                            GetAverageOf(_foodScores) + 
+                            GetAverageOf(_customerSRScores)) / 3f;
 
+        Debug.Log(finalScore);
+
+        // add code to show a lettered score based on finalScore;
+    }
     float GetAverageOf(List<float> list) 
     {
         // prevents a div/0 case
@@ -91,26 +107,6 @@ public class GameManager : Singleton<GameManager>
 
         return n / _foodScores.Count;
     }
-
-    float CalculateRestartantRating(float avgCustomerSR, float avgFoodScore) // this only triggers once it's the shift ends 
-    {
-    /// <summary> -RATING FORMULA ISSUES-
-    /// 
-    /// so far, we're using a simple formula
-    /// there are a lot of variables that we need to look into
-    /// so for now, we won't cover the waste counter & cleanliness of the resto
-    /// 
-    /// This is an idea for the final calculations, but some of it hasn't been implemented yet
-    /// restaurant rate = avg (CleanlinessRate + 
-    ///                        Avg of Customers' Satisfaction Rating + 
-    ///                        Food Score of All dishes served - 
-    ///                        DisposeRate)
-    /// </summary>
-    
-        return (avgCustomerSR + avgFoodScore) / 2f; // will make this more complex after midterms
-    }
-
-#endregion
 
 #region Event_Methods 
 

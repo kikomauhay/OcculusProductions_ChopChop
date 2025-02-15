@@ -1,70 +1,108 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class CleanManager : MonoBehaviour
+public class CleanManager : Singleton<CleanManager>
 {
     //Standardized script for activating colliders on the hand, will draft it up and will ask help from isagani to clean up the code later
-    //prolly rename this script to clean manager or smth
-    [SerializeField] Collider[] _handWashColliders;
-    [SerializeField] Collider[] _KitchenWashColliders;
-    [SerializeField] int _kitchenDecay;
-    [SerializeField] float _timer;
-    [SerializeField] bool _coroutineTriggered; //temp bool, please change logic for coroutine if there is a more efficient way
+    public Action OnCleanedArea, OnStartDecayAgain;
+    public float KitchenScore { get; private set; } // overall cleanliness meter of the kitchen
 
-    private void Start() // Should we use awake instead?
+    [SerializeField] Collider[] _handWashColliders, _kitchenWashColliders;
+    float _decayTimer, _decayRate, _cleanlinessThreshold; 
+    bool _canClean;
+
+
+#region Unity_Methods
+
+    protected override void Awake() => base.Awake();
+    protected override void OnApplicationQuit() 
     {
-        if (_handWashColliders == null && _KitchenWashColliders == null) return;
-        for (int i = 0; i < _handWashColliders.Length; i++)
+        base.OnApplicationQuit();
+        Reset();
+    }
+    void Reset() => OnCleanedArea -= IncreaseCleanRate;   
+    
+    void Start()
+    {
+        KitchenScore = 100;
+        _decayTimer = 5f;
+        _decayRate = 5f;
+        _cleanlinessThreshold = 90f; // kitchen needs to go below this score to start cleaning 
+        _canClean = false;           // prevents the player from cleaning too much
+
+        OnCleanedArea += IncreaseCleanRate;
+
+        ToggleAllColliders();
+        StartCoroutine(DecayKitchen());
+    }
+    void Update() => test();
+
+#endregion
+
+    void test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) 
         {
-            if (_handWashColliders[i])
-                _handWashColliders[i].enabled = false;
+            ToggleHandWashColliders();
+            ToggleKitchenColliders();
         }
-        for (int i = 0; i < _KitchenWashColliders.Length; i++)
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+            IncreaseCleanRate();
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            if (_KitchenWashColliders[i])
-                _KitchenWashColliders[i].enabled = false;
+            _canClean = !_canClean;
+            Debug.Log($"Can clean: {_canClean}");
         }
+    }   
+
+
+#region Private_Functions
+
+    void ToggleAllColliders()
+    {
+        ToggleKitchenColliders();
+        ToggleHandWashColliders();
+    }
+    void ToggleKitchenColliders()
+    {
+        foreach (Collider col in _kitchenWashColliders)
+            col.enabled = !col.enabled;
+    }
+    void ToggleHandWashColliders()
+    {
+        foreach (Collider col in _handWashColliders)
+            col.enabled = !col.enabled;
     }
 
-    private void FixedUpdate()
-    {
-        if( !_coroutineTriggered )
-            StartCoroutine(DecayRate());
-        Debug.Log(_kitchenDecay);
-
-        if (_handWashColliders == null && _KitchenWashColliders == null) return;
-
-        if (_kitchenDecay < 100)
-        {
-            ActivateKitchenWashColliders();
-        }
-        else DeactivateKitchenWashColliders();
-    }
-    #region Private Functions
     private void ActivateKitchenWashColliders()
     {
-        if (_KitchenWashColliders == null) return;  
-        for (int i =0;i < _KitchenWashColliders.Length;i++)
+        if (_kitchenWashColliders == null) return;  
+
+        for (int i =0;i < _kitchenWashColliders.Length;i++)
         {
-            if (_KitchenWashColliders[i])
-                 _KitchenWashColliders[i].enabled = true;
+            if (_kitchenWashColliders[i])
+                 _kitchenWashColliders[i].enabled = true;
         }
         // update texture of kitchen, if di kaya spark na lng siya
         // make sure smelly vfx comes out of the colliders to signify the player that their kitchen needs cleaning
     }
     private void DeactivateKitchenWashColliders()
     {
-        if (_KitchenWashColliders == null) return;
-        for(int i = 0; i<_KitchenWashColliders.Length;i++)
+        if (_kitchenWashColliders == null) return;
+        for(int i = 0; i<_kitchenWashColliders.Length;i++)
         {
-            if (_KitchenWashColliders[i])
-                _KitchenWashColliders[i].enabled = false;
+            if (_kitchenWashColliders[i])
+                _kitchenWashColliders[i].enabled = false;
         }
     }
-    #endregion
 
-    #region Public Functions
+#endregion
+
+#region Public_Functions
+
     public void ActivateHandWashColliders()
     {
         if (_handWashColliders == null) return;
@@ -83,18 +121,54 @@ public class CleanManager : MonoBehaviour
                 _handWashColliders[i].enabled = false;
         }
     }
-    #endregion
 
-    IEnumerator DecayRate()
+#endregion
+
+    void IncreaseCleanRate() 
     {
-        if (_coroutineTriggered) yield break;
-        _coroutineTriggered = true;
-
-        while (_kitchenDecay > 0)
+        if (!_canClean) // no need to focus too much on cleaning
         {
-            yield return new WaitForSeconds(_timer);
-            _kitchenDecay -= 5;
+            Debug.LogError("You can't clean yet!");
+            return;
         }
-        _coroutineTriggered = false;
+
+        // enables the decay mechanic to start again
+        if (KitchenScore < 1)
+            StartCoroutine(DecayKitchen());
+        
+        KitchenScore += UnityEngine.Random.Range(5, 10); // test value for now
+
+        if (KitchenScore > 100)
+            KitchenScore = 100;
+    }
+
+    IEnumerator DecayKitchen()
+    {
+        yield return new WaitForSeconds(3f);
+
+        Debug.LogWarning("Kitchen is getting dirty!");
+        
+        while (KitchenScore > 0) 
+        {
+            yield return new WaitForSeconds(_decayTimer);
+            KitchenScore -= _decayRate;
+
+            // no need to focus too much on cleaning
+            if (KitchenScore < _cleanlinessThreshold && !_canClean)
+            {
+                _canClean = true;
+                ToggleAllColliders();
+                Debug.Log("All colliders should be disabled");
+            }
+            else if (KitchenScore > _cleanlinessThreshold) 
+            {
+                _canClean = false;
+                ToggleAllColliders();
+                Debug.Log("All colliders should be enabled");
+            }
+
+            Debug.LogWarning($"Can clean is {_canClean}");
+            Debug.Log(KitchenScore); // test
+        }
     }
 }
