@@ -3192,10 +3192,20 @@ PrefabInstance:
       objectReference: {fileID: 1028304624}
     - target: {fileID: 9070508986851495209, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
         type: 3}
+      propertyPath: _totalCostText
+      value: 
+      objectReference: {fileID: 1638109688}
+    - target: {fileID: 9070508986851495209, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
+        type: 3}
       propertyPath: tunaSlabPrefab
       value: 
       objectReference: {fileID: 286803097528491412, guid: 387c212b92acf5c4e864fd73bcea9687,
         type: 3}
+    - target: {fileID: 9070508986851495209, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
+        type: 3}
+      propertyPath: _salmonCostText
+      value: 
+      objectReference: {fileID: 1638109686}
     - target: {fileID: 9070508986851495209, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
         type: 3}
       propertyPath: _totalPriceText
@@ -3232,6 +3242,11 @@ PrefabInstance:
       propertyPath: startPlayerMoney
       value: 10000
       objectReference: {fileID: 0}
+    - target: {fileID: 9070508986851495209, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
+        type: 3}
+      propertyPath: _salmonOrderAmountText
+      value: 
+      objectReference: {fileID: 1638109689}
     - target: {fileID: 9070508986851495211, guid: 8ca1a8b7e8b57ea48adf93d2b0d9920b,
         type: 3}
       propertyPath: m_Name

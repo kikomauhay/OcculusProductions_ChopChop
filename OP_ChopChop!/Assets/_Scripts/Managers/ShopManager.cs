@@ -12,12 +12,12 @@ public class ShopManager : Singleton<ShopManager>
     [SerializeField] TextMeshProUGUI _playerMoneyText;
 
     [Header("Prices UI")]
-    [SerializeField] TextMeshProUGUI _totalPriceText;
-    [SerializeField] TextMeshProUGUI _salmonPriceText, _tunaPriceText; 
+    [SerializeField] TextMeshProUGUI _totalCostText;
+    [SerializeField] TextMeshProUGUI _salmonCostText, _tunaCostText; 
     
     [Header("Order Amount UI")]
-    [SerializeField] TextMeshProUGUI _salmonCountText;
-    [SerializeField] TextMeshProUGUI _tunaCountText;
+    [SerializeField] TextMeshProUGUI _salmonOrderAmountText;
+    [SerializeField] TextMeshProUGUI _tunaOrderAmountText;
 
     // SHOP VARIABLES
     int _salmonOrderCount, _tunaOrderCount;
@@ -164,16 +164,16 @@ public class ShopManager : Singleton<ShopManager>
 #region UI_Methods
 
     void UpdateSalmonCountUI() => 
-        _salmonCountText.text = $"{_salmonOrderCount}";
+        _salmonOrderAmountText.text = $"{_salmonOrderCount}";
     
     void UpdateTunaCountUI() => 
-        _tunaCountText.text = $"{_tunaOrderCount}";
+        _tunaOrderAmountText.text = $"{_tunaOrderCount}";
 
     void UpdatePlayerMoneyUI() =>
         _playerMoneyText.text = $"${GameManager.Instance.AvailableMoney}";
 
     void UpdateTotalPriceUI() => 
-        _totalPriceText.text = $"${CalculateTotalPrice()}";
+        _totalCostText.text = $"${CalculateTotalPrice()}";
 
 #endregion
 }

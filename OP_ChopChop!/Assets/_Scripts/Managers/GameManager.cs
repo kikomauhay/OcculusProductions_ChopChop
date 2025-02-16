@@ -93,7 +93,7 @@ public class GameManager : Singleton<GameManager>
         */ 
 
         // restaurant rating 
-        float finalScore = (CleanManager.Instance.KitchenScore + 
+        float finalScore = (CleaningManager.Instance.KitchenScore + 
                             GetAverageOf(_foodScores) + 
                             GetAverageOf(_customerSRScores)) / 3f;
 

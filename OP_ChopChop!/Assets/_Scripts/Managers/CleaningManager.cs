@@ -2,9 +2,9 @@ using System.Collections;
 using UnityEngine;
 using System;
 
-public class CleanManager : Singleton<CleanManager>
+public class CleaningManager : Singleton<CleaningManager>
 {
-    //Standardized script for activating colliders on the hand, will draft it up and will ask help from isagani to clean up the code later
+    // Standardized script for activating colliders on the hand, will draft it up and will ask help from isagani to clean up the code later
     public Action OnCleanedArea, OnStartDecayAgain;
     public float KitchenScore { get; private set; } // overall cleanliness meter of the kitchen
 
@@ -15,7 +15,11 @@ public class CleanManager : Singleton<CleanManager>
 
 #region Unity_Methods
 
-    protected override void Awake() => base.Awake();
+    protected override void Awake() 
+    {
+        base.Awake();
+        OnCleanedArea += IncreaseCleanRate;
+    }
     protected override void OnApplicationQuit() 
     {
         base.OnApplicationQuit();
@@ -30,8 +34,6 @@ public class CleanManager : Singleton<CleanManager>
         _decayRate = 5f;
         _cleanlinessThreshold = 90f; // kitchen needs to go below this score to start cleaning 
         _canClean = false;           // prevents the player from cleaning too much
-
-        OnCleanedArea += IncreaseCleanRate;
 
         ToggleAllColliders();
         StartCoroutine(DecayKitchen());
@@ -84,8 +86,9 @@ public class CleanManager : Singleton<CleanManager>
         for (int i =0;i < _kitchenWashColliders.Length;i++)
         {
             if (_kitchenWashColliders[i])
-                 _kitchenWashColliders[i].enabled = true;
+                _kitchenWashColliders[i].enabled = true;
         }
+
         // update texture of kitchen, if di kaya spark na lng siya
         // make sure smelly vfx comes out of the colliders to signify the player that their kitchen needs cleaning
     }
@@ -158,13 +161,13 @@ public class CleanManager : Singleton<CleanManager>
             {
                 _canClean = true;
                 ToggleAllColliders();
-                Debug.Log("All colliders should be disabled");
+                Debug.Log("All colliders should be enabled");
             }
             else if (KitchenScore > _cleanlinessThreshold) 
             {
                 _canClean = false;
                 ToggleAllColliders();
-                Debug.Log("All colliders should be enabled");
+                Debug.Log("All colliders should be disabled");
             }
 
             Debug.LogWarning($"Can clean is {_canClean}");
