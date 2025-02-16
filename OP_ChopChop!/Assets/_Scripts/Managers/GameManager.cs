@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -20,47 +21,50 @@ using System;
 
 public class GameManager : Singleton<GameManager>
 {
-
 #region Members
 
-    // Events
     public Action OnFoodDisposed, OnCustomerLeft;
-    public Action<float> OnCustomerServed;
+    public Action<float> OnCustomerServed, OnMoneyChanged;
 
-    // Player references
-    [SerializeField] GameObject _player;
-    public GameObject Player => _player;
+    public float AvailableMoney { get; private set; }
 
     // Scores to keep track of
     List<float> _foodScores, _customerSRScores;
 
-    int _customersLeftCounter;
+    int _customersThatLeftCounter;
 
 #endregion
 
 #region Unity_Methods
 
-    protected override void Awake() => base.Awake();
-    protected override void OnApplicationQuit() 
+    protected override void Awake() 
     {
-        base.OnApplicationQuit();
-        Reset();
-    }
-    void Reset()
-    {
-        OnCustomerServed -= AddToFoodScore;
-        OnCustomerLeft -= IncrementCustomersLeft;
-    }
+        base.Awake();
 
+        OnCustomerServed += AddToFoodScore;
+        OnCustomerLeft += IncrementCustomersLeft;
+        OnMoneyChanged += ChangeMoney;
+    }
     void Start()
     {
         _foodScores = new List<float>();
         _customerSRScores = new List<float>();
-
-        OnCustomerServed += AddToFoodScore;
-        OnCustomerLeft += IncrementCustomersLeft;
+        AvailableMoney = 0f;
     }
+    
     void Update() => test();
+    
+    void Reset()
+    {
+        OnCustomerServed -= AddToFoodScore;
+        OnCustomerLeft -= IncrementCustomersLeft;
+        OnMoneyChanged -= ChangeMoney;
+    }
+    protected override void OnApplicationQuit() 
+    {
+        base.OnApplicationQuit();
+        Reset();
+    }    
 
 #endregion
 
@@ -77,6 +81,8 @@ public class GameManager : Singleton<GameManager>
             throw new NullReferenceException("test");
             //Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
     }  
+
+#region Rating_Methods
 
     void EndOfDayCalculations()
     {
@@ -108,13 +114,25 @@ public class GameManager : Singleton<GameManager>
         return n / _foodScores.Count;
     }
 
+#endregion
+
 #region Event_Methods 
 
-    // other GameObjects don't call the GameManager's methods, the just call the events for it
+    // other GameObjects call the GameManager's events to trigger these methods
 
     void AddToFoodScore(float foodScore) => _foodScores.Add(foodScore);
     void AddToCustomerSRScore(float srScore) => _customerSRScores.Add(srScore);
-    void IncrementCustomersLeft() => _customersLeftCounter++;
+    void IncrementCustomersLeft() => _customersThatLeftCounter++;
+    void ChangeMoney(float amt) 
+    {
+        AvailableMoney += amt;
+
+        if (AvailableMoney < 0f)
+        {
+            AvailableMoney = 0f;
+            Debug.LogWarning("You have no more money!");
+        }
+    }
 
 #endregion
 }
