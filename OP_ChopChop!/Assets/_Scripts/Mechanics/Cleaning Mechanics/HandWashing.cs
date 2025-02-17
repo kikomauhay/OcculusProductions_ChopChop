@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HandWashing : MonoBehaviour
@@ -8,8 +7,7 @@ public class HandWashing : MonoBehaviour
     //had another epiphany, gani pag kagising can you put all the coroutines inside cleanmanager na lang.
     //maiwan lang dito should be the ontrigger stay pala
 
-    [SerializeField] bool _isDirty;
-    [SerializeField] bool _coroutineTriggered;
+    [SerializeField] bool _isDirty, _coroutineTriggered;
     [SerializeField] int _cleanCounter;
     [SerializeField] float _timer;
 
@@ -26,13 +24,13 @@ public class HandWashing : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<Sponge>() != null)
-        {
-            //change sponge into soap or something along the way
-            //same sht with plate, velocity things
-            //instantiate bubble vfx
-            //set dirty to false after a few seconds of cleaning
-        }
+        if (other.gameObject.GetComponent<Sponge>() == null) return;
+
+        //change sponge into soap or something along the way
+        //same sht with plate, velocity things
+        //instantiate bubble vfx
+        //set dirty to false after a few seconds of cleaning
+
     }
 
     IEnumerator DecayRate()

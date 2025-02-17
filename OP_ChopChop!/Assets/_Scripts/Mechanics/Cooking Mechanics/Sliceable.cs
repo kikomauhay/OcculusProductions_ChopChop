@@ -4,11 +4,11 @@ public class Sliceable : MonoBehaviour
 {
 #region Members
 
+    // will change this into an array later
     [SerializeField] private GameObject _currentPrefab, _nextPrefab; // make this an array 
-    [SerializeField] private GameObject _sharpObject, _meatBoard; // references for the ingredient
     [SerializeField] private GameObject _smokeVFX;
     
-    private int _chopCounter;
+    int _chopCounter;
     public bool IsAttached { get; set; }
 
 #endregion
@@ -19,8 +19,6 @@ public class Sliceable : MonoBehaviour
     {
         _chopCounter = 0;
         IsAttached = false;
-        _sharpObject = EquipmentManager.Instance?.Knife;
-        _meatBoard = EquipmentManager.Instance?.MeatBoard;
     }
     void Update()
     {
@@ -29,27 +27,25 @@ public class Sliceable : MonoBehaviour
             Sliced();
 
             // needs an explanation
-            _meatBoard.gameObject.GetComponent<Snap>().ResetSnap();
+            EquipmentManager.Instance.MeatBoard.GetComponent<Snap>().ResetSnap();
         }
     }
     void OnTriggerEnter(Collider other)
     {
-        // check other gameobject if it has a knife script
-        Knife knife = other.gameObject.GetComponent<Knife>();
+        if (other.gameObject.GetComponent<Knife>() == null) return;
 
-        // if not null, +1 on chop counter
         if (IsAttached)
         {
-            if (knife != null)
-            {
-                Vector3 _currentPosition = _currentPrefab.transform.position;
-                Quaternion _currentRotation = _currentPrefab.transform.rotation;
-                _chopCounter++;
+            _chopCounter++;
 
-                SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
-                SoundManager.Instance.PlaySound(Random.value > 0.5f ? "fish slice 01" : "fish slice 02");
-                Debug.Log("Chopping");
-            }
+            SpawnManager.Instance.SpawnVFX(VFXType.SPARKLE,
+                                           transform.position,
+                                           transform.rotation);
+
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ?
+                                            "fish slice 01" :
+                                            "fish slice 02");
+            Debug.LogWarning("Chopping");
         }
     }   
 
@@ -59,24 +55,19 @@ public class Sliceable : MonoBehaviour
     {
         if (_currentPrefab != null)
         {
-            // gets the position and rotation of prefab and then destroys it
-            Vector3 _currentPosition = _currentPrefab.transform.position;
-            Quaternion _currentRotation = _currentPrefab.transform.rotation;
-
             Destroy(_currentPrefab);
-            SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
-            Instantiate(_nextPrefab, _currentPosition, _currentRotation);
+            
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, 
+                                           transform.position,
+                                           transform.rotation);
+
+            SpawnManager.Instance.SpawnFoodItem(_nextPrefab, 
+                                                FoodItemType.INGREDIENT,
+                                                transform.position,
+                                                transform.rotation);
             
             SoundManager.Instance.PlaySound("knife chop");
             Debug.Log("SLICED!");
         }
-    }
-    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
-    {
-        if(vfxPrefab != null)
-        {
-            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
-            Destroy(VFXInstance, 2f);
-        }    
     }
 }
