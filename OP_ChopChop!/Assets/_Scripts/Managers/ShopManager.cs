@@ -63,18 +63,20 @@ public class ShopManager : Singleton<ShopManager>
         {
             for (int i = 0; i < _salmonOrderCount; i++)
             {
-                SpawnManager.Instance.SpawnIngredient(_salmonPrefab, 
-                                                      _orderSpawnPoint.position, 
-                                                      _orderSpawnPoint.rotation);
+                SpawnManager.Instance.SpawnFoodItem(_salmonPrefab, 
+                                                    FoodItemType.FOOD,
+                                                    _orderSpawnPoint.position, 
+                                                    _orderSpawnPoint.rotation);
             }
         }
         if (_tunaOrderCount > 0)
         {
             for (int i = 0; i < _tunaOrderCount; i++)
             {
-                SpawnManager.Instance.SpawnIngredient(_tunaPrefab, 
-                                                      _orderSpawnPoint.position, 
-                                                      _orderSpawnPoint.rotation);
+                SpawnManager.Instance.SpawnFoodItem(_tunaPrefab, 
+                                                    FoodItemType.FOOD,
+                                                    _orderSpawnPoint.position, 
+                                                    _orderSpawnPoint.rotation);
             }
         }
 

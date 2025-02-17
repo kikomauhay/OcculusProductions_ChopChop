@@ -39,7 +39,7 @@ public class RiceIngredient : Ingredient
         // gets the freshness rates of both ingredients before deleting them
         Destroy(gameObject);
         Destroy(other.gameObject);
-        SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.SMOKE, pos, rot);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, pos, rot);
         
         // only nigiris for now (makis will be added after midterms)
         if (ing.GetComponent<FishIngredient>().SliceType == SliceType.THIN)
