@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 
 /// </summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -9,9 +8,7 @@ using System.Collections;
 ///
 /// </summary>
 
-
 public enum FoodItemType { INGREDIENT, FOOD, DISH }
-
 public enum VFXType { SMOKE, BUBBLE, SPARKLE, STINKY }
 
 public class SpawnManager : Singleton<SpawnManager>
@@ -24,7 +21,7 @@ public class SpawnManager : Singleton<SpawnManager>
     [SerializeField] GameObject[] _vfxPrefabs; 
     [SerializeField] GameObject _customerPrefab, _platePrefab;
     
-    [Header("Areas"), Tooltip("0 = ingredients, 1 = foods, 2 = dishes")]
+    [Header("Instantiated Areas"), Tooltip("0 = ingredients, 1 = foods, 2 = dishes")]
     [SerializeField] Transform[] _areas; // avoids clutters in the hierarchy  
 
 #endregion
@@ -63,6 +60,14 @@ public class SpawnManager : Singleton<SpawnManager>
             SpawnVFX((VFXType)UnityEngine.Random.Range(0, _vfxPrefabs.Length),
                       transform.position,
                       transform.rotation);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            SpawnFoodItem(_platePrefab,
+                          FoodItemType.INGREDIENT,
+                          transform.position,
+                          transform.rotation);
         }
     }
 }
