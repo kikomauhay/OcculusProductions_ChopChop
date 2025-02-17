@@ -30,7 +30,6 @@ public class SpawnManager : Singleton<SpawnManager>
 #endregion
 
     protected override void Awake() => base.Awake();
-    
     protected override void OnApplicationQuit()
     {
         base.OnApplicationQuit();

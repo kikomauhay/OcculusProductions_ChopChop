@@ -8,9 +8,9 @@ public class EnvironmentCleaning : MonoBehaviour
          
         if (other.gameObject.GetComponent<Sponge>().IsWet)
         {
-            SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.BUBBLE,
-                                                     transform.position,
-                                                     transform.rotation);
+            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE,
+                                           transform.position,
+                                           transform.rotation);
 
             CleaningManager.Instance.OnCleanedArea?.Invoke();
         }
