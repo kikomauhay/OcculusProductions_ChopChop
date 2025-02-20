@@ -38,5 +38,5 @@ public abstract class Food : MonoBehaviour
         Destroy(other.gameObject);
     }
 
-    protected abstract void CreateDish(Vector3 pos, Quaternion rot);
+    public abstract void CreateDish(Vector3 pos, Quaternion rot);
 }
