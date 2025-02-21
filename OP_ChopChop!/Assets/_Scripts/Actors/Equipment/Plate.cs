@@ -1,4 +1,6 @@
- using UnityEngine;
+using System.Collections;
+using UnityEngine;
+using System;
 
 public class Plate : Equipment
 {
@@ -6,7 +8,7 @@ public class Plate : Equipment
     
     [SerializeField] Material _dirtyPlateMat, _cleanPlateMat;
     [SerializeField] Collider _cleanTrigger;
-    [SerializeField] bool _isDirty;
+    [SerializeField] bool _isDirty,_isPlated;
 
     protected override void Start()
     {
@@ -28,20 +30,45 @@ public class Plate : Equipment
 
         DishWash();
     }
+    #region OnTriggerSht
+    private void OnTriggerEnter(Collider other)
+    {
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
+        if(other.GetComponent<Food>() != null && !_isPlated)
+        {
+            Destroy(this.gameObject);
+            Destroy(other.gameObject);
+            TogglePlated();
+            other.GetComponent<Food>().CreateDish(this.transform.position, this.transform.rotation);
+        }
+        if (sponge.IsWet)
+            Debug.Log("Cleaning Plate");
+            SetCleaned();
+    }
 
     private void OnTriggerStay(Collider other)
     {
         Sponge sponge = other.GetComponent<Sponge>();
         Rigidbody _spongeRb = sponge.GetComponent<Rigidbody>();
-        //Create a formula that tracks the change in velocity and compares it to a certain value
-        //If velocity is greater than assigned value, start coroutine for cleaning
-        //suggestion ko lang coroutine but if there's a more efficient way in cleaning the plate please don't hesitate to try it out
-        //If you do go the coroutine route, I think you'd need to put the checker to avoid having the coroutine run again and again.       
+        Vector3 _lastVelocity = _spongeRb.velocity;
+        float dif = Mathf.Abs((_spongeRb.velocity - _lastVelocity).magnitude / Time.fixedDeltaTime);
+
+        if (sponge == null) return;
+
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.GetComponent<Sponge>() != null)
+        {
+            StopAllCoroutines();
+        }
+    }
+    #endregion
 
     private void DishWash()
     {
-        if(_isDirty)
+        if(_isDirty || !_isPlated)
             _cleanTrigger.enabled = true;
 
         else _cleanTrigger.enabled = false;
@@ -56,6 +83,10 @@ public class Plate : Equipment
         
         else SetCleaned();
     }
+    public void TogglePlated()
+    {
+        _isPlated = !_isPlated;
+    }
     public void SetContaminated()
     {
         _isDirty = true;
@@ -67,4 +98,10 @@ public class Plate : Equipment
         GetComponent<MeshRenderer>().material = _cleanPlateMat;
     }
     #endregion
+
+    IEnumerator CleaningPlate()
+    {
+        SetCleaned();
+        yield return new WaitForSeconds(2f);
+    }
 }
