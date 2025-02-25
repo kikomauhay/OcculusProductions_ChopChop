@@ -8,9 +8,6 @@ using System;
 ///
 /// </summary>
 
-public enum FoodItemType { INGREDIENT, FOOD, DISH }
-public enum VFXType { SMOKE, BUBBLE, SPARKLE, STINKY }
-
 public class SpawnManager : Singleton<SpawnManager>
 {
 #region Members

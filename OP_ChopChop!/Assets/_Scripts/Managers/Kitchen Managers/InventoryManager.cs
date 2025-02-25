@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
-public enum StorageType { CHILLER, FREEZER } 
-
 public class InventoryManager : Singleton<InventoryManager>
 {
     List<GameObject> _fridge = new List<GameObject>();

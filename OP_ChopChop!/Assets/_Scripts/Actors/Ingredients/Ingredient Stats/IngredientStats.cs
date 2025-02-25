@@ -1,8 +1,6 @@
 using UnityEngine;
 using System;
 
-public enum FreshnessRating { FRESH, LESS_FRESH, EXPIRED }
-
 [CreateAssetMenu(menuName = "Ingredient")]
 public class IngredientStats : ScriptableObject
 {   
