@@ -35,6 +35,6 @@ public class IngredientManager : Singleton<IngredientManager>
  
     public void TrashIngredient(GameObject food) {
         _trashCan.Add(food);
-        food.GetComponent<Ingredient>().ThrowInTrash();
+        food.GetComponent<Ingredient>().TrashIngredient();
     }
 }

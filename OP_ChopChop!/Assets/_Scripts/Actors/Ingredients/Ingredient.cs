@@ -8,9 +8,6 @@ using UnityEngine;
 /// 
 /// </summary>
 
-public enum IngredientType { RICE, TUNA, SALMON, SEAWEED } // will expand later
-public enum IngredientState { DEFAULT, EXPIRED, CONTAMINATED, TRASHED, STORED }
-
 public abstract class Ingredient : MonoBehaviour
 {
 #region Members
@@ -44,7 +41,7 @@ public abstract class Ingredient : MonoBehaviour
         StartCoroutine(DecayIngredient());
     }
     
-    public void ThrowInTrash() // idk if we need this
+    public void TrashIngredient() // idk if we need this
     {
         // removes the food from the game entirely
         // could add more punishment later on 
@@ -54,6 +51,19 @@ public abstract class Ingredient : MonoBehaviour
         SoundManager.Instance.PlaySound("dispose food");
         CheckRate();
     }
+
+    public void RotIngredient()
+    {
+        IngredientState = IngredientState.ROTTEN;
+        CheckRate();
+    } 
+    public void MoldifyIngredient()
+    {
+        Debug.LogWarning($"{name} has been contaminated!");
+        IngredientState = IngredientState.MOLDY;
+    }
+
+
     protected void CheckRate() 
     {
         // material of the ingredient changes based on the freshness rate
@@ -81,17 +91,13 @@ public abstract class Ingredient : MonoBehaviour
             GetComponent<MeshRenderer>().material = m;
     }
 
-    public void ContaminateFood()
-    {
-        Debug.LogWarning($"{name} has been contaminated!");
-        IngredientState = IngredientState.CONTAMINATED;
-    }
+    
 
 #endregion
 
     protected IEnumerator DecayIngredient() 
     {        
-        while (IngredientState != IngredientState.EXPIRED)
+        while (IngredientState != IngredientState.ROTTEN)
         {
             // rate & speed will change depending on the IngredientState
             int rate = 0, speed = 0; 
@@ -99,7 +105,7 @@ public abstract class Ingredient : MonoBehaviour
             // added "this" to prevent mistakes form the variable name from the enum datatype
             switch (this.IngredientState) 
             {
-                case IngredientState.CONTAMINATED:
+                case IngredientState.MOLDY:
                     rate = _ingredientStats.Contaminated.Rate;
                     speed = _ingredientStats.Contaminated.Speed;
                     break;
@@ -114,7 +120,7 @@ public abstract class Ingredient : MonoBehaviour
                     speed = _ingredientStats.Decay.Speed;
                     break;
                 
-                case IngredientState.EXPIRED: break;
+                case IngredientState.ROTTEN: break;
                 default:                      break;
             }
             
@@ -127,7 +133,7 @@ public abstract class Ingredient : MonoBehaviour
             if (FreshnessRate < 1f) 
             {
                 FreshnessRate = 0f;
-                IngredientState = IngredientState.EXPIRED;
+                IngredientState = IngredientState.ROTTEN;
             }
             CheckRate();
         }
