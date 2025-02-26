@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CustomerColliderCheck : MonoBehaviour
+public class ColliderCheck : MonoBehaviour
 {
     public CustomerOrder CustomerOrder { get; set; }
 

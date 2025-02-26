@@ -36,10 +36,10 @@ public class Plate : Equipment
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
         if(other.GetComponent<Food>() != null && !_isPlated)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             Destroy(other.gameObject);
             TogglePlated();
-            other.GetComponent<Food>().CreateDish(this.transform.position, this.transform.rotation);
+            other.GetComponent<Food>().CreateDish(transform);
         }
         if (sponge.IsWet)
             Debug.Log("Cleaning Plate");

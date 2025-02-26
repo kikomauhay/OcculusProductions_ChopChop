@@ -18,7 +18,7 @@ public class SpawnManager : Singleton<SpawnManager>
     [SerializeField] GameObject[] _vfxPrefabs; 
     [SerializeField] GameObject _customerPrefab, _platePrefab;
     
-    [Header("Instantiated Areas"), Tooltip("0 = ingredients, 1 = foods, 2 = dishes")]
+    [Header("Instantiated Areas"), Tooltip("0 = ingredients, 1 = foods, 2 = dishes, 3 = customers, 4 = VFXs")]
     [SerializeField] Transform[] _areas; // avoids clutters in the hierarchy  
 
 #endregion
@@ -34,17 +34,26 @@ public class SpawnManager : Singleton<SpawnManager>
 
 #region Spawn_Methods
 
-    public void SpawnVFX(VFXType type, Vector3 pos, Quaternion rot)
+    public void SpawnVFX(VFXType type, Transform t)
     {
-        GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type], pos, rot);
+        GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type], t.position, t.rotation);
+        vfxInstance.transform.SetParent(_areas[4]);
+
         Destroy(vfxInstance, 2f); // destory time could also be variable
     }
-    public void SpawnFoodItem(GameObject obj, FoodItemType type, Vector3 pos, Quaternion rot) 
+    public void SpawnFoodItem(GameObject obj, FoodItemType type, Transform t) 
     {
-        obj = Instantiate(obj, pos, rot); // will need to test this on H if this really works or not
-
-        // adds the GameObj in another GameObj to avoid cluttering the inspector when testing
+        obj = Instantiate(obj, t.position, t.rotation); // will need to test this on H if this really works 
         obj.transform.SetParent(_areas[(int)type]);
+    }
+    public GameObject SpawnCustomer(GameObject obj, Transform t)
+    {
+        obj = Instantiate(obj, t.position, t.rotation);
+        obj.transform.SetParent(_areas[3]);
+
+        Debug.Log("Spawned the customer");
+
+        return obj;
     }
     
 
@@ -55,16 +64,14 @@ public class SpawnManager : Singleton<SpawnManager>
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SpawnVFX((VFXType)UnityEngine.Random.Range(0, _vfxPrefabs.Length),
-                      transform.position,
-                      transform.rotation);
+                      transform);
         }
 
         if (Input.GetKeyDown(KeyCode.Delete))
         {
             SpawnFoodItem(_platePrefab,
                           FoodItemType.INGREDIENT,
-                          transform.position,
-                          transform.rotation);
+                          transform);
         }
     }
 }

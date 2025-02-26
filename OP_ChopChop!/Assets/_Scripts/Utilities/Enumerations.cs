@@ -4,7 +4,7 @@ public class Enumerations : MonoBehaviour {}
 
 #region Spawning
 
-public enum FoodItemType { INGREDIENT, FOOD, DISH }
+public enum FoodItemType { INGREDIENT, FOOD, DISH, CUSTOMER, VFX }
 public enum VFXType { SMOKE, BUBBLE, SPARKLE, STINKY }
 
 #endregion

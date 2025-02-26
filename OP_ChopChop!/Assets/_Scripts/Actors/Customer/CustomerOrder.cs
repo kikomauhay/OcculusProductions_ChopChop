@@ -50,7 +50,7 @@ public class CustomerOrder : MonoBehaviour
     void MakeSeatEmpty() // clears the seat of any customer references 
     {
         CustomerSpawningManager.Instance.RemoveCustomer(gameObject);
-        CustomerSpawningManager.Instance.GetComponent<SpawnLocationScript>().IsPrefabPresent = false;
+        CustomerSpawningManager.Instance.GetComponent<CustomerSeat>().HasCustomer = false;
         CustomerSpawningManager.Instance.StartCoroutine("SpawnNextCustomer");
 
         // adds the customer's score to the Scores list

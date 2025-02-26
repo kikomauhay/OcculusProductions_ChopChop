@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class NigiriFood : Food
 {
-    public override void CreateDish(Vector3 pos, Quaternion rot)
+    public override void CreateDish(Transform t)
     {
-        GameObject dishToSpawn = Instantiate(_dishPrefab, pos, rot);
+        GameObject dishToSpawn = Instantiate(_dishPrefab, t.position, t.rotation);
         Dish dish = dishToSpawn.GetComponent<Dish>();
 
         dish.DishScore = FoodScore;

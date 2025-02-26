@@ -2,27 +2,17 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
-// might make this a static instance and just get a reference fro SpawnMgr, so it does the actions, not this script specifically
-public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
+public class CustomerSpawningManager : StaticInstance<CustomerSpawningManager>
 {
 #region Methods
-
-    [Header("Arrays")]
-    [SerializeField] private GameObject[] customerSpawnPoints;          // petition to change it to _spawnPoints
-    [SerializeField] private GameObject[] customerCollisionPoints;      // petition to change it to _collisionBoxes
-    [SerializeField] private List<GameObject> listOfCustomersInWaiting; // petition to change it to _seatedCustomers
-   
-    [Header("CustomerVariable")] // This is the prefab for the Customer itself
-    [SerializeField] private GameObject[] customerModelPrefab; // petition to change to _customerPrefabs 
-
-    [Header("Variable Counts")]
-    [SerializeField] private int maxCustomerToSpawn;   // petition to change it to _maxCustomerCount
-    [SerializeField] private int currentCustomerCount; // petition to change it to _currentCustomerCount
-
-    [Header("Timer")] // just add an underscore before the text it should be good
-    [SerializeField] private float minCustomerTimer;
-    [SerializeField] private float maxCustomerTimer;
-    private float nextCustomerTimer;
+  
+    [SerializeField] List<GameObject> _seatedCustomers;
+    [SerializeField] GameObject[] _customerSeats, _collisionBoxes;             
+    [SerializeField] GameObject _customerPrefab;
+     
+    const int MAX_CUSTOMER_COUNT = 4;
+    int _currentCustomerCount; 
+    float _minWaitingTime, _maxWaitingTime, _customerWaitTimer;
 
 #endregion
 
@@ -31,100 +21,84 @@ public class CustomerSpawningManager : Singleton<CustomerSpawningManager>
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
 
-
     void Start()
     {
-        StartCoroutine(SpawnNextCustomer()); // pls put this under a condition once testing is done
-    }
+        _minWaitingTime = 4f;
+        _maxWaitingTime = 7f;
+        _customerWaitTimer = 3f;
 
-    void Update()
-    {   
-        /*
-        if (currentCustomerCount < customerSpawnPoints.Length)
-        {
-            StopCoroutine(ITimerForNextCustomerSpawn());
-        }
-        */
+        Debug.Log("Starting to spawn a customer");
+        StartCoroutine(SpawnNextCustomer()); // pls put this under a condition once testing is done
     }
 
 #endregion
 
 #region Spawn_Methods
 
-    private void DoSpawnCustomer()
+    void DoSpawnCustomer()
     {
-        // int ranNum = Random.Range(0, 1); //for spawning customer variant
+        if (_currentCustomerCount > MAX_CUSTOMER_COUNT)
+        {
+            Debug.LogError("Too many customers at the moment!");
+            return;
+        }
 
-        if (currentCustomerCount >= customerSpawnPoints.Length) 
+        if (_currentCustomerCount > _customerSeats.Length) 
         { 
             StopCoroutine(SpawnNextCustomer());
             return;
         }
 
-        for (int i = 0; i < customerSpawnPoints.Length; i++)
+        for (int i = 0; i < _customerSeats.Length; i++)
         {
-            if (currentCustomerCount <= maxCustomerToSpawn)
+            if (!_customerSeats[i].GetComponent<CustomerSeat>().HasCustomer)
             {
-                // the current box colllider is empty
-                if (!customerSpawnPoints[i].GetComponent<SpawnLocationScript>().IsPrefabPresent)
-                {
-                    GameObject createdCustomer = Instantiate(customerModelPrefab[0],
-                                                             customerSpawnPoints[i].transform.position,
-                                                             customerSpawnPoints[i].transform.rotation);
+                GameObject customer = SpawnManager.Instance.SpawnCustomer(_customerPrefab,
+                                                                          _customerSeats[i].transform);
 
-                    // assigns a box collider to the customer
-                    customerCollisionPoints[i].GetComponent<CustomerColliderCheck>().CustomerOrder = 
-                        createdCustomer?.GetComponent<CustomerOrder>();
+                Debug.Log("Spanwed a customer");
 
-                    // Debug.LogWarning("Connected CustomerOrder to CollisionCheck");
+                // links a box collider to the customer
+                _collisionBoxes[i].GetComponent<ColliderCheck>().CustomerOrder = customer.GetComponent<CustomerOrder>();
+                _currentCustomerCount++;
+                _seatedCustomers.Add(customer);
 
-                    currentCustomerCount++;
-                    listOfCustomersInWaiting.Add(createdCustomer);
+                Debug.Log("Linked the customer to a collider");
 
-                    // prevents multiple links to one box collider
-                    customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().
-                        IsPrefabPresent = true;
-                    
-                    break;
-                }
-            } 
+                // prevents multiple links
+                _customerSeats[i].gameObject.GetComponent<CustomerSeat>().HasCustomer = true;
+
+                break;
+            }
         }
         StartCoroutine(SpawnNextCustomer());
     }
-    
-    public bool IsEmptySpawnLocation() // petition to change to HasAnEmptySeat()
-    {
-        // Debug.Log("isEmptyPlaying");
-        for (int i = 0; i < customerSpawnPoints.Length; i++)
-        {
 
-            // what the fuck am I looking at
-            if (customerSpawnPoints[i].gameObject.GetComponent<SpawnLocationScript>().
-                IsPrefabPresent == false)
+    public bool HasAnEmptySeat()
+    {
+        for (int i = 0; i < _customerSeats.Length; i++)
+        {
+            if (!_customerSeats[i].gameObject.GetComponent<CustomerSeat>().HasCustomer)
             {
-                // Debug.Log("IsEmpty True");
+                Debug.LogWarning("There is an empty seat");
                 return true;
             }            
-
-
         }
 
-        Debug.Log("IsEmpty False");
+        Debug.LogWarning("There are no empty seats");
         return false;
     }
-    public void RemoveCustomer(GameObject customer) => listOfCustomersInWaiting.Remove(customer);
+    public void RemoveCustomer(GameObject customer) => _seatedCustomers.Remove(customer);
     
 #endregion
 
     IEnumerator SpawnNextCustomer()
     {
-        // waits a random amt of seconds before spanwing a new customer
-        nextCustomerTimer = Random.Range(minCustomerTimer, maxCustomerTimer);
-        //Debug.Log("Enum CUSTOMER TIMER: " + nextCustomerTimer);
+        _customerWaitTimer = Random.Range(_minWaitingTime, _maxWaitingTime);
 
-        yield return new WaitForSeconds(nextCustomerTimer);
+        yield return new WaitForSeconds(_customerWaitTimer);
 
-        if (IsEmptySpawnLocation())
+        if (HasAnEmptySeat())
             DoSpawnCustomer();
     }
 }
