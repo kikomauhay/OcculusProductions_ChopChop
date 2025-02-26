@@ -39,8 +39,7 @@ public class Sliceable : MonoBehaviour
             _chopCounter++;
 
             SpawnManager.Instance.SpawnVFX(VFXType.SPARKLE,
-                                           transform.position,
-                                           transform.rotation);
+                                           transform);
 
             SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                             "fish slice 01" :
@@ -57,14 +56,11 @@ public class Sliceable : MonoBehaviour
         {
             Destroy(_currentPrefab);
             
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, 
-                                           transform.position,
-                                           transform.rotation);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
 
             SpawnManager.Instance.SpawnFoodItem(_nextPrefab, 
                                                 FoodItemType.INGREDIENT,
-                                                transform.position,
-                                                transform.rotation);
+                                                transform);
             
             SoundManager.Instance.PlaySound("knife chop");
             Debug.Log("SLICED!");

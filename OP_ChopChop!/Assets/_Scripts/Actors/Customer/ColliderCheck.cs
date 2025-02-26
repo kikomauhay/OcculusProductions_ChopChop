@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class CustomerColliderCheck : MonoBehaviour
+public class ColliderCheck : MonoBehaviour
 {
     public CustomerOrder CustomerOrder { get; set; }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        if (CustomerOrder.GetComponent<CustomerOrder>() == null) return;
+        if (CustomerOrder == null) return;
 
         Dish collidedDish = other.gameObject.GetComponent<Dish>();
         Plate plate = collidedDish.gameObject.GetComponentInParent<Plate>();

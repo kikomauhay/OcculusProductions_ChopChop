@@ -41,7 +41,7 @@ public class OrderManager : Singleton<OrderManager>
         for (int i = 0; i < _prefabSpawnLocations.Length; i++)
         {
             // there is an empty slot 
-            if (!_prefabSpawnLocations[i].GetComponent<SpawnLocationScript>().IsPrefabPresent) 
+            if (!_prefabSpawnLocations[i].GetComponent<CustomerSeat>().IsEmpty) 
             {
                 GameObject spawnOrder = Instantiate(
                     _dishPrefabs[0],
@@ -53,7 +53,7 @@ public class OrderManager : Singleton<OrderManager>
                 spawnOrder.GetComponent<SushiDishUI>()._OrderLocation = _prefabSpawnLocations[i].gameObject;
 
                 // fills a slot so this doens't take any other orders
-                _prefabSpawnLocations[i].gameObject.GetComponent<SpawnLocationScript>().IsPrefabPresent = true;
+                _prefabSpawnLocations[i].gameObject.GetComponent<CustomerSeat>().IsEmpty = true;
 
                 // sets customer timer before they leave
                 spawnOrder.GetComponent<SushiDishUI>().maxTime = _timeToMakeOrder; 
@@ -68,7 +68,7 @@ public class OrderManager : Singleton<OrderManager>
         Debug.Log("isEmptyPlaying");
         for (int i = 0; i < _prefabSpawnLocations.Length; i++)
         {
-            if (_prefabSpawnLocations[i].gameObject.GetComponent<SpawnLocationScript>().IsPrefabPresent == false)
+            if (_prefabSpawnLocations[i].gameObject.GetComponent<CustomerSeat>().IsEmpty == false)
             {
                 Debug.Log("IsEmpty True");
                 return true;

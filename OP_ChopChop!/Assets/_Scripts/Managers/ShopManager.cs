@@ -65,8 +65,7 @@ public class ShopManager : Singleton<ShopManager>
             {
                 SpawnManager.Instance.SpawnFoodItem(_salmonPrefab, 
                                                     FoodItemType.FOOD,
-                                                    _orderSpawnPoint.position, 
-                                                    _orderSpawnPoint.rotation);
+                                                    _orderSpawnPoint);
             }
         }
         if (_tunaOrderCount > 0)
@@ -75,8 +74,7 @@ public class ShopManager : Singleton<ShopManager>
             {
                 SpawnManager.Instance.SpawnFoodItem(_tunaPrefab, 
                                                     FoodItemType.FOOD,
-                                                    _orderSpawnPoint.position, 
-                                                    _orderSpawnPoint.rotation);
+                                                    _orderSpawnPoint);
             }
         }
 
