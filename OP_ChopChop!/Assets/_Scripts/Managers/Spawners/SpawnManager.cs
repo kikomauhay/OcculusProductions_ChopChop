@@ -46,9 +46,9 @@ public class SpawnManager : Singleton<SpawnManager>
         obj = Instantiate(obj, t.position, t.rotation); // will need to test this on H if this really works 
         obj.transform.SetParent(_areas[(int)type]);
     }
-    public GameObject SpawnCustomer(GameObject obj, Transform t)
+    public GameObject SpawnCustomer(Transform t)
     {
-        obj = Instantiate(obj, t.position, t.rotation);
+        GameObject obj = Instantiate(_customerPrefab, t.position, t.rotation);
         obj.transform.SetParent(_areas[3]);
 
         Debug.Log("Spawned the customer");

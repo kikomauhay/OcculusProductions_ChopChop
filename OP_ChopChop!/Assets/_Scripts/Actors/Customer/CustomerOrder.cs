@@ -33,7 +33,7 @@ public class CustomerOrder : MonoBehaviour
         _patienceRate = 1.65f; 
         _customerDeleteTimer = 3f;
         
-        CreateCustomerUI();
+        // CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
 
         Debug.LogWarning($"{name}: {CustomerDishType}");
@@ -49,9 +49,9 @@ public class CustomerOrder : MonoBehaviour
     // will refine with AJ's help     
     void MakeSeatEmpty() // clears the seat of any customer references 
     {
-        CustomerSpawningManager.Instance.RemoveCustomer(gameObject);
-        CustomerSpawningManager.Instance.GetComponent<CustomerSeat>().HasCustomer = false;
-        CustomerSpawningManager.Instance.StartCoroutine("SpawnNextCustomer");
+        CustomerHandler.Instance.RemoveCustomer(gameObject);
+        CustomerHandler.Instance.GetComponent<CustomerSeat>().IsEmpty = false;
+        CustomerHandler.Instance.StartCoroutine("SpawnNextCustomer");
 
         // adds the customer's score to the Scores list
         GameManager.Instance.OnCustomerServed?.Invoke(CustomerSR);

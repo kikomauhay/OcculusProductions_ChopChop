@@ -1,18 +1,25 @@
+using System.Collections;
 using UnityEngine;
-
-/// <summary>
-/// 
-/// Anything that needs to move about the customer goes here
-/// 
-/// </summary>
 
 public class CustomerActions : MonoBehaviour
 {
-    [SerializeField] private float _customerSpeed;
-    [SerializeField] private Transform[] _targetLocations;
+    public Vector3 TargetSeat { get; set; }
+    public int SeatIndex { get; set; } 
 
-    void Start() => _customerSpeed *= Time.deltaTime;
+    float _customerSpeed = 2f;
+
+    void Start() => StartCoroutine(DeleteCustomer());
+
     void LateUpdate() => transform.position = Vector3.MoveTowards(transform.position, 
-                                                                  _targetLocations[0].position, 
-                                                                  _customerSpeed);
+                                                                  TargetSeat, 
+                                                                  _customerSpeed * Time.deltaTime);
+
+
+    IEnumerator DeleteCustomer()
+    {
+        yield return new WaitForSeconds(5f);
+
+        CustomerHandler.Instance.RemoveCustomer(gameObject);
+        Destroy(gameObject);
+    }
 }
