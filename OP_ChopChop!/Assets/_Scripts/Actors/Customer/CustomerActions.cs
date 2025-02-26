@@ -19,7 +19,7 @@ public class CustomerActions : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
 
-        CustomerHandler.Instance.RemoveCustomer(gameObject);
+        SpawnManager.Instance.RemoveCustomer(gameObject);
         Destroy(gameObject);
     }
 }
