@@ -33,7 +33,6 @@ public class CleanManager : Singleton<CleanManager>
 
         OnCleanedArea += IncreaseCleanRate;
 
-        ToggleAllColliders();
         StartCoroutine(DecayKitchen());
     }
     void Update() => test();
@@ -60,71 +59,22 @@ public class CleanManager : Singleton<CleanManager>
 
 
 #region Private_Functions
-
-    void ToggleAllColliders()
-    {
-        ToggleKitchenColliders();
-        ToggleHandWashColliders();
-    }
     void ToggleKitchenColliders()
     {
         foreach (Collider col in _kitchenWashColliders)
             col.enabled = !col.enabled;
+        //Add vfx that spawns on trigger area
     }
-    void ToggleHandWashColliders()
-    {
-        foreach (Collider col in _handWashColliders)
-            col.enabled = !col.enabled;
-    }
-
-    private void ActivateKitchenWashColliders()
-    {
-        if (_kitchenWashColliders == null) return;  
-
-        for (int i =0;i < _kitchenWashColliders.Length;i++)
-        {
-            if (_kitchenWashColliders[i])
-                 _kitchenWashColliders[i].enabled = true;
-        }
-        // update texture of kitchen, if di kaya spark na lng siya
-        // make sure smelly vfx comes out of the colliders to signify the player that their kitchen needs cleaning
-    }
-    private void DeactivateKitchenWashColliders()
-    {
-        if (_kitchenWashColliders == null) return;
-        for(int i = 0; i<_kitchenWashColliders.Length;i++)
-        {
-            if (_kitchenWashColliders[i])
-                _kitchenWashColliders[i].enabled = false;
-        }
-    }
-
 #endregion
 
 #region Public_Functions
 
-    public void ActivateHandWashColliders()
+    public void ToggleHandWashColliders()
     {
-        if (_handWashColliders == null) return;
-        for (int i = 0; i < _handWashColliders.Length; i++)
-        {
-            if(_handWashColliders[i])
-                _handWashColliders[i].enabled = true;
-        }
+        foreach (Collider col in _handWashColliders)
+            col.enabled = !col.enabled;
     }
-    public void DeactivateHandWashColliders()
-    {
-        if (_handWashColliders == null) return;
-        for (int i = 0; i <= _handWashColliders.Length; i++)
-        {
-            if( _handWashColliders[i])
-                _handWashColliders[i].enabled = false;
-        }
-    }
-
-#endregion
-
-    void IncreaseCleanRate() 
+    public void IncreaseCleanRate() 
     {
         if (!_canClean) // no need to focus too much on cleaning
         {
@@ -142,6 +92,9 @@ public class CleanManager : Singleton<CleanManager>
             KitchenScore = 100;
     }
 
+#endregion
+
+
     IEnumerator DecayKitchen()
     {
         yield return new WaitForSeconds(3f);
@@ -157,14 +110,14 @@ public class CleanManager : Singleton<CleanManager>
             if (KitchenScore < _cleanlinessThreshold && !_canClean)
             {
                 _canClean = true;
-                ToggleAllColliders();
-                Debug.Log("All colliders should be disabled");
+                ToggleKitchenColliders();
+                Debug.Log("All colliders should be enabled");
             }
             else if (KitchenScore > _cleanlinessThreshold) 
             {
                 _canClean = false;
-                ToggleAllColliders();
-                Debug.Log("All colliders should be enabled");
+                ToggleKitchenColliders();
+                Debug.Log("All colliders should be disabled");
             }
 
             Debug.LogWarning($"Can clean is {_canClean}");

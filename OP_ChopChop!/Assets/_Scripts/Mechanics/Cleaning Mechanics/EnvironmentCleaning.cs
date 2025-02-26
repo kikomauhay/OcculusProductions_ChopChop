@@ -5,16 +5,22 @@ using UnityEngine;
 public class EnvironmentCleaning : MonoBehaviour
 {
     [SerializeField] GameObject _bubblesVfx;
+    [SerializeField] CleanManager _cleanManager;
+    [SerializeField] float _maxChange;
     private void OnTriggerEnter(Collider other)
     {
+        Rigidbody _rb = other.GetComponent<Rigidbody>();
+        Vector3 _lastVelocity = _rb.velocity;
+        float dif = Mathf.Abs((_rb.velocity - _lastVelocity).magnitude/Time.fixedDeltaTime);
 
-        if(other.gameObject.GetComponent<Sponge>() != null &&
-            other.gameObject.GetComponent<Sponge>().IsWet == true)
+        if (other.gameObject.GetComponent<Sponge>() == null) return;
+
+        if(other.gameObject.GetComponent<Sponge>().IsWet)
         {
-            Vector3 _currentPosition = this.transform.position;
-            Quaternion _currentRotation = this.transform.rotation;
+            Vector3 _currentPosition = other.transform.position;
+            Quaternion _currentRotation = other.transform.rotation;
             SpawnVFX(_bubblesVfx, _currentPosition, _currentRotation);
-            //Reduce Dirty meter
+            _cleanManager.IncreaseCleanRate();
         }
     }
 

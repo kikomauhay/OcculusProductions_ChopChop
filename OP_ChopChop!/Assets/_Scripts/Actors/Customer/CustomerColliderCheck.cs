@@ -22,7 +22,8 @@ public class CustomerColliderCheck : MonoBehaviour
             // customer "eats" the food
             Destroy(other.gameObject);
 
-            plate.SetContaminated();            
+            plate.SetContaminated();      
+            plate.TogglePlated();
             return;
         }
 

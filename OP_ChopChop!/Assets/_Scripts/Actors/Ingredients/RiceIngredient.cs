@@ -33,13 +33,16 @@ public class RiceIngredient : Ingredient
         if (_moldType != MoldType.PERFECT) return;
 
         Ingredient ing = other.GetComponent<Ingredient>();
-        Vector3 pos = transform.position;
-        Quaternion rot = transform.rotation;
+        Vector3 pos = this.transform.position;
+        Quaternion rot = this.transform.rotation;
 
-        // gets the freshness rates of both ingredients before deleting them
-        Destroy(gameObject);
-        Destroy(other.gameObject);
-        SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.SMOKE, pos, rot);
+        if(ing != null)
+        {
+         // gets the freshness rates of both ingredients before deleting them
+            Destroy(gameObject);
+            Destroy(other.gameObject);
+            SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.SMOKE, pos, rot);
+        }
         
         // only nigiris for now (makis will be added after midterms)
         if (ing.GetComponent<FishIngredient>().SliceType == SliceType.THIN)
