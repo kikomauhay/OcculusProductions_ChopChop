@@ -37,10 +37,14 @@ public abstract class Ingredient : MonoBehaviour
         
         FreshnessRate = 100; // the higher the score, the better
 
+        // ingredients will only decay once the shift has started  
+        GameManager.Instance.OnStartGame += StartDecaying;
+
         CheckRate();
-        StartCoroutine(DecayIngredient());
     }
-    
+
+    protected void Reset() => GameManager.Instance.OnStartGame += StartDecaying;
+
     public void TrashIngredient() // idk if we need this
     {
         // removes the food from the game entirely
@@ -91,6 +95,8 @@ public abstract class Ingredient : MonoBehaviour
             GetComponent<MeshRenderer>().material = m;
     }
 
+
+    void StartDecaying() => StartCoroutine(DecayIngredient());
     
 
 #endregion

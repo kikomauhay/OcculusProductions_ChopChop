@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 58728f38c8bb11f43a87e9f8c5340ab5
+guid: b78b52eedb2979e488b2e4559a584fab
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 240
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -70,7 +70,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -105,7 +105,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: customer_neutral1
+      name: face_neutral_1
       rect:
         serializedVersion: 2
         x: 0
@@ -119,14 +119,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1c25dbf6fe6148546a7401ed071c449f
-      internalID: 1635324828
+      spriteID: e6400d0cc3c667e40a5df6e11179dc8e
+      internalID: -11771893
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_chewing1
+      name: face_eat_1
       rect:
         serializedVersion: 2
         x: 256
@@ -140,14 +140,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8444a119395bab847b9bb9b949508a78
-      internalID: -2082589764
+      spriteID: 4d880cc8a12b4464c892e43fa5d3e5c0
+      internalID: 470213912
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_mad1
+      name: face_mad_1
       rect:
         serializedVersion: 2
         x: 512
@@ -161,14 +161,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5ba81fc1f821a0f45abdefb89bfa981f
-      internalID: -292295266
+      spriteID: 50b6f4677a56aa747928ef16a1dddf61
+      internalID: -1252453121
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: d_blank1
+      name: z_extra_1
       rect:
         serializedVersion: 2
         x: 768
@@ -182,14 +182,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 385dd914ecb947b4b8c199b6f79d61e2
-      internalID: -2005300935
+      spriteID: c02c0005ca6fe3f4e9f9e4dae68f0894
+      internalID: 1479729272
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_neutral2
+      name: face_neutral_2
       rect:
         serializedVersion: 2
         x: 0
@@ -203,14 +203,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c66438c9b4a8c2045b577f0f3a193dbf
-      internalID: -993561787
+      spriteID: 1a4083849689bf24bb60c51c60e35248
+      internalID: 1355224709
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_chewing2
+      name: face_eat_2
       rect:
         serializedVersion: 2
         x: 256
@@ -224,14 +224,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cbc4dc777c0d4bf41bd8c9399eb14db2
-      internalID: 1710456847
+      spriteID: c37baa25866b5c849960f09a9c169b18
+      internalID: 448509024
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_mad2
+      name: face_mad_2
       rect:
         serializedVersion: 2
         x: 512
@@ -245,18 +245,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fe5c0a9f4807e7346bdfc65537ac66de
-      internalID: -1199339110
+      spriteID: fde0f6ed03bc6304c96eb90ea9f1e856
+      internalID: -1157831227
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: d_blank2
+      name: z_extra_2
       rect:
         serializedVersion: 2
         x: 768
-        y: 514
+        y: 512
         width: 256
         height: 256
       alignment: 0
@@ -266,17 +266,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 67b8d21e8fd5fc540bbc9134021e05d2
-      internalID: 1178692294
+      spriteID: 636091d9f745e28498aecb0b5c16200d
+      internalID: -219558863
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_neutral3
+      name: face_neutral_3
       rect:
         serializedVersion: 2
-        x: 9
+        x: 0
         y: 256
         width: 256
         height: 256
@@ -287,14 +287,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1464c752b8549de4fabad9d9343d4001
-      internalID: -1963799442
+      spriteID: c1aef67ca05390e42abec911f4615c66
+      internalID: -1735441325
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_sus1
+      name: face_sus_1
       rect:
         serializedVersion: 2
         x: 256
@@ -308,14 +308,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7cc7563dd1b17434f89d108ae5ee754d
-      internalID: -1084128877
+      spriteID: 1a7f855567b653f46bf923eb82edb4d5
+      internalID: 1643530941
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_mad3
+      name: face_mad_3
       rect:
         serializedVersion: 2
         x: 512
@@ -329,14 +329,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 838e77cdee2b3f04bb6600cd4853a63a
-      internalID: -1797527227
+      spriteID: a7c3e9c8767b21643be799bca3dbc010
+      internalID: -14450752
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: d_blank3
+      name: z_extra_3
       rect:
         serializedVersion: 2
         x: 768
@@ -350,17 +350,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 007cdf3f80c6e4149898b4b72bec0558
-      internalID: 225422431
+      spriteID: 84183131c8616a340b3980244b0aa3b8
+      internalID: 1523039648
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_neutral4
+      name: face_neutral_4
       rect:
         serializedVersion: 2
-        x: 4
+        x: 0
         y: 0
         width: 256
         height: 256
@@ -371,18 +371,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: afca9057d6e48384ca3c3afabc9cb344
-      internalID: 888757304
+      spriteID: 25d59df1149996f45b10cbb78ca7a8ff
+      internalID: -870008742
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_sus2
+      name: face_sus_2
       rect:
         serializedVersion: 2
         x: 256
-        y: 2
+        y: 0
         width: 256
         height: 256
       alignment: 0
@@ -392,14 +392,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aea4919610e9f9a4d8503d36a78af5b8
-      internalID: 1222857080
+      spriteID: a71bc8d15a2fee645b107665cb464c41
+      internalID: 1541474490
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: customer_sus3
+      name: face_sus_3
       rect:
         serializedVersion: 2
         x: 512
@@ -413,18 +413,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 82007bbdfa9c2b84fafc4a16d0b817e5
-      internalID: -1454647479
+      spriteID: 358284df6d2a43147b026473e450869b
+      internalID: 257822556
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: d_blank4
+      name: z_extra_4
       rect:
         serializedVersion: 2
         x: 768
-        y: 2
+        y: 5
         width: 256
         height: 256
       alignment: 0
@@ -434,8 +434,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1b731068dd4d3ce4598ededf9dd7a2fa
-      internalID: 1772954728
+      spriteID: 997ffd9719730a542bf4067649796484
+      internalID: -1136362134
       vertices: []
       indices: 
       edges: []
@@ -443,7 +443,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 2339d9580a89a6247a3bdd82cbaf3f50
+    spriteID: d943140a0dbc86045afcd2ea4a6241fe
     internalID: 0
     vertices: []
     indices: 
@@ -451,22 +451,22 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      customer_chewing1: -2082589764
-      customer_chewing2: 1710456847
-      customer_mad1: -292295266
-      customer_mad2: -1199339110
-      customer_mad3: -1797527227
-      customer_neutral1: 1635324828
-      customer_neutral2: -993561787
-      customer_neutral3: -1963799442
-      customer_neutral4: 888757304
-      customer_sus1: -1084128877
-      customer_sus2: 1222857080
-      customer_sus3: -1454647479
-      d_blank1: -2005300935
-      d_blank2: 1178692294
-      d_blank3: 225422431
-      d_blank4: 1772954728
+      face_eat_1: 470213912
+      face_eat_2: 448509024
+      face_mad_1: -1252453121
+      face_mad_2: -1157831227
+      face_mad_3: -14450752
+      face_neutral_1: -11771893
+      face_neutral_2: 1355224709
+      face_neutral_3: -1735441325
+      face_neutral_4: -870008742
+      face_sus_1: 1643530941
+      face_sus_2: 1541474490
+      face_sus_3: 257822556
+      z_extra_1: 1479729272
+      z_extra_2: -219558863
+      z_extra_3: 1523039648
+      z_extra_4: -1136362134
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
