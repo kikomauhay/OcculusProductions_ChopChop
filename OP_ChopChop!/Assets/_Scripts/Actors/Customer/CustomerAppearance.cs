@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(CustomerOrder), typeof(CustomerActions))]
 public class CustomerAppearance : MonoBehaviour 

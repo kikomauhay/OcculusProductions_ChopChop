@@ -132,7 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 903670385a651ec41a5d1158f8ad715a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dishOrdersUI: []
+  _dishOrdersUI:
+  - {fileID: 5310049217961757311, guid: df266eaa3df82b645bd33953b7f90413, type: 3}
   _orderUITransform: {fileID: 0}
 --- !u!114 &3137001617738611113
 MonoBehaviour:
