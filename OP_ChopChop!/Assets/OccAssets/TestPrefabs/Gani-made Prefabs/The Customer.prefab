@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3137001617505576220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.25, z: 0.291}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3137001617738611115}
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_Size: {x: 1.0666667, y: 1.0666667}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &3137001617738611114
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 3137001617738611113}
   - component: {fileID: 3137001617738611112}
   m_Layer: 0
-  m_Name: Customer
+  m_Name: The Customer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -146,8 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0fc3ab7847f24046b32e85f9847eeb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _customerSpeed: 0
-  _targetLocations: []
 --- !u!114 &3137001617738611112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,16 +209,24 @@ MonoBehaviour:
     - {fileID: 2100000, guid: c2e0291ef028fb444972d064b0f5e4f2, type: 2}
     - {fileID: 2100000, guid: 58abaeee0642f1548936ece683bd1201, type: 2}
   _faceVariant:
-    NeutralFace: {fileID: 1635324828, guid: 58728f38c8bb11f43a87e9f8c5340ab5, type: 3}
-    HappyFace: {fileID: -2082589764, guid: 58728f38c8bb11f43a87e9f8c5340ab5, type: 3}
-    MadFace: {fileID: -292295266, guid: 58728f38c8bb11f43a87e9f8c5340ab5, type: 3}
-    DisgustFace: {fileID: -1084128877, guid: 58728f38c8bb11f43a87e9f8c5340ab5, type: 3}
-    ChewingFace: {fileID: -2082589764, guid: 58728f38c8bb11f43a87e9f8c5340ab5, type: 3}
+    NeutralFace: {fileID: -11771893, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+    HappyFace: {fileID: 470213912, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+    MadFace: {fileID: -1252453121, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+    DisgustFace: {fileID: 1643530941, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+    ChewingFace: {fileID: -1252453121, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
   _faces:
-  - {fileID: -2082589764, guid: 58728f38c8bb11f43a87e9f8c5340ab5, type: 3}
-  - {fileID: -292295266, guid: 58728f38c8bb11f43a87e9f8c5340ab5, type: 3}
-  - {fileID: 1635324828, guid: 58728f38c8bb11f43a87e9f8c5340ab5, type: 3}
-  - {fileID: -1084128877, guid: 58728f38c8bb11f43a87e9f8c5340ab5, type: 3}
+  - {fileID: 470213912, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: 448509024, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: -1252453121, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: -1157831227, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: -14450752, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: -11771893, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: 1355224709, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: -1735441325, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: -870008742, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: 1643530941, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: 1541474490, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: 257822556, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
 --- !u!1 &4104175501500718738
 GameObject:
   m_ObjectHideFlags: 0

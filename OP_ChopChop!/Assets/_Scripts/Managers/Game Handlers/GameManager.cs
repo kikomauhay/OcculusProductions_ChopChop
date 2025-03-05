@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Unity.VisualScripting;
+using UnityEditor;
+using UnityEngine.UIElements;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -23,10 +24,12 @@ public class GameManager : Singleton<GameManager>
 {
 #region Members
 
-    public Action OnFoodDisposed, OnCustomerLeft;
+    public Action OnStartGame, OnCustomerLeft;
+    public Action OnPhaseChanged; 
     public Action<float> OnCustomerServed, OnMoneyChanged;
 
     public float AvailableMoney { get; private set; }
+    public GamePhase CurrentPhase { get; private set; }  
 
     // Scores to keep track of
     List<float> _foodScores, _customerSRScores;
@@ -45,13 +48,16 @@ public class GameManager : Singleton<GameManager>
         OnCustomerLeft += IncrementCustomersLeft;
         OnMoneyChanged += ChangeMoney;
     }
-    void Start()
+    void Start() 
     {
         _foodScores = new List<float>();
         _customerSRScores = new List<float>();
+        
+        _customersThatLeftCounter = 0;
         AvailableMoney = 0f;
+
+        ChangePhase(GamePhase.PRE_PRE_SERVICE);
     }
-    
     void Update() => test();
     
     void Reset()
@@ -64,9 +70,73 @@ public class GameManager : Singleton<GameManager>
     {
         base.OnApplicationQuit();
         Reset();
-    }    
+    }
+
+
+    public void ChangePhase(GamePhase phase)
+    {
+        if (phase == CurrentPhase) 
+        {
+            Debug.LogError("You can't go to the same phase again!");
+            return;
+        }
+
+        switch (phase)
+        {
+            case GamePhase.PRE_PRE_SERVICE:
+                DoPrePreService();
+                break;
+            
+            case GamePhase.PRE_SERVICE:
+                DoPreSerice();
+                break;
+
+            case GamePhase.SERVICE:
+                DoService();
+                break; 
+
+            case GamePhase.POST_SERVICE:
+                DoPostService();
+                break; 
+
+            default:
+                Debug.LogError("Invalid state chosen");
+                break;
+        }
+
+        CurrentPhase = phase;
+        OnPhaseChanged?.Invoke();
+    }
+
 
 #endregion
+
+#region Phase_Methods
+
+    void DoPrePreService()
+    {
+        // view the different equipment 
+    }
+    void DoPreSerice()
+    {
+        // buying of ingredients
+        // rice cooking preparation
+    }
+    void DoService()
+    {
+        OnStartGame?.Invoke();
+
+        // customers spawn in 
+        // cooking, serving, and serving
+    }
+    void DoPostService()
+    {
+        // shop closes and you get the rating for the day
+        // finish washing the dishes
+    }
+
+#endregion
+
 
     void test() {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -135,4 +205,5 @@ public class GameManager : Singleton<GameManager>
     }
 
 #endregion
+
 }

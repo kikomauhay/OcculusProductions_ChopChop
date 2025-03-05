@@ -64,7 +64,7 @@ public class ShopManager : Singleton<ShopManager>
             for (int i = 0; i < _salmonOrderCount; i++)
             {
                 SpawnManager.Instance.SpawnFoodItem(_salmonPrefab, 
-                                                    FoodItemType.FOOD,
+                                                    SpawnObjectType.FOOD,
                                                     _orderSpawnPoint);
             }
         }
@@ -73,7 +73,7 @@ public class ShopManager : Singleton<ShopManager>
             for (int i = 0; i < _tunaOrderCount; i++)
             {
                 SpawnManager.Instance.SpawnFoodItem(_tunaPrefab, 
-                                                    FoodItemType.FOOD,
+                                                    SpawnObjectType.FOOD,
                                                     _orderSpawnPoint);
             }
         }

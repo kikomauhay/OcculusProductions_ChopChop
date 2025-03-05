@@ -295,13 +295,14 @@ GameObject:
   - component: {fileID: 139234581}
   - component: {fileID: 139234580}
   - component: {fileID: 139234579}
+  - component: {fileID: 139234582}
   m_Layer: 0
-  m_Name: Fish Ingedient
+  m_Name: Salmon Ingedient
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &139234577
 Transform:
   m_ObjectHideFlags: 0
@@ -380,6 +381,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139234576}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &139234582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139234576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da93d8d7d8cacb841b99f6853e575221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ingredientType: 0
+  _stateMaterials:
+    _expiredMaterials:
+    - {fileID: 2100000, guid: e52df8bbd99503e4db36c316f28c1134, type: 2}
+    - {fileID: 2100000, guid: 6da453871b5fe984ca0991be0e1a0b87, type: 2}
+    - {fileID: 2100000, guid: 1a75f0e690193654cbde248509affaaa, type: 2}
+    _freshMaterials:
+    - {fileID: 2100000, guid: 03f2e0642f0031940af03fcb96fa9625, type: 2}
+    - {fileID: 2100000, guid: a0fe1c2644aef1f40b1112c7a9c70cc9, type: 2}
+    - {fileID: 2100000, guid: c1852a7f87ade4d4388dc7e6735a2761, type: 2}
+    _contaminatedMaterials:
+    - {fileID: 2100000, guid: d52bdd2be36eb4942b30af37876d34ab, type: 2}
+    - {fileID: 2100000, guid: c3dc2a6db70b7774ca55cb01f97ac5cc, type: 2}
+    - {fileID: 2100000, guid: 641df16b7135ee5439c5321fccae8aee, type: 2}
+  _ingredientStats: {fileID: 0}
+  _fishSlices: {fileID: 0}
+  _sliceType: 0
+  _fishType: 0
 --- !u!1 &215525674
 GameObject:
   m_ObjectHideFlags: 0
@@ -2216,7 +2247,7 @@ PrefabInstance:
     - target: {fileID: 7564253948250721293, guid: 6d8e178db82292546afbe87fe1212197,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.446
       objectReference: {fileID: 0}
     - target: {fileID: 7564253948250721293, guid: 6d8e178db82292546afbe87fe1212197,
         type: 3}

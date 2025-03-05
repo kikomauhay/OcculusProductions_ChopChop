@@ -50,7 +50,7 @@ public class SpawnManager : Singleton<SpawnManager>
 
         Destroy(vfxInstance, 2f); // destory time could also be variable
     }
-    public void SpawnFoodItem(GameObject obj, FoodItemType type, Transform t) 
+    public void SpawnFoodItem(GameObject obj, SpawnObjectType type, Transform t) 
     {
         obj = Instantiate(obj, t.position, t.rotation); // will need to test this on H if this really works 
         obj.transform.SetParent(_areas[(int)type]);
@@ -149,7 +149,7 @@ public class SpawnManager : Singleton<SpawnManager>
         if (Input.GetKeyDown(KeyCode.Delete))
         {
             SpawnFoodItem(_platePrefab,
-                          FoodItemType.INGREDIENT,
+                          SpawnObjectType.INGREDIENT,
                           transform);
         }
 

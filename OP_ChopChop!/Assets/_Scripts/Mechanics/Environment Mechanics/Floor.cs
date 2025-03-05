@@ -14,10 +14,10 @@ public class Floor : MonoBehaviour
         switch (other.gameObject.GetComponent<Trashable>()._trashTypes)
         {
             case TrashableType.INGREDIENT:
-                other.gameObject.GetComponent<Ingredient>().MoldifyIngredient();
+                other.gameObject.GetComponent<Ingredient>().ContaminateIngredient();
                 break;
             case TrashableType.FOOD:
-                other.gameObject.GetComponent<Ingredient>().MoldifyIngredient();
+                other.gameObject.GetComponent<Ingredient>().ContaminateIngredient();
                 break;
             case TrashableType.EQUIPMENT:
                 Debug.LogWarning("Reset Equipment");

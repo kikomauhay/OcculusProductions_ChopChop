@@ -17,7 +17,7 @@ public class CustomerActions : MonoBehaviour
 
     IEnumerator DeleteCustomer()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSecondsRealtime(5f);
 
         SpawnManager.Instance.RemoveCustomer(gameObject);
         Destroy(gameObject);
