@@ -45,20 +45,22 @@ public class SpawnManager : Singleton<SpawnManager>
 
     public void SpawnVFX(VFXType type, Transform t)
     {
-        GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type], t.position, t.rotation);
-        vfxInstance.transform.SetParent(_areas[4]);
-
+        GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type], 
+                                             t.position, t.rotation,
+                                             _areas[4]);
+        
         Destroy(vfxInstance, 2f); // destory time could also be variable
     }
     public void SpawnFoodItem(GameObject obj, SpawnObjectType type, Transform t) 
     {
-        obj = Instantiate(obj, t.position, t.rotation); // will need to test this on H if this really works 
-        obj.transform.SetParent(_areas[(int)type]);
+        obj = Instantiate(obj, t.position, t.rotation,
+                          _areas[(int)type]); // will need to test this on H if this really works 
     }
     public GameObject SpawnCustomer(Transform t)
     {
-        GameObject obj = Instantiate(_customerPrefab, t.position, t.rotation);
-        obj.transform.SetParent(_areas[3]);
+        GameObject obj = Instantiate(_customerPrefab, 
+                                     t.position, t.rotation,
+                                     _areas[3]);
 
         Debug.Log("Spawned the customer");
 
@@ -119,6 +121,7 @@ public class SpawnManager : Singleton<SpawnManager>
 
         _customerSeats[idx].IsEmpty = true;
         _colliderChecks[idx].CustomerOrder = null;
+        // Destroy(customer);
 
         StartCoroutine(HandleCustomer());
     }
@@ -148,12 +151,16 @@ public class SpawnManager : Singleton<SpawnManager>
 
         if (Input.GetKeyDown(KeyCode.Delete))
         {
-            SpawnFoodItem(_platePrefab,
-                          SpawnObjectType.INGREDIENT,
-                          transform);
+            // SpawnFoodItem(_platePrefab, SpawnObjectType.INGREDIENT, transform);
+
+            RemoveCustomer(_seatedCustomers[Random.Range(0, _seatedCustomers.Count)]);
+            Debug.LogWarning("Deleted a random customer");
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
+        {
             SpawnCustomer(GiveAvaiableSeat());
+            Debug.LogWarning("Added a random customer");
+        }        
     }
 }

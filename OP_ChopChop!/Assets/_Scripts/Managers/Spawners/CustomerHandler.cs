@@ -81,7 +81,7 @@ public class CustomerHandler : StaticInstance<CustomerHandler>
 
 #region Enumerators
 
-    IEnumerator HandleCustomer()
+    public IEnumerator HandleCustomer()
     {
         Debug.LogWarning("Spawning a new customer!");   
         

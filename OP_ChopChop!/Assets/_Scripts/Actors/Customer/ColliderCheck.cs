@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ColliderCheck : MonoBehaviour
@@ -6,12 +7,16 @@ public class ColliderCheck : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (CustomerOrder == null) return;
+        if (CustomerOrder == null) 
+        {
+            Debug.LogError("Null CustomerOrder");
+            return;
+        }
 
-        Dish collidedDish = other.gameObject.GetComponent<Dish>();
-        Plate plate = collidedDish.gameObject.GetComponentInParent<Plate>();
+        Dish collidedDish = other.gameObject.GetComponentInChildren<Dish>();
+        Plate plate = other.gameObject.GetComponent<Plate>();
 
-        if (CustomerOrder.OrderIsSameAs(other.gameObject.GetComponent<Dish>()))
+        if (CustomerOrder.OrderIsSameAs(collidedDish))
         {
             Debug.LogWarning("CORRECT ORDER");
             CustomerOrder.StartCoroutine("DoPositiveReaction");
@@ -20,10 +25,13 @@ public class ColliderCheck : MonoBehaviour
             CustomerOrder.CustomerSR = (collidedDish.DishScore + CustomerOrder.PatienceRate) / 2f;
             
             // customer "eats" the food
-            Destroy(other.gameObject);
+            Destroy(collidedDish.gameObject);
+            // SpawnManager.Instance.RemoveCustomer(CustomerOrder.gameObject);
 
             plate.SetContaminated();      
             plate.TogglePlated();
+            StartCoroutine(DisableColider());
+
             return;
         }
 
@@ -31,5 +39,14 @@ public class ColliderCheck : MonoBehaviour
         CustomerOrder.StartCoroutine("DoNegativeReaction");
         
         // idk if the customer still eats the food or skips it entirely
+    }
+
+    IEnumerator DisableColider()
+    {
+        GetComponent<Collider>().enabled = false;
+
+        yield return new WaitForSeconds(3f);
+
+        GetComponent<Collider>().enabled = true;
     }
 }
