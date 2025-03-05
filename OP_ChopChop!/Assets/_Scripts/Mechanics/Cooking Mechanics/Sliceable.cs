@@ -59,7 +59,7 @@ public class Sliceable : MonoBehaviour
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
 
             SpawnManager.Instance.SpawnFoodItem(_nextPrefab, 
-                                                FoodItemType.INGREDIENT,
+                                                SpawnObjectType.INGREDIENT,
                                                 transform);
             
             SoundManager.Instance.PlaySound("knife chop");
