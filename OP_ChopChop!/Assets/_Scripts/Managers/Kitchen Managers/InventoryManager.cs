@@ -10,6 +10,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit(); 
+
     void Reset() // removes all the food after testing 
     {         
         if (_fridge.Count > 0)

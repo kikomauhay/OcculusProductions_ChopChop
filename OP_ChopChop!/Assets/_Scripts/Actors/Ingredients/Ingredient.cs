@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -10,140 +12,169 @@ using UnityEngine;
 
 public abstract class Ingredient : MonoBehaviour
 {
-#region Members
-
-    [Header("Ingredient Components")]
-    [SerializeField] protected IngredientStats _ingredientStats;
-    [SerializeField] protected IngredientType _ingredientType; // will be used by the child classes
+#region Readers
 
     public IngredientStats IngredientStats => _ingredientStats;
     public IngredientType IngredientType => _ingredientType;
 
-    public IngredientState IngredientState { get; protected set; }
-    public TrashableType TrashableType { get; private set; }
-    public FreshnessRating Rating { get; private set; }
-    public float FreshnessRate { get; private set; }
-    public bool IsProperlyStored { get; set; } // is changed outside the script
+    // INGREDIENT ENUMS
+    public IngredientState IngredientState { get; private set; } // changes inside this script
+    public TrashableType TrashableType { get; private set; }     // won't change at all once it's set
+
+    // INGREDIENT ATTRIBUTES
+    public float FreshnessRate { get; private set; } // the higher the score, the better
+    public bool IsProperlyStored { get; set; }       // is changed outside the script
+    public bool IsFresh { get; private set; }        // changes inside the enumerator
 
 #endregion
 
 #region Members
 
+    [Header("Ingredient Components")]
+    [SerializeField] protected IngredientType _ingredientType; // will be used by the child classes
+    [SerializeField] protected StateMaterials _stateMaterials;
+    [SerializeField] protected IngredientStats _ingredientStats;
+
+#endregion
+
+#region Unity_Methods
+
     protected virtual void Start() 
     {
-        IngredientState = IngredientState.DEFAULT; // changes inside this script
-        TrashableType = TrashableType.INGREDIENT;  // won't change at all
-        Rating = FreshnessRating.FRESH;            // changes inside the enumerator
-        
-        FreshnessRate = 100; // the higher the score, the better
+        IngredientState = IngredientState.DEFAULT; 
+        TrashableType = TrashableType.INGREDIENT;  
+
+        FreshnessRate = 100f;     
+        IsFresh = true;           
+        IsProperlyStored = false; 
 
         // ingredients will only decay once the shift has started  
         GameManager.Instance.OnStartGame += StartDecaying;
 
-        CheckRate();
+        ChangeMaterial();
     }
+    protected virtual void Reset() => GameManager.Instance.OnStartGame -= StartDecaying;
 
-    protected void Reset() => GameManager.Instance.OnStartGame += StartDecaying;
+#endregion
+
+#region Ingredient_Actions
 
     public void TrashIngredient() // idk if we need this
     {
         // removes the food from the game entirely
         // could add more punishment later on 
 
-        IngredientState = IngredientState.TRASHED;
+        IngredientState = IngredientState.CONTAMINATED;
+        IsFresh = false;
         FreshnessRate = 0f;
         SoundManager.Instance.PlaySound("dispose food");
-        CheckRate();
-    }
+        ChangeMaterial();
 
-    public void RotIngredient()
+        Debug.LogWarning($"{name} has been trashed!");
+
+
+        // add Destroy() ??
+    }
+    public void ExpireIngredient()
     {
-        IngredientState = IngredientState.ROTTEN;
-        CheckRate();
+        IngredientState = IngredientState.EXPIRED;
+        IsFresh = false;
+
+        ChangeMaterial();
+        
+        Debug.LogWarning($"{name} has expired!");
     } 
-    public void MoldifyIngredient()
+    public void ContaminateIngredient()
     {
+        IngredientState = IngredientState.CONTAMINATED;
+        IsFresh = false;
+        ChangeMaterial();
+        
         Debug.LogWarning($"{name} has been contaminated!");
-        IngredientState = IngredientState.MOLDY;
     }
 
+#endregion
 
-    protected void CheckRate() 
+    protected void ChangeMaterial() 
     {
-        // material of the ingredient changes based on the freshness rate
+        // the material of the ingredient changes based on the freshness rate
         // the lower the number, the worse it is
 
-        Material m;
+        Material m = null;
 
-        if (FreshnessRate < 70f) 
+        switch (this.IngredientState)
         {
-            Rating = FreshnessRating.EXPIRED;
-            m = _ingredientStats.Materials[2];    
-        }
-        else if (FreshnessRate > 87f) 
-        {
-            Rating = FreshnessRating.FRESH;
-            m = _ingredientStats.Materials[0];
-        }
-        else
-        {
-            Rating = FreshnessRating.LESS_FRESH;
-            m = _ingredientStats.Materials[1];
+            case IngredientState.CONTAMINATED:
+                m = _ingredientStats.Materials[2];
+                break;
+
+            case IngredientState.EXPIRED:
+                m = _ingredientStats.Materials[1];
+                break;
+
+            case IngredientState.DEFAULT:
+                m = _ingredientStats.Materials[0];
+                break;
+
+            default: break;
         }
 
         if (m != null)
             GetComponent<MeshRenderer>().material = m;
     }
 
-
     void StartDecaying() => StartCoroutine(DecayIngredient());
-    
 
-#endregion
+#region Enumerators
 
     protected IEnumerator DecayIngredient() 
-    {        
-        while (IngredientState != IngredientState.ROTTEN)
+    {
+        // grace period before actual decaying starts
+        yield return new WaitForSeconds(10f);
+        
+        while (FreshnessRate > 0f)
         {
-            // rate & speed will change depending on the IngredientState
-            int rate = 0, speed = 0; 
+            yield return new WaitForSeconds(_ingredientStats.DecaySpeed);
 
-            // added "this" to prevent mistakes form the variable name from the enum datatype
-            switch (this.IngredientState) 
+            // reduces freshness rate based on the ingredient's state
+            switch (IngredientState)
             {
-                case IngredientState.MOLDY:
-                    rate = _ingredientStats.Contaminated.Rate;
-                    speed = _ingredientStats.Contaminated.Speed;
+                case IngredientState.DEFAULT: 
+                    FreshnessRate = _ingredientStats.NormalRate;
                     break;
 
                 case IngredientState.STORED:
-                    rate = _ingredientStats.Stored.Rate;
-                    speed = _ingredientStats.Stored.Speed;
+                    FreshnessRate = _ingredientStats.StoredRate;
                     break;
-                
-                case IngredientState.DEFAULT: // just outside the fridge AND not contaminated
-                    rate = _ingredientStats.Decay.Rate;
-                    speed = _ingredientStats.Decay.Speed;
+
+                case IngredientState.CONTAMINATED:
+                    FreshnessRate = _ingredientStats.ContaminatedRate;
                     break;
-                
-                case IngredientState.ROTTEN: break;
-                default:                      break;
+
+                default: break;
             }
-            
-            yield return new WaitForSeconds(speed);
-            FreshnessRate -= rate;
 
-            // test
-            Debug.Log($"Freshness of {name} has been reduced to {FreshnessRate}");
-
-            if (FreshnessRate < 1f) 
+            if (FreshnessRate < 1)
             {
                 FreshnessRate = 0f;
-                IngredientState = IngredientState.ROTTEN;
+                IngredientState = IngredientState.EXPIRED;
             }
-            CheckRate();
+
+            ChangeMaterial();
         }
-        Destroy(gameObject); // test, remove this once it's properly set up
     }
+
+    #endregion
+
 }
 
+[Serializable]
+public struct StateMaterials
+{
+    public Material[] ExpiredMats => _expiredMaterials;
+    public Material[] FreshMats => _freshMaterials;
+    public Material[] ContaminatedMats => _contaminatedMaterials;
+
+    [Tooltip("0 = thick cut, 1 = thick strip, 2 = thin slice")]
+    [SerializeField] Material[] _expiredMaterials, _freshMaterials, _contaminatedMaterials;
+}

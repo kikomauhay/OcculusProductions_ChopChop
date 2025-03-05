@@ -7,10 +7,6 @@ using System;
 /// 
 /// </summary>
 
-public enum SliceType { THICK, THIN, SLAB }
-
-public enum FishType { SALMON, TUNA }
-
 public class FishIngredient : Ingredient
 {
     public Action<int> OnFishSliced;
@@ -33,8 +29,11 @@ public class FishIngredient : Ingredient
 
         OnFishSliced += UpdateSlice; 
     }
-    protected void Reset() => OnFishSliced -= UpdateSlice;
-
+    protected override void Reset()
+    {
+        base.Reset();
+        OnFishSliced -= UpdateSlice;
+    }
     protected void UpdateSlice(int i)
     {
         _sliceType = (SliceType)i;

@@ -11,9 +11,7 @@ public class DishCleaning : MonoBehaviour
 
         if (other.gameObject.GetComponent<Sponge>().IsWet)
         {
-            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE,
-                                           transform);
- 
+            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform);
             other.gameObject.GetComponent<Plate>().SetCleaned();
         }
     }
