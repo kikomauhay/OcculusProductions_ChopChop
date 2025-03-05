@@ -34,28 +34,35 @@ public class Plate : Equipment
     private void OnTriggerEnter(Collider other)
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
-        if(other.GetComponent<Food>() != null && !_isPlated)
+        
+        if (other.GetComponent<Food>() != null && !_isPlated)
         {
             Destroy(gameObject);
             Destroy(other.gameObject);
             TogglePlated();
             other.GetComponent<Food>().CreateDish(transform);
         }
-        if (sponge.IsWet)
-            Debug.Log("Cleaning Plate");
-            SetCleaned();
+
+        
+        // if (sponge.IsWet)
+        // {
+        //     SetCleaned();
+        //     Debug.Log("Cleaning Plate");
+        // }
     }
 
+    /*
     private void OnTriggerStay(Collider other)
     {
-        Sponge sponge = other.GetComponent<Sponge>();
-        Rigidbody _spongeRb = sponge.GetComponent<Rigidbody>();
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
+        Rigidbody _spongeRb = sponge.gameObject.GetComponent<Rigidbody>();
         Vector3 _lastVelocity = _spongeRb.velocity;
         float dif = Mathf.Abs((_spongeRb.velocity - _lastVelocity).magnitude / Time.fixedDeltaTime);
 
         if (sponge == null) return;
 
     }
+    */
 
     private void OnTriggerExit(Collider other)
     {
