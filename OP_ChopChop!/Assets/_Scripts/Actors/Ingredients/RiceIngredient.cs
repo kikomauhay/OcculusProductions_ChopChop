@@ -1,15 +1,10 @@
 using UnityEngine;
 using System;
 
-public enum MoldType { UNMOLDED, GOOD, PERFECT, BAD }
-
 public class RiceIngredient : Ingredient
 {
-    [Header("Finished Dishes"), Tooltip("Possible dishes the rice can combine with.")]
-    [SerializeField] GameObject[] _foodPrefabs; // 0 = salmon nigiri, 1 = tuna nigiri
-
-    [Header("VFX Settings")]
-    [SerializeField] float _vfxDestroyTime; // was initially at 2f  
+    [Header("Finished Dishes"), Tooltip("0 = salmon nigiri, 1 = tuna nigiri")]
+    [SerializeField] GameObject[] _foodPrefabs; 
 
     [Header("Molding Attributes")]
     [SerializeField] MoldType _moldType;
@@ -23,8 +18,11 @@ public class RiceIngredient : Ingredient
         _moldType = MoldType.UNMOLDED;
         _ingredientType = IngredientType.RICE;
     }
-
-    void Reset() => OnRiceMolded -= ChangeRiceMold;
+    protected override void Reset()
+    {
+        base.Reset();
+        OnRiceMolded -= ChangeRiceMold;
+    }
 
     void OnTriggerEnter(Collider other) // combination of the food
     {
@@ -39,7 +37,7 @@ public class RiceIngredient : Ingredient
         // gets the freshness rates of both ingredients before deleting them
         Destroy(gameObject);
         Destroy(other.gameObject);
-        SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.SMOKE, pos, rot);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
         
         // only nigiris for now (makis will be added after midterms)
         if (ing.GetComponent<FishIngredient>().SliceType == SliceType.THIN)

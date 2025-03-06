@@ -20,23 +20,19 @@ public abstract class Food : MonoBehaviour
     {
         if (other.gameObject.GetComponent<Plate>() == null) return;
 
-        Plate plate = other.gameObject.GetComponent<Plate>();
-        Vector3 pos = other.transform.position;
-        Quaternion rot = other.transform.rotation;
-
-        if (plate.IsDirty)
+        if (other.gameObject.GetComponent<Plate>().IsDirty)
         {
             Debug.LogError("The plate is contaminating the food");
             // add code to infect the food
             return;
         }
 
-        SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.SMOKE, pos, rot);
-        CreateDish(pos, rot);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform);
+        CreateDish(other.transform);
 
         Destroy(gameObject);
         Destroy(other.gameObject);
     }
 
-    protected abstract void CreateDish(Vector3 pos, Quaternion rot);
+    public abstract void CreateDish(Transform t);
 }

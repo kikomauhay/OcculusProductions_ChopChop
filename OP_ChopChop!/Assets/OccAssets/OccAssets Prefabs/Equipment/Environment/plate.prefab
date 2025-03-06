@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8263769189308658279}
   - component: {fileID: 5111822455627633108}
   - component: {fileID: -4468792535025144192}
+  - component: {fileID: 8317945801525187979}
   m_Layer: 0
   m_Name: plate
   m_TagString: Untagged
@@ -281,6 +282,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743a916b100adae4d9f58e1c401605c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _trashType: 0
   _dirtyPlateMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
   _cleanPlateMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
+  _cleanTrigger: {fileID: 0}
   _isDirty: 0
+--- !u!65 &8317945801525187979
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110817272790873094}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.14, y: -0.03, z: 0.16}
+  m_Center: {x: 0, y: 0.03, z: 0}

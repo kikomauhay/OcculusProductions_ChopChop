@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
+using UnityEngine.UIElements;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -20,49 +22,121 @@ using System;
 
 public class GameManager : Singleton<GameManager>
 {
-
 #region Members
 
-    // Events
-    public Action OnFoodDisposed, OnCustomerLeft;
-    public Action<float> OnCustomerServed;
+    public Action OnStartGame, OnCustomerLeft;
+    public Action OnPhaseChanged; 
+    public Action<float> OnCustomerServed, OnMoneyChanged;
 
-    // Player references
-    [SerializeField] GameObject _player;
-    public GameObject Player => _player;
+    public float AvailableMoney { get; private set; }
+    public GamePhase CurrentPhase { get; private set; }  
 
     // Scores to keep track of
     List<float> _foodScores, _customerSRScores;
 
-    int _customersLeftCounter;
+    int _customersThatLeftCounter;
 
 #endregion
 
 #region Unity_Methods
 
-    protected override void Awake() => base.Awake();
+    protected override void Awake() 
+    {
+        base.Awake();
+
+        OnCustomerServed += AddToFoodScore;
+        OnCustomerLeft += IncrementCustomersLeft;
+        OnMoneyChanged += ChangeMoney;
+    }
+    void Start() 
+    {
+        _foodScores = new List<float>();
+        _customerSRScores = new List<float>();
+        
+        _customersThatLeftCounter = 0;
+        AvailableMoney = 0f;
+
+        ChangePhase(GamePhase.PRE_PRE_SERVICE);
+    }
+    void Update() => test();
+    
+    void Reset()
+    {
+        OnCustomerServed -= AddToFoodScore;
+        OnCustomerLeft -= IncrementCustomersLeft;
+        OnMoneyChanged -= ChangeMoney;
+    }
     protected override void OnApplicationQuit() 
     {
         base.OnApplicationQuit();
         Reset();
     }
-    void Reset()
+
+
+    public void ChangePhase(GamePhase phase)
     {
-        OnCustomerServed -= AddToFoodScore;
-        OnCustomerLeft -= IncrementCustomersLeft;
+        if (phase == CurrentPhase) 
+        {
+            Debug.LogError("You can't go to the same phase again!");
+            return;
+        }
+
+        switch (phase)
+        {
+            case GamePhase.PRE_PRE_SERVICE:
+                DoPrePreService();
+                break;
+            
+            case GamePhase.PRE_SERVICE:
+                DoPreSerice();
+                break;
+
+            case GamePhase.SERVICE:
+                DoService();
+                break; 
+
+            case GamePhase.POST_SERVICE:
+                DoPostService();
+                break; 
+
+            default:
+                Debug.LogError("Invalid state chosen");
+                break;
+        }
+
+        CurrentPhase = phase;
+        OnPhaseChanged?.Invoke();
     }
 
-    void Start()
-    {
-        _foodScores = new List<float>();
-        _customerSRScores = new List<float>();
-
-        OnCustomerServed += AddToFoodScore;
-        OnCustomerLeft += IncrementCustomersLeft;
-    }
-    void Update() => test();
 
 #endregion
+
+#region Phase_Methods
+
+    void DoPrePreService()
+    {
+        // view the different equipment 
+    }
+    void DoPreSerice()
+    {
+        // buying of ingredients
+        // rice cooking preparation
+    }
+    void DoService()
+    {
+        OnStartGame?.Invoke();
+
+        // customers spawn in 
+        // cooking, serving, and serving
+    }
+    void DoPostService()
+    {
+        // shop closes and you get the rating for the day
+        // finish washing the dishes
+    }
+
+#endregion
+
 
     void test() {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -78,6 +152,8 @@ public class GameManager : Singleton<GameManager>
             //Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
     }  
 
+#region Rating_Methods
+
     void EndOfDayCalculations()
     {
         /* UI CODE 
@@ -87,7 +163,7 @@ public class GameManager : Singleton<GameManager>
         */ 
 
         // restaurant rating 
-        float finalScore = (CleanManager.Instance.KitchenScore + 
+        float finalScore = (CleaningManager.Instance.KitchenScore + 
                             GetAverageOf(_foodScores) + 
                             GetAverageOf(_customerSRScores)) / 3f;
 
@@ -108,13 +184,26 @@ public class GameManager : Singleton<GameManager>
         return n / _foodScores.Count;
     }
 
+#endregion
+
 #region Event_Methods 
 
-    // other GameObjects don't call the GameManager's methods, the just call the events for it
+    // other GameObjects call the GameManager's events to trigger these methods
 
     void AddToFoodScore(float foodScore) => _foodScores.Add(foodScore);
     void AddToCustomerSRScore(float srScore) => _customerSRScores.Add(srScore);
-    void IncrementCustomersLeft() => _customersLeftCounter++;
+    void IncrementCustomersLeft() => _customersThatLeftCounter++;
+    void ChangeMoney(float amt) 
+    {
+        AvailableMoney += amt;
+
+        if (AvailableMoney < 0f)
+        {
+            AvailableMoney = 0f;
+            Debug.LogWarning("You have no more money!");
+        }
+    }
 
 #endregion
+
 }

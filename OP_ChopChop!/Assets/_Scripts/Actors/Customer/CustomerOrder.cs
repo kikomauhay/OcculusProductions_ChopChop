@@ -15,8 +15,8 @@ public class CustomerOrder : MonoBehaviour
     private float _customerScore;       // starts at 100 ang decreases over time
 
     [Header("Dish UI")]
-    [SerializeField] private GameObject[] _dishOrdersUI; // the different order UI for the customer 
-    [SerializeField] private Transform _orderUITransform; //Spawning of the order
+    [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
+    [SerializeField] private Transform _orderUITransform; // Spawning of the order
 
 #endregion
 
@@ -36,22 +36,22 @@ public class CustomerOrder : MonoBehaviour
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
 
-        Debug.LogWarning($"{name}: {CustomerDishType}");
+        // Debug.LogWarning($"{name}: {CustomerDishType}");
     }
 
     void CreateCustomerUI()
     {
-        Instantiate(_dishOrdersUI[(int)CustomerDishType], // i love type-casting
+        Instantiate(_dishOrdersUI[0],
                     _orderUITransform.position,
-                    _orderUITransform.rotation);
+                    _orderUITransform.rotation,
+                    transform);
     }
-
-    // will refine with AJ's help     
+    
     void MakeSeatEmpty() // clears the seat of any customer references 
     {
-        CustomerSpawningManager.Instance.RemoveCustomer(gameObject);
-        CustomerSpawningManager.Instance.GetComponent<SpawnLocationScript>().IsPrefabPresent = false;
-        CustomerSpawningManager.Instance.StartCoroutine("SpawnNextCustomer");
+        CustomerHandler.Instance.RemoveCustomer(gameObject);
+        // CustomerHandler.Instance.GetComponent<CustomerSeat>().IsEmpty = false;
+        StartCoroutine(CustomerHandler.Instance.HandleCustomer());
 
         // adds the customer's score to the Scores list
         GameManager.Instance.OnCustomerServed?.Invoke(CustomerSR);
@@ -68,6 +68,9 @@ public class CustomerOrder : MonoBehaviour
         // customer eats the food before despawning
         // can add animation of the customer eating & sfx
 
+        Debug.LogWarning("CORRECT ORDER!");
+        Debug.Log($"Waiting {_customerDeleteTimer} seconds before destroying {name}");
+        
         yield return new WaitForSeconds(_customerDeleteTimer);
 
         MakeSeatEmpty();
@@ -75,6 +78,7 @@ public class CustomerOrder : MonoBehaviour
     IEnumerator DoNegativeReaction() // customer lost all patience or got the wrong order
     {       
         _customerScore = 0f;
+        Debug.LogWarning("WRONG ORDER!");
 
         yield return new WaitForSeconds(_customerDeleteTimer);
 
@@ -90,6 +94,7 @@ public class CustomerOrder : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             _customerScore -= _patienceRate;
+            Debug.Log($"{name}'s score: {_customerScore}");
             // Debug.Log($"Customer score of {name} is now {_customerScore}");
 
             if (_customerScore < 1f)
@@ -98,7 +103,6 @@ public class CustomerOrder : MonoBehaviour
 
         // customer lost all patience
         _customerScore = 0f;   
-        Debug.Log(_customerScore);
 
         yield return StartCoroutine(DoNegativeReaction());
     }

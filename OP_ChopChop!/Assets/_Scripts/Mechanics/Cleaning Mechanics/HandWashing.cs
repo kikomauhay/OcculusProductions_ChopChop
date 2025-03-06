@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HandWashing : MonoBehaviour
@@ -8,43 +7,62 @@ public class HandWashing : MonoBehaviour
     //had another epiphany, gani pag kagising can you put all the coroutines inside cleanmanager na lang.
     //maiwan lang dito should be the ontrigger stay pala
 
+    public int CleanRate { get; private set; }
+
     [SerializeField] bool _isDirty;
-    [SerializeField] bool _coroutineTriggered;
-    [SerializeField] int _cleanCounter;
     [SerializeField] float _timer;
+
+    void Start()
+    {
+        CleanRate = 100;    
+        _isDirty = true;
+
+        StartCoroutine(DirtifyHands());
+
+        Debug.Log($"Hand Dirty is {_isDirty}");
+    }
 
     private void FixedUpdate()
     {
-        if(!_coroutineTriggered)
-            StartCoroutine(DecayRate());
 
-        if (_cleanCounter <= 0)
+        if (CleanRate <= 0)
             _isDirty = true;
         else _isDirty = false;
 
-        Debug.Log("Hand Dirty?" +_isDirty);
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<Sponge>() != null)
+        if (other.gameObject.GetComponent<Sponge>() == null) return;
+
+        if (other.gameObject.GetComponent<Ingredient>() != null)
         {
-            //change sponge into soap or something along the way
-            //same sht with plate, velocity things
-            //instantiate bubble vfx
-            //set dirty to false after a few seconds of cleaning
+            if (_isDirty)
+            {
+                
+            }
         }
+
+
+        //change sponge into soap or something along the way
+        //same sht with plate, velocity things
+        //instantiate bubble vfx
+        //set dirty to false after a few seconds of cleaning
+
     }
 
-    IEnumerator DecayRate()
+    IEnumerator DirtifyHands()
     {
-        if (_coroutineTriggered) yield break;
-        _coroutineTriggered = true;
-
-        while (_cleanCounter > 0)
+        if (_isDirty) yield break;
+         
+        
+        while (CleanRate > 70)
         {
             yield return new WaitForSeconds(_timer);
-            _cleanCounter -= 5;
+            CleanRate -= Random.Range(3, 5);
+            
         }
-        _coroutineTriggered = false;
+
+        _isDirty = false;
+        Debug.Log($"Hand Dirty is {_isDirty}");
     }
 }

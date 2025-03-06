@@ -1,7 +1,5 @@
 using UnityEngine;
 
-public enum TrashableType { FOOD, INGREDIENT, EQUIPMENT }
-
 public abstract class Equipment : MonoBehaviour 
 {
     public TrashableType TrashType => _trashType;
@@ -17,5 +15,5 @@ public abstract class Equipment : MonoBehaviour
     }
 
     protected void Reset() => Reposition();
-    protected void Reposition() => transform.position = _startPosition;
+    public void Reposition() => transform.position = _startPosition;
 }
