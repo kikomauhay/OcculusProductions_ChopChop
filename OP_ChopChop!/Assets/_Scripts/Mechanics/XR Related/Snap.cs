@@ -35,7 +35,7 @@ public class Snap : MonoBehaviour
 
     void SnapToObject(Transform _foodObject)
     {
-            _foodObject.localPosition = this.transform.position;
+            _foodObject.localPosition = SnapCollider.transform.position;
             _foodObject.localRotation = Quaternion.Euler(0, _foodObject.localRotation.eulerAngles.y, 0);
     }
 
