@@ -5,8 +5,6 @@ using UnityEngine;
 public class Snap : MonoBehaviour
 {
     [SerializeField]
-    float _attachY;
-    [SerializeField]
     float timer;
 
     public Collider SnapCollider;
@@ -37,8 +35,7 @@ public class Snap : MonoBehaviour
 
     void SnapToObject(Transform _foodObject)
     {
-            _foodObject.SetParent(transform);
-            _foodObject.localPosition = new Vector3(0, _attachY, 0);
+            _foodObject.localPosition = this.transform.position;
             _foodObject.localRotation = Quaternion.Euler(0, _foodObject.localRotation.eulerAngles.y, 0);
     }
 

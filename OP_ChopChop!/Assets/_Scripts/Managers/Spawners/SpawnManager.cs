@@ -37,7 +37,7 @@ public class SpawnManager : Singleton<SpawnManager>
     
     // add an "if player hat is worn" condition
     void Start() => StartCoroutine(HandleCustomer());
-    void Update() => test();
+    //void Update() => test();
 
 #endregion
 
