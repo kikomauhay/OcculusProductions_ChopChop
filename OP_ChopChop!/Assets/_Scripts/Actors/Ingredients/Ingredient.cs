@@ -35,6 +35,8 @@ public abstract class Ingredient : MonoBehaviour
     [SerializeField] protected StateMaterials _stateMaterials;
     [SerializeField] protected IngredientStats _ingredientStats;
 
+    protected Vector3 _startPosition;
+
 #endregion
 
 #region Unity_Methods
@@ -47,13 +49,17 @@ public abstract class Ingredient : MonoBehaviour
         FreshnessRate = 100f;     
         IsFresh = true;           
         IsProperlyStored = false; 
+        _startPosition = transform.position;
 
         // ingredients will only decay once the shift has started  
         GameManager.Instance.OnStartGame += StartDecaying;
 
         ChangeMaterial();
     }
-    protected virtual void Reset() => GameManager.Instance.OnStartGame -= StartDecaying;
+    protected virtual void Reset() {
+        GameManager.Instance.OnStartGame -= StartDecaying;
+        Reposition();
+    }
 
 #endregion
 
@@ -89,6 +95,7 @@ public abstract class Ingredient : MonoBehaviour
         IngredientState = IngredientState.CONTAMINATED;
         IsFresh = false;
         ChangeMaterial();
+        Reposition();
         
         Debug.LogWarning($"{name} has been contaminated!");
     }
@@ -124,6 +131,7 @@ public abstract class Ingredient : MonoBehaviour
     }
 
     void StartDecaying() => StartCoroutine(DecayIngredient());
+    public void Reposition() => transform.position = _startPosition;
 
 #region Enumerators
 
