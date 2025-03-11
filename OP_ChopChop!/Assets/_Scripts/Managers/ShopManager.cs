@@ -37,7 +37,7 @@ public class ShopManager : Singleton<ShopManager>
         _tunaOrderCount = 0;
         _salmonOrderCount = 0;
 
-        GameManager.Instance.OnMoneyChanged?.Invoke(10000f);
+        GameManager.Instance.AddMoney(10000f); // +10k  
 
         UpdatePlayerMoneyUI();
         UpdateSalmonCountUI();
@@ -50,7 +50,7 @@ public class ShopManager : Singleton<ShopManager>
         if (GameManager.Instance.AvailableMoney >= _totalPrice) 
         { 
             ToOrderSupplies();
-            GameManager.Instance.OnMoneyChanged?.Invoke(-_totalPrice);
+            GameManager.Instance.DeductMoney(_totalPrice);
             Debug.LogWarning($"Available cash: ${GameManager.Instance.AvailableMoney}");
         }
     }

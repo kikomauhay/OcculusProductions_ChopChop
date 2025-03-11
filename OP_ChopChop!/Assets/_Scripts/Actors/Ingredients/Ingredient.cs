@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// 
@@ -39,7 +38,6 @@ public abstract class Ingredient : MonoBehaviour
 
 #endregion
 
-#region Unity_Methods
 
     protected virtual void Start() 
     {
@@ -52,18 +50,19 @@ public abstract class Ingredient : MonoBehaviour
         _startPosition = transform.position;
 
         // ingredients will only decay once the shift has started  
-        GameManager.Instance.OnStartGame += StartDecaying;
+        GameManager.Instance.OnStartService += StartDecaying;
+        GameManager.Instance.OnEndService += ExpireIngredient;
 
         ChangeMaterial();
     }
-    protected virtual void Reset() {
-        GameManager.Instance.OnStartGame -= StartDecaying;
+    protected virtual void Reset() 
+    {
+        GameManager.Instance.OnStartService -= StartDecaying;
+        GameManager.Instance.OnEndService -= ExpireIngredient;
         Reposition();
     }
 
-#endregion
-
-#region Ingredient_Actions
+#region State_Actions
 
     public void TrashIngredient() // idk if we need this
     {

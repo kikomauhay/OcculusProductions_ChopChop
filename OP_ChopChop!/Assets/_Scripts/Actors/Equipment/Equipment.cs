@@ -7,7 +7,9 @@ public abstract class Equipment : MonoBehaviour
 
     [SerializeField] protected Material _cleanMat, _dirtyMat;
     protected Vector3 _startPosition;
-    protected int _usageCounter; // counter to know how many times it has been used
+
+    // DIRTY MECHANIC
+    protected int _usageCounter; // counter to know how many times equipment has been used
     protected int _maxUsageCounter; // max counter before it gets dirty
 
 #region Unity_Methods
@@ -20,8 +22,14 @@ public abstract class Equipment : MonoBehaviour
 
         IsClean = true;
         GetComponent<MeshRenderer>().material = _cleanMat;
+
+        GameManager.Instance.OnStartService += ResetPosition;
     }
-    protected void Reset() => ResetPosition();
+    protected void Reset() 
+    {
+        ResetPosition();
+        GameManager.Instance.OnStartService -= ResetPosition;
+    }
     
 #endregion
     

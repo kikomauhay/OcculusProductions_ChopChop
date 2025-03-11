@@ -78,7 +78,7 @@ public class Plate : Equipment
         }
     }
 
-    void TogglePlated() => IsPlated = !IsPlated;
+    public void TogglePlated() => IsPlated = !IsPlated;
 
     private void DishWash()
     {
