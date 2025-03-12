@@ -28,7 +28,7 @@ public class ColliderCheck : MonoBehaviour
             Destroy(collidedDish.gameObject);
             // SpawnManager.Instance.RemoveCustomer(CustomerOrder.gameObject);
 
-            plate.SetContaminated();      
+            // plate.SetContaminated();      
             plate.TogglePlated();
             StartCoroutine(DisableColider());
 

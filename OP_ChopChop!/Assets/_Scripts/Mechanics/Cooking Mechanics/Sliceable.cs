@@ -1,5 +1,5 @@
-using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine;
 
 public class Sliceable : MonoBehaviour
 {
@@ -22,42 +22,44 @@ public class Sliceable : MonoBehaviour
         _chopCounter = 0;
         IsAttached = false;
     }
-    void Update()
-    {
-        if (_chopCounter >= 5)
-        {
-            Sliced();
-        }
-    }
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Knife>() == null) return;
 
-        if(other.gameObject.GetComponent<ActionBasedController>() && IsAttached)
+        if (other.gameObject.GetComponent<ActionBasedController>() && IsAttached)
             _interactor = other.gameObject.GetComponent<XRDirectInteractor>();
-            
+
         if (IsAttached)
         {
             _chopCounter++;
 
+            if (_chopCounter >= 5)
+            {
+                Sliced();
+                return;
+            }
+
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE,
                                            transform);
 
+            // ternary operator syntax -> condition ? val_if_true : val_if_false
             SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                             "fish slice 01" :
                                             "fish slice 02");
-            Debug.LogWarning("Chopping");
+            // Debug.LogWarning("Chopping");
         }
 
+        // wtf does this do
         if (_interactor != null)
             _interactor.selectEntered.AddListener(Remove);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.GetComponent<ActionBasedController>())
+        if (other.gameObject.GetComponent<ActionBasedController>())
         {
-            _interactor.selectEntered.RemoveListener(Remove);
+            // commented this out cuz this was producing a lot of errors
+            // _interactor.selectEntered.RemoveListener(Remove);
             _interactor = null;
         }
     }
@@ -66,19 +68,19 @@ public class Sliceable : MonoBehaviour
 
     void Sliced()
     {
-        if (_currentPrefab != null)
-        {
-            Destroy(_currentPrefab);
+        if (_currentPrefab == null) return;
 
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
 
-            SpawnManager.Instance.SpawnFoodItem(_nextPrefab,
-                                                SpawnObjectType.INGREDIENT,
-                                                transform);
+        SpawnManager.Instance.SpawnObject(_nextPrefab,
+                                          transform,
+                                          SpawnObjectType.INGREDIENT);
 
-            SoundManager.Instance.PlaySound("knife chop");
-            Debug.Log("SLICED!");
-        }
+        SoundManager.Instance.PlaySound("knife chop");
+        Debug.Log("SLICED!");
+
+        // this doens't destroy the thing even
+        Destroy(gameObject);
     }
 
     private void Remove(SelectEnterEventArgs args)

@@ -1,41 +1,37 @@
 using System.Collections;
 using UnityEngine;
-using System;
 
 public class Plate : Equipment
 {
-    public bool IsDirty => _isDirty;
-    
-    [SerializeField] Material _dirtyPlateMat, _cleanPlateMat;
+#region Members
+
+    public bool IsPlated { get; private set; }
+
+    [Tooltip("The Box Collider Component")] 
     [SerializeField] Collider _cleanTrigger;
-    [SerializeField] bool _isDirty,_isPlated;
+
+#endregion    
 
     protected override void Start()
     {
         base.Start();
 
         name = "Plate";
-        _isDirty = false;
+        _maxUsageCounter = 1;
+
+        IsPlated = false;
         _cleanTrigger.enabled = false;
-
-        GetComponent<MeshRenderer>().material = _cleanPlateMat;
     }
 
-    void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Space)) 
-            TogglePlateSanitation(); // test
+    // void Update() => test();
+    
 
-        if (_cleanTrigger == null) return;
+    
 
-        DishWash();
-    }
-    #region OnTriggerSht
-    private void OnTriggerEnter(Collider other)
-    {
-        Sponge sponge = other.gameObject.GetComponent<Sponge>();
+    void OnTriggerEnter(Collider other)
+    {      
         
-        if (other.GetComponent<Food>() != null && !_isPlated)
+        if (other.GetComponent<Food>() != null && !IsPlated)
         {
             Destroy(gameObject);
             Destroy(other.gameObject);
@@ -64,51 +60,26 @@ public class Plate : Equipment
     }
     */
 
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.GetComponent<Sponge>() != null)
-        {
-            StopAllCoroutines();
-        }
-    }
-    #endregion
+    public void TogglePlated() => IsPlated = !IsPlated;
 
     private void DishWash()
     {
-        if(_isDirty || !_isPlated)
+        if (_cleanTrigger == null) return;
+
+        if (!IsClean && !IsPlated)
             _cleanTrigger.enabled = true;
 
-        else _cleanTrigger.enabled = false;
+        else
+            _cleanTrigger.enabled = false;
     }
-    #region Public Functions
-    public void TogglePlateSanitation() 
-    {
-        _isDirty = !_isDirty;
 
-        if (_isDirty)
-            SetContaminated();
-        
-        else SetCleaned();
-    }
-    public void TogglePlated()
-    {
-        _isPlated = !_isPlated;
-    }
-    public void SetContaminated()
-    {
-        _isDirty = true;
-        GetComponent<MeshRenderer>().material = _dirtyPlateMat;
-    }
-    public void SetCleaned()
-    {
-        _isDirty = false;
-        GetComponent<MeshRenderer>().material = _cleanPlateMat;
-    }
-    #endregion
+#region Testing
 
-    IEnumerator CleaningPlate()
+    void test()
     {
-        SetCleaned();
-        yield return new WaitForSeconds(2f);
+        if (Input.GetKeyUp(KeyCode.Space))
+            ToggleClean(); // test
     }
+
+#endregion
 }

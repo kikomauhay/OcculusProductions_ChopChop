@@ -1,9 +1,10 @@
 using UnityEngine;
 public class Enumerations : MonoBehaviour {}
 
-public enum GamePhase 
+public enum GameShift 
 { 
-    PRE_PRE_SERVICE, 
+    DEFAULT,
+    PRE_PRE_SERVICE,
     PRE_SERVICE,
     SERVICE, 
     POST_SERVICE
