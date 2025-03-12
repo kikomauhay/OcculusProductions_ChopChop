@@ -1,5 +1,5 @@
-using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine;
 
 public class Sliceable : MonoBehaviour
 {
@@ -42,12 +42,14 @@ public class Sliceable : MonoBehaviour
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE,
                                            transform);
 
+            // ternary operator syntax -> condition ? val_if_true : val_if_false
             SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                             "fish slice 01" :
                                             "fish slice 02");
-            Debug.LogWarning("Chopping");
+            // Debug.LogWarning("Chopping");
         }
 
+        // wtf does this do
         if (_interactor != null)
             _interactor.selectEntered.AddListener(Remove);
     }
@@ -56,6 +58,7 @@ public class Sliceable : MonoBehaviour
     {
         if (other.gameObject.GetComponent<ActionBasedController>())
         {
+            // commented this out cuz this was producing a lot of errors
             // _interactor.selectEntered.RemoveListener(Remove);
             _interactor = null;
         }
@@ -65,20 +68,19 @@ public class Sliceable : MonoBehaviour
 
     void Sliced()
     {
-        if (_currentPrefab != null)
-        {
+        if (_currentPrefab == null) return;
 
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
 
-            SpawnManager.Instance.SpawnFoodItem(_nextPrefab,
-                                                SpawnObjectType.INGREDIENT,
-                                                transform);
+        SpawnManager.Instance.SpawnObject(_nextPrefab,
+                                          transform,
+                                          SpawnObjectType.INGREDIENT);
+        //commented this out for now, null error was being caused
+        //SoundManager.Instance.PlaySound("knife chop");
+        Debug.Log("SLICED!");
 
-            SoundManager.Instance.PlaySound("knife chop");
-            Debug.Log("SLICED!");
-
-            Destroy(gameObject);
-        }
+        //works
+        Destroy(gameObject);
     }
 
     private void Remove(SelectEnterEventArgs args)
