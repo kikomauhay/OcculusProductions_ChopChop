@@ -129,9 +129,6 @@ public class SpawnManager : Singleton<SpawnManager>
 
         _customerSeats[idx].IsEmpty = true;
         _colliderChecks[idx].CustomerOrder = null;
-        // Destroy(customer);
-
-        // StartCoroutine(HandleCustomer());
     }
 
     void ClearCustomerSeats()
@@ -155,15 +152,17 @@ public class SpawnManager : Singleton<SpawnManager>
 
     IEnumerator HandleCustomer()
     {
-        Debug.LogWarning("Spawning a new customer!");   
-        
+        yield return new WaitForSeconds(5f);
+        Debug.LogWarning("Spawned a new customer!");
+        SpawnCustomer(GiveAvaiableSeat());
+
         while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(10f);
+            Debug.LogWarning("Spawned a new customer!");   
             SpawnCustomer(GiveAvaiableSeat());
         }
     }
-
 
 #region Testing
 

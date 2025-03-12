@@ -33,7 +33,7 @@ public class CleaningManager : Singleton<CleaningManager>
         _cleanlinessThreshold = 90f; // kitchen needs to go below this score to start cleaning 
         _canClean = false;           // prevents the player from cleaning too much
 
-        ToggleAllColliders();
+        // ToggleAllColliders();
     }
     
     void Reset() 
@@ -179,7 +179,7 @@ public class CleaningManager : Singleton<CleaningManager>
             }
 
             // Debug.LogWarning($"Can clean is {_canClean}");
-            Debug.Log($"Kitchen Sanitation: {KitchenScore}"); // test
+            // Debug.Log($"Kitchen Sanitation: {KitchenScore}"); // test
         }
     }
 }

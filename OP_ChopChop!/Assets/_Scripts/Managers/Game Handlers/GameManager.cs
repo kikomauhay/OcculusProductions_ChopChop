@@ -44,7 +44,8 @@ public class GameManager : Singleton<GameManager>
         _customersFledCount = 0;
         AvailableMoney = 0f;
 
-        ChangeShift(GameShift.PRE_PRE_SERVICE);
+        // ChangeShift(GameShift.PRE_PRE_SERVICE);
+        ChangeShift(GameShift.SERVICE);
     }
 
 #region Public
@@ -146,9 +147,10 @@ public class GameManager : Singleton<GameManager>
 
         // StartCoroutine(StartShiftCountdown());
 
+        /*
         Debug.LogWarning("Customer spawning & food serving!");
         Debug.Log("Wait 20s");
-        StartCoroutine(TestShifCountdown(20f, GameShift.POST_SERVICE)); 
+        StartCoroutine(TestShifCountdown(20f, GameShift.POST_SERVICE)); */
     }
     void DoPostService()
     {
