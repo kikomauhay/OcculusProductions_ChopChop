@@ -49,9 +49,8 @@ public class CustomerOrder : MonoBehaviour
     
     void MakeSeatEmpty() // clears the seat of any customer references 
     {
-        CustomerHandler.Instance.RemoveCustomer(gameObject);
-        // CustomerHandler.Instance.GetComponent<CustomerSeat>().IsEmpty = false;
-        StartCoroutine(CustomerHandler.Instance.HandleCustomer());
+        SpawnManager.Instance.RemoveCustomer(gameObject);
+        SpawnManager.Instance.StartCoroutine("HandleCustomer");
 
         GameManager.Instance.AddToCustomerScores(CustomerSR);
         Destroy(gameObject);
