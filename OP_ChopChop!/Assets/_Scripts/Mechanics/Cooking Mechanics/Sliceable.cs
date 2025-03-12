@@ -75,11 +75,11 @@ public class Sliceable : MonoBehaviour
         SpawnManager.Instance.SpawnObject(_nextPrefab,
                                           transform,
                                           SpawnObjectType.INGREDIENT);
-
-        SoundManager.Instance.PlaySound("knife chop");
+        //commented this out for now, null error was being caused
+        //SoundManager.Instance.PlaySound("knife chop");
         Debug.Log("SLICED!");
 
-        // this doens't destroy the thing even
+        //works
         Destroy(gameObject);
     }
 
