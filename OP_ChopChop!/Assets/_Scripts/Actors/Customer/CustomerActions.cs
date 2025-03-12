@@ -8,7 +8,7 @@ public class CustomerActions : MonoBehaviour
 
     float _customerSpeed = 2f;
 
-    void Start() => StartCoroutine(DeleteCustomer());
+    // void Start() => StartCoroutine(DeleteCustomer());
 
     void LateUpdate() => transform.position = Vector3.MoveTowards(transform.position, 
                                                                   TargetSeat, 

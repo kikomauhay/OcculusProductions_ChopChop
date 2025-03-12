@@ -22,10 +22,10 @@ public class Snap : MonoBehaviour
             _other.gameObject.GetComponent<Sliceable>().IsAttached = true;
 
             SnapToObject(_other.transform);
-            SetCollider(_other);
             DisableRigidBody(_other);
-            Debug.Log("Triggered");
+            Debug.Log("Snapped!!");
             SnapCollider.enabled = false;
+            StartCoroutine(DelayedSetting(_other));
         }
        else
         {
@@ -61,5 +61,12 @@ public class Snap : MonoBehaviour
         Debug.Log(timer);
         yield return new WaitForSeconds(timer);
         ResetSnap();
+    }
+
+    private IEnumerator DelayedSetting(Collider _other)
+    {
+        //Delay setting the collider to trigger
+        yield return new WaitForSeconds(1.5F);
+        SetCollider(_other);
     }
 }

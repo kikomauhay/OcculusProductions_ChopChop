@@ -22,23 +22,22 @@ public class Sliceable : MonoBehaviour
         _chopCounter = 0;
         IsAttached = false;
     }
-    void Update()
-    {
-        if (_chopCounter >= 5)
-        {
-            Sliced();
-        }
-    }
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Knife>() == null) return;
 
-        if(other.gameObject.GetComponent<ActionBasedController>() && IsAttached)
+        if (other.gameObject.GetComponent<ActionBasedController>() && IsAttached)
             _interactor = other.gameObject.GetComponent<XRDirectInteractor>();
-            
+
         if (IsAttached)
         {
             _chopCounter++;
+
+            if (_chopCounter >= 5)
+            {
+                Sliced();
+                return;
+            }
 
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE,
                                            transform);
@@ -55,9 +54,9 @@ public class Sliceable : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.GetComponent<ActionBasedController>())
+        if (other.gameObject.GetComponent<ActionBasedController>())
         {
-            _interactor.selectEntered.RemoveListener(Remove);
+            // _interactor.selectEntered.RemoveListener(Remove);
             _interactor = null;
         }
     }
@@ -68,7 +67,6 @@ public class Sliceable : MonoBehaviour
     {
         if (_currentPrefab != null)
         {
-            Destroy(_currentPrefab);
 
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
 
@@ -78,6 +76,8 @@ public class Sliceable : MonoBehaviour
 
             SoundManager.Instance.PlaySound("knife chop");
             Debug.Log("SLICED!");
+
+            Destroy(gameObject);
         }
     }
 

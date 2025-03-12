@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CustomerHandler : StaticInstance<CustomerHandler>
 {
-#region Methods
+#region Members
   
     [SerializeField] List<GameObject> _seatedCustomers;
     [SerializeField] GameObject[] _customerSeats, _collisionBoxes;
@@ -14,13 +14,19 @@ public class CustomerHandler : StaticInstance<CustomerHandler>
 
 #endregion
 
-    protected override void Awake() => base.Awake();
-    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+    protected override void Awake() 
+    {
+        base.Awake();
+        GameManager.Instance.OnStartService += StartCustomerSpawning;
+    } 
+    protected override void OnApplicationQuit() 
+    {
+        base.OnApplicationQuit();
+        Reset();
+    }
+    void Reset() => GameManager.Instance.OnStartService -= StartCustomerSpawning;
 
-    // add an "if player hat is worn" condition
-    void Start() => StartCoroutine(HandleCustomer());
-
-#region Spawn_Methods
+#region Spawning
 
     int GiveAvaiableSeat() // sets the index where the customer should sit
     {
@@ -29,13 +35,12 @@ public class CustomerHandler : StaticInstance<CustomerHandler>
             CustomerSeat seat = _customerSeats[i].gameObject.GetComponent<CustomerSeat>();
 
             if (seat.IsEmpty)
-            {
-                Debug.LogWarning("There is an empty seat!");
                 return i;
-            }
-            else continue;
+            
+            else
+                continue;
         }
-        return -1; // no seats are empty
+        return -1; // all seats are empty
     }
     void SpawnCustomer(int idx)
     {
@@ -47,7 +52,7 @@ public class CustomerHandler : StaticInstance<CustomerHandler>
 
         // calls SpawnMgr to spawn the customer
         GameObject customer = SpawnManager.Instance.SpawnCustomer(_customerSeats[idx].transform);
-        CustomerActions customerActions = customer.GetComponent<CustomerActions>();
+        CustomerActions actions = customer.GetComponent<CustomerActions>();
 
         // assigns the index to the seat & collider
         CustomerSeat seat = _customerSeats[idx].GetComponent<CustomerSeat>();
@@ -58,11 +63,12 @@ public class CustomerHandler : StaticInstance<CustomerHandler>
         _seatedCustomers.Add(customer);
 
         // sets the actions of the customer
-        customerActions.TargetSeat = seat.transform.position;
-        customerActions.SeatIndex = idx;
+        actions.TargetSeat = seat.transform.position;
+        actions.SeatIndex = idx;
 
         // prevents multiple customers getting the same seat 
         seat.IsEmpty = false;
+        Debug.LogWarning("Spawning a new customer!");
     }
 
     public void RemoveCustomer(GameObject customer) 
@@ -74,8 +80,10 @@ public class CustomerHandler : StaticInstance<CustomerHandler>
         _customerSeats[idx].GetComponent<CustomerSeat>().IsEmpty = true;
         _collisionBoxes[idx].GetComponent<ColliderCheck>().CustomerOrder = null;
 
-        StartCoroutine(HandleCustomer());
+        // StartCoroutine(HandleCustomer());
     }
+
+    void StartCustomerSpawning() => StartCoroutine(HandleCustomer());
     
 #endregion
 
@@ -83,15 +91,14 @@ public class CustomerHandler : StaticInstance<CustomerHandler>
 
     public IEnumerator HandleCustomer()
     {
-        Debug.LogWarning("Spawning a new customer!");   
         
-        while (_seatedCustomers.Count < MAX_CUSTOMER_COUNT)
+        while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
             yield return new WaitForSeconds(2f);
             SpawnCustomer(GiveAvaiableSeat());
         }
 
-        Debug.LogWarning("All seats are full!");
+        // Debug.LogWarning("All seats are full!");
     }
 
 #endregion

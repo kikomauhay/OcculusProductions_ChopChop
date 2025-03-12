@@ -19,7 +19,7 @@ public class CustomerAppearance : MonoBehaviour
 
 #endregion
 
-    void Awake()
+    void Start()
     {        
         int i = Random.Range(0, _skinVariants.Length);
 
@@ -28,34 +28,6 @@ public class CustomerAppearance : MonoBehaviour
         _tail.material = _skinVariants[i].TailVariants[Random.Range(0, _skinVariants[i].TailVariants.Length)];
 
         _face.sprite = _faceVariant.NeutralFace;
-    }
-
-    void Update() => test();
-
-    void test()
-    {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            _face.sprite = null;
-            _face.sprite = _faces[Random.Range(0, _faces.Length)];
-
-            ResetSkin();
-
-            Debug.LogWarning("Randomized customer face!");
-        }
-    }
-
-    void ResetSkin()
-    {
-        _body.material = null;
-        _ears.material = null;
-        _tail.material = null;
-
-        int i = Random.Range(0, _skinVariants.Length);
-
-        _body.material = _skinVariants[i].BodyMaterial;
-        _ears.material = _skinVariants[i].EarVariants[Random.Range(0, _skinVariants[i].EarVariants.Length)];
-        _tail.material = _skinVariants[i].TailVariants[Random.Range(0, _skinVariants[i].TailVariants.Length)];
     }
 }
 

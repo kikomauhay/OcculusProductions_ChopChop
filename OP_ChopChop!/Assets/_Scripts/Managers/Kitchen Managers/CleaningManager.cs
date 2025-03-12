@@ -15,30 +15,35 @@ public class CleaningManager : Singleton<CleaningManager>
 
 #region Unity_Methods
 
-    protected override void Awake() 
-    {
-        base.Awake();
-        OnCleanedArea += IncreaseCleanRate;
-    }
+    protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() 
     {
         base.OnApplicationQuit();
         Reset();
     }
-    void Reset() => OnCleanedArea -= IncreaseCleanRate;   
-    
     void Start()
     {
+        OnCleanedArea += IncreaseCleanRate;
+        GameManager.Instance.OnStartService += StartKitchenDecay;
+        GameManager.Instance.OnEndService += StopAllCoroutines;
+
         KitchenScore = 100;
         _decayTimer = 5f;
         _decayRate = 5f;
         _cleanlinessThreshold = 90f; // kitchen needs to go below this score to start cleaning 
         _canClean = false;           // prevents the player from cleaning too much
 
-        ToggleAllColliders();
-        StartCoroutine(DecayKitchen());
+        // ToggleAllColliders();
     }
-    void Update() => test();
+    
+    void Reset() 
+    {
+        OnCleanedArea -= IncreaseCleanRate;   
+        GameManager.Instance.OnStartService -= StartKitchenDecay;
+        GameManager.Instance.OnEndService -= StopAllCoroutines;
+    }
+
+    void StartKitchenDecay() => StartCoroutine(DecayKitchen());
 
 #endregion
 
@@ -56,7 +61,7 @@ public class CleaningManager : Singleton<CleaningManager>
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             _canClean = !_canClean;
-            Debug.Log($"Can clean: {_canClean}");
+            // Debug.Log($"Can clean: {_canClean}");
         }
     }   
 
@@ -83,7 +88,7 @@ public class CleaningManager : Singleton<CleaningManager>
     {
         if (_kitchenWashColliders == null) return;  
 
-        for (int i =0;i < _kitchenWashColliders.Length;i++)
+        for (int i = 0; i < _kitchenWashColliders.Length;i++)
         {
             if (_kitchenWashColliders[i])
                 _kitchenWashColliders[i].enabled = true;
@@ -118,6 +123,7 @@ public class CleaningManager : Singleton<CleaningManager>
     public void DeactivateHandWashColliders()
     {
         if (_handWashColliders == null) return;
+
         for (int i = 0; i <= _handWashColliders.Length; i++)
         {
             if( _handWashColliders[i])
@@ -131,7 +137,7 @@ public class CleaningManager : Singleton<CleaningManager>
     {
         if (!_canClean) // no need to focus too much on cleaning
         {
-            Debug.LogError("You can't clean yet!");
+            Debug.LogWarning("You can't clean yet!");
             return;
         }
 
@@ -147,9 +153,11 @@ public class CleaningManager : Singleton<CleaningManager>
 
     IEnumerator DecayKitchen()
     {
+        KitchenScore = 100;
+
         yield return new WaitForSeconds(3f);
 
-        Debug.LogWarning("Kitchen is getting dirty!");
+        // Debug.LogWarning("Kitchen is getting dirty!");
         
         while (KitchenScore > 0) 
         {
@@ -161,17 +169,17 @@ public class CleaningManager : Singleton<CleaningManager>
             {
                 _canClean = true;
                 ToggleAllColliders();
-                Debug.Log("All colliders should be enabled");
+                // Debug.Log("All colliders should be enabled");
             }
             else if (KitchenScore > _cleanlinessThreshold) 
             {
                 _canClean = false;
                 ToggleAllColliders();
-                Debug.Log("All colliders should be disabled");
+                // Debug.Log("All colliders should be disabled");
             }
 
-            Debug.LogWarning($"Can clean is {_canClean}");
-            Debug.Log(KitchenScore); // test
+            // Debug.LogWarning($"Can clean is {_canClean}");
+            // Debug.Log($"Kitchen Sanitation: {KitchenScore}"); // test
         }
     }
 }
