@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
-public enum StorageType { CHILLER, FREEZER } 
-
 public class InventoryManager : Singleton<InventoryManager>
 {
     List<GameObject> _fridge = new List<GameObject>();
@@ -12,6 +10,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit(); 
+
     void Reset() // removes all the food after testing 
     {         
         if (_fridge.Count > 0)

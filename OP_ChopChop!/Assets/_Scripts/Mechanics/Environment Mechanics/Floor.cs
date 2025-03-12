@@ -4,25 +4,55 @@ public class Floor : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Plate>() != null)
-        {
-            other.gameObject.GetComponent<Plate>().SetContaminated();
-            return;
-        }
-        if (other.gameObject.GetComponent<Trashable>() == null) return;
-        
-        switch (other.gameObject.GetComponent<Trashable>()._trashTypes)
+        GameObject obj = other.gameObject;
+
+        if (obj.GetComponent<Trashable>() == null) return;
+
+        switch (obj.GetComponent<Trashable>().TrashTypes)
         {
             case TrashableType.INGREDIENT:
-                other.gameObject.GetComponent<Ingredient>().ContaminateFood();
+                DoIngredientLogic(obj.GetComponent<Ingredient>());
                 break;
+
             case TrashableType.FOOD:
-                other.gameObject.GetComponent<Ingredient>().ContaminateFood();
+                DoFoodLogic(obj.GetComponent<Food>());
                 break;
+
             case TrashableType.EQUIPMENT:
-                Debug.LogWarning("Reset Equipment");
+                DoEquipmentLogic(obj.GetComponent<Equipment>());
                 break;
+
             default: break;
         }
     }
+
+#region Collision_Logic
+
+    void DoIngredientLogic(Ingredient ing)
+    {
+        ing.ContaminateIngredient();
+        Debug.LogWarning($"{ing.gameObject.name} has been contaminated!");
+    }
+
+    void DoFoodLogic(Food food)
+    {
+        food.SetContaminated();
+        Debug.LogWarning($"{food.gameObject.name} has been contaminated!");
+    }
+
+    void DoEquipmentLogic(Equipment eq)
+    {
+        eq.ResetPosition();
+        
+        // other logic for equipment child classes
+        
+        if (eq.GetComponent<Plate>().IsClean)
+        {
+            eq.ToggleClean(); 
+            Debug.LogWarning($"{eq.gameObject.name} has gotten dirty!");
+        }  
+    } 
+
+#endregion
+
 }

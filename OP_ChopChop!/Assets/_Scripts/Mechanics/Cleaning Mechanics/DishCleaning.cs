@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DishCleaning : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Sponge>() == null) return;
         
@@ -11,13 +11,8 @@ public class DishCleaning : MonoBehaviour
 
         if (other.gameObject.GetComponent<Sponge>().IsWet)
         {
-            Plate plate = gameObject.GetComponent<Plate>();
-
-            SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.BUBBLE,
-                                                     transform.position,
-                                                     transform.rotation);
- 
-            plate.SetCleaned();
+            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform);
+            other.gameObject.GetComponent<Plate>().ToggleClean();
         }
     }
 }

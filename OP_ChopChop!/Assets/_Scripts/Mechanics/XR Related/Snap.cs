@@ -5,8 +5,6 @@ using UnityEngine;
 public class Snap : MonoBehaviour
 {
     [SerializeField]
-    float _attachY;
-    [SerializeField]
     float timer;
 
     public Collider SnapCollider;
@@ -24,10 +22,10 @@ public class Snap : MonoBehaviour
             _other.gameObject.GetComponent<Sliceable>().IsAttached = true;
 
             SnapToObject(_other.transform);
-            SetCollider(_other);
             DisableRigidBody(_other);
-            Debug.Log("Triggered");
+            Debug.Log("Snapped!!");
             SnapCollider.enabled = false;
+            StartCoroutine(DelayedSetting(_other));
         }
        else
         {
@@ -37,8 +35,7 @@ public class Snap : MonoBehaviour
 
     void SnapToObject(Transform _foodObject)
     {
-            _foodObject.SetParent(transform);
-            _foodObject.localPosition = new Vector3(0, _attachY, 0);
+            _foodObject.localPosition = SnapCollider.transform.position;
             _foodObject.localRotation = Quaternion.Euler(0, _foodObject.localRotation.eulerAngles.y, 0);
     }
 
@@ -64,5 +61,12 @@ public class Snap : MonoBehaviour
         Debug.Log(timer);
         yield return new WaitForSeconds(timer);
         ResetSnap();
+    }
+
+    private IEnumerator DelayedSetting(Collider _other)
+    {
+        //Delay setting the collider to trigger
+        yield return new WaitForSeconds(1.5F);
+        SetCollider(_other);
     }
 }

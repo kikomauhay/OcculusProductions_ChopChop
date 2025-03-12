@@ -3,5 +3,5 @@ using UnityEngine;
 
 public class Trashable : MonoBehaviour
 {
-    public TrashableType _trashTypes;
+    public TrashableType TrashTypes { get; set; }
 }

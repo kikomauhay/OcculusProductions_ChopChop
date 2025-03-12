@@ -1,14 +1,16 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Sliceable : MonoBehaviour
 {
 #region Members
 
-    [SerializeField] private GameObject _currentPrefab, _nextPrefab; // make this an array 
-    [SerializeField] private GameObject _sharpObject, _meatBoard; // references for the ingredient
-    [SerializeField] private GameObject _smokeVFX;
-    
-    private int _chopCounter;
+    // will change this into an array later
+    [SerializeField] private GameObject _currentPrefab, _nextPrefab;
+
+    IXRSelectInteractor _interactor;
+
+    int _chopCounter;
     public bool IsAttached { get; set; }
 
 #endregion
@@ -19,64 +21,98 @@ public class Sliceable : MonoBehaviour
     {
         _chopCounter = 0;
         IsAttached = false;
-        _sharpObject = EquipmentManager.Instance?.Knife;
-        _meatBoard = EquipmentManager.Instance?.MeatBoard;
-    }
-    void Update()
-    {
-        if (_chopCounter >= 5)
-        {
-            Sliced();
-
-            // needs an explanation
-            _meatBoard.gameObject.GetComponent<Snap>().ResetSnap();
-        }
     }
     void OnTriggerEnter(Collider other)
     {
-        // check other gameobject if it has a knife script
-        Knife knife = other.gameObject.GetComponent<Knife>();
+        if (other.gameObject.GetComponent<Knife>() == null) return;
 
-        // if not null, +1 on chop counter
+        if (other.gameObject.GetComponent<ActionBasedController>() && IsAttached)
+            _interactor = other.gameObject.GetComponent<XRDirectInteractor>();
+
         if (IsAttached)
         {
-            if (knife != null)
+            _chopCounter++;
+
+            if (_chopCounter >= 5)
             {
-                Vector3 _currentPosition = _currentPrefab.transform.position;
-                Quaternion _currentRotation = _currentPrefab.transform.rotation;
-                _chopCounter++;
-
-                SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
-                SoundManager.Instance.PlaySound(Random.value > 0.5f ? "fish slice 01" : "fish slice 02");
-                Debug.Log("Chopping");
+                Sliced();
+                return;
             }
-        }
-    }   
 
-#endregion
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE,
+                                           transform);
+
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ?
+                                            "fish slice 01" :
+                                            "fish slice 02");
+            Debug.LogWarning("Chopping");
+        }
+
+        if (_interactor != null)
+            _interactor.selectEntered.AddListener(Remove);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.GetComponent<ActionBasedController>())
+        {
+            // _interactor.selectEntered.RemoveListener(Remove);
+            _interactor = null;
+        }
+    }
+
+    #endregion
 
     void Sliced()
     {
         if (_currentPrefab != null)
         {
-            // gets the position and rotation of prefab and then destroys it
-            Vector3 _currentPosition = _currentPrefab.transform.position;
-            Quaternion _currentRotation = _currentPrefab.transform.rotation;
 
-            Destroy(_currentPrefab);
-            SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
-            Instantiate(_nextPrefab, _currentPosition, _currentRotation);
-            
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+
+            SpawnManager.Instance.SpawnFoodItem(_nextPrefab,
+                                                SpawnObjectType.INGREDIENT,
+                                                transform);
+
             SoundManager.Instance.PlaySound("knife chop");
             Debug.Log("SLICED!");
+
+            Destroy(gameObject);
         }
     }
-    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
+
+    private void Remove(SelectEnterEventArgs args)
     {
-        if(vfxPrefab != null)
-        {
-            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
-            Destroy(VFXInstance, 2f);
-        }    
+        Rigidbody rb = this.GetComponent<Rigidbody>();
+        Collider collider = this.GetComponent<Collider>();
+
+        Debug.Log("Removing item");
+        rb.isKinematic = false;
+        IsAttached = false;
+        collider.isTrigger = false;
+
+        //if not attaching to hand, uncomment code below
+        /*        AttachToHand(this.gameObject, _interactor);*/
+
     }
+
+    /*    private void AttachToHand(GameObject _sliceable, IXRSelectInteractor _interactor)
+        {
+            XRGrabInteractable _grabInteractable = _sliceable.GetComponent<XRGrabInteractable>();
+            XRInteractionManager _interactionManager = _grabInteractable.interactionManager as XRInteractionManager;
+            if (_interactionManager == null
+                && _interactor is MonoBehaviour interactorObject)
+            {
+                _interactionManager = interactorObject.GetComponentInParent<XRInteractionManager>();
+            }
+            if (_grabInteractable != null
+                && _interactionManager != null)
+            {
+                _interactionManager.SelectEnter(_interactor, _grabInteractable);
+            }
+            else
+            {
+                Debug.LogError("Spawned object does not have an XRGrabInteractable component.");
+            }
+        }*/
 }

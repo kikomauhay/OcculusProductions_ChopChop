@@ -1,36 +1,45 @@
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(CustomerOrder), typeof(CustomerActions))]
 public class CustomerAppearance : MonoBehaviour 
+{     
+
+#region Customer_Variant_Members
+
+    [Header("Customer Material Renderers")]
+    [SerializeField] SpriteRenderer _face;
+    [SerializeField] MeshRenderer _ears, _tail, _body;
+
+    [Tooltip("0 = Calico, 1 = Siamese, 2 = Tabby, 3 = Torbie, 4 = Tuxedo")] 
+    [SerializeField] SkinVariant[] _skinVariants;
+
+    [SerializeField] FaceVariant _faceVariant;
+    [SerializeField] Sprite[] _faces; // test
+
+
+#endregion
+
+    void Start()
+    {        
+        int i = Random.Range(0, _skinVariants.Length);
+
+        _body.material = _skinVariants[i].BodyMaterial;
+        _ears.material = _skinVariants[i].EarVariants[Random.Range(0, _skinVariants[i].EarVariants.Length)];
+        _tail.material = _skinVariants[i].TailVariants[Random.Range(0, _skinVariants[i].TailVariants.Length)];
+
+        _face.sprite = _faceVariant.NeutralFace;
+    }
+}
+
+[System.Serializable]
+public struct SkinVariant
 {
-    [SerializeField] GameObject[] _ears;
-    [SerializeField] GameObject[] _tails;
-    [SerializeField] GameObject[] _faces; // not yet used 
+    public Material BodyMaterial;
+    public Material[] EarVariants, TailVariants; 
+}
 
-    void Awake()
-    {
-        _ears[Random.Range(0, _ears.Length)].SetActive(true);
-        _tails[Random.Range(0, _tails.Length)].SetActive(true);
-    }
-
-    void Start() => StartCoroutine(test());
-   
-
-    IEnumerator test() {
-
-        while (true)
-        {
-            yield return new WaitForSeconds(1f);
-            
-            foreach (GameObject e in _ears)
-                e.SetActive(false);
-
-            foreach (GameObject t in _tails)
-                t.SetActive(false);
-            
-            Awake();
-            Debug.Log("Randomized customer face!");
-        }
-    }
+[System.Serializable]
+public struct FaceVariant
+{
+    public Sprite NeutralFace, HappyFace, MadFace, DisgustFace, ChewingFace;
 }

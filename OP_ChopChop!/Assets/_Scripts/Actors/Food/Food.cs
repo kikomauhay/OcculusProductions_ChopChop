@@ -9,34 +9,42 @@ using UnityEngine;
 
 public abstract class Food : MonoBehaviour
 {
-    public float FoodScore { get; set; } 
+    public bool IsContaminated { get; private set; }
+    public float FoodScore { get; set; }
     public DishType FoodType { get; set; }
-    public TrashableType TrashType => _trashType;
+    public TrashableType TrashType { get; protected set; }
+
 
     [SerializeField] protected GameObject _dishPrefab;
-    [SerializeField] protected TrashableType _trashType; 
-    
+
+    protected virtual void Start()
+    {
+        FoodScore = 0f;
+        IsContaminated = false;
+    }
+
     protected void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Plate>() == null) return;
 
-        Plate plate = other.gameObject.GetComponent<Plate>();
-        Vector3 pos = other.transform.position;
-        Quaternion rot = other.transform.rotation;
-
-        if (plate.IsDirty)
+        if (!other.gameObject.GetComponent<Plate>().IsClean)
         {
             Debug.LogError("The plate is contaminating the food");
             // add code to infect the food
             return;
         }
 
-        SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.SMOKE, pos, rot);
-        CreateDish(pos, rot);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform);
+        CreateDish(other.transform);
 
         Destroy(gameObject);
         Destroy(other.gameObject);
     }
 
-    protected abstract void CreateDish(Vector3 pos, Quaternion rot);
+    public abstract void CreateDish(Transform t);
+
+    public void SetContaminated()
+    {
+        IsContaminated = true;
+    }
 }

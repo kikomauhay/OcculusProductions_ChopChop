@@ -1,70 +1,100 @@
- using UnityEngine;
+using System.Collections;
+using UnityEngine;
 
 public class Plate : Equipment
 {
-    public bool IsDirty => _isDirty;
-    
-    [SerializeField] Material _dirtyPlateMat, _cleanPlateMat;
+#region Members
+
+    public bool IsPlated { get; private set; }
+
+    [Tooltip("The Box Collider Component")] 
     [SerializeField] Collider _cleanTrigger;
-    [SerializeField] bool _isDirty;
+
+#endregion    
 
     protected override void Start()
     {
         base.Start();
 
         name = "Plate";
-        _isDirty = false;
-        _cleanTrigger.enabled = false;
+        _maxUsageCounter = 1;
 
-        GetComponent<MeshRenderer>().material = _cleanPlateMat;
+        IsPlated = false;
+        _cleanTrigger.enabled = false;
     }
 
-    void Update()
+    void Update() => test();
+    
+
+    void test()
     {
         if (Input.GetKeyUp(KeyCode.Space)) 
-            TogglePlateSanitation(); // test
+            ToggleClean(); // test
 
-        if (_cleanTrigger == null) return;
-
-        DishWash();
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+
+        // snap the Food to the plate instead
+        
+        
+        if (other.GetComponent<Food>() != null && !IsPlated)
+        {
+            Destroy(gameObject);
+            Destroy(other.gameObject);
+            TogglePlated();
+            other.GetComponent<Food>().CreateDish(transform);
+        }
+
+        
+        // if (sponge.IsWet)
+        // {
+        //     SetCleaned();
+        //     Debug.Log("Cleaning Plate");
+        // }
+    }
+
+    /*
     private void OnTriggerStay(Collider other)
     {
-        Sponge sponge = other.GetComponent<Sponge>();
-        Rigidbody _spongeRb = sponge.GetComponent<Rigidbody>();
-        //Create a formula that tracks the change in velocity and compares it to a certain value
-        //If velocity is greater than assigned value, start coroutine for cleaning
-        //suggestion ko lang coroutine but if there's a more efficient way in cleaning the plate please don't hesitate to try it out
-        //If you do go the coroutine route, I think you'd need to put the checker to avoid having the coroutine run again and again.       
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
+        Rigidbody _spongeRb = sponge.gameObject.GetComponent<Rigidbody>();
+        Vector3 _lastVelocity = _spongeRb.velocity;
+        float dif = Mathf.Abs((_spongeRb.velocity - _lastVelocity).magnitude / Time.fixedDeltaTime);
+
+        if (sponge == null) return;
+
     }
+    */
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<Sponge>() != null)
+        {
+            StopAllCoroutines();
+        }
+    }
+
+    public void TogglePlated() => IsPlated = !IsPlated;
 
     private void DishWash()
     {
-        if(_isDirty)
+        if (_cleanTrigger == null) return;
+
+        if (!IsClean && !IsPlated)
             _cleanTrigger.enabled = true;
 
-        else _cleanTrigger.enabled = false;
+        else
+            _cleanTrigger.enabled = false;
     }
-    #region Public Functions
-    public void TogglePlateSanitation() 
-    {
-        _isDirty = !_isDirty;
 
-        if (_isDirty)
-            SetContaminated();
-        
-        else SetCleaned();
-    }
-    public void SetContaminated()
+
+    IEnumerator CleaningPlate()
     {
-        _isDirty = true;
-        GetComponent<MeshRenderer>().material = _dirtyPlateMat;
+        yield return new WaitForSeconds(2f);
+        ToggleClean ();
     }
-    public void SetCleaned()
-    {
-        _isDirty = false;
-        GetComponent<MeshRenderer>().material = _cleanPlateMat;
-    }
-    #endregion
 }

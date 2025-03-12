@@ -1,6 +1,12 @@
 using UnityEngine;
 
-public class Knife : MonoBehaviour
+public class Knife : Equipment
 {
-    // populate with upgrades in the future maybe
+    protected override void Start() 
+    {
+        base.Start();
+
+        name = "Knife";
+        _maxUsageCounter = 5;
+    }
 }
