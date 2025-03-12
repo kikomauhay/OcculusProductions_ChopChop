@@ -45,7 +45,7 @@ public class Sliceable : MonoBehaviour
             SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                             "fish slice 01" :
                                             "fish slice 02");
-            Debug.LogWarning("Chopping");
+            // Debug.LogWarning("Chopping");
         }
 
         if (_interactor != null)
@@ -65,20 +65,18 @@ public class Sliceable : MonoBehaviour
 
     void Sliced()
     {
-        if (_currentPrefab != null)
-        {
+        if (_currentPrefab == null) return;
 
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
 
-            SpawnManager.Instance.SpawnFoodItem(_nextPrefab,
-                                                SpawnObjectType.INGREDIENT,
-                                                transform);
+        SpawnManager.Instance.SpawnObject(_nextPrefab,
+                                          transform,
+                                          SpawnObjectType.INGREDIENT);
 
-            SoundManager.Instance.PlaySound("knife chop");
-            Debug.Log("SLICED!");
+        SoundManager.Instance.PlaySound("knife chop");
+        Debug.Log("SLICED!");
 
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 
     private void Remove(SelectEnterEventArgs args)

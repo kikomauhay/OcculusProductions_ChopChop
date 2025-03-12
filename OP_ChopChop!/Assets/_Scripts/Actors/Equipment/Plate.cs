@@ -23,23 +23,13 @@ public class Plate : Equipment
         _cleanTrigger.enabled = false;
     }
 
-    void Update() => test();
+    // void Update() => test();
     
 
-    void test()
-    {
-        if (Input.GetKeyUp(KeyCode.Space)) 
-            ToggleClean(); // test
-
-    }
+    
 
     void OnTriggerEnter(Collider other)
-    {
-        Sponge sponge = other.gameObject.GetComponent<Sponge>();
-
-
-        // snap the Food to the plate instead
-        
+    {      
         
         if (other.GetComponent<Food>() != null && !IsPlated)
         {
@@ -70,14 +60,6 @@ public class Plate : Equipment
     }
     */
 
-    void OnTriggerExit(Collider other)
-    {
-        if (other.GetComponent<Sponge>() != null)
-        {
-            StopAllCoroutines();
-        }
-    }
-
     public void TogglePlated() => IsPlated = !IsPlated;
 
     private void DishWash()
@@ -91,10 +73,13 @@ public class Plate : Equipment
             _cleanTrigger.enabled = false;
     }
 
+#region Testing
 
-    IEnumerator CleaningPlate()
+    void test()
     {
-        yield return new WaitForSeconds(2f);
-        ToggleClean ();
+        if (Input.GetKeyUp(KeyCode.Space))
+            ToggleClean(); // test
     }
+
+#endregion
 }

@@ -40,8 +40,9 @@ public abstract class Equipment : MonoBehaviour
     {
         IsClean = !IsClean;
 
-        // ternary operator syntax => condition ? val_if_true : val_if_false
-        GetComponent<MeshRenderer>().material = IsClean ? _cleanMat : _dirtyMat;
+        // ternary operator syntax -> condition ? val_if_true : val_if_false
+        GetComponent<MeshRenderer>().material = IsClean ? 
+                                                _cleanMat : _dirtyMat;
     }
     public void ResetUsageCounter() => _usageCounter = 0;
 

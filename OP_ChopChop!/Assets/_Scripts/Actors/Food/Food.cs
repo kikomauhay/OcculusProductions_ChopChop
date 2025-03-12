@@ -42,9 +42,5 @@ public abstract class Food : MonoBehaviour
     }
 
     public abstract void CreateDish(Transform t);
-
-    public void SetContaminated()
-    {
-        IsContaminated = true;
-    }
+    public void SetContaminated() => IsContaminated = true;    
 }

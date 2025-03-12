@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using UnityEditor;
 
 /// </summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -58,18 +57,32 @@ public class SpawnManager : Singleton<SpawnManager>
         
         Destroy(vfxInstance, 2f); // destory time could also be a variable
     }
-    public void SpawnFoodItem(GameObject obj, SpawnObjectType type, Transform t) 
+
+    public GameObject SpawnObject(GameObject obj, Transform t, SpawnObjectType type)
+    {
+        return Instantiate(obj,
+                           t.position, t.rotation,
+                           _bins[(int)type]);
+    }
+    /*
+    public void SpawnFood(GameObject obj, Transform t) 
     {
         Instantiate(obj, 
                     t.position, t.rotation,
-                    _bins[(int)type]); 
-    }
+                    _bins[1]); 
+    } /*
+    public GameObject SpawnDish(GameObject obj, Transform t)
+    {
+        return Instantiate(obj,
+                    t.position, t.rotation,
+                    _bins[2]);
+    } /*
     public GameObject SpawnCustomer(Transform t)
     {
         return Instantiate(_customerPrefab, 
                            t.position, t.rotation,
                            _bins[3]);         
-    }    
+    }    */
 
 #endregion
 
@@ -102,7 +115,10 @@ public class SpawnManager : Singleton<SpawnManager>
             return;
         }
 
-        GameObject customer = SpawnCustomer(_customerSeats[idx].transform);
+        GameObject customer = SpawnObject(_customerPrefab, 
+                                          _customerSeats[idx].transform, 
+                                          SpawnObjectType.CUSTOMER);
+
         CustomerActions customerActions = customer.GetComponent<CustomerActions>();
 
         // assigns the index to the seat & collider

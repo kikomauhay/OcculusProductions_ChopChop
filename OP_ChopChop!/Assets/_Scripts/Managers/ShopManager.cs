@@ -39,11 +39,10 @@ public class ShopManager : Singleton<ShopManager>
 
         GameManager.Instance.AddMoney(10000f); // +10k  
 
-        UpdatePlayerMoneyUI();
-        UpdateSalmonCountUI();
-        UpdateTotalPriceUI();
-        UpdateTunaCountUI();
+        UpdateAllUI();
     }
+
+#region Shop
 
     public void DoOrderSupplies()
     {
@@ -63,26 +62,26 @@ public class ShopManager : Singleton<ShopManager>
         {
             for (int i = 0; i < _salmonOrderCount; i++)
             {
-                SpawnManager.Instance.SpawnFoodItem(_salmonPrefab, 
-                                                    SpawnObjectType.FOOD,
-                                                    _orderSpawnPoint);
+                SpawnManager.Instance.SpawnObject(_salmonPrefab, 
+                                                  _orderSpawnPoint,
+                                                  SpawnObjectType.INGREDIENT);
+
             }
         }
         if (_tunaOrderCount > 0)
         {
             for (int i = 0; i < _tunaOrderCount; i++)
             {
-                SpawnManager.Instance.SpawnFoodItem(_tunaPrefab, 
-                                                    SpawnObjectType.FOOD,
-                                                    _orderSpawnPoint);
+                SpawnManager.Instance.SpawnObject(_tunaPrefab,                                        
+                                                  _orderSpawnPoint,
+                                                  SpawnObjectType.INGREDIENT);
             }
         }
 
         // reset order counts after spawning
         _salmonOrderCount = 0;
         _tunaOrderCount = 0;
-        UpdateSalmonCountUI();
-        UpdateTunaCountUI();
+        UpdateFishCountUI();
     }
 
     float CalculateTotalPrice()
@@ -91,7 +90,9 @@ public class ShopManager : Singleton<ShopManager>
                (_tunaOrderCount * _tunaPrice);
     }
 
-#region Button_Methods
+#endregion
+
+#region Buttons
 
     public void IncreaseOrder(ShoppingCart type)
     {
@@ -122,7 +123,6 @@ public class ShopManager : Singleton<ShopManager>
             default: break;
         }
     }
-
     public void IncreaseSalmonSlabOrder()
     {
         _salmonOrderCount++;
@@ -130,7 +130,6 @@ public class ShopManager : Singleton<ShopManager>
 
         Mathf.Clamp(_salmonOrderCount, 0, ORDER_THRESHOLD);
     }
-
     public void DecreaseSalmonOrder()
     {
         if (_salmonOrderCount > 0)
@@ -141,7 +140,6 @@ public class ShopManager : Singleton<ShopManager>
 
         Mathf.Clamp(_salmonOrderCount, 0, _salmonOrderCount);
     }
-
     public void IncreaseTunaOrder()
     {
         _tunaOrderCount++;
@@ -159,9 +157,53 @@ public class ShopManager : Singleton<ShopManager>
         Mathf.Clamp(_tunaOrderCount, 0, _salmonOrderCount);
     }
 
+    public void IncreaseFishOrder(FishType type)
+    {
+        if (type == FishType.SALMON)
+        {
+            _salmonOrderCount++;
+            Mathf.Clamp(_salmonOrderCount, 0, ORDER_THRESHOLD);
+        }
+        else
+        {
+            _tunaOrderCount++;
+            Mathf.Clamp(_tunaOrderCount, 0, ORDER_THRESHOLD);
+        }
+
+        UpdateFishCountUI();
+    }
+    public void DecreaseFishOrder(FishType type)
+    {
+        if (type == FishType.SALMON)
+        {
+            _salmonOrderCount--;
+            Mathf.Clamp(_salmonOrderCount, 0, _salmonOrderCount);
+        }
+        else
+        {
+            _tunaOrderCount--;
+            Mathf.Clamp(_tunaOrderCount, 0, _tunaOrderCount);
+        }
+            
+        UpdateFishCountUI();
+    }
+
 #endregion
 
 #region UI_Methods
+
+    void UpdateAllUI()
+    {
+        UpdateSalmonCountUI();
+        UpdateTunaCountUI();
+        UpdatePlayerMoneyUI();
+        UpdateTotalPriceUI();
+    }
+    void UpdateFishCountUI()
+    {
+        UpdateSalmonCountUI();
+        UpdateTunaCountUI();
+    }
 
     void UpdateSalmonCountUI() => 
         _salmonOrderAmountText.text = $"{_salmonOrderCount}";
