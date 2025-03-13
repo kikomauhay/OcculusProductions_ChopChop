@@ -1,46 +1,72 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Xml.Schema;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
+
+
+[System.Serializable]
+public struct OrderUI
+{
+    [Header("Spawning")]
+    public GameObject _orderPrefab;
+    public Transform _spawnpoint;
+
+    [Header("Counts & Prices")]
+    public int _stockCount;   // # of ingredients in your inventory
+    public int _toOrderCount; // # of ingredients to buy
+    public float _stockPrice, _totalPrice;
+
+    [Header("UI Texts")]
+    public TextMeshProUGUI _stockCountTxt;
+    public TextMeshProUGUI _toOrderCountTxt;
+    public TextMeshProUGUI _priceTxt, _totalPriceTxt;
+}
+
 
 public class OrderInventoryUI : MonoBehaviour
 {
-    [Header("GameObjects")]
-    [SerializeField] private GameObject salmonSlabPrefab;
-    [SerializeField] private GameObject tunaSlabPrefab;
-    [SerializeField] private GameObject ricePrefab; //idk if this is it
-    [SerializeField] private Transform riceSpawnPoint; //spawn Point for rice, idk kung ano plano ngo
-    [SerializeField] private Transform fishSpawnPoint;
-    //----------------------------------------------------------------//
-    [Header("PlayerCurrency")]
-    [SerializeField] private int startPlayerMoney;
-    [SerializeField] private int currentPlayerMoney;
-    [SerializeField] private TextMeshProUGUI txtCurrentPlayerMoney;
-    //----------------------------------------------------------------//
-    [Header("IngredientStockCount")]
-    [SerializeField] private int currentSalmonStock;
-    [SerializeField] private TextMeshProUGUI txtCurrentSalmonStockCount;
-    [SerializeField] private int currentTunaStock;
-    [SerializeField] private TextMeshProUGUI txtCurrentTunaStockCount;
-    [SerializeField] private float currentRiceStock; //I left this as float because Idk maybe we indicate per 0.1 decrements per grab of rice?
-    [SerializeField] private TextMeshProUGUI txtCurrentRiceStockCount;
-    //----------------------------------------------------------------//
-    [Header("ToOrderIngredientCount")]
-    [SerializeField] private int salmonSlabOrderCount;
-    [SerializeField] private TextMeshProUGUI txtSalmonOrderCount;
-    [SerializeField] private int tunaSlabOrderCount;
-    [SerializeField] private TextMeshProUGUI txtTunaOrderCount;
-    [SerializeField] private int riceOrderCount;
-    [SerializeField] private TextMeshProUGUI txtRiceOrderCount;
-    //----------------------------------------------------------------//
-    [Header("IngredientPrice")]
+    #region Members
+
+    [Header("Ingredient UI Components"), Tooltip("0 = salmon, 1 = tuna, 2 = rice")]
+    [SerializeField] OrderUI[] IngredientOrders;
+    
+    [SerializeField] TextMeshProUGUI _playerMoneyTxt, _totalPriceTxt;
+
+    const int MAX_STOCK_COUNT = 99;
+    float _totalPrice;
+
+    /* -OLD UI VARIABLES -
+    [Header("Prefabs to Spawn")]
+    [SerializeField] private GameObject _ricePrefab;
+    [SerializeField] private GameObject _salmonSlabPrefab, _tunaSlabPrefab;
+
+    [Header("Spawnpoints")]
+    [SerializeField] private Transform _riceSpawnpoint;
+    [SerializeField] private Transform _fishSpawnpoint; 
+
+    // [Header("Player Money")]
+    // [SerializeField] private TextMeshProUGUI _playerMoneyTxt;
+    // [SerializeField] private int startPlayerMoney;
+    // [SerializeField] private int currentPlayerMoney;
+
+    /*
+    [Header("Ingredient Stock Count")] // items in inventory
+    [SerializeField] private float _currentRiceStock; //I left this as float because Idk maybe we indicate per 0.1 decrements per grab of rice?
+    [SerializeField] private int _currentSalmonStock, _currentTunaStock;
+    [SerializeField] private TextMeshProUGUI _currentSalmonStockTxt, _currentTunaStockTxt, _currentRiceStockTxt;
+
+    [Header("To-Order-Ingredient Count")]
+    [SerializeField] private int _riceOrderCount;
+    [SerializeField] private int _salmonSlabOrderCount, _tunaSlabOrderCount;
+    [SerializeField] private TextMeshProUGUI _salmonOrderCountTxt, _tunaOrderCountTxt, _riceOrderCountTxt; 
+    
+    [Header("Ingredient Prices")]
     [SerializeField] private int salmonSlabPrice;
     [SerializeField] private TextMeshProUGUI txtSalmonSlabPrice;
     [SerializeField] private int tunaSlabPrice;
     [SerializeField] private TextMeshProUGUI txtTunaSlabPrice;
     [SerializeField] private int ricePrice;
-    [SerializeField] private TextMeshProUGUI txtRicePrice;
+    [SerializeField] private TextMeshProUGUI txtRicePrice; 
+    
     //----------------------------------------------------------------//
     [Header("TotalPrice")]
     [SerializeField] private int salmonOrderTotalPrice;
@@ -50,29 +76,37 @@ public class OrderInventoryUI : MonoBehaviour
     [SerializeField] private int riceOrderTotalPrice;
     [SerializeField] private TextMeshProUGUI txtRiceTotalPrice;
     [SerializeField] private int totalPrice;
-    [SerializeField] private TextMeshProUGUI txtTotalPrice;
+    [SerializeField] private TextMeshProUGUI txtTotalPrice; /**/
+
+
+
+    #endregion
 
     // Start is called before the first frame update
     void Start()
     {
-        currentPlayerMoney = startPlayerMoney;
+        // currentPlayerMoney = startPlayerMoney;
+        // GameManager.Instance.AddMoney(10000f); // +10k  
+
+        // buy button -> do order supplies
     }
 
     // Update is called once per frame
+    /*
     void Update()
     {
         //player currency
-        txtCurrentPlayerMoney.text = currentPlayerMoney.ToString();
+        _playerMoneyTxt.text = $"{GameManager.Instance.AvailableMoney}";
 
         //IngredientStockCount
-        txtCurrentSalmonStockCount.text = currentSalmonStock.ToString();
-        txtCurrentTunaStockCount.text = currentTunaStock.ToString();
-        txtCurrentRiceStockCount.text = currentRiceStock.ToString();
+        _currentSalmonStockTxt.text = _currentSalmonStock.ToString();
+        _currentTunaStockTxt.text = _currentTunaStock.ToString();
+        _currentRiceStockTxt.text = _currentRiceStock.ToString();
 
         //ToOrderIngredientCount
-        txtSalmonOrderCount.text = salmonSlabOrderCount.ToString();
-        txtTunaOrderCount.text = tunaSlabOrderCount.ToString();
-        txtRiceOrderCount.text = riceOrderCount.ToString();
+        _salmonOrderCountTxt.text = _salmonSlabOrderCount.ToString();
+        _tunaOrderCountTxt.text = _tunaSlabOrderCount.ToString();
+        _riceOrderCountTxt.text = _riceOrderCount.ToString();
 
         //IngredientPrice
         txtSalmonSlabPrice.text = salmonSlabPrice.ToString();
@@ -83,127 +117,136 @@ public class OrderInventoryUI : MonoBehaviour
         txtSalmonTotalPrice.text = CalculateSalmonTotalPrice().ToString();
         txtTunaTotalPrice.text = CalculateTunaTotalPrice().ToString();
         txtRiceTotalPrice.text = CalculateRiceTotalPrice().ToString();
-        txtTotalPrice.text = CalculateTotalPrice().ToString();
+        _totalPriceTxt.text = CalculateTotalPrice().ToString();
         //txtTotalPrice.text = totalPrice.ToString();
     }
 
+#region Public
+
     public void DoOrderSupplies()
     {
-        if(currentPlayerMoney >= totalPrice) 
+        if(GameManager.Instance.AvailableMoney >= totalPrice) 
         { 
             ToOrderSupplies();
-            currentPlayerMoney -= totalPrice;
+            GameManager.Instance.DeductMoney(totalPrice);
         }
     }
 
     public void ToOrderSupplies()
     {
-        if (salmonSlabOrderCount > 0)
+        if (_salmonSlabOrderCount > 0)
         {
-            for (int i = 0; i < salmonSlabOrderCount; i++)
+            for (int i = 0; i < _salmonSlabOrderCount; i++)
             {
-                Instantiate(salmonSlabPrefab, fishSpawnPoint.transform.localPosition, fishSpawnPoint.transform.rotation);
+                Instantiate(_salmonSlabPrefab, _fishSpawnpoint.transform.localPosition, _fishSpawnpoint.transform.rotation);
             }
         }
 
-        if (tunaSlabOrderCount > 0)
+        if (_tunaSlabOrderCount > 0)
         {
-            for (int i = 0; i < tunaSlabOrderCount; i++)
+            for (int i = 0; i < _tunaSlabOrderCount; i++)
             {
-                Instantiate(tunaSlabPrefab, fishSpawnPoint.transform.localPosition, fishSpawnPoint.transform.rotation);
+                Instantiate(_tunaSlabPrefab, _fishSpawnpoint.transform.localPosition, _fishSpawnpoint.transform.rotation);
             }
         }
 
-        if(riceOrderCount > 0)
+        if(_riceOrderCount > 0)
         {
             //Insert Instantiate code here
         }
 
         // Reset order counts after spawning
-        salmonSlabOrderCount = 0;
-        tunaSlabOrderCount = 0;
-        riceOrderCount = 0;
+        _salmonSlabOrderCount = 0;
+        _tunaSlabOrderCount = 0;
+        _riceOrderCount = 0;
     }
+
+    public void IncreaseSalmonSlabOrder()
+    {
+        _salmonSlabOrderCount++;
+
+        Mathf.Clamp(_salmonSlabOrderCount, 0, 99);
+    }
+
+    public void DecreaseSalmonSlabOrder()
+    {
+        if (_salmonSlabOrderCount > 0)
+        {
+            _salmonSlabOrderCount--;
+        }
+
+        Mathf.Clamp(_salmonSlabOrderCount, 0, _salmonSlabOrderCount);
+    }
+
+    public void IncreaseTunaSlabOrder()
+    {
+        _tunaSlabOrderCount++;
+
+        Mathf.Clamp(_tunaSlabOrderCount, 0, 99);
+    }
+
+    public void DecreaseTunaSlabOrder()
+    {
+        if (_tunaSlabOrderCount > 0)
+        {
+            _tunaSlabOrderCount--;
+        }
+
+        Mathf.Clamp(_tunaSlabOrderCount, 0, _tunaSlabOrderCount);
+    }
+
+    public void IncreaseRiceAmount()
+    {
+        _riceOrderCount++;
+
+        Mathf.Clamp(_riceOrderCount, 0, 1);
+    }
+
+    public void DecreaseRiceAmount()
+    {
+        if (_riceOrderCount > 0)
+        {
+            _riceOrderCount--;
+        }
+
+        Mathf.Clamp(_riceOrderCount, 0, _riceOrderCount);
+    }
+#endregion
+
+    #region Private
 
     private int CalculateTotalPrice()
     {
-        totalPrice = (salmonSlabOrderCount * salmonSlabPrice) + 
-                     (tunaSlabOrderCount * tunaSlabPrice)     +
-                     (riceOrderCount * ricePrice)               ;
+        totalPrice = (_salmonSlabOrderCount * salmonSlabPrice) + 
+                     (_tunaSlabOrderCount * tunaSlabPrice)     +
+                     (_riceOrderCount * ricePrice)               ;
 
         return totalPrice;
     }
 
     private int CalculateSalmonTotalPrice()
     {
-        salmonOrderTotalPrice = (salmonSlabOrderCount * salmonSlabPrice);
+        salmonOrderTotalPrice = (_salmonSlabOrderCount * salmonSlabPrice);
 
         return salmonOrderTotalPrice;
     }
 
     private int CalculateTunaTotalPrice()
     {
-        tunaOrderTotalPrice = (tunaSlabOrderCount * tunaSlabPrice);
+        tunaOrderTotalPrice = (_tunaSlabOrderCount * tunaSlabPrice);
 
         return tunaOrderTotalPrice;
     }
 
     private int CalculateRiceTotalPrice()
     {
-        riceOrderTotalPrice = (riceOrderCount * ricePrice);
+        riceOrderTotalPrice = (_riceOrderCount * ricePrice);
 
         return riceOrderTotalPrice;
     }
 
+#endregion
 
-    public void IncreaseSalmonSlabOrder()
-    {
-        salmonSlabOrderCount++;
-
-        Mathf.Clamp(salmonSlabOrderCount, 0, 99);
-    }
-
-    public void DecreaseSalmonSlabOrder()
-    {
-        if (salmonSlabOrderCount > 0)
-        {
-            salmonSlabOrderCount--;
-        }
-
-        Mathf.Clamp(salmonSlabOrderCount, 0, salmonSlabOrderCount);
-    }
-
-    public void IncreaseTunaSlabOrder()
-    {
-        tunaSlabOrderCount++;
-
-        Mathf.Clamp(tunaSlabOrderCount, 0, 99);
-    }
-
-    public void DecreaseTunaSlabOrder()
-    {
-        if (tunaSlabOrderCount > 0)
-        {
-            tunaSlabOrderCount--;
-        }
-
-        Mathf.Clamp(tunaSlabOrderCount, 0, tunaSlabOrderCount);
-    }
-
-    public void IncreaseRiceAmount()
-    {
-        riceOrderCount++;
-
-        Mathf.Clamp(riceOrderCount, 0, 1);
-    }
-
-    public void DecreaseRiceAmount()
-    {
-        if(riceOrderCount > 0)
-        {
-            riceOrderCount--;
-        }
-
-        Mathf.Clamp(riceOrderCount, 0, riceOrderCount);
-    }
+    */
+    
 }
