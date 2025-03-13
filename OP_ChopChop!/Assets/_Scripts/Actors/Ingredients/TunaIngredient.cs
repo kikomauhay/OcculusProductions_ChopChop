@@ -5,7 +5,7 @@ public class TunaIngredient : FishIngredient
         base.Start();
 
         name = "Tuna";
-        _ingredientType = IngredientType.TUNA;
-        _fishType = FishType.TUNA;
+        //_ingredientType = IngredientType.TUNA;
+        //_fishType = FishType.TUNA;
     }
 }
