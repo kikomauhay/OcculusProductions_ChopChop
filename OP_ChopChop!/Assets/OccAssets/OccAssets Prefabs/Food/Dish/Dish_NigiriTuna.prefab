@@ -411,12 +411,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743a916b100adae4d9f58e1c401605c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trashType: 0
-  _dirtyPlateMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
-  _cleanPlateMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
-  _cleanTrigger: {fileID: 0}
-  _isDirty: 0
-  _isPlated: 1
+  _cleanMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
+  _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
+  _cleanTrigger: {fileID: 1224727216559202365}
 --- !u!65 &1224727216559202365
 BoxCollider:
   m_ObjectHideFlags: 0
