@@ -39,13 +39,13 @@ public enum GameShift // CORRECT ORDER
         SASHIMI_SALMON, 
         SASHIMI_TUNA 
     }
-    public enum IngredientType // CORRECT ORDER
+    public enum IngredientType // IN A CERTAIN ORDER
     {    
         RICE, 
         SALMON,
         TUNA
     }
-    public enum IngredientState // CORRECT ORDER
+    public enum IngredientState // IN A CERTAIN ORDER
     { 
         DEFAULT, 
         EXPIRED, 
@@ -63,18 +63,19 @@ public enum GameShift // CORRECT ORDER
         SALMON, 
         TUNA 
     }
-    public enum MoldType // CORRECT ORDER
-{
+    public enum MoldType // IN A CERTAIN ORDER
+    {
         UNMOLDED,
         GOOD,
         PERFECT,
         BAD
     }
+
 #endregion
 
 #region Others
 
-public enum StorageType 
+    public enum StorageType 
     { 
         CHILLER, 
         FREEZER 

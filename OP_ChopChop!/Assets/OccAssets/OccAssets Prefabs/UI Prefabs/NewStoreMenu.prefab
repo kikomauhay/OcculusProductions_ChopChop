@@ -5349,37 +5349,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b887e45d41c3bf14cb7cbb4f5faa0857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IngredientOrders:
-  - _orderPrefab: {fileID: 0}
-    _spawnpoint: {fileID: 0}
-    _stockCount: 0
-    _toOrderCount: 0
-    _stockPrice: 0
-    _totalPrice: 0
-    _stockCountTxt: {fileID: 6402165608114714155}
-    _toOrderCountTxt: {fileID: 7306440849182462893}
-    _priceTxt: {fileID: 374647085295484329}
-    _totalPriceTxt: {fileID: 1590222942215699125}
-  - _orderPrefab: {fileID: 0}
-    _spawnpoint: {fileID: 0}
-    _stockCount: 0
-    _toOrderCount: 0
-    _stockPrice: 0
-    _totalPrice: 0
-    _stockCountTxt: {fileID: 1315881442225615310}
-    _toOrderCountTxt: {fileID: 3861621578918593984}
-    _priceTxt: {fileID: 5793301182131650285}
-    _totalPriceTxt: {fileID: 1171105451942152039}
-  - _orderPrefab: {fileID: 0}
-    _spawnpoint: {fileID: 0}
-    _stockCount: 0
-    _toOrderCount: 0
-    _stockPrice: 0
-    _totalPrice: 0
-    _stockCountTxt: {fileID: 1601948037363424787}
-    _toOrderCountTxt: {fileID: 2466455362994464616}
-    _priceTxt: {fileID: 4582020865113599955}
-    _totalPriceTxt: {fileID: 1776229476188357507}
+  _ingredientOrders:
+  - OrderPrefab: {fileID: 0}
+    Spawnpoint: {fileID: 0}
+    InventoryCount: 0
+    BuyCount: 0
+    StockPrice: 0
+    TotalPrice: 0
+    InventoryCountTxt: {fileID: 0}
+    BuyCountTxt: {fileID: 0}
+    StockPriceTxt: {fileID: 0}
+    TotalPriceTxt: {fileID: 0}
+  - OrderPrefab: {fileID: 0}
+    Spawnpoint: {fileID: 0}
+    InventoryCount: 0
+    BuyCount: 0
+    StockPrice: 0
+    TotalPrice: 0
+    InventoryCountTxt: {fileID: 0}
+    BuyCountTxt: {fileID: 0}
+    StockPriceTxt: {fileID: 0}
+    TotalPriceTxt: {fileID: 0}
+  - OrderPrefab: {fileID: 0}
+    Spawnpoint: {fileID: 0}
+    InventoryCount: 0
+    BuyCount: 0
+    StockPrice: 0
+    TotalPrice: 0
+    InventoryCountTxt: {fileID: 0}
+    BuyCountTxt: {fileID: 0}
+    StockPriceTxt: {fileID: 0}
+    TotalPriceTxt: {fileID: 0}
   _playerMoneyTxt: {fileID: 8062479003663044360}
   _totalPriceTxt: {fileID: 6139427797404662674}
 --- !u!1 &9070508987573380331

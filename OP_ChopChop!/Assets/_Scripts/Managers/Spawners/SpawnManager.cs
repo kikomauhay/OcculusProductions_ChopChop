@@ -4,8 +4,7 @@ using UnityEngine;
 
 /// </summary> -WHAT DOES THIS SCRIPT DO-
 ///
-/// Spawns anything that comes out of the game
-/// Uses events to handle different spawning types
+/// Spawns different objects that's needed in the game.
 ///
 /// </summary>
 
@@ -26,9 +25,11 @@ public class SpawnManager : Singleton<SpawnManager>
     [SerializeField] ColliderCheck[] _colliderChecks;
     List<GameObject> _seatedCustomers = new List<GameObject>();
     public int CustomerCount => _seatedCustomers.Count;
-    const int MAX_CUSTOMER_COUNT = 4;   
+    const int MAX_CUSTOMER_COUNT = 4;
 
 #endregion
+
+#region Unity_Methods
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() 
@@ -46,6 +47,21 @@ public class SpawnManager : Singleton<SpawnManager>
         GameManager.Instance.OnStartService -= StartCustomerSpawning;
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
     }
+    IEnumerator HandleCustomer()
+    {
+        yield return new WaitForSeconds(5f);
+        Debug.LogWarning("Spawned a new customer!");
+        SpawnCustomer(GiveAvaiableSeat());
+
+        while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
+        {
+            yield return new WaitForSeconds(10f);
+            Debug.LogWarning("Spawned a new customer!");   
+            SpawnCustomer(GiveAvaiableSeat());
+        }
+    }
+
+#endregion
 
 #region Spawning
 
@@ -63,45 +79,7 @@ public class SpawnManager : Singleton<SpawnManager>
         return Instantiate(obj,
                            t.position, t.rotation,
                            _bins[(int)type]);
-    }
-    /*
-    public void SpawnFood(GameObject obj, Transform t) 
-    {
-        Instantiate(obj, 
-                    t.position, t.rotation,
-                    _bins[1]); 
-    } /*
-    public GameObject SpawnDish(GameObject obj, Transform t)
-    {
-        return Instantiate(obj,
-                    t.position, t.rotation,
-                    _bins[2]);
-    } /*
-    public GameObject SpawnCustomer(Transform t)
-    {
-        return Instantiate(_customerPrefab, 
-                           t.position, t.rotation,
-                           _bins[3]);         
-    }    */
-
-#endregion
-
-#region Customer
-
-    int GiveAvaiableSeat() // sets the index where the customer should sit
-    {
-        for (int i = 0; i < _customerSeats.Length; i++)
-        {
-            CustomerSeat seat = _customerSeats[i].gameObject.GetComponent<CustomerSeat>();
-
-            if (seat.IsEmpty)
-                return i;
-            
-            else 
-                continue;
-        }
-        return -1; // all seats are empty
-    }
+    }    
     void SpawnCustomer(int idx)
     {
         if (idx == -1)
@@ -135,8 +113,12 @@ public class SpawnManager : Singleton<SpawnManager>
 
         // prevents multiple customers getting the same seat 
         seat.IsEmpty = false;
-    }
-    
+    } 
+
+#endregion
+
+#region Customer_Helpers
+
     public void RemoveCustomer(GameObject customer) 
     {
         int idx = customer.GetComponent<CustomerActions>().SeatIndex;
@@ -145,8 +127,27 @@ public class SpawnManager : Singleton<SpawnManager>
 
         _customerSeats[idx].IsEmpty = true;
         _colliderChecks[idx].CustomerOrder = null;
+    }   
+    int GiveAvaiableSeat() // sets the index where the customer should sit
+    {
+        for (int i = 0; i < _customerSeats.Length; i++)
+        {
+            CustomerSeat seat = _customerSeats[i].gameObject.GetComponent<CustomerSeat>();
+
+            if (seat.IsEmpty)
+                return i;
+            
+            else 
+                continue;
+        }
+        return -1; // all seats are empty
     }
 
+#endregion
+    
+#region Event_Methods
+
+    void StartCustomerSpawning() => StartCoroutine(HandleCustomer());
     void ClearCustomerSeats()
     {
         foreach (GameObject obj in _seatedCustomers)
@@ -155,30 +156,15 @@ public class SpawnManager : Singleton<SpawnManager>
         _seatedCustomers.Clear();
 
         foreach (CustomerSeat seat in _customerSeats)
-            seat.IsEmpty = true;
+            seat.IsEmpty = true;        
 
         foreach (ColliderCheck col in _colliderChecks)
             col.CustomerOrder = null;
 
-        StopAllCoroutines();
+        StopAllCoroutines(); 
     }
-    void StartCustomerSpawning() => StartCoroutine(HandleCustomer());
-
+    
 #endregion
-
-    IEnumerator HandleCustomer()
-    {
-        yield return new WaitForSeconds(5f);
-        Debug.LogWarning("Spawned a new customer!");
-        SpawnCustomer(GiveAvaiableSeat());
-
-        while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
-        {
-            yield return new WaitForSeconds(10f);
-            Debug.LogWarning("Spawned a new customer!");   
-            SpawnCustomer(GiveAvaiableSeat());
-        }
-    }
 
 #region Testing
 
