@@ -5,7 +5,7 @@ public class SalmonIngredient : FishIngredient
         base.Start();
 
         name = "Salmon";
-        _ingredientType = IngredientType.SALMON;
-        _fishType = FishType.SALMON;
+        //_ingredientType = IngredientType.SALMON;
+        //_fishType = FishType.SALMON;
     }
 }

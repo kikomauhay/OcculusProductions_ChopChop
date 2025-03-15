@@ -15,8 +15,8 @@ public class RiceIngredient : Ingredient
         base.Start();
 
         OnRiceMolded += ChangeRiceMold;
-        _moldType = MoldType.UNMOLDED;
-        _ingredientType = IngredientType.RICE;
+        //_moldType = MoldType.UNMOLDED;
+        //_ingredientType = IngredientType.RICE;
     }
     protected override void Reset()
     {

@@ -37,7 +37,7 @@ public class ShopManager : Singleton<ShopManager>
         _tunaOrderCount = 0;
         _salmonOrderCount = 0;
 
-        GameManager.Instance.AddMoney(10000f); // +10k  
+        // GameManager.Instance.AddMoney(10000f); // +10k  
 
         UpdateAllUI();
     }

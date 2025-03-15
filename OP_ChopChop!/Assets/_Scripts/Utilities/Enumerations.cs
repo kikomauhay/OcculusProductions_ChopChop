@@ -1,7 +1,7 @@
 using UnityEngine;
 public class Enumerations : MonoBehaviour {}
 
-public enum GameShift 
+public enum GameShift // CORRECT ORDER
 { 
     DEFAULT,
     PRE_PRE_SERVICE,
@@ -36,17 +36,16 @@ public enum GameShift
     { 
         NIGIRI_SALMON, 
         NIGIRI_TUNA, 
-        MAKI_SALMON, 
-        MAKI_TUNA 
+        SASHIMI_SALMON, 
+        SASHIMI_TUNA 
     }
-    public enum IngredientType // will expand later
-    { 
+    public enum IngredientType // IN A CERTAIN ORDER
+    {    
         RICE, 
-        TUNA, 
-        SALMON, 
-        SEAWEED 
+        SALMON,
+        TUNA
     }
-    public enum IngredientState 
+    public enum IngredientState // IN A CERTAIN ORDER
     { 
         DEFAULT, 
         EXPIRED, 
@@ -59,12 +58,12 @@ public enum GameShift
         THIN, 
         SLAB 
     }
-    public enum FishType // will expand expand later
+    public enum FishType // will expand later
     { 
         SALMON, 
         TUNA 
     }
-    public enum MoldType
+    public enum MoldType // IN A CERTAIN ORDER
     {
         UNMOLDED,
         GOOD,
@@ -74,9 +73,9 @@ public enum GameShift
 
 #endregion
 
-#region Attributes
+#region Others
 
-public enum StorageType 
+    public enum StorageType 
     { 
         CHILLER, 
         FREEZER 
