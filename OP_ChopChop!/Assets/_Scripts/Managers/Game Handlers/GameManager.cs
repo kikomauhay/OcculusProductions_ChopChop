@@ -34,6 +34,8 @@ public class GameManager : Singleton<GameManager>
 
 #endregion
 
+#region Unity_Mehods
+
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
@@ -47,6 +49,19 @@ public class GameManager : Singleton<GameManager>
         // ChangeShift(GameShift.PRE_PRE_SERVICE);
         ChangeShift(GameShift.SERVICE);
     }
+    IEnumerator StartShiftCountdown()
+    {
+        yield return new WaitForSeconds(10f);
+        ChangeShift(GameShift.POST_SERVICE);
+    }
+    IEnumerator TestShifCountdown(float timer, GameShift shift)
+    {
+        yield return new WaitForSeconds(timer);
+        ChangeShift(shift);
+        Debug.ClearDeveloperConsole();
+    }
+
+#endregion
 
 #region Public
 
@@ -205,18 +220,7 @@ public class GameManager : Singleton<GameManager>
 
 #endregion
 
-    IEnumerator StartShiftCountdown()
-    {
-        yield return new WaitForSeconds(10f);
-        ChangeShift(GameShift.POST_SERVICE);
-    }
-
-    IEnumerator TestShifCountdown(float timer, GameShift shift)
-    {
-        yield return new WaitForSeconds(timer);
-        ChangeShift(shift);
-        Debug.ClearDeveloperConsole();
-    }
+    
 
 
 #region Testing

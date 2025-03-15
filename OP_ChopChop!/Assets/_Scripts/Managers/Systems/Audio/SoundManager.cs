@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using System;
 
 public class SoundManager : Singleton<SoundManager>
 {
@@ -7,9 +7,14 @@ public class SoundManager : Singleton<SoundManager>
     public Sound[] Sounds;
     int i = 0; // testing
 
+#region Unity_Methods
+
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    void Update() => test();
+
+#endregion
+
+#region Public
 
     public void PlaySound(string title)
     {
@@ -29,6 +34,10 @@ public class SoundManager : Singleton<SoundManager>
     public void ToggleMute() => SoundSource.mute = !SoundSource.mute;
     public void SetSoundVolume(float v) => SoundSource.volume = v;
 
+#endregion
+
+#region Testing
+
     void test()
     {
         // plays all the sounds in order
@@ -44,4 +53,7 @@ public class SoundManager : Singleton<SoundManager>
         if (Input.GetKeyDown(KeyCode.Escape))
             PlaySound(UnityEngine.Random.value > 0.5f ? "fish slice 01" : "fish slice 02"); 
     }
+
+#endregion
+
 }
