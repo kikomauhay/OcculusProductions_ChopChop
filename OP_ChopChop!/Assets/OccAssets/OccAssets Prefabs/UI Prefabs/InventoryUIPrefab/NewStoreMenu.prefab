@@ -5350,36 +5350,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ingredientOrders:
+  - OrderPrefab: {fileID: 6471662108566301999, guid: 8ba3dee17cdd5c3439f8b5065cfb0e99,
+      type: 3}
+    Spawnpoint: {fileID: 0}
+    InventoryCount: 0
+    BuyCount: 0
+    StockPrice: 70
+    TotalPrice: 0
+    InventoryCountTxt: {fileID: 6402165608114714155}
+    BuyCountTxt: {fileID: 7306440849182462893}
+    StockPriceTxt: {fileID: 374647085295484329}
+    TotalPriceTxt: {fileID: 1590222942215699125}
+  - OrderPrefab: {fileID: 8873129294027024833, guid: ba797919c82adff4496e76c87131c561,
+      type: 3}
+    Spawnpoint: {fileID: 0}
+    InventoryCount: 0
+    BuyCount: 0
+    StockPrice: 100
+    TotalPrice: 0
+    InventoryCountTxt: {fileID: 1315881442225615310}
+    BuyCountTxt: {fileID: 3861621578918593984}
+    StockPriceTxt: {fileID: 5793301182131650285}
+    TotalPriceTxt: {fileID: 1171105451942152039}
   - OrderPrefab: {fileID: 0}
     Spawnpoint: {fileID: 0}
     InventoryCount: 0
     BuyCount: 0
-    StockPrice: 0
+    StockPrice: 50
     TotalPrice: 0
-    InventoryCountTxt: {fileID: 0}
-    BuyCountTxt: {fileID: 0}
-    StockPriceTxt: {fileID: 0}
-    TotalPriceTxt: {fileID: 0}
-  - OrderPrefab: {fileID: 0}
-    Spawnpoint: {fileID: 0}
-    InventoryCount: 0
-    BuyCount: 0
-    StockPrice: 0
-    TotalPrice: 0
-    InventoryCountTxt: {fileID: 0}
-    BuyCountTxt: {fileID: 0}
-    StockPriceTxt: {fileID: 0}
-    TotalPriceTxt: {fileID: 0}
-  - OrderPrefab: {fileID: 0}
-    Spawnpoint: {fileID: 0}
-    InventoryCount: 0
-    BuyCount: 0
-    StockPrice: 0
-    TotalPrice: 0
-    InventoryCountTxt: {fileID: 0}
-    BuyCountTxt: {fileID: 0}
-    StockPriceTxt: {fileID: 0}
-    TotalPriceTxt: {fileID: 0}
+    InventoryCountTxt: {fileID: 1601948037363424787}
+    BuyCountTxt: {fileID: 2466455362994464616}
+    StockPriceTxt: {fileID: 4582020865113599955}
+    TotalPriceTxt: {fileID: 4582020865113599955}
   _playerMoneyTxt: {fileID: 8062479003663044360}
   _totalPriceTxt: {fileID: 6139427797404662674}
 --- !u!1 &9070508987573380331
