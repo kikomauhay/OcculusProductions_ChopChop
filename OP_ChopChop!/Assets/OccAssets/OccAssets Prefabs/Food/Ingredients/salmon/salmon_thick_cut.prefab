@@ -30,8 +30,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4045151705470340862}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.5428144, y: 0.053544376, z: -6.0304713}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -282,14 +282,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPrefab: {fileID: 4045151705470340862}
-  nextPrefab: {fileID: 4145670708388241588, guid: 6abfe7c3b5a8f2d4ea2f59f093e506e7,
+  _currentPrefab: {fileID: 4045151705470340862}
+  _nextPrefab: {fileID: 4145670708388241588, guid: 6abfe7c3b5a8f2d4ea2f59f093e506e7,
     type: 3}
-  sharpObject: {fileID: 0}
-  MeatBoard: {fileID: 0}
-  SmokeVFX: {fileID: 2611135798559895553, guid: 03277cac3d95b3d46a37879aea695411,
-    type: 3}
-  IsAttached: 0
 --- !u!114 &617058654935941288
 MonoBehaviour:
   m_ObjectHideFlags: 0
