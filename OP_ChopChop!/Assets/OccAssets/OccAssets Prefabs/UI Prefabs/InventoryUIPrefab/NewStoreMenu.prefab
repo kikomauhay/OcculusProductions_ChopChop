@@ -1401,7 +1401,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9070508986851495209}
         m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: IncreaseSalmonSlabOrder
+        m_MethodName: Button_IncreaseSalmonCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1740,7 +1740,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9070508986851495209}
         m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: DecreaseSalmonSlabOrder
+        m_MethodName: Button_DecreaseSalmonCount
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3442,7 +3442,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9070508986851495209}
         m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: DoOrderSupplies
+        m_MethodName: BuyIngredients
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

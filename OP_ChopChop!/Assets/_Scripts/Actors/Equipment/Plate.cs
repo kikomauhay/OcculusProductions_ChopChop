@@ -20,7 +20,7 @@ public class Plate : Equipment
         _maxUsageCounter = 1;
 
         IsPlated = false;
-        _cleanTrigger.enabled = false;
+        _cleanTrigger.enabled = true;
     }
 
     // void Update() => test();
@@ -39,12 +39,12 @@ public class Plate : Equipment
             other.GetComponent<Food>().CreateDish(transform);
         }
 
-        
-        // if (sponge.IsWet)
-        // {
-        //     SetCleaned();
-        //     Debug.Log("Cleaning Plate");
-        // }
+
+        if (other.GetComponent<Sponge>().IsWet)
+        {
+             ToggleClean();
+             Debug.Log("Cleaning Plate");
+        }
     }
 
     /*
