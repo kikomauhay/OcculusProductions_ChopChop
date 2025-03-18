@@ -7,6 +7,7 @@ public class Sliceable : MonoBehaviour
 
     // will change this into an array later
     [SerializeField] private GameObject _currentPrefab, _nextPrefab;
+    [SerializeField] private Collider _SnapCollider;
 
     IXRSelectInteractor _interactor;
 
@@ -79,6 +80,7 @@ public class Sliceable : MonoBehaviour
                                           SpawnObjectType.INGREDIENT);
 
         Debug.Log("SLICED!");
+        /*_SnapCollider.GetComponent<Snap>().CallReset();*/
 
         //works
         Destroy(gameObject);

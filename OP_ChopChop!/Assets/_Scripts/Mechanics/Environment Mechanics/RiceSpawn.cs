@@ -22,28 +22,32 @@ public class RiceSpawn : MonoBehaviour
     {
         IXRSelectInteractor interactor = null;
 
-        if (CheckGrip(Left) && other.gameObject.GetComponent<ActionBasedController>())
+        if (Left && other.gameObject.GetComponent<ActionBasedController>())
         {
-            interactor = Left.GetComponent<XRDirectInteractor>(); 
-            _mainInteractor = interactor;
+            interactor = Left.GetComponent<XRDirectInteractor>();
         }
-        if (CheckGrip(Right) && other.gameObject.GetComponent<ActionBasedController>())
+        else if (Right && other.gameObject.GetComponent<ActionBasedController>())
         {
             interactor = Right.GetComponent<XRDirectInteractor>();
-            _mainInteractor = interactor;
         }
 
-        if (_mainInteractor != null)
+        if (interactor != null)
+        {
+            _mainInteractor = interactor;
+            Debug.Log("Interactor Set");
+
             _mainInteractor.selectEntered.AddListener(RiceEvent);
-        
+        }
         else
-            Debug.LogError("Interactor is null");
-        
+        {
+            Debug.LogError("Interactor is null or not valid.");
+        }
     }
     void OnTriggerExit(Collider other)
     {
         _mainInteractor.selectEntered.RemoveListener(RiceEvent);
         _mainInteractor = null;
+        Debug.Log("Main Interactor Removed");
     }
     void RiceEvent(SelectEnterEventArgs args)
     { 
