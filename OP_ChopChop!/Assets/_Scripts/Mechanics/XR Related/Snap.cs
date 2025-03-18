@@ -7,7 +7,8 @@ public class Snap : MonoBehaviour
     [SerializeField]
     float timer;
 
-    public Collider SnapCollider;
+    [SerializeField]
+    Collider SnapCollider;
 
     public void ResetSnap()
     {
@@ -54,6 +55,10 @@ public class Snap : MonoBehaviour
         {
             rb.isKinematic = true;
         }
+    }
+    public void CallReset()
+    {
+        StartCoroutine(IResetTrigger());
     }
 
     private IEnumerator IResetTrigger()
