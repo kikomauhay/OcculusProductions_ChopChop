@@ -92,5 +92,13 @@ public enum GameShift // CORRECT ORDER
         SEAWEED
     }
 
+public enum FishType
+{
+
+}
+
+
+
+
 
 #endregion
