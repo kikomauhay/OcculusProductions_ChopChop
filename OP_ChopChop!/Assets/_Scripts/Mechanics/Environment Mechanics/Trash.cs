@@ -7,34 +7,33 @@ public class Trash : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<Trashable>() != null)
+        GameObject obj = other.gameObject;
+
+        if (obj.GetComponent<Trashable>() == null) return;
+        
+        switch(obj.GetComponent<Trashable>().TrashTypes)
         {
-            if (other.gameObject.GetComponent<Trashable>().TrashTypes == TrashableType.INGREDIENT)
-            {
-                Destroy(other.gameObject);
-                SoundManager.Instance.PlaySound("dispose food");
-            }
-            if (other.gameObject.GetComponent<Trashable>().TrashTypes == TrashableType.FOOD)
-            {
-                Debug.Log("Food has been thrown out");
-          /*      GameObject _DirtyPlate = InstantiatePlate();
-                AttachToHand(_DirtyPlate, _mainInteractor);*/
-                
-            }
-            if (other.gameObject.GetComponent<Trashable>().TrashTypes == TrashableType.EQUIPMENT)
-            {
-                //Reset Equipment here
-                //Set Reset Points
-            }
+            case TrashableType.INGREDIENT:
+                DestroyIngredient(obj.GetComponent<Ingredient>());
+                break;
+            case TrashableType.FOOD:
+                break;
+            case TrashableType.EQUIPMENT:
+                break;
         }
     }
 
     #region Functions
 
-    // If we have spawn manager na, put the Instantiate codes into spawn manager na lang
-    private GameObject InstantiatePlate(GameObject _plate, Vector3 _currentPosition, Quaternion _currentRotation)
+    void DestroyIngredient(Ingredient ing)
     {
-        return Instantiate(_plate,_currentPosition,_currentRotation);
+        Destroy(gameObject);
+    }
+
+    void DoFoodLogic(Food food)
+    {
+        food.SetContaminated();
+        Debug.LogWarning($"{food.gameObject.name} has been contaminated!");
     }
 
     private void AttachToHand(GameObject _spawnedPlate, IXRSelectInteractor _interactor)

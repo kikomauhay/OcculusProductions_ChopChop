@@ -20,17 +20,13 @@ public class Plate : Equipment
         _maxUsageCounter = 1;
 
         IsPlated = false;
-        _cleanTrigger.enabled = false;
+        _cleanTrigger.enabled = true;
     }
 
     // void Update() => test();
-    
-
-    
 
     void OnTriggerEnter(Collider other)
-    {      
-        
+    {              
         if (other.GetComponent<Food>() != null && !IsPlated)
         {
             Destroy(gameObject);
@@ -39,12 +35,11 @@ public class Plate : Equipment
             other.GetComponent<Food>().CreateDish(transform);
         }
 
-        
-        // if (sponge.IsWet)
-        // {
-        //     SetCleaned();
-        //     Debug.Log("Cleaning Plate");
-        // }
+        if (other.GetComponent<Sponge>().IsWet && !IsClean)
+        {
+             ToggleClean();
+             Debug.Log("Cleaning Plate");
+        }
     }
 
     /*

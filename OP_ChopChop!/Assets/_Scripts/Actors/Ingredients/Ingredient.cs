@@ -16,11 +16,8 @@ public abstract class Ingredient : MonoBehaviour
     public IngredientStats IngredientStats => _ingredientStats;
     public IngredientType IngredientType => _ingredientType;
 
-    // INGREDIENT ENUMS
-    public IngredientState IngredientState { get; private set; } // changes inside this script
-    public TrashableType TrashableType { get; private set; }     // won't change at all once it's set
-
     // INGREDIENT ATTRIBUTES
+    public IngredientState IngredientState { get; private set; } // changes inside this script
     public float FreshnessRate { get; private set; } // the higher the score, the better
     public bool IsProperlyStored { get; set; }       // is changed outside the script
     public bool IsFresh { get; private set; }        // changes inside the enumerator
@@ -38,11 +35,10 @@ public abstract class Ingredient : MonoBehaviour
 
 #endregion
 
-
     protected virtual void Start() 
     {
         IngredientState = IngredientState.DEFAULT; 
-        TrashableType = TrashableType.INGREDIENT;  
+        // TrashableType = TrashableType.INGREDIENT;  
 
         FreshnessRate = 100f;     
         IsFresh = true;           

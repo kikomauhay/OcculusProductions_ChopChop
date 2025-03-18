@@ -7,6 +7,7 @@ public class Sliceable : MonoBehaviour
 
     // will change this into an array later
     [SerializeField] private GameObject _currentPrefab, _nextPrefab;
+    [SerializeField] private Collider _SnapCollider;
 
     IXRSelectInteractor _interactor;
 
@@ -46,6 +47,8 @@ public class Sliceable : MonoBehaviour
             SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                             "fish slice 01" :
                                             "fish slice 02");
+
+            SoundManager.Instance.PlaySound("knife chop");
             // Debug.LogWarning("Chopping");
         }
 
@@ -75,9 +78,9 @@ public class Sliceable : MonoBehaviour
         SpawnManager.Instance.SpawnObject(_nextPrefab,
                                           transform,
                                           SpawnObjectType.INGREDIENT);
-        //commented this out for now, null error was being caused
-        //SoundManager.Instance.PlaySound("knife chop");
+
         Debug.Log("SLICED!");
+        /*_SnapCollider.GetComponent<Snap>().CallReset();*/
 
         //works
         Destroy(gameObject);

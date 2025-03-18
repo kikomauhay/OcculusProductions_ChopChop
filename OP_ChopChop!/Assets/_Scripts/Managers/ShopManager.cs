@@ -1,8 +1,6 @@
 using UnityEngine;
 using TMPro;
 
-public enum ShoppingCart { SALMON, TUNA, RICE, SEAWEED } 
-
 public class ShopManager : Singleton<ShopManager>
 {
 #region Members   
@@ -157,33 +155,35 @@ public class ShopManager : Singleton<ShopManager>
         Mathf.Clamp(_tunaOrderCount, 0, _salmonOrderCount);
     }
 
-    public void IncreaseFishOrder(FishType type)
-    {
-        if (type == FishType.SALMON)
-        {
-            _salmonOrderCount++;
-            Mathf.Clamp(_salmonOrderCount, 0, ORDER_THRESHOLD);
-        }
-        else
+    public void IncreaseFishOrder(bool isTuna)
+    {        
+        if (isTuna)
         {
             _tunaOrderCount++;
             Mathf.Clamp(_tunaOrderCount, 0, ORDER_THRESHOLD);
         }
+        else
+        {
+            _salmonOrderCount++;
+            Mathf.Clamp(_salmonOrderCount, 0, ORDER_THRESHOLD);
+        }
 
         UpdateFishCountUI();
     }
-    public void DecreaseFishOrder(FishType type)
+    public void DecreaseFishOrder(bool isTuna)
     {
-        if (type == FishType.SALMON)
-        {
-            _salmonOrderCount--;
-            Mathf.Clamp(_salmonOrderCount, 0, _salmonOrderCount);
-        }
-        else
+
+        if (isTuna)
         {
             _tunaOrderCount--;
             Mathf.Clamp(_tunaOrderCount, 0, _tunaOrderCount);
         }
+        else
+        {
+            _salmonOrderCount--;
+            Mathf.Clamp(_salmonOrderCount, 0, _salmonOrderCount);
+        }
+        
             
         UpdateFishCountUI();
     }
