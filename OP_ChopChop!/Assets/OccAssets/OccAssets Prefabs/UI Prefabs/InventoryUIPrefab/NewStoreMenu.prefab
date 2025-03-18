@@ -665,10 +665,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9070508986851495209}
-        m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: DecreaseOrderCount
-        m_Mode: 3
+      - m_Target: {fileID: 6871160923573454168}
+        m_TargetAssemblyTypeName: NEW_OrderInventoryUI, Assembly-CSharp
+        m_MethodName: DecreaseRiceAmount
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1399,10 +1399,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9070508986851495209}
-        m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: IncreaseOrderCount
-        m_Mode: 3
+      - m_Target: {fileID: 6871160923573454168}
+        m_TargetAssemblyTypeName: NEW_OrderInventoryUI, Assembly-CSharp
+        m_MethodName: IncreaseSalmonSlabOrder
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1532,10 +1532,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9070508986851495209}
-        m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: IncreaseOrderCount
-        m_Mode: 3
+      - m_Target: {fileID: 6871160923573454168}
+        m_TargetAssemblyTypeName: NEW_OrderInventoryUI, Assembly-CSharp
+        m_MethodName: IncreaseTunaSlabOrder
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1738,10 +1738,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9070508986851495209}
-        m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: DecreaseOrderCount
-        m_Mode: 3
+      - m_Target: {fileID: 6871160923573454168}
+        m_TargetAssemblyTypeName: NEW_OrderInventoryUI, Assembly-CSharp
+        m_MethodName: DecreaseSalmonSlabOrder
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2435,10 +2435,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9070508986851495209}
-        m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: IncreaseOrderCount
-        m_Mode: 3
+      - m_Target: {fileID: 6871160923573454168}
+        m_TargetAssemblyTypeName: NEW_OrderInventoryUI, Assembly-CSharp
+        m_MethodName: IncreaseRiceAmount
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3440,9 +3440,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9070508986851495209}
-        m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: BuyIngredients
+      - m_Target: {fileID: 6871160923573454168}
+        m_TargetAssemblyTypeName: NEW_OrderInventoryUI, Assembly-CSharp
+        m_MethodName: DoOrderSupplies
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4968,10 +4968,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9070508986851495209}
-        m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: DecreaseOrderCount
-        m_Mode: 3
+      - m_Target: {fileID: 6871160923573454168}
+        m_TargetAssemblyTypeName: NEW_OrderInventoryUI, Assembly-CSharp
+        m_MethodName: DecreaseTunaSlabOrder
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5304,7 +5304,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9070508986851495208}
-  - component: {fileID: 9070508986851495209}
+  - component: {fileID: 6871160923573454168}
   m_Layer: 5
   m_Name: NewStoreMenu
   m_TagString: Untagged
@@ -5321,7 +5321,7 @@ RectTransform:
   m_GameObject: {fileID: 9070508986851495211}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0177, y: 1.0816115, z: 1.0177}
+  m_LocalScale: {x: 0.051918402, y: 0.10952269, z: 0.06520157}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1860027950884921192}
@@ -5337,7 +5337,7 @@ RectTransform:
   m_AnchoredPosition: {x: -6, y: -42}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9070508986851495209
+--- !u!114 &6871160923573454168
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5346,44 +5346,46 @@ MonoBehaviour:
   m_GameObject: {fileID: 9070508986851495211}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b887e45d41c3bf14cb7cbb4f5faa0857, type: 3}
+  m_Script: {fileID: 11500000, guid: f46ca7e8fe1a33647a7c57ec158cf5f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ingredientOrders:
-  - OrderPrefab: {fileID: 6471662108566301999, guid: 8ba3dee17cdd5c3439f8b5065cfb0e99,
-      type: 3}
-    Spawnpoint: {fileID: 0}
-    InventoryCount: 0
-    BuyCount: 0
-    StockPrice: 70
-    TotalPrice: 0
-    InventoryCountTxt: {fileID: 6402165608114714155}
-    BuyCountTxt: {fileID: 7306440849182462893}
-    StockPriceTxt: {fileID: 374647085295484329}
-    TotalPriceTxt: {fileID: 1590222942215699125}
-  - OrderPrefab: {fileID: 8873129294027024833, guid: ba797919c82adff4496e76c87131c561,
-      type: 3}
-    Spawnpoint: {fileID: 0}
-    InventoryCount: 0
-    BuyCount: 0
-    StockPrice: 100
-    TotalPrice: 0
-    InventoryCountTxt: {fileID: 1315881442225615310}
-    BuyCountTxt: {fileID: 3861621578918593984}
-    StockPriceTxt: {fileID: 5793301182131650285}
-    TotalPriceTxt: {fileID: 1171105451942152039}
-  - OrderPrefab: {fileID: 0}
-    Spawnpoint: {fileID: 0}
-    InventoryCount: 0
-    BuyCount: 0
-    StockPrice: 50
-    TotalPrice: 0
-    InventoryCountTxt: {fileID: 1601948037363424787}
-    BuyCountTxt: {fileID: 2466455362994464616}
-    StockPriceTxt: {fileID: 4582020865113599955}
-    TotalPriceTxt: {fileID: 4582020865113599955}
-  _playerMoneyTxt: {fileID: 8062479003663044360}
-  _totalPriceTxt: {fileID: 6139427797404662674}
+  salmonSlabPrefab: {fileID: 9223341567872474545, guid: f187849ca6808774d8c947b5df962e25,
+    type: 3}
+  tunaSlabPrefab: {fileID: 8873129294027024833, guid: ba797919c82adff4496e76c87131c561,
+    type: 3}
+  ricePrefab: {fileID: 0}
+  riceSpawnPoint: {fileID: 0}
+  salmonSpawnPoint: {fileID: 0}
+  tunaSpawnPoint: {fileID: 0}
+  startPlayerMoney: 500
+  currentPlayerMoney: 0
+  txtCurrentPlayerMoney: {fileID: 8062479003663044360}
+  currentSalmonStock: 0
+  txtCurrentSalmonStockCount: {fileID: 6402165608114714155}
+  currentTunaStock: 0
+  txtCurrentTunaStockCount: {fileID: 1315881442225615310}
+  currentRiceStock: 0
+  txtCurrentRiceStockCount: {fileID: 1601948037363424787}
+  salmonSlabOrderCount: 0
+  txtSalmonOrderCount: {fileID: 7306440849182462893}
+  tunaSlabOrderCount: 0
+  txtTunaOrderCount: {fileID: 3861621578918593984}
+  riceOrderCount: 0
+  txtRiceOrderCount: {fileID: 2466455362994464616}
+  salmonSlabPrice: 70
+  txtSalmonSlabPrice: {fileID: 374647085295484329}
+  tunaSlabPrice: 100
+  txtTunaSlabPrice: {fileID: 5793301182131650285}
+  ricePrice: 50
+  txtRicePrice: {fileID: 4582020865113599955}
+  salmonOrderTotalPrice: 0
+  txtSalmonTotalPrice: {fileID: 1590222942215699125}
+  tunaOrderTotalPrice: 0
+  txtTunaTotalPrice: {fileID: 1171105451942152039}
+  riceOrderTotalPrice: 0
+  txtRiceTotalPrice: {fileID: 1776229476188357507}
+  totalPrice: 0
+  txtTotalPrice: {fileID: 6139427797404662674}
 --- !u!1 &9070508987573380331
 GameObject:
   m_ObjectHideFlags: 0
