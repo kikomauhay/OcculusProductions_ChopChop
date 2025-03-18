@@ -60,7 +60,7 @@ public class Snap : MonoBehaviour
     private IEnumerator DelayedSetting(Collider other)
     {
         //Delay setting the collider to trigger
-        yield return new WaitForSeconds(1.5);
+        yield return new WaitForSeconds(1.5f);
         SetCollider(other);
     }
 }
