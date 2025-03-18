@@ -8,7 +8,7 @@ using TMPro;
 /// 
 /// </summary>
 
-public class OrderInventoryUI : MonoBehaviour
+public class TEMP_OrderInventoryUI : MonoBehaviour
 {
 #region Members
 

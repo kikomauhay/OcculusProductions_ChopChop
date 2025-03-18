@@ -24,13 +24,9 @@ public class Plate : Equipment
     }
 
     // void Update() => test();
-    
-
-    
 
     void OnTriggerEnter(Collider other)
-    {      
-        
+    {              
         if (other.GetComponent<Food>() != null && !IsPlated)
         {
             Destroy(gameObject);
@@ -39,8 +35,7 @@ public class Plate : Equipment
             other.GetComponent<Food>().CreateDish(transform);
         }
 
-
-        if (other.GetComponent<Sponge>().IsWet)
+        if (other.GetComponent<Sponge>().IsWet && !IsClean)
         {
              ToggleClean();
              Debug.Log("Cleaning Plate");

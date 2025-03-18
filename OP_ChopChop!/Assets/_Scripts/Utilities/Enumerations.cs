@@ -52,17 +52,6 @@ public enum GameShift // CORRECT ORDER
         CONTAMINATED, 
         STORED
     }
-    public enum SliceType 
-    { 
-        THICK, 
-        THIN, 
-        SLAB 
-    }
-    public enum FishType // will expand later
-    { 
-        SALMON, 
-        TUNA 
-    }
     public enum MoldType // IN A CERTAIN ORDER
     {
         UNMOLDED,
@@ -82,9 +71,10 @@ public enum GameShift // CORRECT ORDER
     }
     public enum TrashableType 
     { 
-        FOOD, 
+        EQUIPMENT,
         INGREDIENT, 
-        EQUIPMENT 
+        FOOD, 
+        DISH
     }
     public enum CatVariant 
     { 
@@ -94,5 +84,13 @@ public enum GameShift // CORRECT ORDER
         TORBIE, 
         TUXEDO 
     }
+    public enum ShoppingCart
+    {
+        SALMON,
+        TUNA,
+        RICE,
+        SEAWEED
+    }
+
 
 #endregion
