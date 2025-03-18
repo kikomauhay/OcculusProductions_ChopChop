@@ -65,9 +65,6 @@ public class CustomerOrder : MonoBehaviour
     {
         // customer eats the food before despawning
         // can add animation of the customer eating & sfx
-
-        Debug.LogWarning("CORRECT ORDER!");
-        // Debug.Log($"Waiting {_customerDeleteTimer} seconds before destroying {name}");
         
         yield return new WaitForSeconds(_customerDeleteTimer);
 
@@ -91,8 +88,6 @@ public class CustomerOrder : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             _customerScore -= _patienceRate;
-            // Debug.Log($"{name}'s score: {_customerScore}");
-            // Debug.Log($"Customer score of {name} is now {_customerScore}");
 
             if (_customerScore < 1f)
                 _customerScore = 0f;
