@@ -88,6 +88,16 @@ public class OrderInventoryUI : MonoBehaviour
         UpdateTotalPriceCount(type);
         UpdateSumTotalPrice();
     }
+
+    public void Button_IncreaseSalmonCount()
+    {
+        ChangeOrderCount(IngredientType.SALMON, true);
+    }
+
+    public void Button_DecreaseSalmonCount()
+    {
+        ChangeOrderCount(IngredientType.SALMON, false);
+    }
    
 #endregion
 

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8826752314101152436}
   - component: {fileID: 1160510959785699360}
   - component: {fileID: 1160510959785699361}
+  - component: {fileID: 3647334895528391339}
   m_Layer: 0
   m_Name: salmon_thin_cut
   m_TagString: Untagged
@@ -268,3 +269,24 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &3647334895528391339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4145670708388241588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0a61dc6b2809f418a3cae42df6da65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ingredientType: 1
+  _stateMaterials:
+    _expiredMaterials: []
+    _freshMaterials: []
+    _contaminatedMaterials: []
+  _ingredientStats: {fileID: 0}
+  _fishSlices: {fileID: 0}
+  _sliceType: 1
+  _fishType: 0

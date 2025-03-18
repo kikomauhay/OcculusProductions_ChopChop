@@ -35,22 +35,29 @@ public class RiceIngredient : Ingredient
         Quaternion rot = transform.rotation;
 
         // gets the freshness rates of both ingredients before deleting them
-        Destroy(gameObject);
-        Destroy(other.gameObject);
-        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
         
-        // only nigiris for now (makis will be added after midterms)
+        // only nigiris for now (makis will be added on SPARK)
         if (ing.GetComponent<FishIngredient>().SliceType == SliceType.THIN)
         {
             GameObject foodToSpawn;
             Food food = null;
 
             if (ing.IngredientType == IngredientType.SALMON)
+            {
+                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+                Destroy(gameObject);
+                Destroy(other.gameObject);
                 foodToSpawn = Instantiate(_foodPrefabs[0], pos, rot);
+            }
             
             else if (ing.IngredientType == IngredientType.TUNA)
+            {
+                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+                Destroy(gameObject);
+                Destroy(other.gameObject);
                 foodToSpawn = Instantiate(_foodPrefabs[1], pos, rot);
-            
+            }
+
             else return;
 
             // sets up the food's score
