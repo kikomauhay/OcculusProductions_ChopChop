@@ -69,36 +69,30 @@ public class OrderInventoryUI : MonoBehaviour
         SpawnIngredients();
         UpdatePlayerMoney();
     }
-    public void ChangeOrderCount(IngredientType type, bool isAdd)
+
+    public void IncreaseOrderCount(int choice)
     {
-        int count = _ingredientOrders[(int)type].BuyCount;
+        int count = _ingredientOrders[choice].BuyCount;
 
-        if (isAdd)
-        {
-            count++;
-            Mathf.Clamp(count, 0, MAX_ORDER_COUNT);
-        }
-        else
-        {
-            count--;
-            Mathf.Clamp(count, 0, count);
-        }
+        count++;
+        Mathf.Clamp(count, 0, MAX_ORDER_COUNT);
 
-        UpdateBuyCount(type);
-        UpdateTotalPriceCount(type);
+        UpdateBuyCount((IngredientType)choice);
+        UpdateTotalPriceCount((IngredientType)choice);
+        UpdateSumTotalPrice();
+    }
+    public void DecreaseOrderCount(int choice)
+    {
+        int count = _ingredientOrders[choice].BuyCount;
+
+        count--;
+        Mathf.Clamp(count, 0, count);
+
+        UpdateBuyCount((IngredientType)choice);
+        UpdateTotalPriceCount((IngredientType)choice);
         UpdateSumTotalPrice();
     }
 
-    public void Button_IncreaseSalmonCount()
-    {
-        ChangeOrderCount(IngredientType.SALMON, true);
-    }
-
-    public void Button_DecreaseSalmonCount()
-    {
-        ChangeOrderCount(IngredientType.SALMON, false);
-    }
-   
 #endregion
 
 #region Button_Helpers

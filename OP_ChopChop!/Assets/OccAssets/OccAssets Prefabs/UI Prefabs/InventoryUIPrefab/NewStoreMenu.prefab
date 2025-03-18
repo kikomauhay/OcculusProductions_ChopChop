@@ -667,12 +667,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9070508986851495209}
         m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: DecreaseRiceAmount
-        m_Mode: 1
+        m_MethodName: DecreaseOrderCount
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1401,8 +1401,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9070508986851495209}
         m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: Button_IncreaseSalmonCount
-        m_Mode: 1
+        m_MethodName: IncreaseOrderCount
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1534,12 +1534,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9070508986851495209}
         m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: IncreaseTunaSlabOrder
-        m_Mode: 1
+        m_MethodName: IncreaseOrderCount
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1740,8 +1740,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9070508986851495209}
         m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: Button_DecreaseSalmonCount
-        m_Mode: 1
+        m_MethodName: DecreaseOrderCount
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2437,12 +2437,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9070508986851495209}
         m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: IncreaseRiceAmount
-        m_Mode: 1
+        m_MethodName: IncreaseOrderCount
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -4970,12 +4970,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9070508986851495209}
         m_TargetAssemblyTypeName: OrderInventoryUI, Assembly-CSharp
-        m_MethodName: DecreaseTunaSlabOrder
-        m_Mode: 1
+        m_MethodName: DecreaseOrderCount
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
