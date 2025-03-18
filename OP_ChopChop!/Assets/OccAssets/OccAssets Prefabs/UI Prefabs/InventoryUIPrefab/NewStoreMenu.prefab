@@ -5305,6 +5305,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9070508986851495208}
   - component: {fileID: 9070508986851495209}
+  - component: {fileID: 3980157311741805225}
   m_Layer: 5
   m_Name: NewStoreMenu
   m_TagString: Untagged
@@ -5349,41 +5350,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b887e45d41c3bf14cb7cbb4f5faa0857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ingredientOrders:
-  - OrderPrefab: {fileID: 6471662108566301999, guid: 8ba3dee17cdd5c3439f8b5065cfb0e99,
-      type: 3}
-    Spawnpoint: {fileID: 0}
-    InventoryCount: 0
-    BuyCount: 0
-    StockPrice: 70
-    TotalPrice: 0
-    InventoryCountTxt: {fileID: 6402165608114714155}
-    BuyCountTxt: {fileID: 7306440849182462893}
-    StockPriceTxt: {fileID: 374647085295484329}
-    TotalPriceTxt: {fileID: 1590222942215699125}
-  - OrderPrefab: {fileID: 8873129294027024833, guid: ba797919c82adff4496e76c87131c561,
-      type: 3}
-    Spawnpoint: {fileID: 0}
-    InventoryCount: 0
-    BuyCount: 0
-    StockPrice: 100
-    TotalPrice: 0
-    InventoryCountTxt: {fileID: 1315881442225615310}
-    BuyCountTxt: {fileID: 3861621578918593984}
-    StockPriceTxt: {fileID: 5793301182131650285}
-    TotalPriceTxt: {fileID: 1171105451942152039}
-  - OrderPrefab: {fileID: 0}
-    Spawnpoint: {fileID: 0}
-    InventoryCount: 0
-    BuyCount: 0
-    StockPrice: 50
-    TotalPrice: 0
-    InventoryCountTxt: {fileID: 1601948037363424787}
-    BuyCountTxt: {fileID: 2466455362994464616}
-    StockPriceTxt: {fileID: 4582020865113599955}
-    TotalPriceTxt: {fileID: 4582020865113599955}
-  _playerMoneyTxt: {fileID: 8062479003663044360}
-  _totalPriceTxt: {fileID: 6139427797404662674}
+--- !u!114 &3980157311741805225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9070508986851495211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5d428f1f9f8b0a4ca895160cbec3e4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _orderSpawnPoint: {fileID: 0}
+  _salmonPrefab: {fileID: 0}
+  _tunaPrefab: {fileID: 0}
+  _playerMoneyText: {fileID: 0}
+  _totalCostText: {fileID: 0}
+  _salmonCostText: {fileID: 0}
+  _tunaCostText: {fileID: 0}
+  _salmonOrderAmountText: {fileID: 0}
+  _tunaOrderAmountText: {fileID: 0}
 --- !u!1 &9070508987573380331
 GameObject:
   m_ObjectHideFlags: 0

@@ -80,7 +80,6 @@ public class CustomerOrder : MonoBehaviour
 
         yield return new WaitForSeconds(_customerDeleteTimer);
 
-        GameManager.Instance.CustomerFled();
         MakeSeatEmpty();
     }
     IEnumerator PatienceCountdown()
