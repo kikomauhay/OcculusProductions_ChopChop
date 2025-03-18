@@ -37,8 +37,7 @@ public class RiceIngredient : Ingredient
         // gets the freshness rates of both ingredients before deleting them
         
         // only nigiris for now (makis will be added on SPARK)
-        if (ing.GetComponent<FishIngredient>().SliceType == SliceType.THIN)
-        {
+        
             GameObject foodToSpawn;
             Food food = null;
 
@@ -64,7 +63,7 @@ public class RiceIngredient : Ingredient
             food = foodToSpawn.GetComponent<Food>();
             food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
             food.FoodType = DishType.NIGIRI_SALMON; // only salmon for now (will add tuna later)
-        }
+        
     }
 
     void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;

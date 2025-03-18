@@ -5904,6 +5904,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 727
       objectReference: {fileID: 0}
+    - target: {fileID: 5075351722813696564, guid: 7a609331d762229458520779795f465a,
+        type: 3}
+      propertyPath: tunaSpawnPoint
+      value: 
+      objectReference: {fileID: 1413052817}
+    - target: {fileID: 5075351722813696564, guid: 7a609331d762229458520779795f465a,
+        type: 3}
+      propertyPath: salmonSpawnPoint
+      value: 
+      objectReference: {fileID: 1421530697}
     - target: {fileID: 5805547900624873487, guid: 7a609331d762229458520779795f465a,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -6039,6 +6049,16 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -95.99498
       objectReference: {fileID: 0}
+    - target: {fileID: 6871160923573454168, guid: 7a609331d762229458520779795f465a,
+        type: 3}
+      propertyPath: tunaSpawnPoint
+      value: 
+      objectReference: {fileID: 1413052817}
+    - target: {fileID: 6871160923573454168, guid: 7a609331d762229458520779795f465a,
+        type: 3}
+      propertyPath: salmonSpawnPoint
+      value: 
+      objectReference: {fileID: 1421530697}
     - target: {fileID: 7010095080839665593, guid: 7a609331d762229458520779795f465a,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -6248,7 +6268,18 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -43
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8790586850299623450, guid: 7a609331d762229458520779795f465a,
+        type: 3}
+      propertyPath: tunaSpawnPoint
+      value: 
+      objectReference: {fileID: 1413052817}
+    - target: {fileID: 8790586850299623450, guid: 7a609331d762229458520779795f465a,
+        type: 3}
+      propertyPath: salmonSpawnPoint
+      value: 
+      objectReference: {fileID: 1421530697}
+    m_RemovedComponents:
+    - {fileID: 6871160923573454168, guid: 7a609331d762229458520779795f465a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7a609331d762229458520779795f465a, type: 3}
 --- !u!33 &7348055430693398254
 MeshFilter:
