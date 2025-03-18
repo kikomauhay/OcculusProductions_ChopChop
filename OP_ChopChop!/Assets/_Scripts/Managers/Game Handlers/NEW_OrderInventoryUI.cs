@@ -65,19 +65,21 @@ public class NEW_OrderInventoryUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        //IngredientStockCount
+        // Ingredient Stock Count
         txtCurrentSalmonStockCount.text = currentSalmonStock.ToString();
         txtCurrentTunaStockCount.text = currentTunaStock.ToString();
         txtCurrentRiceStockCount.text = currentRiceStock.ToString();
       
-    
-        //TotalPrice
+        // Total Price
         txtSalmonTotalPrice.text = CalculateSalmonTotalPrice().ToString();
         txtTunaTotalPrice.text = CalculateTunaTotalPrice().ToString();
         txtRiceTotalPrice.text = CalculateRiceTotalPrice().ToString();
         txtTotalPrice.text = CalculateTotalPrice().ToString();
-        //txtTotalPrice.text = totalPrice.ToString();
+
+        // Ingredient Order Count
+        txtSalmonOrderCount.text = $"{salmonSlabOrderCount}";
+        txtTunaOrderCount.text = $"{tunaSlabOrderCount}";
+        txtRiceOrderCount.text = $"{riceOrderCount}";
     }
 
     public void DoOrderSupplies()
@@ -106,11 +108,6 @@ public class NEW_OrderInventoryUI : MonoBehaviour
             {
                 Instantiate(tunaSlabPrefab, salmonSpawnPoint.transform.localPosition, salmonSpawnPoint.transform.rotation);
             }
-        }
-
-        if (riceOrderCount > 0)
-        {
-            //Insert Instantiate code here
         }
 
         // Reset order counts after spawning

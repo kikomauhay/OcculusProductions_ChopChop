@@ -27,26 +27,26 @@ public class GameManager : Singleton<GameManager>
 
     public GameShift CurrentShift { get; private set; } = GameShift.DEFAULT;
     public float AvailableMoney { get; private set; }
+    public bool IsPaused { get; private set; }
+    public bool CanPause { get; private set; }
 
     // SCORING VALUES
     List<float> _customerSRScores;
-    int _customersFledCount; // idk what to do with this 
 
 #endregion
 
-#region Unity_Mehods
+#region Unity_Methods
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
-                                               // sample values
-        _customerSRScores = new List<float>() { 100f, 90f, 80f, 70f }; 
-        
-        _customersFledCount = 0;
+        // _customerSRScores = new List<float>() { 100f, 90f, 80f, 70f }; 
+       
         AvailableMoney = 0f;
+        CanPause = true;
+        IsPaused = false;
 
-        // ChangeShift(GameShift.PRE_PRE_SERVICE);
         ChangeShift(GameShift.SERVICE);
     }
     IEnumerator StartShiftCountdown()
@@ -65,18 +65,27 @@ public class GameManager : Singleton<GameManager>
 
 #region Public
 
+    // GAME PAUSING
+    public void TogglePause()
+    {
+        if (!CanPause) return;
+
+        IsPaused = !IsPaused;
+
+        if (IsPaused) 
+            Time.timeScale = 0f;
+        
+        else 
+            Time.timeScale = 1f;
+    }
+
     // SCORING-RELATED
     public void AddToCustomerScores(float n) => _customerSRScores.Add(n);
-    public void CustomerFled() => _customersFledCount++;
 
     // CASH-RELATED
     public void AddMoney(float amt) 
     {
-        if (amt < 0f)
-        {
-            Debug.LogError($"{amt} is a negative number!");
-            return;
-        }
+        if (amt < 0f) return;
 
         AvailableMoney += amt;
 
@@ -84,11 +93,7 @@ public class GameManager : Singleton<GameManager>
     }
     public void DeductMoney(float amt)
     {
-        if (amt < 0f)
-        {
-            Debug.LogError($"{amt} is a negative number!");
-            return;
-        }
+        if (amt < 0f) return;
 
         AvailableMoney -= amt;
 
@@ -99,11 +104,7 @@ public class GameManager : Singleton<GameManager>
     // GAME SHIFT CHANGING
     public void ChangeShift(GameShift chosenShift)
     {
-        if (chosenShift == CurrentShift) 
-        {
-            Debug.LogError("You can't go to the same shift again!");
-            return;
-        }
+        if (chosenShift == CurrentShift) return;
 
         CurrentShift = chosenShift;
 
@@ -129,8 +130,6 @@ public class GameManager : Singleton<GameManager>
                 Debug.LogError("Invalid state chosen");
                 break;
         }
-
-        // Debug.LogWarning($"Changed to {CurrentShift}");
     }
 
 #endregion
@@ -204,11 +203,7 @@ public class GameManager : Singleton<GameManager>
     float GetAverageOf(List<float> list) 
     {
         // prevents a div/0 case
-        if (list.Count < 1) 
-        {
-            Debug.LogError("Given list contains 0 elements!");
-            return 0f;
-        }
+        if (list.Count < 1) return float.NaN;
         
         float n = 0f;
 
@@ -219,9 +214,6 @@ public class GameManager : Singleton<GameManager>
     }
 
 #endregion
-
-    
-
 
 #region Testing
 

@@ -1,13 +1,13 @@
 using UnityEngine.XR.Interaction.Toolkit;
+using System.Collections;
 using UnityEngine;
 
 public class Sliceable : MonoBehaviour
 {
 #region Members
 
-    // will change this into an array later
     [SerializeField] private GameObject _currentPrefab, _nextPrefab;
-    [SerializeField] private Collider _SnapCollider;
+    [SerializeField] Snap _snap;
 
     IXRSelectInteractor _interactor;
 
@@ -40,19 +40,13 @@ public class Sliceable : MonoBehaviour
                 return;
             }
 
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE,
-                                           transform);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
 
             // ternary operator syntax -> condition ? val_if_true : val_if_false
             SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                            "fish slice 01" :
-                                            "fish slice 02");
-
-            SoundManager.Instance.PlaySound("knife chop");
-            // Debug.LogWarning("Chopping");
+                                            "fish slice 01" : "fish slice 02");
         }
 
-        // wtf does this do
         if (_interactor != null)
             _interactor.selectEntered.AddListener(Remove);
     }
@@ -74,50 +68,25 @@ public class Sliceable : MonoBehaviour
         if (_currentPrefab == null) return;
 
         SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
-
-        SpawnManager.Instance.SpawnObject(_nextPrefab,
-                                          transform,
-                                          SpawnObjectType.INGREDIENT);
-
-        Debug.Log("SLICED!");
-        /*_SnapCollider.GetComponent<Snap>().CallReset();*/
-
-        //works
-        Destroy(gameObject);
+        StartCoroutine(DoCutting());
     }
 
     private void Remove(SelectEnterEventArgs args)
     {
-        Rigidbody rb = this.GetComponent<Rigidbody>();
-        Collider collider = this.GetComponent<Collider>();
-
-        Debug.Log("Removing item");
-        rb.isKinematic = false;
+        GetComponent<Rigidbody>().isKinematic = false;
         IsAttached = false;
-        collider.isTrigger = false;
-
-        //if not attaching to hand, uncomment code below
-        /*        AttachToHand(this.gameObject, _interactor);*/
-
+        GetComponent<Collider>().isTrigger = false;
     }
 
-    /*    private void AttachToHand(GameObject _sliceable, IXRSelectInteractor _interactor)
-        {
-            XRGrabInteractable _grabInteractable = _sliceable.GetComponent<XRGrabInteractable>();
-            XRInteractionManager _interactionManager = _grabInteractable.interactionManager as XRInteractionManager;
-            if (_interactionManager == null
-                && _interactor is MonoBehaviour interactorObject)
-            {
-                _interactionManager = interactorObject.GetComponentInParent<XRInteractionManager>();
-            }
-            if (_grabInteractable != null
-                && _interactionManager != null)
-            {
-                _interactionManager.SelectEnter(_interactor, _grabInteractable);
-            }
-            else
-            {
-                Debug.LogError("Spawned object does not have an XRGrabInteractable component.");
-            }
-        }*/
+    IEnumerator DoCutting()
+    {  
+        yield return null;
+        SpawnManager.Instance.SpawnObject(_nextPrefab,
+                                          transform,
+                                          SpawnObjectType.INGREDIENT);
+        yield return null;
+        Destroy(gameObject);
+
+        _snap.ResetTrigger();
+    }
 }
