@@ -12,11 +12,11 @@ public class RiceSpawn : MonoBehaviour
     [SerializeField] Collider _spwnCollider;
     [SerializeField] float _resetTimer;
 
-    void Awake()
+/*    void Awake()
     {
         Left = ControllerManager.Instance.LeftController;
         Right = ControllerManager.Instance.RightController;
-    }
+    }*/
 
     void OnTriggerEnter(Collider other)
     {
