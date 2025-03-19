@@ -10,7 +10,7 @@ public class Sponge : Equipment
         base.Start();
 
         name = "Sponge";
-        IsWet = false;
+        IsWet = true;
     }
 
     public void Dried() => IsWet = false;

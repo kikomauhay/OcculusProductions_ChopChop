@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Snap : MonoBehaviour
 {
@@ -12,9 +13,11 @@ public class Snap : MonoBehaviour
        if (other.gameObject.GetComponent<Sliceable>() != null)
        {
             other.gameObject.GetComponent<Sliceable>().IsAttached = true;
+            other.gameObject.GetComponent<XRGrabInteractable>().enabled = false;
+            other.gameObject.GetComponent<Sliceable>().SetSnap(SnapCollider);
 
             SnapToObject(other.transform);
-            // DisableRigidBody(_other);
+            DisableRigidBody(other);
 
             SnapCollider.enabled = false;
             StartCoroutine(DelayedSetting(other));
@@ -35,23 +38,23 @@ public class Snap : MonoBehaviour
             other.GetComponent<Collider>().isTrigger = true;
         }
     }
-    
-    /*
+
+
     void DisableRigidBody(Collider other)
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
-        if(rb != null)
+        if (rb != null)
         {
             rb.isKinematic = true;
         }
     }
-    */
-/*    public void CallReset()
+
+    public void CallReset()
     {
         StartCoroutine(ResetTrigger());
-    }*/
+    }
 
-    public IEnumerator ResetTrigger()
+    private IEnumerator ResetTrigger()
     {
         yield return new WaitForSeconds(timer);
         SnapCollider.enabled = true;

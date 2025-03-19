@@ -49,7 +49,7 @@ public class Plate : Equipment
     IEnumerator PlateTheFood(Food food)
     {
         TogglePlated();
-        yield return null;
+        yield return new WaitForSeconds(1.5f);
         food.CreateDish(transform);
     }
 
