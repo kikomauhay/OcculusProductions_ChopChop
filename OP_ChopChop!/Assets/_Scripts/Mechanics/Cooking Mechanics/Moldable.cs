@@ -23,11 +23,6 @@ public class Moldable : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Mold counter: " + _moldCounter);
-        if (Input.GetKeyUp(KeyCode.W))
-        {
-            _moldCounter++;
-        }
         // "levels up" the molded rice and resets the mold count
         if (_moldCounter >= _moldLimitPerStage)
         {

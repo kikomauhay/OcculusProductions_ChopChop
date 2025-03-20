@@ -17,6 +17,7 @@ public class ColliderCheck : MonoBehaviour
         {
             Debug.LogError("GIVEN ORDER IS AN INGREDIENT");
             CustomerOrder.StartCoroutine("DoNegativeReaction");
+            Destroy(other.gameObject);
             return;
         }
 
@@ -44,8 +45,9 @@ public class ColliderCheck : MonoBehaviour
 
         Debug.LogError("WRONG ORDER");
         CustomerOrder.StartCoroutine("DoNegativeReaction");
-        
+
         // idk if the customer still eats the food or skips it entirely
+        Destroy(other.gameObject);
     }
 
     IEnumerator DisableColider()

@@ -40,7 +40,7 @@ public class Sliceable : MonoBehaviour
                 return;
             }
 
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
 
             // ternary operator syntax -> condition ? val_if_true : val_if_false
             SoundManager.Instance.PlaySound(Random.value > 0.5f ?
@@ -67,7 +67,7 @@ public class Sliceable : MonoBehaviour
     {
         if (_currentPrefab == null) return;
 
-        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
         StartCoroutine(DoCutting());
     }
 

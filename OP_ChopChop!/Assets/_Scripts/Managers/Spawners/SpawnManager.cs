@@ -65,13 +65,13 @@ public class SpawnManager : Singleton<SpawnManager>
 
 #region Spawning
 
-    public void SpawnVFX(VFXType type, Transform t)
+    public void SpawnVFX(VFXType type, Transform t, float destroyTime)
     {   
         GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type], 
                                              t.position, t.rotation,
                                              _bins[4]);
-        
-        Destroy(vfxInstance, 2f); // destory time could also be a variable
+
+        Destroy(vfxInstance, destroyTime);
     }
     public GameObject SpawnObject(GameObject obj, Transform t, SpawnObjectType type)
     {
@@ -172,7 +172,8 @@ public class SpawnManager : Singleton<SpawnManager>
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SpawnVFX((VFXType)Random.Range(0, _vfxPrefabs.Length),
-                      transform);
+                      transform, 
+                      Random.Range(1f, 5f));
         }
 
         if (Input.GetKeyDown(KeyCode.Delete))

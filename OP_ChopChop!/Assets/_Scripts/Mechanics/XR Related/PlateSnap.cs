@@ -18,7 +18,7 @@ public class PlateSnap : MonoBehaviour
         //}
 
         if (other.GetComponent<Sponge>() != null)
-            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform);
+            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
         
         else
             StartCoroutine(ResetTrigger());
