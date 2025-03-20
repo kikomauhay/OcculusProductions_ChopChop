@@ -94,5 +94,12 @@ public class Enumerations : MonoBehaviour {}
         RICE,
         SEAWEED
     } 
+    public enum FaceVariant
+    {
+        NEUTRAL,
+        HAPPY,
+        MAD,
+        SUS
+    }
 
 #endregion
