@@ -34,6 +34,7 @@ public class GameManager : Singleton<GameManager>
     List<float> _customerSRScores;
     public int CustomersServed; // will be used for difficulty increase 
 
+    [SerializeField] private GameObject restaurantReceipt;
 
 #endregion
 
@@ -164,9 +165,19 @@ public class GameManager : Singleton<GameManager>
         DoPostServiceRating();
     }
 
-#endregion
+    #endregion
 
-#region Resto_Rating
+    #region Resto_Rating
+    void DoCustomerRating()
+    {
+        float customerScore = GetAverageOf(_customerSRScores);
+
+        if (customerScore >= 97)
+        {
+            
+        }
+    }
+
 
     void DoPostServiceRating()
     {
