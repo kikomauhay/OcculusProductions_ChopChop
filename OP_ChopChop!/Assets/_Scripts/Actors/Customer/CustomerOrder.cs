@@ -39,10 +39,10 @@ public class CustomerOrder : MonoBehaviour
 
     void CreateCustomerUI()
     {
+        Debug.Log("OrderCreated");
         Instantiate(_dishOrdersUI[UnityEngine.Random.Range(0, _dishOrdersUI.Length)],
                     _orderUITransform.position,
-                    _orderUITransform.rotation,
-                    transform);
+                    _orderUITransform.rotation);
     }
     void MakeSeatEmpty() // clears the seat of any customer references 
     {

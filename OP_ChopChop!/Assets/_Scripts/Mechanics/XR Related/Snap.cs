@@ -27,8 +27,8 @@ public class Snap : MonoBehaviour
 
     void SnapToObject(Transform foodObject)
     {
-        foodObject.localPosition = SnapCollider.transform.position;
-        foodObject.localRotation = Quaternion.Euler(0, foodObject.localRotation.eulerAngles.y, 0);
+        foodObject.position = SnapCollider.transform.position;
+        foodObject.rotation = Quaternion.Euler(0, foodObject.rotation.eulerAngles.y, 0);
     }
 
     void SetCollider(Collider other)
@@ -42,17 +42,14 @@ public class Snap : MonoBehaviour
 
     void DisableRigidBody(Collider other)
     {
-        Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null)
+        if (other.GetComponent<Rigidbody>() != null)
         {
-            rb.isKinematic = true;
+            other.GetComponent<Rigidbody>().isKinematic = true;
         }
     }
 
-    public void CallReset()
-    {
-        StartCoroutine(ResetTrigger());
-    }
+    public void CallReset() => StartCoroutine(ResetTrigger());
+    
 
     private IEnumerator ResetTrigger()
     {

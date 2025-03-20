@@ -7,7 +7,7 @@ public class Sliceable : MonoBehaviour
 #region Members
 
     [SerializeField] private GameObject _currentPrefab, _nextPrefab;
-    [SerializeField] Collider _snap;
+    Collider _snap;
 
     IXRSelectInteractor _interactor;
 
