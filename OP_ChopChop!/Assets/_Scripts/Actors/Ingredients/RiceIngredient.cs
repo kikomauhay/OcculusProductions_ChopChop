@@ -12,8 +12,8 @@ public class RiceIngredient : Ingredient
 
     protected override void Start() 
     {
-        base.Start();
 
+        base.Start();
         OnRiceMolded += ChangeRiceMold;
         //_moldType = MoldType.UNMOLDED;
         //_ingredientType = IngredientType.RICE;
@@ -38,32 +38,29 @@ public class RiceIngredient : Ingredient
         
         // only nigiris for now (makis will be added on SPARK)
         
-            GameObject foodToSpawn;
-            Food food = null;
+        GameObject foodToSpawn;
+        Food food = null;
 
-            if (ing.IngredientType == IngredientType.SALMON)
-            {
-                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
-                Destroy(gameObject);
-                Destroy(other.gameObject);
-                foodToSpawn = Instantiate(_foodPrefabs[0], pos, rot);
-            }
-            
-            else if (ing.IngredientType == IngredientType.TUNA)
-            {
-                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
-                Destroy(gameObject);
-                Destroy(other.gameObject);
-                foodToSpawn = Instantiate(_foodPrefabs[1], pos, rot);
-            }
+        if (ing.IngredientType == IngredientType.SALMON)
+        {
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+            Destroy(gameObject);
+            Destroy(other.gameObject);
+            foodToSpawn = Instantiate(_foodPrefabs[0], pos, rot);
+        }
+        else if (ing.IngredientType == IngredientType.TUNA)
+        {
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+            Destroy(gameObject);
+            Destroy(other.gameObject);
+            foodToSpawn = Instantiate(_foodPrefabs[1], pos, rot);
+        }
+        else return;
 
-            else return;
-
-            // sets up the food's score
-            food = foodToSpawn.GetComponent<Food>();
-            food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
-            food.FoodType = DishType.NIGIRI_SALMON; // only salmon for now (will add tuna later)
-        
+        // sets up the food's score
+        food = foodToSpawn.GetComponent<Food>();
+        food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
+        food.FoodType = DishType.NIGIRI_SALMON; // only salmon for now (will add tuna later)
     }
 
     void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;

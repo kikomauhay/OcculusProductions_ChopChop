@@ -34,7 +34,7 @@ public abstract class Food : MonoBehaviour
             return;
         }
 
-        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform, 1f);
         CreateDish(other.transform);
 
         Destroy(gameObject);

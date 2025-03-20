@@ -33,6 +33,8 @@ public class GameManager : Singleton<GameManager>
     // SCORING VALUES
     List<float> _customerSRScores;
 
+    public int CustomersServed;
+
 #endregion
 
 #region Unity_Methods
@@ -44,6 +46,7 @@ public class GameManager : Singleton<GameManager>
         // _customerSRScores = new List<float>() { 100f, 90f, 80f, 70f }; 
        
         AvailableMoney = 0f;
+        CustomersServed = 0;
         CanPause = true;
         IsPaused = false;
 

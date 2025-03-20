@@ -20,12 +20,14 @@ public enum GameShift // CORRECT ORDER
         CUSTOMER, 
         VFX 
     }
-    public enum VFXType 
+    public enum VFXType // & destroyTime
     { 
-        SMOKE, 
-        BUBBLE, 
-        SPARKLE, 
-        STINKY 
+        SMOKE,   // 1s
+        BUBBLE,  // 3s
+        SPARKLE, // 5s
+        STINKY,  // 5s
+        RICE,    // 3s
+        SPLASH   // 4s
     }
 
 #endregion

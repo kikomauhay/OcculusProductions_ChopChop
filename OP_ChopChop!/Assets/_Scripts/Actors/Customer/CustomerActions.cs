@@ -14,7 +14,6 @@ public class CustomerActions : MonoBehaviour
                                                                   TargetSeat, 
                                                                   _customerSpeed * Time.deltaTime);
 
-
     IEnumerator DeleteCustomer()
     {
         yield return new WaitForSecondsRealtime(5f);
