@@ -43,13 +43,13 @@ public class Floor : MonoBehaviour
     void DoEquipmentLogic(Equipment eq)
     {
         eq.ResetPosition();
+        eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
         
         // other logic for equipment child classes
         
         if (eq.GetComponent<Plate>().IsClean)
         {
             eq.ToggleClean();
-            eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
             Debug.LogWarning($"{eq.gameObject.name} has gotten dirty!");
         }  

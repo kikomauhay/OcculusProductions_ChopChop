@@ -23,15 +23,18 @@ public class GameManager : Singleton<GameManager>
 {
 #region Members
 
-    public Action OnStartService, OnEndService;
+    public Action OnStartService, OnEndService, OnTraining;
 
-    public GameShift CurrentShift { get; private set; } = GameShift.DEFAULT;
+    public GameShift CurrentShift { get; private set; }
     public float AvailableMoney { get; private set; }
     public bool IsPaused { get; private set; }
     public bool CanPause { get; private set; }
 
     // SCORING VALUES
     List<float> _customerSRScores;
+    public int CustomersServed; // will be used for difficulty increase 
+
+    [SerializeField] private GameObject restaurantReceipt;
 
 #endregion
 
@@ -41,9 +44,9 @@ public class GameManager : Singleton<GameManager>
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
-        // _customerSRScores = new List<float>() { 100f, 90f, 80f, 70f }; 
-       
+        CurrentShift = GameShift.DEFAULT;
         AvailableMoney = 0f;
+        CustomersServed = 0;
         CanPause = true;
         IsPaused = false;
 
@@ -51,15 +54,10 @@ public class GameManager : Singleton<GameManager>
     }
     IEnumerator StartShiftCountdown()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(300f); // 5 minutes
         ChangeShift(GameShift.POST_SERVICE);
     }
-    IEnumerator TestShifCountdown(float timer, GameShift shift)
-    {
-        yield return new WaitForSeconds(timer);
-        ChangeShift(shift);
-        Debug.ClearDeveloperConsole();
-    }
+    
 
 #endregion
 
@@ -81,6 +79,7 @@ public class GameManager : Singleton<GameManager>
 
     // SCORING-RELATED
     public void AddToCustomerScores(float n) => _customerSRScores.Add(n);
+    public void IncrementCustomersServed() => CustomersServed++;
 
     // CASH-RELATED
     public void AddMoney(float amt) 
@@ -88,8 +87,6 @@ public class GameManager : Singleton<GameManager>
         if (amt < 0f) return;
 
         AvailableMoney += amt;
-
-        // idk if theres's a max cap when it comes to money
     }
     public void DeductMoney(float amt)
     {
@@ -101,7 +98,7 @@ public class GameManager : Singleton<GameManager>
             AvailableMoney = 0f;
     }
     
-    // GAME SHIFT CHANGING
+    // GAME SHIFTING
     public void ChangeShift(GameShift chosenShift)
     {
         if (chosenShift == CurrentShift) return;
@@ -110,12 +107,12 @@ public class GameManager : Singleton<GameManager>
 
         switch (chosenShift)
         {   
-            case GameShift.PRE_PRE_SERVICE:
-                DoPrePreSerice();
+            case GameShift.TRAINING:
+                DoTraining();
                 break;         
 
             case GameShift.PRE_SERVICE:
-                DoPreSerice();
+                DoPreService();
                 break;
 
             case GameShift.SERVICE:
@@ -136,35 +133,27 @@ public class GameManager : Singleton<GameManager>
 
 #region Game_Shifts
 
-    void DoPrePreSerice() // spectator mode
+    void DoTraining() // sandbox mode
     {
         // no ingredient decaying or equipment dirtying
 
-        Debug.LogWarning("Player is viewing the world!");
-        Debug.Log("Wait 5s");
-        StartCoroutine(TestShifCountdown(5f, GameShift.PRE_SERVICE));        
+        OnTraining?.Invoke();
     }
-    void DoPreSerice()
+    void DoPreService()
     {
         // buying of ingredients
         // rice cooking preparation
         // storing ingredients
         // clean kitchen 
 
-        Debug.LogWarning("Player is buying ingredients!");
-        Debug.Log("Wait 5s");
-        StartCoroutine(TestShifCountdown(5f, GameShift.SERVICE)); 
+        StartCoroutine(TestShifCountdown(testTimer, GameShift.SERVICE)); 
     }
     void DoService() // customer spawning + cooking, serving, & cleaning
     {
         OnStartService?.Invoke(); // all ingredients start decaying
 
-        // StartCoroutine(StartShiftCountdown());
-
-        /*
-        Debug.LogWarning("Customer spawning & food serving!");
-        Debug.Log("Wait 20s");
-        StartCoroutine(TestShifCountdown(20f, GameShift.POST_SERVICE)); */
+        // 5 min timer once the shift ends
+        StartCoroutine(StartShiftCountdown());
     }
     void DoPostService()
     {
@@ -174,15 +163,21 @@ public class GameManager : Singleton<GameManager>
         // clean the remaining dishes
 
         DoPostServiceRating();
-
-        Debug.LogWarning("It's the end of the day!");
-        Debug.Log("Wait 10s");
-        StartCoroutine(TestShifCountdown(10f, GameShift.PRE_PRE_SERVICE)); 
     }
 
-#endregion
+    #endregion
 
-#region Resto_Rating
+    #region Resto_Rating
+    void DoCustomerRating()
+    {
+        float customerScore = GetAverageOf(_customerSRScores);
+
+        if (customerScore >= 97)
+        {
+            
+        }
+    }
+
 
     void DoPostServiceRating()
     {
@@ -217,6 +212,9 @@ public class GameManager : Singleton<GameManager>
 
 #region Testing
 
+    // TESTING
+    float testTimer = 10f;
+
     void test() 
     {
         if (Input.GetKeyDown(KeyCode.Escape)) 
@@ -232,7 +230,7 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeShift(GameShift.SERVICE);
 
         if (Input.GetKeyDown(KeyCode.Return) && CurrentShift == GameShift.POST_SERVICE)
-            ChangeShift(GameShift.PRE_PRE_SERVICE);
+            ChangeShift(GameShift.TRAINING);
             
             // throw new NullReferenceException("test");
             //Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
@@ -246,7 +244,11 @@ public class GameManager : Singleton<GameManager>
             Debug.Log(CurrentShift);
         }
     }
+    IEnumerator TestShifCountdown(float timer, GameShift shift)
+    {
+        yield return new WaitForSeconds(timer);
+        ChangeShift(shift);
+    }
 
 #endregion
-
 }

@@ -7,7 +7,7 @@ public class Sliceable : MonoBehaviour
 #region Members
 
     [SerializeField] private GameObject _currentPrefab, _nextPrefab;
-    [SerializeField] Snap _snap;
+    Collider _snap;
 
     IXRSelectInteractor _interactor;
 
@@ -40,7 +40,7 @@ public class Sliceable : MonoBehaviour
                 return;
             }
 
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
 
             // ternary operator syntax -> condition ? val_if_true : val_if_false
             SoundManager.Instance.PlaySound(Random.value > 0.5f ?
@@ -67,7 +67,7 @@ public class Sliceable : MonoBehaviour
     {
         if (_currentPrefab == null) return;
 
-        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
         StartCoroutine(DoCutting());
     }
 
@@ -78,15 +78,20 @@ public class Sliceable : MonoBehaviour
         GetComponent<Collider>().isTrigger = false;
     }
 
+    public void SetSnap(Collider snap)
+    {
+        _snap = snap;
+    }
+
     IEnumerator DoCutting()
     {  
         yield return null;
         SpawnManager.Instance.SpawnObject(_nextPrefab,
                                           transform,
                                           SpawnObjectType.INGREDIENT);
+
+        _snap.gameObject.GetComponent<Snap>().CallReset();
         yield return null;
         Destroy(gameObject);
-
-        _snap.ResetTrigger();
     }
 }

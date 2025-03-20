@@ -8,7 +8,7 @@ public class CustomerOrder : MonoBehaviour
 
     public Action OnBadOrder, OnGoodOrder;
 
-    public DishType CustomerDishType { get; private set; } // what dish the customer wants to order   
+    public DishType CustomerDishType { get; private set; } // what dish the cust omer wants to order   
     public float CustomerSR { get; set; }                  // (FoodScore of dish + _patienceRate) / 2
     public float PatienceRate => _patienceRate;
     
@@ -39,10 +39,10 @@ public class CustomerOrder : MonoBehaviour
 
     void CreateCustomerUI()
     {
-        Instantiate(_dishOrdersUI[0],
+        Debug.Log("OrderCreated");
+        Instantiate(_dishOrdersUI[UnityEngine.Random.Range(0, _dishOrdersUI.Length)],
                     _orderUITransform.position,
-                    _orderUITransform.rotation,
-                    transform);
+                    _orderUITransform.rotation);
     }
     void MakeSeatEmpty() // clears the seat of any customer references 
     {
@@ -69,9 +69,7 @@ public class CustomerOrder : MonoBehaviour
     {       
         _customerScore = 0f;
         OnBadOrder?.Invoke();
-
         yield return new WaitForSeconds(_customerDeleteTimer);
-
 
         MakeSeatEmpty();
     }
@@ -89,7 +87,7 @@ public class CustomerOrder : MonoBehaviour
                 _customerScore = 0f;
         }
         
-        // custoemr lost all patience
+        // customer lost all patience
         _customerScore = 0f;   
 
         yield return StartCoroutine(DoNegativeReaction());
