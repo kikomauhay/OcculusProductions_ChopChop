@@ -41,6 +41,8 @@ public class SpawnManager : Singleton<SpawnManager>
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
+
+
     }
     void Reset() 
     {
@@ -50,13 +52,11 @@ public class SpawnManager : Singleton<SpawnManager>
     IEnumerator HandleCustomer()
     {
         yield return new WaitForSeconds(5f);
-        Debug.LogWarning("Spawned a new customer!");
         SpawnCustomer(GiveAvaiableSeat());
 
         while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
-            yield return new WaitForSeconds(10f);
-            Debug.LogWarning("Spawned a new customer!");   
+            yield return new WaitForSeconds(10f);  
             SpawnCustomer(GiveAvaiableSeat());
         }
     }
@@ -65,15 +65,14 @@ public class SpawnManager : Singleton<SpawnManager>
 
 #region Spawning
 
-    public void SpawnVFX(VFXType type, Transform t)
+    public void SpawnVFX(VFXType type, Transform t, float destroyTime)
     {   
         GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type], 
                                              t.position, t.rotation,
                                              _bins[4]);
-        
-        Destroy(vfxInstance, 2f); // destory time could also be a variable
-    }
 
+        Destroy(vfxInstance, destroyTime);
+    }
     public GameObject SpawnObject(GameObject obj, Transform t, SpawnObjectType type)
     {
         return Instantiate(obj,
@@ -173,7 +172,8 @@ public class SpawnManager : Singleton<SpawnManager>
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SpawnVFX((VFXType)Random.Range(0, _vfxPrefabs.Length),
-                      transform);
+                      transform, 
+                      Random.Range(1f, 5f));
         }
 
         if (Input.GetKeyDown(KeyCode.Delete))

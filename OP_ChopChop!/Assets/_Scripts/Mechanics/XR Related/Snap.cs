@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class Snap : MonoBehaviour
 {
@@ -12,9 +13,11 @@ public class Snap : MonoBehaviour
        if (other.gameObject.GetComponent<Sliceable>() != null)
        {
             other.gameObject.GetComponent<Sliceable>().IsAttached = true;
+            other.gameObject.GetComponent<XRGrabInteractable>().enabled = false;
+            other.gameObject.GetComponent<Sliceable>().SetSnap(SnapCollider);
 
             SnapToObject(other.transform);
-            // DisableRigidBody(_other);
+            DisableRigidBody(other);
 
             SnapCollider.enabled = false;
             StartCoroutine(DelayedSetting(other));
@@ -24,8 +27,8 @@ public class Snap : MonoBehaviour
 
     void SnapToObject(Transform foodObject)
     {
-        foodObject.localPosition = SnapCollider.transform.position;
-        foodObject.localRotation = Quaternion.Euler(0, foodObject.localRotation.eulerAngles.y, 0);
+        foodObject.position = SnapCollider.transform.position;
+        foodObject.rotation = Quaternion.Euler(0, foodObject.rotation.eulerAngles.y, 0);
     }
 
     void SetCollider(Collider other)
@@ -35,23 +38,20 @@ public class Snap : MonoBehaviour
             other.GetComponent<Collider>().isTrigger = true;
         }
     }
-    
-    /*
+
+
     void DisableRigidBody(Collider other)
     {
-        Rigidbody rb = other.GetComponent<Rigidbody>();
-        if(rb != null)
+        if (other.GetComponent<Rigidbody>() != null)
         {
-            rb.isKinematic = true;
+            other.GetComponent<Rigidbody>().isKinematic = true;
         }
     }
-    */
-/*    public void CallReset()
-    {
-        StartCoroutine(ResetTrigger());
-    }*/
 
-    public IEnumerator ResetTrigger()
+    public void CallReset() => StartCoroutine(ResetTrigger());
+    
+
+    private IEnumerator ResetTrigger()
     {
         yield return new WaitForSeconds(timer);
         SnapCollider.enabled = true;
@@ -60,7 +60,7 @@ public class Snap : MonoBehaviour
     private IEnumerator DelayedSetting(Collider other)
     {
         //Delay setting the collider to trigger
-        yield return new WaitForSeconds(1.5);
+        yield return new WaitForSeconds(1.5f);
         SetCollider(other);
     }
 }

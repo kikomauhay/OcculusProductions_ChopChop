@@ -13,6 +13,14 @@ public class ColliderCheck : MonoBehaviour
             return;
         }
 
+        if (other.gameObject.GetComponent<Ingredient>() != null) 
+        {
+            Debug.LogError("GIVEN ORDER IS AN INGREDIENT");
+            CustomerOrder.StartCoroutine("DoNegativeReaction");
+            Destroy(other.gameObject);
+            return;
+        }
+
         Dish collidedDish = other.gameObject.GetComponentInChildren<Dish>();
         Plate plate = other.gameObject.GetComponent<Plate>();
 
@@ -37,8 +45,9 @@ public class ColliderCheck : MonoBehaviour
 
         Debug.LogError("WRONG ORDER");
         CustomerOrder.StartCoroutine("DoNegativeReaction");
-        
+
         // idk if the customer still eats the food or skips it entirely
+        Destroy(other.gameObject);
     }
 
     IEnumerator DisableColider()

@@ -1,8 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class Equipment : MonoBehaviour 
 {
-    // public TrashableType TrashType { get; private set; }
+
+#region Members
+
     public bool IsClean { get; private set; }
 
     [SerializeField] protected Material _cleanMat, _dirtyMat;
@@ -11,6 +14,8 @@ public abstract class Equipment : MonoBehaviour
     // DIRTY MECHANIC
     protected int _usageCounter; // counter to know how many times equipment has been used
     protected int _maxUsageCounter; // max counter before it gets dirty
+
+#endregion
 
 #region Unity_Methods
 
@@ -32,9 +37,8 @@ public abstract class Equipment : MonoBehaviour
     
 #endregion
     
-#region Equipment_Methods
+#region Cleaning
 
-    public void ResetPosition() => transform.position = _startPosition;
     public void ToggleClean() 
     {
         IsClean = !IsClean;
@@ -54,6 +58,18 @@ public abstract class Equipment : MonoBehaviour
             ToggleClean();
             Debug.LogWarning($"{name} got dirty from being used too much!");
         }
+    }
+
+#endregion
+
+#region Reposition
+
+    public void ResetPosition() => StartCoroutine(Reposition());
+
+    IEnumerator Reposition()
+    {
+        yield return new WaitForSeconds(Random.Range(7f, 10f));
+        transform.position = _startPosition;
     }
 
 #endregion
