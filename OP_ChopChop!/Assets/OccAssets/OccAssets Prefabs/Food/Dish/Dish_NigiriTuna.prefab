@@ -128,6 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73bc3b0813aa4dc49bba7a5a37f9bf1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _freshMat: {fileID: 2100000, guid: 4c8ae6b8d6c705e4a8d61d6b1c99c001, type: 2}
+  _rottenMat: {fileID: 2100000, guid: cfa83527698872843b85bac2837cc3a3, type: 2}
 --- !u!1 &7068943804873736624
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,9 +143,10 @@ GameObject:
   - component: {fileID: 8726026094980702309}
   - component: {fileID: 4868871853393835067}
   - component: {fileID: 1242592191039178705}
+  - component: {fileID: 1224727216559202365}
   - component: {fileID: 2693304552162272354}
   - component: {fileID: 2480346041438133046}
-  - component: {fileID: 1224727216559202365}
+  - component: {fileID: 7811420576834989616}
   m_Layer: 0
   m_Name: Dish_NigiriTuna
   m_TagString: Untagged
@@ -247,6 +250,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &1224727216559202365
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7068943804873736624}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.14, y: -0.03, z: 0.16}
+  m_Center: {x: 0, y: 0.03, z: 0}
 --- !u!114 &2693304552162272354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -411,22 +427,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743a916b100adae4d9f58e1c401605c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trashType: 0
-  _dirtyPlateMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
-  _cleanPlateMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
-  _cleanTrigger: {fileID: 0}
-  _isDirty: 0
-  _isPlated: 1
---- !u!65 &1224727216559202365
-BoxCollider:
+  _cleanMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
+  _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
+  _cleanTrigger: {fileID: 1224727216559202365}
+--- !u!114 &7811420576834989616
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7068943804873736624}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.14, y: -0.03, z: 0.16}
-  m_Center: {x: 0, y: 0.03, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 3

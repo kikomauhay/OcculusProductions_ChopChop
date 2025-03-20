@@ -48,7 +48,9 @@ public class Floor : MonoBehaviour
         
         if (eq.GetComponent<Plate>().IsClean)
         {
-            eq.ToggleClean(); 
+            eq.ToggleClean();
+            eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
             Debug.LogWarning($"{eq.gameObject.name} has gotten dirty!");
         }  
     } 

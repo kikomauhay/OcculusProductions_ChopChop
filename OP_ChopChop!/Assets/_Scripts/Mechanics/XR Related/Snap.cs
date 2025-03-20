@@ -4,49 +4,39 @@ using UnityEngine;
 
 public class Snap : MonoBehaviour
 {
-    [SerializeField]
-    float timer;
+    [SerializeField] float timer;
+    [SerializeField] Collider SnapCollider;
 
-    public Collider SnapCollider;
-
-    public void ResetSnap()
+    private void OnTriggerEnter(Collider other)
     {
-        SnapCollider.enabled = true;
-    }
+       if (other.gameObject.GetComponent<Sliceable>() != null)
+       {
+            other.gameObject.GetComponent<Sliceable>().IsAttached = true;
 
-    private void OnTriggerEnter(Collider _other)
-    {
-       if(_other.gameObject.GetComponent<Sliceable>() != null)
-        {
-            
-            _other.gameObject.GetComponent<Sliceable>().IsAttached = true;
+            SnapToObject(other.transform);
+            // DisableRigidBody(_other);
 
-            SnapToObject(_other.transform);
-            DisableRigidBody(_other);
-            Debug.Log("Snapped!!");
             SnapCollider.enabled = false;
-            StartCoroutine(DelayedSetting(_other));
-        }
-       else
-        {
-            StartCoroutine(IResetTrigger());
-        }
+            StartCoroutine(DelayedSetting(other));
+       }
+       else StartCoroutine(ResetTrigger());
     }
 
-    void SnapToObject(Transform _foodObject)
+    void SnapToObject(Transform foodObject)
     {
-            _foodObject.localPosition = SnapCollider.transform.position;
-            _foodObject.localRotation = Quaternion.Euler(0, _foodObject.localRotation.eulerAngles.y, 0);
+        foodObject.localPosition = SnapCollider.transform.position;
+        foodObject.localRotation = Quaternion.Euler(0, foodObject.localRotation.eulerAngles.y, 0);
     }
 
-    void SetCollider(Collider _other)
+    void SetCollider(Collider other)
     {
-        if(_other.GetComponent<Collider>() != null)
+        if (other.GetComponent<Collider>() != null)
         {
-            _other.GetComponent<Collider>().isTrigger = true;
+            other.GetComponent<Collider>().isTrigger = true;
         }
     }
-
+    
+    /*
     void DisableRigidBody(Collider other)
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
@@ -55,18 +45,22 @@ public class Snap : MonoBehaviour
             rb.isKinematic = true;
         }
     }
-
-    private IEnumerator IResetTrigger()
+    */
+/*    public void CallReset()
     {
-        Debug.Log(timer);
+        StartCoroutine(ResetTrigger());
+    }*/
+
+    public IEnumerator ResetTrigger()
+    {
         yield return new WaitForSeconds(timer);
-        ResetSnap();
+        SnapCollider.enabled = true;
     }
 
-    private IEnumerator DelayedSetting(Collider _other)
+    private IEnumerator DelayedSetting(Collider other)
     {
         //Delay setting the collider to trigger
-        yield return new WaitForSeconds(1.5F);
-        SetCollider(_other);
+        yield return new WaitForSeconds(1.5);
+        SetCollider(other);
     }
 }

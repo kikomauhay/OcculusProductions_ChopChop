@@ -1,11 +1,8 @@
-public class SalmonIngredient : FishIngredient
+public class SalmonIngredient : Ingredient
 {
     protected override void Start()
     {
         base.Start();
-
-        name = "Salmon";
-        _ingredientType = IngredientType.SALMON;
-        _fishType = FishType.SALMON;
+        name = "Salmon Ingredient";
     }
 }

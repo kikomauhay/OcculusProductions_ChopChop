@@ -113,8 +113,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36432c146a7d5e48bf5c269230332d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trashType: 2
-  IsWet: 0
+  _cleanMat: {fileID: 2100000, guid: 2b12033325e0db8419b438b7860c3423, type: 2}
+  _dirtyMat: {fileID: 2100000, guid: 6f38092b008458e449537dea6c353476, type: 2}
 --- !u!54 &689214983072142834
 Rigidbody:
   m_ObjectHideFlags: 0

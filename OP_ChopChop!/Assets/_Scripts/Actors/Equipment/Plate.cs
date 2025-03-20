@@ -8,9 +8,11 @@ public class Plate : Equipment
     public bool IsPlated { get; private set; }
 
     [Tooltip("The Box Collider Component")] 
-    [SerializeField] Collider _cleanTrigger;
+    [SerializeField] Collider _boxTrigger;
 
-#endregion    
+    #endregion
+
+#region Unity_Methods
 
     protected override void Start()
     {
@@ -20,57 +22,49 @@ public class Plate : Equipment
         _maxUsageCounter = 1;
 
         IsPlated = false;
-        _cleanTrigger.enabled = false;
+        _boxTrigger.enabled = true;
     }
-
-    // void Update() => test();
-    
-
-    
-
     void OnTriggerEnter(Collider other)
-    {      
-        
+    {              
         if (other.GetComponent<Food>() != null && !IsPlated)
         {
             Destroy(gameObject);
             Destroy(other.gameObject);
-            TogglePlated();
-            other.GetComponent<Food>().CreateDish(transform);
+
+            StartCoroutine(PlateTheFood(other.GetComponent<Food>()));
         }
 
-        
-        // if (sponge.IsWet)
-        // {
-        //     SetCleaned();
-        //     Debug.Log("Cleaning Plate");
-        // }
+        if (other.GetComponent<Sponge>().IsWet && !IsClean)
+        {
+            StartCoroutine(DoCleaning());
+            DishWash();
+        }
     }
-
-    /*
-    private void OnTriggerStay(Collider other)
+    IEnumerator DoCleaning()
     {
-        Sponge sponge = other.gameObject.GetComponent<Sponge>();
-        Rigidbody _spongeRb = sponge.gameObject.GetComponent<Rigidbody>();
-        Vector3 _lastVelocity = _spongeRb.velocity;
-        float dif = Mathf.Abs((_spongeRb.velocity - _lastVelocity).magnitude / Time.fixedDeltaTime);
-
-        if (sponge == null) return;
-
+        yield return new WaitForSeconds(2f);
+        ToggleClean();
     }
-    */
+
+    IEnumerator PlateTheFood(Food food)
+    {
+        TogglePlated();
+        yield return null;
+        food.CreateDish(transform);
+    }
+
+#endregion
 
     public void TogglePlated() => IsPlated = !IsPlated;
-
     private void DishWash()
     {
-        if (_cleanTrigger == null) return;
+        if (_boxTrigger == null) return;
 
         if (!IsClean && !IsPlated)
-            _cleanTrigger.enabled = true;
+            _boxTrigger.enabled = true;
 
         else
-            _cleanTrigger.enabled = false;
+            _boxTrigger.enabled = false;
     }
 
 #region Testing

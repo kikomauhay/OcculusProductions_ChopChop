@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class Equipment : MonoBehaviour 
 {
-    public TrashableType TrashType { get; private set; }
+    // public TrashableType TrashType { get; private set; }
     public bool IsClean { get; private set; }
 
     [SerializeField] protected Material _cleanMat, _dirtyMat;
@@ -18,7 +18,6 @@ public abstract class Equipment : MonoBehaviour
     {
         _startPosition = transform.position;
         _usageCounter = 0;
-        TrashType = TrashableType.EQUIPMENT;
 
         IsClean = true;
         GetComponent<MeshRenderer>().material = _cleanMat;

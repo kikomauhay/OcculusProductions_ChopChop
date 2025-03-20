@@ -1,79 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
+using System.Collections;
+using UnityEngine;
 
 public class RiceSpawn : MonoBehaviour
 {
-    public ActionBasedController Left;
-    public ActionBasedController Right;
+    public ActionBasedController Left, Right;
 
     IXRSelectInteractor _mainInteractor;
 
-    [SerializeField]
-    GameObject _unmoldedRice;
+    [SerializeField] GameObject _ricePrefab;
+    [SerializeField] Collider _spwnCollider;
+    [SerializeField] float _resetTimer;
 
-    [SerializeField]
-    Collider _spwnCollider;
-
-    [SerializeField]
-    float _timer;
-
-    private void Awake()
+    void Awake()
     {
         Left = ControllerManager.Instance.LeftController;
         Right = ControllerManager.Instance.RightController;
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
-        IXRSelectInteractor _interactor = null;
-        if (CheckGrip(Left) && other.gameObject.GetComponent<ActionBasedController>())
+        IXRSelectInteractor interactor = null;
+
+        if (Left && other.gameObject.GetComponent<ActionBasedController>())
         {
-            _interactor = Left.GetComponent<XRDirectInteractor>(); 
-            _mainInteractor = _interactor;
+            interactor = Left.GetComponent<XRDirectInteractor>();
         }
-        if (CheckGrip(Right) && other.gameObject.GetComponent<ActionBasedController>())
+        else if (Right && other.gameObject.GetComponent<ActionBasedController>())
         {
-            _interactor = Right.GetComponent<XRDirectInteractor>();
-            _mainInteractor = _interactor;
+            interactor = Right.GetComponent<XRDirectInteractor>();
         }
-        if (_mainInteractor != null)
+
+        if (interactor != null)
         {
+            _mainInteractor = interactor;
+            Debug.Log("Interactor Set");
+
             _mainInteractor.selectEntered.AddListener(RiceEvent);
         }
         else
         {
-            Debug.Log("Interactor null");
+            Debug.LogError("Interactor is null or not valid.");
         }
     }
-    private void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
         _mainInteractor.selectEntered.RemoveListener(RiceEvent);
         _mainInteractor = null;
+        Debug.Log("Main Interactor Removed");
     }
-
-
-    private void RiceEvent(SelectEnterEventArgs args)
+    void RiceEvent(SelectEnterEventArgs args)
     { 
-            Debug.Log("Triggered, Rice spawned");
-            GameObject _spawnedRice = InstantiateRice(_unmoldedRice);
-            _spwnCollider.enabled = false;
-            AttachToHand(_spawnedRice, _mainInteractor);
-            IResetTrigger();    
+        Debug.LogWarning("Triggered, Rice spawned");
+
+        GameObject _newRice = SpawnManager.Instance.SpawnObject(_ricePrefab,
+                                                                    transform,
+                                                                    SpawnObjectType.INGREDIENT); 
+        
+        _spwnCollider.enabled = false;
+        AttachToHand(_newRice, _mainInteractor);
+        ResetTrigger();
     }
 
     private bool CheckGrip(ActionBasedController _controller)
     {
         return _controller.selectAction.action.ReadValue<float>() > 0.5f;
-    }
-
-    private GameObject InstantiateRice(GameObject _rice)
-    {
-        Vector3 _currentPosition = this.transform.position;
-        Quaternion _currentRotation = this. transform.rotation;
-        return Instantiate(_rice, _currentPosition, _currentRotation);
     }
 
     private void AttachToHand(GameObject _spawnedRice, IXRSelectInteractor _interactor)
@@ -96,14 +87,12 @@ public class RiceSpawn : MonoBehaviour
         }
     }
 
-    private void ResetCollider()
-    {
-        _spwnCollider.enabled = true;
-    }
+    private void ResetCollider() => _spwnCollider.enabled = true;
+    
 
-    private IEnumerator IResetTrigger()
+    private IEnumerator ResetTrigger()
     {
-        yield return new WaitForSeconds(_timer);
+        yield return new WaitForSeconds(_resetTimer);
         ResetCollider();
     }
 }
