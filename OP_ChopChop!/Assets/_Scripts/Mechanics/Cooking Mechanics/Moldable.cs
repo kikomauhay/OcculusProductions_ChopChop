@@ -7,14 +7,12 @@ public class Moldable : MonoBehaviour
     public ActionBasedController Left, Right;
 
     [SerializeField] GameObject[] _moldedStages;
-
-
-    [SerializeField] GameObject _smokeVFX;
     [SerializeField] RiceIngredient _rice;
     [SerializeField] int _moldLimitPerStage;
    
     int _moldCounter, _moldStageIndex;
     IXRSelectInteractor _interactor;
+
     void Start()
     {
         Left = ControllerManager.Instance.LeftController;
@@ -35,8 +33,8 @@ public class Moldable : MonoBehaviour
         {
             _moldCounter = 0;
 
-            if (_moldStageIndex < _moldedStages.Length)
-            { // prevents out of range errors
+            if (_moldStageIndex < _moldedStages.Length) // prevents out of range errors
+            { 
                 _moldStageIndex++;
                 _rice.OnRiceMolded?.Invoke(_moldStageIndex);
             }
@@ -44,22 +42,18 @@ public class Moldable : MonoBehaviour
             MoldInstantiate(_moldedStages[_moldStageIndex]);
         }
     }
-    #region OnTriggerStuff
+ #region Collisions
+
     private void OnTriggerEnter(Collider other)
     {
-        if(CheckGrip(Left))
+        if (CheckGrip(Left))
             _interactor = Right.GetComponent<XRDirectInteractor>();
+
         else if(CheckGrip(Right))
             _interactor = Left.GetComponent<XRDirectInteractor>();
 
-        if(_interactor != null)
-        {
+        if (_interactor != null)
             _interactor.selectEntered.AddListener(MoldEvent);
-        }
-        else
-        {
-            Debug.Log("Interactor null");
-        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -67,19 +61,16 @@ public class Moldable : MonoBehaviour
         _interactor.selectEntered.RemoveListener(MoldEvent);
         _interactor = null;
     }
-    #endregion
-    #region Functions
-    private void MoldEvent(SelectEnterEventArgs args)
-    {  
-        Debug.Log("Molding");
-        _moldCounter++;
-    }
 
-    bool CheckGrip(ActionBasedController controller) 
-    {
-        return controller.selectAction.action.ReadValue<float>() > 0.5f;
-    }
+#endregion
 
+#region Functions
+
+    void MoldEvent(SelectEnterEventArgs args) => _moldCounter++;
+    
+    bool CheckGrip(ActionBasedController controller) =>
+        controller.selectAction.action.ReadValue<float>() > 0.5f;
+    
     void MoldInstantiate(GameObject moldPrefab)
     {
         Vector3 pos = transform.position;
@@ -93,5 +84,6 @@ public class Moldable : MonoBehaviour
         yield return new WaitForSeconds(2f);
         Debug.Log($"Mold counter: {_moldCounter}");
     }
-    #endregion
+
+#endregion
 }

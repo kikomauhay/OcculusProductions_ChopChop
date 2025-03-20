@@ -47,8 +47,7 @@ public class RiceIngredient : Ingredient
                 Destroy(gameObject);
                 Destroy(other.gameObject);
                 foodToSpawn = Instantiate(_foodPrefabs[0], pos, rot);
-            }
-            
+            }            
             else if (ing.IngredientType == IngredientType.TUNA)
             {
                 SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform);
@@ -56,14 +55,12 @@ public class RiceIngredient : Ingredient
                 Destroy(other.gameObject);
                 foodToSpawn = Instantiate(_foodPrefabs[1], pos, rot);
             }
-
             else return;
 
             // sets up the food's score
             food = foodToSpawn.GetComponent<Food>();
             food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
             food.FoodType = DishType.NIGIRI_SALMON; // only salmon for now (will add tuna later)
-        
     }
 
     void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;

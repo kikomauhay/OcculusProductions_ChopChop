@@ -13,6 +13,13 @@ public class ColliderCheck : MonoBehaviour
             return;
         }
 
+        if (other.gameObject.GetComponent<Ingredient>() != null) 
+        {
+            Debug.LogError("GIVEN ORDER IS AN INGREDIENT");
+            CustomerOrder.StartCoroutine("DoNegativeReaction");
+            return;
+        }
+
         Dish collidedDish = other.gameObject.GetComponentInChildren<Dish>();
         Plate plate = other.gameObject.GetComponent<Plate>();
 

@@ -41,6 +41,8 @@ public class SpawnManager : Singleton<SpawnManager>
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
+
+
     }
     void Reset() 
     {
@@ -50,13 +52,11 @@ public class SpawnManager : Singleton<SpawnManager>
     IEnumerator HandleCustomer()
     {
         yield return new WaitForSeconds(5f);
-        Debug.LogWarning("Spawned a new customer!");
         SpawnCustomer(GiveAvaiableSeat());
 
         while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
-            yield return new WaitForSeconds(10f);
-            Debug.LogWarning("Spawned a new customer!");   
+            yield return new WaitForSeconds(10f);  
             SpawnCustomer(GiveAvaiableSeat());
         }
     }
@@ -73,7 +73,6 @@ public class SpawnManager : Singleton<SpawnManager>
         
         Destroy(vfxInstance, 2f); // destory time could also be a variable
     }
-
     public GameObject SpawnObject(GameObject obj, Transform t, SpawnObjectType type)
     {
         return Instantiate(obj,

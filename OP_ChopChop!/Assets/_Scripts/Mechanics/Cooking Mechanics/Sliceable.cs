@@ -93,6 +93,5 @@ public class Sliceable : MonoBehaviour
         _snap.gameObject.GetComponent<Snap>().CallReset();
         yield return null;
         Destroy(gameObject);
-
     }
 }
