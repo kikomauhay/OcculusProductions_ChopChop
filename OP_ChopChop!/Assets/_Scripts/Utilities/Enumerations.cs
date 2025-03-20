@@ -1,14 +1,13 @@
 using UnityEngine;
 public class Enumerations : MonoBehaviour {}
 
-public enum GameShift // CORRECT ORDER
-{ 
-    DEFAULT,
-    PRE_PRE_SERVICE,
-    PRE_SERVICE,
-    SERVICE, 
-    POST_SERVICE
-}
+/// <summary> -WHAT DOES THIS SCRIPT DO-
+/// 
+/// Anything script that uses enums is here
+/// Don't change shit willy-nilly, you might break parts of the game
+/// 
+/// </summary>
+
 
 #region Spawning
 
@@ -41,20 +40,20 @@ public enum GameShift // CORRECT ORDER
         SASHIMI_SALMON, 
         SASHIMI_TUNA 
     }
-    public enum IngredientType // IN A CERTAIN ORDER
+    public enum IngredientType // IN A CERTAIN ORDER (DON'T RE-ORDER)
     {    
         RICE, 
         SALMON,
         TUNA
     }
-    public enum IngredientState // IN A CERTAIN ORDER
-    { 
+    public enum IngredientState // IN A CERTAIN ORDER (DON'T RE-ORDER)
+{ 
         DEFAULT, 
         EXPIRED, 
         CONTAMINATED, 
         STORED
     }
-    public enum MoldType // IN A CERTAIN ORDER
+    public enum MoldType // IN A CERTAIN ORDER (DON'T RE-ORDER)
     {
         UNMOLDED,
         GOOD,
@@ -65,11 +64,13 @@ public enum GameShift // CORRECT ORDER
 #endregion
 
 #region Others
-
-    public enum StorageType 
-    { 
-        CHILLER, 
-        FREEZER 
+    public enum GameShift // IN A CERTAIN ORDER (DON'T RE-ORDER)
+    {
+        DEFAULT,
+        TRAINING,
+        PRE_SERVICE,
+        SERVICE,
+        POST_SERVICE
     }
     public enum TrashableType 
     { 
@@ -92,15 +93,6 @@ public enum GameShift // CORRECT ORDER
         TUNA,
         RICE,
         SEAWEED
-    }
-
-public enum FishType
-{
-
-}
-
-
-
-
+    } 
 
 #endregion

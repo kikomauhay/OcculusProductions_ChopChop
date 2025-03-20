@@ -37,19 +37,22 @@ public abstract class Ingredient : MonoBehaviour
 
     protected virtual void Start() 
     {
-        IngredientState = IngredientState.DEFAULT; 
-        // TrashableType = TrashableType.INGREDIENT;  
+        // ingredients will only decay once the shift has started  
+        GameManager.Instance.OnStartService += StartDecaying;
+        GameManager.Instance.OnEndService += ExpireIngredient;
+
+        IngredientState = IngredientState.DEFAULT;   
 
         FreshnessRate = 100f;     
         IsFresh = true;           
         IsProperlyStored = false; 
         _startPosition = transform.position;
 
-        // ingredients will only decay once the shift has started  
-        GameManager.Instance.OnStartService += StartDecaying;
-        GameManager.Instance.OnEndService += ExpireIngredient;
-
         ChangeMaterial();
+
+        // in case some ingredients are spawned during Service time
+        if (GameManager.Instance.CurrentShift == GameShift.SERVICE)
+            StartDecaying();        
     }
     protected virtual void Reset() 
     {
