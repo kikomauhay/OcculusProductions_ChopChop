@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Plate : Equipment
 {
@@ -10,7 +11,7 @@ public class Plate : Equipment
     [Tooltip("The Box Collider Component")] 
     [SerializeField] Collider _boxTrigger;
 
-    #endregion
+#endregion
 
 #region Unity_Methods
 
@@ -36,16 +37,22 @@ public class Plate : Equipment
 
         if (other.GetComponent<Sponge>().IsWet && !IsClean)
         {
+            StopCoroutine(DoCleaning());
             StartCoroutine(DoCleaning());
             DishWash();
         }
     }
+    void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<Sponge>() != null) 
+            StopCoroutine(DoCleaning());
+    }
+
     IEnumerator DoCleaning()
     {
         yield return new WaitForSeconds(2f);
         ToggleClean();
     }
-
     IEnumerator PlateTheFood(Food food)
     {
         TogglePlated();
