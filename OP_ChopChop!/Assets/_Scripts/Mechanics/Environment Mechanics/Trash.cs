@@ -17,6 +17,7 @@ public class Trash : MonoBehaviour
                 DestroyIngredient(obj.GetComponent<Ingredient>());
                 break;
             case TrashableType.FOOD:
+                DestroyFood(obj.GetComponent<Food>());
                 break;
             case TrashableType.EQUIPMENT:
                 break;
@@ -30,10 +31,22 @@ public class Trash : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void DoFoodLogic(Food food)
+    void DestroyFood(Food food)
     {
-        food.SetContaminated();
-        Debug.LogWarning($"{food.gameObject.name} has been contaminated!");
+        Destroy(gameObject);
+    }
+
+    void DoEquipmentLogic(Equipment eq)
+    {
+        eq.ResetPosition();
+        eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+        // other logic for equipment child classes
+
+        if (eq.GetComponent<Plate>().IsClean)
+        {
+            eq.ToggleClean();
+        }
     }
 
     private void AttachToHand(GameObject _spawnedPlate, IXRSelectInteractor _interactor)

@@ -34,7 +34,9 @@ public class GameManager : Singleton<GameManager>
     List<float> _customerSRScores;
     public int CustomersServed; // will be used for difficulty increase 
 
-    [SerializeField] private GameObject restaurantReceipt;
+    [SerializeField] private GameObject endOfDayReceipt;
+    private RestaurantReceipt receiptScript;
+    
 
 #endregion
 
@@ -44,13 +46,14 @@ public class GameManager : Singleton<GameManager>
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
+        receiptScript = endOfDayReceipt.GetComponent<RestaurantReceipt>(); //To assign the script from the receipt
         CurrentShift = GameShift.DEFAULT;
         AvailableMoney = 0f;
         CustomersServed = 0;
         CanPause = true;
         IsPaused = false;
 
-        ChangeShift(GameShift.SERVICE);
+        ChangeShift(GameShift.PRE_SERVICE);
     }
     IEnumerator StartShiftCountdown()
     {
@@ -146,10 +149,12 @@ public class GameManager : Singleton<GameManager>
         // storing ingredients
         // clean kitchen 
 
-        StartCoroutine(TestShifCountdown(testTimer, GameShift.SERVICE)); 
+        StartCoroutine(TestShiftCountdown(testTimer, GameShift.SERVICE)); 
     }
-    void DoService() // customer spawning + cooking, serving, & cleaning
+    void DoService()
     {
+        // customer spawning + cooking, serving, & cleaning
+
         OnStartService?.Invoke(); // all ingredients start decaying
 
         // 5 min timer once the shift ends
@@ -172,18 +177,29 @@ public class GameManager : Singleton<GameManager>
     {
         float customerScore = GetAverageOf(_customerSRScores);
 
-        if (customerScore >= 97)
-        {
-            
-        }
+        int indexCustomerRating = receiptScript.ReturnScoretoIndexRating(customerScore);
+
+        receiptScript.GiveCustomerRating(indexCustomerRating);
     }
 
+    void DoKitchenRating()
+    {
+        float kitchenScore = CleaningManager.Instance.KitchenScore;
+
+        int indexKitchenRating = receiptScript.ReturnScoretoIndexRating(kitchenScore);
+
+        receiptScript.GiveKitchenRating(indexKitchenRating);
+    }
 
     void DoPostServiceRating()
     {
         // END-OF-DAY RESTAURANT RATING 
         float finalScore = (CleaningManager.Instance.KitchenScore + 
                             GetAverageOf(_customerSRScores)) / 2f;
+
+        int indexPostServiceRating = receiptScript.ReturnScoretoIndexRating(finalScore);
+
+        receiptScript.GiveRestaurantRating(indexPostServiceRating);
 
         Debug.LogWarning($"Final score for the day: {finalScore}");
 
@@ -192,9 +208,21 @@ public class GameManager : Singleton<GameManager>
             - shows the amt of customers that left
             - show the LETTERED SCORE to the player 
             - shows how much money you gained
-            - add a button where the player goes back to the pre pre service 
+            - add a button where the player goes back to the training mode
         */
     }
+
+    void TurnOnEndOfDayReceipt()
+    {
+        DoCustomerRating();
+        DoKitchenRating();
+        DoPostServiceRating();
+
+        CustomersServed = receiptScript.totalcustomerServed;
+        receiptScript.GiveTotalCustomerServed();
+        endOfDayReceipt.SetActive(true);
+    }
+
     float GetAverageOf(List<float> list) 
     {
         // prevents a div/0 case
@@ -213,7 +241,7 @@ public class GameManager : Singleton<GameManager>
 #region Testing
 
     // TESTING
-    float testTimer = 10f;
+    float testTimer = 2f;
 
     void test() 
     {
@@ -244,7 +272,7 @@ public class GameManager : Singleton<GameManager>
             Debug.Log(CurrentShift);
         }
     }
-    IEnumerator TestShifCountdown(float timer, GameShift shift)
+    IEnumerator TestShiftCountdown(float timer, GameShift shift)
     {
         yield return new WaitForSeconds(timer);
         ChangeShift(shift);
