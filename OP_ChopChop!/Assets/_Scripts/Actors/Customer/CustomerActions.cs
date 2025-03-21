@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class CustomerActions : MonoBehaviour
@@ -13,10 +12,9 @@ public class CustomerActions : MonoBehaviour
     void LateUpdate() => transform.position = Vector3.MoveTowards(transform.position,
                                                                   TargetSeat,
                                                                   _customerSpeed * Time.deltaTime);
-
-    void TriggerEating() =>
-        SpawnManager.Instance.SpawnVFX(VFXType.RICE,
-                                       _mouthTransform,
-                                       3f);
+                                                                  
+    public void TriggerEating() => SpawnManager.Instance.SpawnVFX(VFXType.RICE,
+                                                                  _mouthTransform,
+                                                                  3f);
 }
 

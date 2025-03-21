@@ -16,7 +16,10 @@ public class ColliderCheck : MonoBehaviour
         if (other.gameObject.GetComponent<Ingredient>() != null) 
         {
             Debug.LogError("GIVEN ORDER IS AN INGREDIENT");
-            CustomerOrder.StartCoroutine("DoNegativeReaction");
+            
+            // CustomerOrder.StartCoroutine("DoNegativeReaction");
+            StartCoroutine(CustomerOrder.DoReaction(FaceVariant.MAD));
+
             Destroy(other.gameObject);
             return;
         }
@@ -27,7 +30,9 @@ public class ColliderCheck : MonoBehaviour
         if (CustomerOrder.OrderIsSameAs(collidedDish))
         {
             Debug.LogWarning("CORRECT ORDER");
-            CustomerOrder.StartCoroutine("DoPositiveReaction");
+
+            // CustomerOrder.StartCoroutine("DoPositiveReaction");
+            StartCoroutine(CustomerOrder.DoReaction(FaceVariant.HAPPY));
             
             // calculates the customer SR
             CustomerOrder.CustomerSR = (collidedDish.DishScore + CustomerOrder.PatienceRate) / 2f;
@@ -44,9 +49,10 @@ public class ColliderCheck : MonoBehaviour
         }
 
         Debug.LogError("WRONG ORDER");
-        CustomerOrder.StartCoroutine("DoNegativeReaction");
 
-        // idk if the customer still eats the food or skips it entirely
+        // CustomerOrder.StartCoroutine("DoNegativeReaction");
+        StartCoroutine(CustomerOrder.DoReaction(FaceVariant.MAD));
+
         Destroy(other.gameObject);
     }
 
