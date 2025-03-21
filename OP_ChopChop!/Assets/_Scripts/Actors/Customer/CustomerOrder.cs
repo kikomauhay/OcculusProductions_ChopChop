@@ -24,6 +24,8 @@ public class CustomerOrder : MonoBehaviour
     [Header("Dish UI")]
     [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
     [SerializeField] private Transform _orderUITransform; // Spawning of the order
+    
+    [SerializeField] int _minCash, _maxCash; // testing
 
     [Header("Customer Components")]
     [SerializeField] CustomerActions _actions;
@@ -33,8 +35,6 @@ public class CustomerOrder : MonoBehaviour
     float _customerChewingTimer; // time it takes for the customer to eat and leave
     float _patienceRate;         // deduction rate to use
     float _customerScore;        // starts at 100 ang decreases over time
-    
-    [SerializeField] int _minCash, _maxCash; // testing
 
 #endregion
 
@@ -44,7 +44,7 @@ public class CustomerOrder : MonoBehaviour
 
         _customerScore = 100f; // will decrease overtime
         _patienceRate = 1.65f; // referenced for the document
-        _customerChewingTimer = 4f;
+        _customerChewingTimer = 4f; 
         
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
