@@ -53,7 +53,7 @@ public class GameManager : Singleton<GameManager>
         CanPause = true;
         IsPaused = false;
 
-        ChangeShift(GameShift.SERVICE);
+        ChangeShift(GameShift.PRE_SERVICE);
     }
     IEnumerator StartShiftCountdown()
     {
@@ -149,10 +149,12 @@ public class GameManager : Singleton<GameManager>
         // storing ingredients
         // clean kitchen 
 
-        StartCoroutine(TestShifCountdown(testTimer, GameShift.SERVICE)); 
+        StartCoroutine(TestShiftCountdown(testTimer, GameShift.SERVICE)); 
     }
-    void DoService() // customer spawning + cooking, serving, & cleaning
+    void DoService()
     {
+        // customer spawning + cooking, serving, & cleaning
+
         OnStartService?.Invoke(); // all ingredients start decaying
 
         // 5 min timer once the shift ends
@@ -239,7 +241,7 @@ public class GameManager : Singleton<GameManager>
 #region Testing
 
     // TESTING
-    float testTimer = 10f;
+    float testTimer = 2f;
 
     void test() 
     {
@@ -270,7 +272,7 @@ public class GameManager : Singleton<GameManager>
             Debug.Log(CurrentShift);
         }
     }
-    IEnumerator TestShifCountdown(float timer, GameShift shift)
+    IEnumerator TestShiftCountdown(float timer, GameShift shift)
     {
         yield return new WaitForSeconds(timer);
         ChangeShift(shift);
