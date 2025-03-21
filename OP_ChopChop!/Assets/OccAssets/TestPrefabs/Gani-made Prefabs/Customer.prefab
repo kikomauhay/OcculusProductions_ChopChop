@@ -560,6 +560,8 @@ MonoBehaviour:
   - {fileID: 8585795031534507061, guid: 4cdd869cff0d0bf4badeedb080ca41fc, type: 3}
   - {fileID: 3798674209957098441, guid: f6e91241ede71a54ea1340f8577d3dd6, type: 3}
   _orderUITransform: {fileID: 1410965453023544373}
+  _minCash: 200
+  _maxCash: 250
   _actions: {fileID: 8242136411445390343}
   _appearance: {fileID: 8242136411445390342}
 --- !u!114 &8242136411445390343
@@ -638,12 +640,15 @@ MonoBehaviour:
     - {fileID: 2100000, guid: c2e0291ef028fb444972d064b0f5e4f2, type: 2}
     - {fileID: 2100000, guid: 58abaeee0642f1548936ece683bd1201, type: 2}
   _reactionFaces:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: -11771893, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: -1735441325, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: 257822556, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
   _chewingFaces:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 470213912, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: 448509024, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: 1643530941, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: 1541474490, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  _madFaces:
+  - {fileID: -14450752, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: -1252453121, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}
+  - {fileID: -1157831227, guid: b78b52eedb2979e488b2e4559a584fab, type: 3}

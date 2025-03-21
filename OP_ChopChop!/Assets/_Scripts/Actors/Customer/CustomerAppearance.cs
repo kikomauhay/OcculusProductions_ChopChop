@@ -2,9 +2,10 @@ using System.Collections;
 using UnityEngine;
 
 public class CustomerAppearance : MonoBehaviour 
-{     
+{
+    public Sprite[] MadFaces => _madFaces;
 
-#region Customer_Variant_Members
+#region Members
 
     [Header("Customer Material Renderers")]
     [SerializeField] SpriteRenderer _face;
@@ -14,8 +15,9 @@ public class CustomerAppearance : MonoBehaviour
     [SerializeField] SkinVariant[] _skinVariants;
 
     [Header("Face Types")] 
-    [SerializeField] Sprite[] _reactionFaces; // 0 = neutral, 1 = happy, 2 = mad, 3 = sus
-    [SerializeField] Sprite[] _chewingFaces; // 0-1 = normal, 2-3 = sus
+    [SerializeField] Sprite[] _reactionFaces; // 0 = neutral, 1 = happy, 2 = sus
+    [SerializeField] Sprite[] _chewingFaces;  // 0-1 = normal, 2-3 = sus
+    [SerializeField] Sprite[] _madFaces;      // 0 = angry, 1 = angrier, 2 = angriest
 
 #endregion
 
@@ -42,11 +44,11 @@ public class CustomerAppearance : MonoBehaviour
                 break;
             
             case FaceVariant.MAD:
-                _face.sprite = _reactionFaces[2];
+                _face.sprite = _madFaces[0];
                 break;
 
             case FaceVariant.SUS:
-                _face.sprite = _reactionFaces[3];
+                _face.sprite = _reactionFaces[2];
                 break;
 
             default: break;
