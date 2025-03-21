@@ -6135,6 +6135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CustomersServed: 0
+  endOfDayReceipt: {fileID: 1267482132601974048}
 --- !u!1 &2030309113
 GameObject:
   m_ObjectHideFlags: 0
@@ -6664,6 +6665,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 737eec0da604cd246bb199bd9ceda74c, type: 3}
+--- !u!1 &1267482132601974048 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 949552108770128601, guid: 737eec0da604cd246bb199bd9ceda74c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1267482132601974047}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1325348572160926496
 Transform:
   m_ObjectHideFlags: 0
