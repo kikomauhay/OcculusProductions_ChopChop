@@ -73,11 +73,19 @@ public class GameManager : Singleton<GameManager>
 
         IsPaused = !IsPaused;
 
-        if (IsPaused) 
+        if (IsPaused)
+        {
             Time.timeScale = 0f;
-        
-        else 
+            MainMenuUIScript.Instance.TogglePlayIcon(false);
+            MainMenuUIScript.Instance.TogglePausePanel(true);
+        } 
+        else
+        {
             Time.timeScale = 1f;
+            MainMenuUIScript.Instance.TogglePausePanel(false);
+            MainMenuUIScript.Instance.TogglePlayIcon(true);
+        }
+            
     }
 
     // SCORING-RELATED
@@ -219,6 +227,7 @@ public class GameManager : Singleton<GameManager>
         DoPostServiceRating();
 
         CustomersServed = receiptScript.totalcustomerServed;
+        MainMenuUIScript.Instance.TogglePlayIcon(false); //turns OFF the play button to display the receipt screen
         receiptScript.GiveTotalCustomerServed();
         endOfDayReceipt.SetActive(true);
     }
