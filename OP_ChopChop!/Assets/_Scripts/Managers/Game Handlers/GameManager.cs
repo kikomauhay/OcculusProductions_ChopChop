@@ -26,9 +26,13 @@ public class GameManager : Singleton<GameManager>
     public Action OnStartService, OnEndService, OnTraining;
 
     public GameShift CurrentShift { get; private set; }
-    public float AvailableMoney { get; private set; }
+
     public bool IsPaused { get; private set; }
     public bool CanPause { get; private set; }
+
+    //PlayerMoney Values
+    [SerializeField] private float startingPlayerMoney = 9999;
+    public float CurrentPlayerMoney { get; private set; }
 
     // SCORING VALUES
     List<float> _customerSRScores;
@@ -45,9 +49,13 @@ public class GameManager : Singleton<GameManager>
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
+        //Setting player money
+        //CurrentPlayerMoney = startingPlayerMoney;
+        //CurrentPlayerMoney = NEW_OrderInventoryUI.Instance.currentPlayerMoney;
+
         receiptScript = endOfDayReceipt.GetComponent<RestaurantReceipt>(); //To assign the script from the receipt
         CurrentShift = GameShift.DEFAULT;
-        AvailableMoney = 0f;
+        CurrentPlayerMoney = 0f;
         CustomersServed = 0;
         CanPause = true;
         IsPaused = false;
@@ -100,16 +108,16 @@ public class GameManager : Singleton<GameManager>
     {
         if (amt < 0f) return;
 
-        AvailableMoney += amt;
+        CurrentPlayerMoney += amt;
     }
     public void DeductMoney(float amt)
     {
         if (amt < 0f) return;
 
-        AvailableMoney -= amt;
+        CurrentPlayerMoney -= amt;
 
-        if (AvailableMoney < 0f)
-            AvailableMoney = 0f;
+        if (CurrentPlayerMoney < 0f)
+            CurrentPlayerMoney = 0f;
     }
     
     // GAME SHIFTING

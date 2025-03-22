@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class NEW_OrderInventoryUI : MonoBehaviour
+public class NEW_OrderInventoryUI : Singleton<NEW_OrderInventoryUI> 
 {
+    protected override void Awake() => base.Awake();
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+
     [Header("GameObjects")]
     [SerializeField] private GameObject salmonSlabPrefab;
     [SerializeField] private GameObject tunaSlabPrefab;
-    [SerializeField] private GameObject ricePrefab; //idk if this is it
-    [SerializeField] private Transform riceSpawnPoint; //spawn Point for rice, idk kung ano plano ngo
     [SerializeField] private Transform salmonSpawnPoint;
     [SerializeField] private Transform tunaSpawnPoint;
     //----------------------------------------------------------------//
     [Header("PlayerCurrency")]
-    [SerializeField] private int startPlayerMoney;
-    [SerializeField] private int currentPlayerMoney;
+    //[SerializeField] private int startPlayerMoney;
+    [SerializeField] public float currentPlayerMoney;
     [SerializeField] private TextMeshProUGUI txtCurrentPlayerMoney;
     //----------------------------------------------------------------//
+    #region CommentedOutCode
+    /*
     [Header("IngredientStockCount")]
     [SerializeField] private int currentSalmonStock;
     [SerializeField] private TextMeshProUGUI txtCurrentSalmonStockCount;
@@ -25,6 +28,7 @@ public class NEW_OrderInventoryUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI txtCurrentTunaStockCount;
     [SerializeField] private float currentRiceStock; //I left this as float because Idk maybe we indicate per 0.1 decrements per grab of rice?
     [SerializeField] private TextMeshProUGUI txtCurrentRiceStockCount;
+   
     //----------------------------------------------------------------//
     [Header("ToOrderIngredientCount")]
     [SerializeField] private int salmonSlabOrderCount;
@@ -33,6 +37,19 @@ public class NEW_OrderInventoryUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI txtTunaOrderCount;
     [SerializeField] private int riceOrderCount;
     [SerializeField] private TextMeshProUGUI txtRiceOrderCount;
+
+
+     [Header("TotalPrice")]
+    [SerializeField] private int salmonOrderTotalPrice;
+    [SerializeField] private TextMeshProUGUI txtSalmonTotalPrice;
+    [SerializeField] private int tunaOrderTotalPrice;
+    [SerializeField] private TextMeshProUGUI txtTunaTotalPrice;
+    [SerializeField] private int riceOrderTotalPrice;
+    [SerializeField] private TextMeshProUGUI txtRiceTotalPrice;
+    [SerializeField] private int totalPrice;
+    [SerializeField] private TextMeshProUGUI txtTotalPrice;
+     */
+    #endregion
     //----------------------------------------------------------------//
     [Header("IngredientPrice")]
     [SerializeField] private int salmonSlabPrice;
@@ -42,20 +59,12 @@ public class NEW_OrderInventoryUI : MonoBehaviour
     [SerializeField] private int ricePrice;
     [SerializeField] private TextMeshProUGUI txtRicePrice;
     //----------------------------------------------------------------//
-    [Header("TotalPrice")]
-    [SerializeField] private int salmonOrderTotalPrice;
-    [SerializeField] private TextMeshProUGUI txtSalmonTotalPrice;
-    [SerializeField] private int tunaOrderTotalPrice;
-    [SerializeField] private TextMeshProUGUI txtTunaTotalPrice;
-    [SerializeField] private int riceOrderTotalPrice;
-    [SerializeField] private TextMeshProUGUI txtRiceTotalPrice;
-    [SerializeField] private int totalPrice;
-    [SerializeField] private TextMeshProUGUI txtTotalPrice;
+   
 
     // Start is called before the first frame update
     void Start()
     {
-        currentPlayerMoney = startPlayerMoney;
+        txtCurrentPlayerMoney.text = currentPlayerMoney.ToString();
         //IngredientPrice
         txtSalmonSlabPrice.text = salmonSlabPrice.ToString();
         txtTunaSlabPrice.text = tunaSlabPrice.ToString();
@@ -65,6 +74,8 @@ public class NEW_OrderInventoryUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        #region CommentedOUtUpdateCode
+        /*
         // Ingredient Stock Count
         txtCurrentSalmonStockCount.text = currentSalmonStock.ToString();
         txtCurrentTunaStockCount.text = currentTunaStock.ToString();
@@ -80,8 +91,44 @@ public class NEW_OrderInventoryUI : MonoBehaviour
         txtSalmonOrderCount.text = $"{salmonSlabOrderCount}";
         txtTunaOrderCount.text = $"{tunaSlabOrderCount}";
         txtRiceOrderCount.text = $"{riceOrderCount}";
+        */
+        #endregion
     }
 
+    private void DeductPlayerMoney(int priceOfItem)
+    {
+        if(currentPlayerMoney >= priceOfItem)
+        {
+            currentPlayerMoney -= priceOfItem;
+        }
+        else
+        {
+            Debug.Log("NO MONEH");
+        }
+       
+        txtCurrentPlayerMoney.text = currentPlayerMoney.ToString();
+    }
+
+    public void BuySalmon()
+    {
+        DeductPlayerMoney(salmonSlabPrice);
+        Instantiate(salmonSlabPrefab, salmonSpawnPoint.transform.localPosition, salmonSpawnPoint.transform.rotation);
+    }
+
+    public void BuyTuna()
+    {
+        DeductPlayerMoney(tunaSlabPrice);
+        Instantiate(tunaSlabPrefab, salmonSpawnPoint.transform.localPosition, salmonSpawnPoint.transform.rotation);
+    }
+
+    public void BuyRice()
+    {
+        DeductPlayerMoney(ricePrice);
+        //insert code here to reset Rice at rice cooker
+    }
+
+    #region CommentedOutCode
+    /*
     public void DoOrderSupplies()
     {
         if (currentPlayerMoney >= totalPrice)
@@ -210,4 +257,6 @@ public class NEW_OrderInventoryUI : MonoBehaviour
 
         Mathf.Clamp(riceOrderCount, 0, riceOrderCount);
     }
+    */
+    #endregion
 }
