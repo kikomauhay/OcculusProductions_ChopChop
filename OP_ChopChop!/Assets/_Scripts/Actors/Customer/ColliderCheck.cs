@@ -18,6 +18,7 @@ public class ColliderCheck : MonoBehaviour
             CustomerOrder.CustomerSR = 0f;
             StartCoroutine(CustomerOrder.AngryReaction());
             Destroy(other.gameObject); // destroys the ingredient on collision
+            StartCoroutine(DisableColider());
 
             return;
         }
@@ -26,22 +27,26 @@ public class ColliderCheck : MonoBehaviour
         Plate plate = other.gameObject.GetComponent<Plate>();
 
         // customer reaction based on the given order
-        if (collidedDish.IsContaminated) // ORDER IS EXPIRED OR CONTAMINATED
+        if (collidedDish.IsContaminated)
         {
+            // ORDER IS EXPIRED OR CONTAMINATED
             CustomerOrder.CustomerSR = 0f;
             StartCoroutine(CustomerOrder.ExpiredReaction());            
         }
-        else if (CustomerOrder.OrderIsSameAs(collidedDish)) // CORRECT ORDER
+        else if (CustomerOrder.OrderIsSameAs(collidedDish))
         {
+            // CORRECT ORDER
             CustomerOrder.CustomerSR = (collidedDish.DishScore + CustomerOrder.PatienceRate) / 2f;
             StartCoroutine(CustomerOrder.HappyReaction());            
         }
-        else // WRONG ORDER
+        else 
         {
+            // WRONG ORDER
             CustomerOrder.CustomerSR = 0f;
             StartCoroutine(CustomerOrder.AngryReaction());            
         }
 
+        // finishing actions for the plate
         plate.ToggleClean();      
         plate.TogglePlated();
         Destroy(collidedDish.gameObject);   
