@@ -37,7 +37,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject endOfDayReceipt;
     private RestaurantReceipt receiptScript;
 
-
 #endregion
 
 #region Unity_Methods
@@ -193,21 +192,19 @@ public class GameManager : Singleton<GameManager>
 
         receiptScript.GiveCustomerRating(indexCustomerRating);
     }
-
     void DoKitchenRating()
     {   
-        float kitchenScore = CleaningManager.Instance.KitchenScore;
+        float kitchenScore = KitchenCleaningManager.Instance.KitchenScore;
 
         int indexKitchenRating = receiptScript.ReturnScoretoIndexRating(kitchenScore);
 
         receiptScript.GiveKitchenRating(indexKitchenRating);
     }
-
     void DoPostServiceRating()
     {
         // END-OF-DAY RESTAURANT RATING 
-        float finalScore = (CleaningManager.Instance.KitchenScore + 
-                            GetAverageOf(_customerSRScores)) / 2f;
+        float finalScore = (KitchenCleaningManager.Instance.KitchenScore + 
+                            GetAverageOf(_customerSRScores)) / 2f;      
 
     
         int indexPostServiceRating = receiptScript.ReturnScoretoIndexRating(finalScore);
@@ -227,20 +224,23 @@ public class GameManager : Singleton<GameManager>
 
     void TurnOnEndOfDayReceipt()
     {
+        MainMenuUIScript.Instance.TogglePlayIcon(false); //turns OFF the play button to display the receipt screen
+        MainMenuUIScript.Instance.ToggleEODPanel();
+        MainMenuUIScript.Instance.ToggleLiveWallpaper();
+        // endOfDayReceipt.SetActive(true);
+
         DoCustomerRating();
         DoKitchenRating();
         DoPostServiceRating();
 
         CustomersServed = receiptScript.totalcustomerServed;
-        MainMenuUIScript.Instance.TogglePlayIcon(false); //turns OFF the play button to display the receipt screen
         receiptScript.GiveTotalCustomerServed();
-        endOfDayReceipt.SetActive(true);
     }
 
     float GetAverageOf(List<float> list) 
     {
         // prevents a div/0 case
-        if (list.Count < 1) return 0f;
+        if (list.Count < 1) return -1f;
         
         float n = 0f;
 
@@ -277,15 +277,6 @@ public class GameManager : Singleton<GameManager>
         // throw new NullReferenceException("test");
         //Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
     }  
-
-    IEnumerator PrintState() 
-    { 
-        while (true) 
-        {
-            yield return new WaitForSeconds(2f);
-            Debug.Log(CurrentShift);
-        }
-    }
     IEnumerator TestShiftCountdown(float timer, GameShift shift)
     {
         yield return new WaitForSeconds(timer);
