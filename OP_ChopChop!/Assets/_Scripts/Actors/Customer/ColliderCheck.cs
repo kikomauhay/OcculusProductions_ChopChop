@@ -9,61 +9,49 @@ public class ColliderCheck : MonoBehaviour
     {
         if (CustomerOrder == null)
         {
-            Debug.LogError("Null CustomerOrder");
+            Debug.LogError("null CustomerOrder");
             return;
         }
 
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
-            Debug.LogError("GIVEN ORDER IS AN INGREDIENT");
+            CustomerOrder.CustomerSR = 0f;
+            StartCoroutine(CustomerOrder.AngryReaction());
+            Destroy(other.gameObject); // destroys the ingredient on collision
 
-            // CustomerOrder.StartCoroutine("DoNegativeReaction");
-            StartCoroutine(CustomerOrder.DoReaction(FaceVariant.MAD));
-
-            Destroy(other.gameObject);
             return;
         }
 
         Dish collidedDish = other.gameObject.GetComponentInChildren<Dish>();
         Plate plate = other.gameObject.GetComponent<Plate>();
 
-        if (CustomerOrder.OrderIsSameAs(collidedDish))
+        // customer reaction based on the given order
+        if (collidedDish.IsContaminated) // ORDER IS EXPIRED OR CONTAMINATED
         {
-            Debug.LogWarning("CORRECT ORDER");
-
-            // CustomerOrder.StartCoroutine("DoPositiveReaction");
-            StartCoroutine(CustomerOrder.DoReaction(FaceVariant.HAPPY));
-
-            // calculates the customer SR
+            CustomerOrder.CustomerSR = 0f;
+            StartCoroutine(CustomerOrder.ExpiredReaction());            
+        }
+        else if (CustomerOrder.OrderIsSameAs(collidedDish)) // CORRECT ORDER
+        {
             CustomerOrder.CustomerSR = (collidedDish.DishScore + CustomerOrder.PatienceRate) / 2f;
-
-            // customer "eats" the food
-            Destroy(collidedDish.gameObject);
-            // SpawnManager.Instance.RemoveCustomer(CustomerOrder.gameObject);
-
-            // plate.SetContaminated();      
-            plate.TogglePlated();
-            StartCoroutine(DisableColider());
-
-            return;
+            StartCoroutine(CustomerOrder.HappyReaction());            
+        }
+        else // WRONG ORDER
+        {
+            CustomerOrder.CustomerSR = 0f;
+            StartCoroutine(CustomerOrder.AngryReaction());            
         }
 
-        Debug.LogError("WRONG ORDER");
-
-        // CustomerOrder.StartCoroutine("DoNegativeReaction");
-        /*        StartCoroutine(CustomerOrder.DoReaction(FaceVariant.MAD));
-
-                Destroy(other.gameObject);*/
-
-        //Create restriction on the code above, it also destroys the players hand on check
+        plate.ToggleClean();      
+        plate.TogglePlated();
+        Destroy(collidedDish.gameObject);   
+        StartCoroutine(DisableColider());
     }
 
     IEnumerator DisableColider()
     {
         GetComponent<Collider>().enabled = false;
-
         yield return new WaitForSeconds(3f);
-
         GetComponent<Collider>().enabled = true;
     }
 }
