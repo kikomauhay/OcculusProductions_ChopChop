@@ -13,7 +13,7 @@ public class EnvironmentCleaning : MonoBehaviour
         if (other.gameObject.GetComponent<Sponge>().IsWet)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
-            CleaningManager.Instance.OnCleanedArea?.Invoke();
+            KitchenCleaningManager.Instance.OnCleanedArea?.Invoke();
         }
     }
 
