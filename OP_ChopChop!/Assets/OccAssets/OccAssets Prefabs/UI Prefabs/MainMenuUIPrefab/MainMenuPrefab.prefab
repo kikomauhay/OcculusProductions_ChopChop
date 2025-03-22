@@ -169,7 +169,7 @@ RectTransform:
   - {fileID: 1698882070473016613}
   - {fileID: 5065101406678032525}
   m_Father: {fileID: 7606357287713412893}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -302,7 +302,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1819053666211770429}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenuUIScript, Assembly-CSharp
         m_MethodName: ToggleSettingsPanel
         m_Mode: 6
@@ -344,7 +344,7 @@ RectTransform:
   m_Children:
   - {fileID: 949552108770128600}
   m_Father: {fileID: 7606357287713412893}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -363,6 +363,7 @@ GameObject:
   - component: {fileID: 2795430792864741469}
   - component: {fileID: 85474071696166039}
   - component: {fileID: 1016096609881983822}
+  - component: {fileID: 907829512341345655}
   m_Layer: 0
   m_Name: MainMenuPrefab
   m_TagString: Untagged
@@ -450,6 +451,24 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 1167503027022721874, guid: 65f6aca8fce737147800fc6014a5c568, type: 3}
+--- !u!114 &907829512341345655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886821632209284418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c77b3fa739bd00e49baaa3469a563cdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playIcon: {fileID: 4778961288633701544}
+  pausePanel: {fileID: 4241560601541665319}
+  settingsPanel: {fileID: 659211701248883583}
+  _eodPanel: {fileID: 1776365175358613142}
+  _liveWallpaper: {fileID: 7175819962581353293}
+  masterSlider: {fileID: 1633250643731563038}
 --- !u!1 &2314840663281236306
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,7 +757,7 @@ RectTransform:
   - {fileID: 5955981911938306614}
   - {fileID: 2147575385196657596}
   m_Father: {fileID: 7606357287713412893}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -776,7 +795,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7606357287713412893}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -853,7 +872,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.2000275, y: 2.9}
+  m_AnchoredPosition: {x: 2.2000122, y: 2.9}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3961231722285799534
@@ -1131,7 +1150,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1819053666211770429}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenuUIScript, Assembly-CSharp
         m_MethodName: ExitSettingsPanel
         m_Mode: 1
@@ -1304,7 +1323,19 @@ MonoBehaviour:
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7175819962581353293
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,7 +1346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3219594998605378126}
   m_Layer: 0
-  m_Name: OnByDefaultElements
+  m_Name: Live Wallpaper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1336,7 +1367,7 @@ Transform:
   - {fileID: 2880860444500956128}
   - {fileID: 8490210787623894122}
   m_Father: {fileID: 7606357287713412893}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7518181268375815972
 GameObject:
@@ -1484,7 +1515,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7606357287713412893}
   - component: {fileID: 2248737100974427232}
-  - component: {fileID: 1819053666211770429}
   m_Layer: 5
   m_Name: MainMenuUI
   m_TagString: Untagged
@@ -1504,11 +1534,11 @@ RectTransform:
   m_LocalScale: {x: 1.0031685, y: 1.0031685, z: 1.0031685}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7906110311298442941}
   - {fileID: 3219594998605378126}
   - {fileID: 2328237240973508645}
   - {fileID: 3573083461897443235}
   - {fileID: 7345795604263545873}
-  - {fileID: 7906110311298442941}
   m_Father: {fileID: 9207385009398069711}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1539,22 +1569,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &1819053666211770429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8822867309532791634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c77b3fa739bd00e49baaa3469a563cdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playIcon: {fileID: 4778961288633701544}
-  pausePanel: {fileID: 4241560601541665319}
-  settingsPanel: {fileID: 659211701248883583}
-  masterSlider: {fileID: 1633250643731563038}
 --- !u!1001 &7793654099936600881
 PrefabInstance:
   m_ObjectHideFlags: 0

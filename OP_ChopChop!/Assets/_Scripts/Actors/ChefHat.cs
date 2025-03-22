@@ -1,4 +1,4 @@
-using UnityEngine;
+using System.Collections;
 
 public class ChefHat : StaticInstance<ChefHat> {
 
@@ -10,6 +10,14 @@ public class ChefHat : StaticInstance<ChefHat> {
     public void StartService() 
     {
         HatWorn = true;
-        GameManager.Instance.ChangeShift(GameShift.SERVICE);
+        StartCoroutine(PreService());
+    }
+
+    IEnumerator PreService()
+    {
+        SceneHandler.Instance.GoToScene("MainGameScene");
+        yield return null;
+
+        GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
     }
 }

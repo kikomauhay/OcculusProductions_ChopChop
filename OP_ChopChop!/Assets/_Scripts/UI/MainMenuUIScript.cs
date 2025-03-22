@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
 public class MainMenuUIScript : Singleton<MainMenuUIScript>
 {
     [SerializeField] private GameObject playIcon;
     [SerializeField] private GameObject pausePanel;
-    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject settingsPanel, _eodPanel, _liveWallpaper;
 
     [SerializeField] private Slider masterSlider;  //We need to fix this slider for the volumeeeeee
 
@@ -24,6 +21,11 @@ public class MainMenuUIScript : Singleton<MainMenuUIScript>
     {
         pausePanel.SetActive(isTrue);
     }
+
+    public void ToggleEODPanel() => _eodPanel.SetActive(!_eodPanel.activeSelf);
+    public void ToggleLiveWallpaper() => _liveWallpaper.SetActive(!_liveWallpaper.activeSelf);
+
+
 
     public void ExitSettingsPanel()
     {
