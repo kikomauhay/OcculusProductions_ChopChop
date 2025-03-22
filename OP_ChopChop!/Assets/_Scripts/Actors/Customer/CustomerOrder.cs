@@ -15,7 +15,7 @@ public class CustomerOrder : MonoBehaviour
 
     public DishType CustomerDishType { get; private set; } // what dish the cust omer wants to order   
     public float CustomerSR { get; set; }                  // (FoodScore of dish + _patienceRate) / 2
-    public float PatienceRate => _patienceRate;
+    public float PatienceRate => _patienceDecreaseRate;
 
 #endregion
 
@@ -32,9 +32,8 @@ public class CustomerOrder : MonoBehaviour
     [SerializeField] CustomerAppearance _appearance;
 
     // TIMERS
-    float _customerChewingTimer; // time it takes for the customer to eat and leave
-    float _patienceRate;         // deduction rate to use
-    float _customerScore;        // starts at 100 ang decreases over time
+    [SerializeField] float _patienceDecreaseRate; // 1.65; deduction rate to use
+    [SerializeField] float _customerScore;        // 100; starts at 100 and decreases over time
 
 #endregion
 
@@ -42,9 +41,8 @@ public class CustomerOrder : MonoBehaviour
     {
         CustomerDishType = DishType.NIGIRI_SALMON;
 
-        _customerScore = 100f; // will decrease overtime
-        _patienceRate = 1.65f; // referenced for the document
-        _customerChewingTimer = 4f; 
+        _customerScore = 100f;         // will decrease overtime
+        _patienceDecreaseRate = 1.65f; // referenced from the document
         
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
@@ -60,8 +58,8 @@ public class CustomerOrder : MonoBehaviour
     }
     void MakeSeatEmpty() // clears the seat of any customer references 
     {
-        SpawnManager.Instance.RemoveCustomer(gameObject);
-        SpawnManager.Instance.StartCoroutine("HandleCustomer");
+        SpawnManager.Instance.RemoveCustomer(gameObject);        
+        SpawnManager.Instance.StartCustomerSpawning();
         GameManager.Instance.AddToCustomerScores(CustomerSR);
 
         Destroy(gameObject);
@@ -72,77 +70,97 @@ public class CustomerOrder : MonoBehaviour
 
 #region Enumerators
 
-    /* -OUTDATED, BUT IS STILL HERE IN CASE THE NEW ONE DOESN'T WANNA WORK-    
-    IEnumerator DoPositiveReaction() // customer got the correct dish
-    {
-        _appearance.ChangeEmotion(FaceVariant.HAPPY);
-        yield return new WaitForSeconds(1f);
-
-        _actions.TriggerEating();
-        StartCoroutine(_appearance.DoChweing(_patienceRate));
-        yield return new WaitForSeconds(_customerChewingTimer);
-
-        MakeSeatEmpty();
-    }
-    IEnumerator DoNegativeReaction() // customer lost all patience or got the wrong order
-    {       
-        _appearance.ChangeEmotion(FaceVariant.HAPPY);
-        yield return new WaitForSeconds(1f);
-
-        _actions.TriggerEating();
-
-        _customerScore = 0f;
-        yield return new WaitForSeconds(_customerChewingTimer);
-
-        MakeSeatEmpty();
-    }
-    */
-
-    public IEnumerator DoReaction(FaceVariant emotionType)
-    {
-        // initlal reaction
-        _appearance.ChangeEmotion(emotionType);
-        yield return new WaitForSeconds(0.5f);
-
-        if (emotionType == FaceVariant.MAD)
-            _customerScore = 0f;
-        
-        // chewing + "chewing animation"
-        _actions.TriggerEating();
-        _appearance.DoChweing(_patienceRate);
-        yield return new WaitForSeconds(_customerChewingTimer);
-
-        // final reaction
-        _appearance.ChangeEmotion(emotionType); 
-        yield return new WaitForSeconds(0.5f);
-
-        // payment/refund
-        if (_patienceRate > 50f)
-            GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
-        
-        else 
-            GameManager.Instance.DeductMoney(Random.Range(_minCash, _maxCash));
-        
-        GameManager.Instance.IncrementCustomersServed();
-        MakeSeatEmpty();
-    }
     IEnumerator PatienceCountdown()
     {
-        yield return new WaitForSeconds(3f); // time it takes for the customer to take a seat
+        // grace period before it actually starts counting down
+        yield return new WaitForSeconds(1.5f); 
 
         while (_customerScore > 0f)
         {
             yield return new WaitForSeconds(1f);
 
-            _customerScore -= _patienceRate;
+            _customerScore -= _patienceDecreaseRate;
 
             if (_customerScore < 1f)
+            {
                 _customerScore = 0f;
+                CustomerSR = 0f;
+            }
+            
+            // face change
+            if (_customerScore >= 80)
+                _appearance.SetFacialEmotion(FaceVariant.HAPPY);
+
+            else if (_customerScore >= 50)
+                _appearance.SetFacialEmotion(FaceVariant.NEUTRAL);
+            
+            else     
+                _appearance.SetAngryEmotion(0);            
         }
         
-        // yield return StartCoroutine(DoNegativeReaction());
-        yield return StartCoroutine(DoReaction(FaceVariant.MAD));
+        // customer lost all patience
+        yield return StartCoroutine(CustomerLostPatience());
     }
+    IEnumerator CustomerLostPatience() // customer wasn't served
+    {
+        _appearance.SetAngryEmotion(2);
+        Debug.LogWarning("$#%$ THIS!");
+        yield return new WaitForSeconds(2f);
+
+        MakeSeatEmpty();
+    }
+    public IEnumerator HappyReaction() // customer got the correct order
+    {
+        // initial reaction
+        _appearance.SetFacialEmotion(FaceVariant.HAPPY);
+        yield return new WaitForSeconds(0.5f);
+
+        // chewing + animations
+        _actions.TriggerEating();
+        StartCoroutine(_appearance.DoChweing(_customerScore));
+
+        // final actions
+        Debug.LogWarning("YUMMY!");
+        GameManager.Instance.IncrementCustomersServed();
+        GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
+        MakeSeatEmpty();
+    }
+    public IEnumerator AngryReaction() // customer got the wrong order
+    {
+        // initial reaction
+        _appearance.SetAngryEmotion(1);
+        _customerScore = 0f;
+        yield return new WaitForSeconds(0.5f);
+
+        /*
+        // chewing + animations
+        _actions.TriggerEating();
+        StartCoroutine(_appearance.DoChweing(_customerScore)); 
+        */
+
+        // final actions
+        Debug.LogWarning("THIS IS NOT MY ORDER!");
+        GameManager.Instance.IncrementCustomersServed();
+        MakeSeatEmpty();
+    }
+    public IEnumerator ExpiredReaction() // customer got an expired order
+    {
+        // initial reaction
+        _appearance.SetFacialEmotion(FaceVariant.SUS);
+        _customerScore = 0f;
+        yield return new WaitForSeconds(0.5f);
+
+        /*
+        // chewing + animation
+        _actions.TriggerEating();
+        StartCoroutine(_appearance.DoChweing(_customerScore));
+        */
+
+        // final actions
+        Debug.LogWarning("WHAT IS THIS FOOD??");
+        GameManager.Instance.IncrementCustomersServed();
+        MakeSeatEmpty();
+    }       
 
 #endregion
 }
