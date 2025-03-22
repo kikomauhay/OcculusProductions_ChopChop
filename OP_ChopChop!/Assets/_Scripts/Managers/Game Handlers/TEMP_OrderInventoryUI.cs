@@ -34,7 +34,7 @@ public class TEMP_OrderInventoryUI : MonoBehaviour
 #region Update_UI_Methods
 
     void UpdatePlayerMoney() => 
-        _playerMoneyTxt.text = $"{GameManager.Instance.AvailableMoney}";
+        _playerMoneyTxt.text = $"{GameManager.Instance.CurrentPlayerMoney}";
     
     void UpdateSumTotalPrice() => _totalPriceTxt.text = $"{_sumTotalPrice}";
 
@@ -58,7 +58,7 @@ public class TEMP_OrderInventoryUI : MonoBehaviour
     {
         _sumTotalPrice = CalculateTotalPrice();
 
-        if (GameManager.Instance.AvailableMoney < _sumTotalPrice)
+        if (GameManager.Instance.CurrentPlayerMoney < _sumTotalPrice)
         {
             Debug.LogError("YOU DON'T HAVE ENOUGH MONEY!");
             return;

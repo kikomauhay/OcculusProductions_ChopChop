@@ -44,11 +44,11 @@ public class ShopManager : Singleton<ShopManager>
 
     public void DoOrderSupplies()
     {
-        if (GameManager.Instance.AvailableMoney >= _totalPrice) 
+        if (GameManager.Instance.CurrentPlayerMoney >= _totalPrice) 
         { 
             ToOrderSupplies();
             GameManager.Instance.DeductMoney(_totalPrice);
-            Debug.LogWarning($"Available cash: ${GameManager.Instance.AvailableMoney}");
+            Debug.LogWarning($"Available cash: ${GameManager.Instance.CurrentPlayerMoney}");
         }
     }
     public void ToOrderSupplies()
@@ -212,7 +212,7 @@ public class ShopManager : Singleton<ShopManager>
         _tunaOrderAmountText.text = $"{_tunaOrderCount}";
 
     void UpdatePlayerMoneyUI() =>
-        _playerMoneyText.text = $"${GameManager.Instance.AvailableMoney}";
+        _playerMoneyText.text = $"${GameManager.Instance.CurrentPlayerMoney}";
 
     void UpdateTotalPriceUI() => 
         _totalCostText.text = $"${CalculateTotalPrice()}";
