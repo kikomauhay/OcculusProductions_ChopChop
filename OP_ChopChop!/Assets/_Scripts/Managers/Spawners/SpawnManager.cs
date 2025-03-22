@@ -13,19 +13,21 @@ public class SpawnManager : Singleton<SpawnManager>
 #region Members
 
     [Header("Prefabs"), Tooltip("0 = smoke, 1 = bubble, 2 = sparkle, 3 = stinky")]
-    [SerializeField] GameObject[] _vfxPrefabs; 
-    [SerializeField] GameObject _platePrefab;
+    [SerializeField] GameObject[] _vfxPrefabs;
+    [SerializeField] GameObject _customerPrefab;
 
     [Header("Instantiated Bins"), Tooltip("0 = ingredients, 1 = foods, 2 = dishes, 3 = customers, 4 = VFXs")]
     [SerializeField] Transform[] _bins; // avoids clutters in the hierarchy  
 
     [Header("Customer Components")]
-    [SerializeField] GameObject _customerPrefab;
     [SerializeField] CustomerSeat[] _customerSeats;
     [SerializeField] ColliderCheck[] _colliderChecks;
     List<GameObject> _seatedCustomers = new List<GameObject>();
-    public int CustomerCount => _seatedCustomers.Count;
     const int MAX_CUSTOMER_COUNT = 4;
+
+    [Header("Customer Spawning Timers"), Tooltip("Can be changed to use for testing")]
+    [SerializeField] float _initialCustomerSpawnTime; // 2s
+    [SerializeField] float _customerSpawnInterval;    // 10s
 
 #endregion
 
@@ -41,23 +43,29 @@ public class SpawnManager : Singleton<SpawnManager>
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
-
-
     }
     void Reset() 
     {
         GameManager.Instance.OnStartService -= StartCustomerSpawning;
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
     }
-    IEnumerator HandleCustomer()
+    
+    IEnumerator CreateCustomer()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(_initialCustomerSpawnTime);
         SpawnCustomer(GiveAvaiableSeat());
 
         while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
-            yield return new WaitForSeconds(10f);  
+            yield return new WaitForSeconds(_customerSpawnInterval);  
             SpawnCustomer(GiveAvaiableSeat());
+
+            // coroutine should stop spawning once all seats are full
+            if (_seatedCustomers.Count == MAX_CUSTOMER_COUNT)
+            {
+                Debug.LogWarning("All seats full. Stopped customer spawning.");
+                yield break;
+            }
         }
     }
 
@@ -146,7 +154,7 @@ public class SpawnManager : Singleton<SpawnManager>
     
 #region Event_Methods
 
-    void StartCustomerSpawning() => StartCoroutine(HandleCustomer());
+    public void StartCustomerSpawning() => StartCoroutine(CreateCustomer());
     void ClearCustomerSeats()
     {
         foreach (GameObject obj in _seatedCustomers)
