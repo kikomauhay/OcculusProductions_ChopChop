@@ -9,6 +9,7 @@ using System;
 /// 
 /// </summary>
 
+[RequireComponent(typeof(Trashable))]
 public abstract class Ingredient : MonoBehaviour
 {
 #region Readers
@@ -19,33 +20,37 @@ public abstract class Ingredient : MonoBehaviour
     // INGREDIENT ATTRIBUTES
     public IngredientState IngredientState { get; private set; } // changes inside this script
     public float FreshnessRate { get; private set; } // the higher the score, the better
-    public bool IsProperlyStored { get; set; }       // is changed outside the script
     public bool IsFresh { get; private set; }        // changes inside the enumerator
 
 #endregion
 
 #region Members
 
+    public Action OnTrashed;
+
     [Header("Ingredient Components")]
     [SerializeField] protected IngredientType _ingredientType; // will be used by the child classes
-    [SerializeField] protected StateMaterials _stateMaterials;
     [SerializeField] protected IngredientStats _ingredientStats;
+
+    [Tooltip("0 = good, 1 = comtaminated, 2 = expired")]
+    [SerializeField] protected Material[] _stateMaterials;
 
     protected Vector3 _startPosition;
 
 #endregion
 
+#region Unity_Methods
+
     protected virtual void Start() 
     {
         // ingredients will only decay once the shift has started  
         GameManager.Instance.OnStartService += StartDecaying;
-        GameManager.Instance.OnEndService += ExpireIngredient;
+        GameManager.Instance.OnEndService += Expire;
 
         IngredientState = IngredientState.DEFAULT;   
 
         FreshnessRate = 100f;     
-        IsFresh = true;           
-        IsProperlyStored = false; 
+        IsFresh = true;
         _startPosition = transform.position;
 
         ChangeMaterial();
@@ -57,49 +62,38 @@ public abstract class Ingredient : MonoBehaviour
     protected virtual void Reset() 
     {
         GameManager.Instance.OnStartService -= StartDecaying;
-        GameManager.Instance.OnEndService -= ExpireIngredient;
+        GameManager.Instance.OnEndService -= Expire;
         Reposition();
     }
 
-#region State_Actions
+#endregion
 
-    public void TrashIngredient() // idk if we need this
+#region Ingredint_Methods
+
+    public void Trashed()
     {
-        // removes the food from the game entirely
-        // could add more punishment later on 
+        OnTrashed?.Invoke();
 
         IngredientState = IngredientState.CONTAMINATED;
         IsFresh = false;
         FreshnessRate = 0f;
-        SoundManager.Instance.PlaySound("dispose food");
+        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
         ChangeMaterial();
-
-        Debug.LogWarning($"{name} has been trashed!");
-
-
-        // add Destroy() ??
     }
-    public void ExpireIngredient()
+    public void Expire()
     {
         IngredientState = IngredientState.EXPIRED;
         IsFresh = false;
 
         ChangeMaterial();
-        
-        Debug.LogWarning($"{name} has expired!");
     } 
-    public void ContaminateIngredient()
+    public void Contaminate()
     {
         IngredientState = IngredientState.CONTAMINATED;
         IsFresh = false;
         ChangeMaterial();
         Reposition();
-        
-        Debug.LogWarning($"{name} has been contaminated!");
     }
-
-#endregion
-
     protected void ChangeMaterial() 
     {
         // the material of the ingredient changes based on the freshness rate
@@ -110,15 +104,15 @@ public abstract class Ingredient : MonoBehaviour
         switch (this.IngredientState)
         {
             case IngredientState.CONTAMINATED:
-                m = _ingredientStats.Materials[2];
+                m = _stateMaterials[1];
                 break;
 
             case IngredientState.EXPIRED:
-                m = _ingredientStats.Materials[1];
+                m = _stateMaterials[2];
                 break;
 
             case IngredientState.DEFAULT:
-                m = _ingredientStats.Materials[0];
+                m = _stateMaterials[0];
                 break;
 
             default: break;
@@ -127,9 +121,10 @@ public abstract class Ingredient : MonoBehaviour
         if (m != null)
             GetComponent<MeshRenderer>().material = m;
     }
-
     void StartDecaying() => StartCoroutine(DecayIngredient());
     public void Reposition() => transform.position = _startPosition;
+
+#endregion
 
 #region Enumerators
 
@@ -164,23 +159,10 @@ public abstract class Ingredient : MonoBehaviour
             {
                 FreshnessRate = 0f;
                 IngredientState = IngredientState.EXPIRED;
+                ChangeMaterial();
             }
-
-            ChangeMaterial();
         }
     }
 
-    #endregion
-
-}
-
-[Serializable]
-public struct StateMaterials
-{
-    public Material[] ExpiredMats => _expiredMaterials;
-    public Material[] FreshMats => _freshMaterials;
-    public Material[] ContaminatedMats => _contaminatedMaterials;
-
-    [Tooltip("0 = thick cut, 1 = thick strip, 2 = thin slice")]
-    [SerializeField] Material[] _expiredMaterials, _freshMaterials, _contaminatedMaterials;
+#endregion
 }

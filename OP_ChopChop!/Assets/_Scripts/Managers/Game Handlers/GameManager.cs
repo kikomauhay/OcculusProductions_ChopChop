@@ -25,21 +25,17 @@ public class GameManager : Singleton<GameManager>
 
     public Action OnStartService, OnEndService, OnTraining;
 
-    public GameShift CurrentShift { get; private set; }
+    public GameShift CurrentShift { get; private set; } = GameShift.DEFAULT;
 
     public bool IsPaused { get; private set; }
     public bool CanPause { get; private set; }
-
-    //PlayerMoney Values
-    [SerializeField] private float startingPlayerMoney = 9999;
     public float CurrentPlayerMoney { get; private set; }
 
     // SCORING VALUES
     List<float> _customerSRScores;
     public int CustomersServed; // will be used for difficulty increase 
 
-    [SerializeField] private GameObject endOfDayReceipt;
-    private RestaurantReceipt receiptScript;
+    [SerializeField] RestaurantReceipt _endOfDayReceipt;
 
 #endregion
 
@@ -49,23 +45,20 @@ public class GameManager : Singleton<GameManager>
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
-        //Setting player money
-        //CurrentPlayerMoney = startingPlayerMoney;
-        //CurrentPlayerMoney = NEW_OrderInventoryUI.Instance.currentPlayerMoney;
+        _endOfDayReceipt = MainMenuHandler.Instance.gameObject?.
+                           GetComponentInChildren<RestaurantReceipt>();
 
-        receiptScript = endOfDayReceipt.GetComponent<RestaurantReceipt>(); //To assign the script from the receipt
-        CurrentShift = GameShift.DEFAULT;
-        CurrentPlayerMoney = 0f;
+        CurrentPlayerMoney = 9999f; // test
         CustomersServed = 0;
+
         CanPause = true;
         IsPaused = false;
 
-
+        _customerSRScores = new List<float>(); 
         ChangeShift(GameShift.SERVICE);
 
         // test
-
-        _customerSRScores = new List<float>() { 100f, 90f, 80f, 70f };
+        // _customerSRScores = new List<float>() { 100f, 90f, 80f, 70f };
     }
     IEnumerator StartShiftCountdown()
     {
@@ -88,14 +81,14 @@ public class GameManager : Singleton<GameManager>
         if (IsPaused)
         {
             Time.timeScale = 0f;
-            MainMenuUIScript.Instance.TogglePlayIcon(false);
-            MainMenuUIScript.Instance.TogglePausePanel(true);
+            MainMenuHandler.Instance.TogglePlayIcon(false);
+            MainMenuHandler.Instance.TogglePausePanel(true);
         } 
         else
         {
             Time.timeScale = 1f;
-            MainMenuUIScript.Instance.TogglePausePanel(false);
-            MainMenuUIScript.Instance.TogglePlayIcon(true);
+            MainMenuHandler.Instance.TogglePausePanel(false);
+            MainMenuHandler.Instance.TogglePlayIcon(true);
         }
     }
 
@@ -104,7 +97,7 @@ public class GameManager : Singleton<GameManager>
     public void IncrementCustomersServed() => CustomersServed++;
 
     // CASH-RELATED
-    public void AddMoney(float amt) 
+    public void AddMoney(float amt)
     {
         if (amt < 0f) return;
 
@@ -196,17 +189,17 @@ public class GameManager : Singleton<GameManager>
     {
         float customerScore = GetAverageOf(_customerSRScores);
 
-        int indexCustomerRating = receiptScript.ReturnScoretoIndexRating(customerScore);
+        int indexCustomerRating = _endOfDayReceipt.ReturnScoretoIndexRating(customerScore);
 
-        receiptScript.GiveCustomerRating(indexCustomerRating);
+        _endOfDayReceipt.GiveCustomerRating(indexCustomerRating);
     }
     void DoKitchenRating()
     {   
         float kitchenScore = KitchenCleaningManager.Instance.KitchenScore;
 
-        int indexKitchenRating = receiptScript.ReturnScoretoIndexRating(kitchenScore);
+        int indexKitchenRating = _endOfDayReceipt.ReturnScoretoIndexRating(kitchenScore);
 
-        receiptScript.GiveKitchenRating(indexKitchenRating);
+        _endOfDayReceipt.GiveKitchenRating(indexKitchenRating);
     }
     void DoPostServiceRating()
     {
@@ -215,9 +208,9 @@ public class GameManager : Singleton<GameManager>
                             GetAverageOf(_customerSRScores)) / 2f;      
 
     
-        int indexPostServiceRating = receiptScript.ReturnScoretoIndexRating(finalScore);
+        int indexPostServiceRating = _endOfDayReceipt.ReturnScoretoIndexRating(finalScore);
 
-        receiptScript.GiveRestaurantRating(indexPostServiceRating);
+        _endOfDayReceipt.GiveRestaurantRating(indexPostServiceRating);
 
         Debug.LogWarning($"Final score for the day: {finalScore}");
 
@@ -232,17 +225,18 @@ public class GameManager : Singleton<GameManager>
 
     void TurnOnEndOfDayReceipt()
     {
-        MainMenuUIScript.Instance.TogglePlayIcon(false); //turns OFF the play button to display the receipt screen
-        MainMenuUIScript.Instance.ToggleEODPanel();
-        MainMenuUIScript.Instance.ToggleLiveWallpaper();
-        // endOfDayReceipt.SetActive(true);
+        MainMenuHandler.Instance.TogglePlayIcon(false); //turns OFF the play button to display the receipt screen
+        MainMenuHandler.Instance.ToggleEODPanel();
+        MainMenuHandler.Instance.ToggleLiveWallpaper();
+
+        _endOfDayReceipt.gameObject.SetActive(true);
 
         DoCustomerRating();
         DoKitchenRating();
         DoPostServiceRating();
 
-        CustomersServed = receiptScript.totalcustomerServed;
-        receiptScript.GiveTotalCustomerServed();
+        CustomersServed = _endOfDayReceipt.totalcustomerServed;
+        _endOfDayReceipt.GiveTotalCustomerServed();
     }
 
     float GetAverageOf(List<float> list) 

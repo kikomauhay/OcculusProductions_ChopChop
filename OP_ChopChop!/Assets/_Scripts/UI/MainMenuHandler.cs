@@ -1,7 +1,7 @@
 using UnityEngine.UI;
 using UnityEngine;
 
-public class MainMenuUIScript : Singleton<MainMenuUIScript>
+public class MainMenuHandler : Singleton<MainMenuHandler>
 {
     [SerializeField] private GameObject playIcon;
     [SerializeField] private GameObject pausePanel;

@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
 {
-
 #region Members
 
     public bool IsClean { get; private set; }

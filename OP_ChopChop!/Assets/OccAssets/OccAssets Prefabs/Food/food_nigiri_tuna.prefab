@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4758083971582321263
+--- !u!1 &962565321575026586
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,50 +8,50 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3542355640125435579}
-  - component: {fileID: 8349810303757410855}
-  - component: {fileID: 5760587150197054690}
-  - component: {fileID: 2207780037383401782}
-  - component: {fileID: 1002424700831925084}
-  - component: {fileID: 8460804047963292379}
-  - component: {fileID: -4699005975147565908}
+  - component: {fileID: 6532223389640209242}
+  - component: {fileID: 6976775310343011826}
+  - component: {fileID: 1243059897119990552}
+  - component: {fileID: -2703607321885209641}
+  - component: {fileID: -715084860744313901}
+  - component: {fileID: 7810161239153293874}
+  - component: {fileID: -3175632664969805650}
   m_Layer: 0
-  m_Name: rice_overmolded
+  m_Name: food_nigiri_tuna
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3542355640125435579
+--- !u!4 &6532223389640209242
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4758083971582321263}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 962565321575026586}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.1552963, y: 0.019724518, z: -6.0120025}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8349810303757410855
+--- !u!33 &6976775310343011826
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4758083971582321263}
-  m_Mesh: {fileID: -3552172149559772626, guid: 4656b572cca2a2c4e96656c8cf6bad81, type: 3}
---- !u!23 &5760587150197054690
+  m_GameObject: {fileID: 962565321575026586}
+  m_Mesh: {fileID: -5448195342292810884, guid: 28ef139772d43154d8ed8d40d1e09656, type: 3}
+--- !u!23 &1243059897119990552
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4758083971582321263}
+  m_GameObject: {fileID: 962565321575026586}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 87f23a8f25eb7d44fa6bf5365db4e1cc, type: 2}
+  - {fileID: 2100000, guid: 4c8ae6b8d6c705e4a8d61d6b1c99c001, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -87,13 +87,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!54 &2207780037383401782
+--- !u!54 &-2703607321885209641
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4758083971582321263}
+  m_GameObject: {fileID: 962565321575026586}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -103,13 +103,13 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1002424700831925084
+--- !u!114 &-715084860744313901
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4758083971582321263}
+  m_GameObject: {fileID: 962565321575026586}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
@@ -255,37 +255,31 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!64 &8460804047963292379
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4758083971582321263}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3552172149559772626, guid: 4656b572cca2a2c4e96656c8cf6bad81, type: 3}
---- !u!114 &-4699005975147565908
+--- !u!114 &7810161239153293874
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4758083971582321263}
+  m_GameObject: {fileID: 962565321575026586}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a66126108b4485a44b12f6cb792ce21a, type: 3}
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ingredientType: 0
-  _stateMaterials:
-    _expiredMaterials: []
-    _freshMaterials: []
-    _contaminatedMaterials: []
-  _ingredientStats: {fileID: 0}
-  _foodPrefabs: []
-  _moldType: 3
+  _trashType: 2
+--- !u!114 &-3175632664969805650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962565321575026586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 195203d2a7057b642ab9cf6b89d6701f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _dishPrefab: {fileID: 7068943804873736624, guid: 82259b4e457a9c649ab0cb683f29eeca,
+    type: 3}
+  _rottenMat: {fileID: 2100000, guid: cfa83527698872843b85bac2837cc3a3, type: 2}

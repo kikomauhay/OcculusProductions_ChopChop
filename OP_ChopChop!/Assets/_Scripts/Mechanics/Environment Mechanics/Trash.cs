@@ -1,5 +1,5 @@
-using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine;
 
 public class Trash : MonoBehaviour
 {
@@ -16,18 +16,23 @@ public class Trash : MonoBehaviour
             case TrashableType.INGREDIENT:
                 DestroyIngredient(obj.GetComponent<Ingredient>());
                 break;
+
             case TrashableType.FOOD:
                 DestroyFood(obj.GetComponent<Food>());
                 break;
+
             case TrashableType.EQUIPMENT:
                 break;
+
+            default: break;
         }
     }
 
-    #region Functions
+#region Functions
 
     void DestroyIngredient(Ingredient ing)
     {
+        
         Destroy(gameObject);
     }
 

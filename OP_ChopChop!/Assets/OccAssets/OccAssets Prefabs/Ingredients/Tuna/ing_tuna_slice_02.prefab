@@ -124,8 +124,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6328671480931028985}
+  - component: {fileID: 2886933129109396024}
+  - component: {fileID: -9013527630144582967}
+  - component: {fileID: 8714433397875630439}
   m_Layer: 0
-  m_Name: top midle slab
+  m_Name: ing_tuna_slice_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,3 +150,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2886933129109396024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6672124092448658755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentPrefab: {fileID: 6672124092448658755}
+  _nextPrefab: {fileID: 4967989956104480434, guid: 63072e62ccdebfd40a9f7166d5a6bade,
+    type: 3}
+--- !u!114 &-9013527630144582967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6672124092448658755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 1
+--- !u!114 &8714433397875630439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6672124092448658755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da93d8d7d8cacb841b99f6853e575221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ingredientType: 1
+  _ingredientStats: {fileID: 11400000, guid: 8d861586e0d7fd446913bed80f383061, type: 2}
+  _stateMaterials:
+  - {fileID: 2100000, guid: 2781f41e41dab314f928b901cc2ea801, type: 2}
+  - {fileID: 2100000, guid: 679f561a947800445872b8cf15d2c84a, type: 2}
+  - {fileID: 2100000, guid: bec3a96f44e2cfa46ae00d71bc65b684, type: 2}

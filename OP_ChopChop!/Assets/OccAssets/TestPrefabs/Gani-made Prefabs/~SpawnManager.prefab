@@ -561,10 +561,9 @@ MonoBehaviour:
   - {fileID: 4467525188659021933, guid: 2a16f8b1d12770346a2562f7071ea701, type: 3}
   - {fileID: 1981580915582403093, guid: 247f3a9b29b2e7a43960b4b13aa0aa3f, type: 3}
   - {fileID: 1938085178870067701, guid: deed092d6fb512940b1596d132c4d402, type: 3}
-  _platePrefab: {fileID: 0}
-  _bins: []
-  _customerPrefab: {fileID: 3137001617738611114, guid: 1f231c7b2bd88f54fb51635cf01200e6,
+  _customerPrefab: {fileID: 8242136411445390340, guid: 6abd3fb3e935698469b673cfaa3eaab2,
     type: 3}
+  _bins: []
   _customerSeats:
   - {fileID: 1597545422519940879}
   - {fileID: 1597545421992399890}
@@ -575,6 +574,8 @@ MonoBehaviour:
   - {fileID: 1597545420845833051}
   - {fileID: 1597545422520328625}
   - {fileID: 1597545421204645413}
+  _initialCustomerSpawnTime: 0
+  _customerSpawnInterval: 0
 --- !u!1 &7564253948344922535
 GameObject:
   m_ObjectHideFlags: 0
