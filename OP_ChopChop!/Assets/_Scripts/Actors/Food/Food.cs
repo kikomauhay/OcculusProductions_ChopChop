@@ -26,12 +26,9 @@ public abstract class Food : MonoBehaviour
 
     protected void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Plate>() == null) return;
-
-        if (!other.gameObject.GetComponent<Plate>().IsClean)
+        if (other.gameObject.GetComponent<Plate>() == null ||
+            !other.gameObject.GetComponent<Plate>().IsClean)
         {
-            Debug.LogError("The plate is contaminating the food");
-            // add code to infect the food
             return;
         }
 

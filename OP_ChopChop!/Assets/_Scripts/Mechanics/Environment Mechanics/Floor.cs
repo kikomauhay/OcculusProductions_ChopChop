@@ -11,11 +11,15 @@ public class Floor : MonoBehaviour
         switch (obj.GetComponent<Trashable>().TrashTypes)
         {
             case TrashableType.INGREDIENT:
-                DoIngredientLogic(obj.GetComponent<Ingredient>());
+                obj.GetComponent<Ingredient>().Contaminate();
                 break;
 
             case TrashableType.FOOD:
-                DoFoodLogic(obj.GetComponent<Food>());
+                obj.GetComponent<Food>().Contaminate();
+                break;
+
+            case TrashableType.DISH:
+                obj.GetComponent<Dish>().Contaminate();
                 break;
 
             case TrashableType.EQUIPMENT:
@@ -24,20 +28,6 @@ public class Floor : MonoBehaviour
 
             default: break;
         }
-    }
-
-#region Collision_Logic
-
-    void DoIngredientLogic(Ingredient ing)
-    {
-        ing.Contaminate();
-        Debug.LogWarning($"{ing.gameObject.name} has been contaminated!");
-    }
-
-    void DoFoodLogic(Food food)
-    {
-        food.Contaminate();
-        Debug.LogWarning($"{food.gameObject.name} has been contaminated!");
     }
 
     void DoEquipmentLogic(Equipment eq)
@@ -61,6 +51,4 @@ public class Floor : MonoBehaviour
                                             SoundGroup.EQUIPMENT);
         }
     } 
-
-#endregion
 }
