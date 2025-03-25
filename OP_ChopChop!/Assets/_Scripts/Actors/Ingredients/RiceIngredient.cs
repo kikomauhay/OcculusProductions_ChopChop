@@ -15,6 +15,7 @@ public class RiceIngredient : Ingredient
 
         base.Start();
         OnRiceMolded += ChangeRiceMold;
+
         //_moldType = MoldType.UNMOLDED;
         //_ingredientType = IngredientType.RICE;
     }
@@ -50,6 +51,8 @@ public class RiceIngredient : Ingredient
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
             Destroy(gameObject);
             Destroy(other.gameObject);
+
+            food.FoodType = DishType.NIGIRI_SALMON;
             foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[0],
                                                             transform,
                                                             SpawnObjectType.FOOD);
@@ -59,6 +62,8 @@ public class RiceIngredient : Ingredient
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
             Destroy(gameObject);
             Destroy(other.gameObject);
+            
+            food.FoodType = DishType.NIGIRI_TUNA;
             foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[1],
                                                             transform,
                                                             SpawnObjectType.FOOD);
@@ -68,7 +73,6 @@ public class RiceIngredient : Ingredient
         // sets up the food's score
         food = foodToSpawn.GetComponent<Food>();
         food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
-        food.FoodType = DishType.NIGIRI_SALMON; // only salmon for now (will add tuna later)
     }
 
     void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;

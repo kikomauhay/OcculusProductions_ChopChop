@@ -7,15 +7,16 @@ using UnityEngine;
 /// 
 /// </summary>
 
+[RequireComponent(typeof(Trashable))]
 public abstract class Food : MonoBehaviour
 {
     public bool IsContaminated { get; private set; }
     public float FoodScore { get; set; }
-    public DishType FoodType { get; set; }
     public TrashableType TrashType { get; protected set; }
-
+    public DishType FoodType { get; set; }
 
     [SerializeField] protected GameObject _dishPrefab;
+    [SerializeField] protected Material _rottenMat;
 
     protected virtual void Start()
     {
@@ -45,7 +46,6 @@ public abstract class Food : MonoBehaviour
     public void Contaminate()
     {
         IsContaminated = true;
-        
-
+        GetComponent<MeshRenderer>().material = _rottenMat;
     }
 }
