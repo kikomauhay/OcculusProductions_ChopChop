@@ -4,21 +4,57 @@ using System;
 public class SoundManager : Singleton<SoundManager>
 {
     public AudioSource SoundSource;
-    public Sound[] Sounds;
-    int i = 0; // testing
+    public Sound[] EquipmentSounds, ApplianceSounds, FoodSounds, GameSounds;
 
-#region Unity_Methods
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
 
-#endregion
-
 #region Public
 
+    /*
     public void PlaySound(string title)
     {
         Sound s = Array.Find(Sounds, i => i.name == title);
+
+        if (s != null)
+        {
+            SoundSource.volume = s.volume;
+            SoundSource.clip = s.clip;
+            SoundSource.loop = s.loop;
+            SoundSource.spatialBlend = 1f;
+            SoundSource.PlayOneShot(s.clip);
+        }
+        else Debug.LogError("Sound not found!");
+    }
+    */
+
+    public void PlaySound(string title, SoundGroup type) 
+    {
+        Sound s = null;
+
+        switch (type)
+        {
+            case SoundGroup.EQUIPMENT:
+                s = Array.Find(EquipmentSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.APPLIANCES:
+                s = Array.Find(ApplianceSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.FOOD:
+                s = Array.Find(FoodSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.GAME:
+                s = Array.Find(GameSounds, i => i.name == title);
+                break;
+
+            default:
+                Debug.LogError("Wrong SoundGroup!");
+                break;
+        }
 
         if (s != null)
         {
@@ -35,25 +71,4 @@ public class SoundManager : Singleton<SoundManager>
     public void SetSoundVolume(float v) => SoundSource.volume = v;
 
 #endregion
-
-#region Testing
-
-    void test()
-    {
-        // plays all the sounds in order
-        if (Input.GetKeyDown(KeyCode.Return)) {
-            SoundSource.PlayOneShot(Sounds[i].clip);
-            Debug.Log($"{Sounds[i].name}");
-        }
-        
-        // increment index 
-        if (Input.GetKeyDown(KeyCode.Space)) i++;
-
-        // random slice variants
-        if (Input.GetKeyDown(KeyCode.Escape))
-            PlaySound(UnityEngine.Random.value > 0.5f ? "fish slice 01" : "fish slice 02"); 
-    }
-
-#endregion
-
 }

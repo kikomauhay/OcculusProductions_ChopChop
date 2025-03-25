@@ -22,9 +22,11 @@ public abstract class Ingredient : MonoBehaviour
     public bool IsProperlyStored { get; set; }       // is changed outside the script
     public bool IsFresh { get; private set; }        // changes inside the enumerator
 
-#endregion
+    #endregion
 
 #region Members
+
+    public Action OnTrashed;
 
     [Header("Ingredient Components")]
     [SerializeField] protected IngredientType _ingredientType; // will be used by the child classes
@@ -33,13 +35,15 @@ public abstract class Ingredient : MonoBehaviour
 
     protected Vector3 _startPosition;
 
-#endregion
+    #endregion
+
+#region Unity_Methods
 
     protected virtual void Start() 
     {
         // ingredients will only decay once the shift has started  
         GameManager.Instance.OnStartService += StartDecaying;
-        GameManager.Instance.OnEndService += ExpireIngredient;
+        GameManager.Instance.OnEndService += Expire;
 
         IngredientState = IngredientState.DEFAULT;   
 
@@ -57,29 +61,27 @@ public abstract class Ingredient : MonoBehaviour
     protected virtual void Reset() 
     {
         GameManager.Instance.OnStartService -= StartDecaying;
-        GameManager.Instance.OnEndService -= ExpireIngredient;
+        GameManager.Instance.OnEndService -= Expire;
         Reposition();
     }
 
+#endregion
+
 #region State_Actions
 
-    public void TrashIngredient() // idk if we need this
+    public void Trashed()
     {
-        // removes the food from the game entirely
-        // could add more punishment later on 
+        OnTrashed?.Invoke();
 
         IngredientState = IngredientState.CONTAMINATED;
         IsFresh = false;
         FreshnessRate = 0f;
-        SoundManager.Instance.PlaySound("dispose food");
+        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
         ChangeMaterial();
 
         Debug.LogWarning($"{name} has been trashed!");
-
-
-        // add Destroy() ??
     }
-    public void ExpireIngredient()
+    public void Expire()
     {
         IngredientState = IngredientState.EXPIRED;
         IsFresh = false;
@@ -88,7 +90,7 @@ public abstract class Ingredient : MonoBehaviour
         
         Debug.LogWarning($"{name} has expired!");
     } 
-    public void ContaminateIngredient()
+    public void Contaminate()
     {
         IngredientState = IngredientState.CONTAMINATED;
         IsFresh = false;

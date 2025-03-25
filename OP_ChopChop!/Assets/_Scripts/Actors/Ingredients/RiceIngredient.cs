@@ -26,34 +26,42 @@ public class RiceIngredient : Ingredient
 
     void OnTriggerEnter(Collider other) // combination of the food
     {
-        if (other.gameObject.name == name) return;
+        /* -COLLISION RULES-
+            * rice can't combine with another rice
+            * food spawning only occurs when the ingredient is still FRESH
+        */
 
-        if (_moldType != MoldType.PERFECT) return;
+        if (other.gameObject.name == name || 
+            _moldType != MoldType.PERFECT) 
+        {
+            return;
+        }
 
         Ingredient ing = other.GetComponent<Ingredient>();
-        Vector3 pos = transform.position;
-        Quaternion rot = transform.rotation;
+        GameObject foodToSpawn = null;
+        Food food = null;
+
+        if (!ing.IsFresh) return;
 
         // gets the freshness rates of both ingredients before deleting them
         
-        // only nigiris for now (makis will be added on SPARK)
-        
-        GameObject foodToSpawn;
-        Food food = null;
-
         if (ing.IngredientType == IngredientType.SALMON)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
             Destroy(gameObject);
             Destroy(other.gameObject);
-            foodToSpawn = Instantiate(_foodPrefabs[0], pos, rot);
+            foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[0],
+                                                            transform,
+                                                            SpawnObjectType.FOOD);
         }
         else if (ing.IngredientType == IngredientType.TUNA)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
             Destroy(gameObject);
             Destroy(other.gameObject);
-            foodToSpawn = Instantiate(_foodPrefabs[1], pos, rot);
+            foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[1],
+                                                            transform,
+                                                            SpawnObjectType.FOOD);
         }
         else return;
 
@@ -64,5 +72,4 @@ public class RiceIngredient : Ingredient
     }
 
     void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;
-    // change to incrementing index so you don't need to get a parameter
 }

@@ -16,18 +16,23 @@ public class Trash : MonoBehaviour
             case TrashableType.INGREDIENT:
                 DestroyIngredient(obj.GetComponent<Ingredient>());
                 break;
+
             case TrashableType.FOOD:
                 DestroyFood(obj.GetComponent<Food>());
                 break;
+
             case TrashableType.EQUIPMENT:
                 break;
+
+            default: break;
         }
     }
 
-    #region Functions
+#region Functions
 
     void DestroyIngredient(Ingredient ing)
     {
+        
         Destroy(gameObject);
     }
 
