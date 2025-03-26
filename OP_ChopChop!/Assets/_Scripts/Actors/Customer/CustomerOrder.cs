@@ -30,6 +30,7 @@ public class CustomerOrder : MonoBehaviour
     [Header("Customer Components")]
     [SerializeField] CustomerActions _actions;
     [SerializeField] CustomerAppearance _appearance;
+    GameObject _customerOrderUI;
 
     // TIMERS
     [SerializeField] float _patienceDecreaseRate; // 1.65; deduction rate to use
@@ -52,9 +53,9 @@ public class CustomerOrder : MonoBehaviour
 
     void CreateCustomerUI() // find a fix so that SpawnMan does the spawning instead
     {
-        Instantiate(_dishOrdersUI[Random.Range(0, _dishOrdersUI.Length)],
-                    _orderUITransform.position,
-                    _orderUITransform.rotation);
+        _customerOrderUI = Instantiate(_dishOrdersUI[Random.Range(0, _dishOrdersUI.Length)],
+                                       _orderUITransform.position,
+                                       _orderUITransform.rotation);
     }
     void MakeSeatEmpty() // clears the seat of any customer references 
     {
@@ -62,6 +63,8 @@ public class CustomerOrder : MonoBehaviour
         SpawnManager.Instance.StartCustomerSpawning();
         GameManager.Instance.AddToCustomerScores(CustomerSR);
 
+        // destroys both the customer and its UI
+        Destroy(_customerOrderUI);
         Destroy(gameObject);
     }
     public bool OrderIsSameAs(Dish dish) => dish?.OrderDishType == CustomerDishType;

@@ -25,7 +25,7 @@ public class GameManager : Singleton<GameManager>
 
     public Action OnStartService, OnEndService, OnTraining;
 
-    public GameShift CurrentShift { get; private set; } = GameShift.DEFAULT;
+    public GameShift CurrentShift { get; private set; } = GameShift.TRAINING;
 
     public bool IsPaused { get; private set; }
     public bool CanPause { get; private set; }
@@ -55,7 +55,7 @@ public class GameManager : Singleton<GameManager>
         IsPaused = false;
 
         _customerSRScores = new List<float>(); 
-        ChangeShift(GameShift.SERVICE);
+        ChangeShift(GameShift.PRE_SERVICE);
 
         // test
         // _customerSRScores = new List<float>() { 100f, 90f, 80f, 70f };
@@ -81,14 +81,14 @@ public class GameManager : Singleton<GameManager>
         if (IsPaused)
         {
             Time.timeScale = 0f;
-            MainMenuHandler.Instance.TogglePlayIcon(false);
-            MainMenuHandler.Instance.TogglePausePanel(true);
+            MainMenuHandler.Instance?.TogglePlayIcon(false);
+            MainMenuHandler.Instance?.TogglePausePanel(true);
         } 
         else
         {
             Time.timeScale = 1f;
-            MainMenuHandler.Instance.TogglePausePanel(false);
-            MainMenuHandler.Instance.TogglePlayIcon(true);
+            MainMenuHandler.Instance?.TogglePausePanel(false);
+            MainMenuHandler.Instance?.TogglePlayIcon(true);
         }
     }
 
@@ -116,6 +116,7 @@ public class GameManager : Singleton<GameManager>
     // GAME SHIFTING
     public void ChangeShift(GameShift chosenShift)
     {
+        // can't go to the same shift again
         if (chosenShift == CurrentShift) return;
 
         CurrentShift = chosenShift;
@@ -153,38 +154,33 @@ public class GameManager : Singleton<GameManager>
         // no ingredient decaying or equipment dirtying
         OnTraining?.Invoke();
     }
-    void DoPreService()
-    {
-        // buying of ingredients
-        // rice cooking preparation
-        // storing ingredients
-        // clean kitchen 
 
-        StartCoroutine(TestShiftCountdown(testTimer, GameShift.SERVICE)); 
-    }
-    void DoService()
+    void DoPreService() => 
+        StartCoroutine(TestShiftCountdown(30f, GameShift.SERVICE)); 
+    
+    void DoService() // customer spawning + cooking, serving, & cleaning
     {
-        // customer spawning + cooking, serving, & cleaning
-
         OnStartService?.Invoke(); // all ingredients start decaying
 
         // 5 min timer once the shift ends
         // StartCoroutine(StartShiftCountdown());
-        StartCoroutine(TestShiftCountdown(testTimer, GameShift.POST_SERVICE)); 
+
+        // sample 2 mins for testing
+        StartCoroutine(TestShiftCountdown(120f, GameShift.POST_SERVICE)); 
     }
+
     void DoPostService()
     {
         OnEndService?.Invoke(); // forces to expire all remaining ingredients
-
-        // shop closes and you get the rating for the day
-        // clean the remaining dishes
-
         TurnOnEndOfDayReceipt();
+
+        // goes back to pre-service to test
+        StartCoroutine(TestShiftCountdown(20f, GameShift.PRE_SERVICE));
     }
 
-#endregion
+    #endregion
 
-#region Resto_Rating
+    #region Resto_Rating
     void DoCustomerRating()
     {
         float customerScore = GetAverageOf(_customerSRScores);
