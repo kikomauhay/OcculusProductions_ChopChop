@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 4640635207000654207}
   - component: {fileID: 7458574973723145653}
   - component: {fileID: 4640635207000654206}
-  - component: {fileID: 7209270925785360434}
   - component: {fileID: 689214983072142834}
+  - component: {fileID: 7209270925785360434}
   - component: {fileID: 328756528703438470}
+  - component: {fileID: 8517073199870308987}
   m_Layer: 0
   m_Name: prefab_sponge
   m_TagString: Untagged
@@ -101,20 +102,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4911400334804642059, guid: 55f7cb1b9a4948a43a1ca4f301d868cf, type: 3}
---- !u!114 &7209270925785360434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8971964425003947104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b36432c146a7d5e48bf5c269230332d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cleanMat: {fileID: 2100000, guid: 2b12033325e0db8419b438b7860c3423, type: 2}
-  _dirtyMat: {fileID: 2100000, guid: 6f38092b008458e449537dea6c353476, type: 2}
 --- !u!54 &689214983072142834
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -131,6 +118,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7209270925785360434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8971964425003947104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b36432c146a7d5e48bf5c269230332d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cleanMat: {fileID: 2100000, guid: 2b12033325e0db8419b438b7860c3423, type: 2}
+  _dirtyMat: {fileID: 2100000, guid: 6f38092b008458e449537dea6c353476, type: 2}
+  _wetMat: {fileID: 2100000, guid: 30565f411dc3e97408565269acfe8e35, type: 2}
 --- !u!114 &328756528703438470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,3 +285,16 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &8517073199870308987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8971964425003947104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 0

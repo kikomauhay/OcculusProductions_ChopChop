@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using System;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -25,12 +27,12 @@ public class GameManager : Singleton<GameManager>
 
     public Action OnStartService, OnEndService, OnTraining;
 
-    public GameShift CurrentShift { get; private set; } = GameShift.TRAINING;
+    public GameShift CurrentShift { get; private set; } = GameShift.DEFAULT;
 
     public bool IsPaused { get; private set; }
     public bool CanPause { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
-
+    public const float MAX_MONEY = 9999f; 
 
     // SCORING VALUES
     List<float> _customerSRScores;
@@ -62,8 +64,7 @@ public class GameManager : Singleton<GameManager>
         _customerSRScores = new List<float>(); 
         ChangeShift(GameShift.PRE_SERVICE);
 
-        // test
-        // _customerSRScores = new List<float>() { 100f, 90f, 80f, 70f };
+        Debug.Log(_endOfDayReceipt.gameObject.activeSelf);
     }
     IEnumerator StartShiftCountdown()
     {
@@ -107,6 +108,8 @@ public class GameManager : Singleton<GameManager>
         if (amt < 0f) return;
 
         CurrentPlayerMoney += amt;
+
+        CurrentPlayerMoney = Mathf.Clamp(CurrentPlayerMoney, 0f, MAX_MONEY);
     }
     public void DeductMoney(float amt)
     {
@@ -116,6 +119,8 @@ public class GameManager : Singleton<GameManager>
 
         if (CurrentPlayerMoney < 0f)
             CurrentPlayerMoney = 0f;
+
+        CurrentPlayerMoney = Mathf.Clamp(CurrentPlayerMoney, 0f, MAX_MONEY);
     }
     
     // GAME SHIFTING
@@ -158,6 +163,7 @@ public class GameManager : Singleton<GameManager>
     {
         // no ingredient decaying or equipment dirtying
         OnTraining?.Invoke();
+        CanPause = true;
     }
 
     void DoPreService() => 
@@ -185,7 +191,7 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
-    #region Resto_Rating
+#region Resto_Rating
     void DoCustomerRating()
     {
         float customerScore = GetAverageOf(_customerSRScores);
@@ -212,16 +218,6 @@ public class GameManager : Singleton<GameManager>
         int indexPostServiceRating = _endOfDayReceipt.ReturnScoretoIndexRating(finalScore);
 
         _endOfDayReceipt.GiveRestaurantRating(indexPostServiceRating);
-
-        Debug.LogWarning($"Final score for the day: {finalScore}");
-
-        /* UI CODE 
-            - shows the total customers served
-            - shows the amt of customers that left
-            - show the LETTERED SCORE to the player 
-            - shows how much money you gained
-            - add a button where the player goes back to the training mode
-        */
     }
 
     void TurnOnEndOfDayReceipt()
@@ -230,9 +226,11 @@ public class GameManager : Singleton<GameManager>
         MainMenuHandler.Instance.ToggleEODPanel();
         MainMenuHandler.Instance.ToggleLiveWallpaper();
 
+        CanPause = false;
+
         _endOfDayReceipt.gameObject.SetActive(true);
 
-        DoCustomerRating();
+        // DoCustomerRating();
         DoKitchenRating();
         DoPostServiceRating();
 
