@@ -156,7 +156,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     void DoPreService() => 
-        StartCoroutine(TestShiftCountdown(60f, GameShift.SERVICE)); 
+        StartCoroutine(TestShiftCountdown(30f, GameShift.SERVICE)); 
     
     void DoService() // customer spawning + cooking, serving, & cleaning
     {
@@ -173,11 +173,14 @@ public class GameManager : Singleton<GameManager>
     {
         OnEndService?.Invoke(); // forces to expire all remaining ingredients
         TurnOnEndOfDayReceipt();
+
+        // goes back to pre-service to test
+        StartCoroutine(TestShiftCountdown(20f, GameShift.PRE_SERVICE));
     }
 
-#endregion
+    #endregion
 
-#region Resto_Rating
+    #region Resto_Rating
     void DoCustomerRating()
     {
         float customerScore = GetAverageOf(_customerSRScores);
