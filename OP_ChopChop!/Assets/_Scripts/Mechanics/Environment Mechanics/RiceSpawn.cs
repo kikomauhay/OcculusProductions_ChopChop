@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class RiceSpawn : XRBaseInteractable
 {
-    public ActionBasedController Left, Right;
-
-    IXRSelectInteractor _mainInteractor;
 
     [SerializeField] GameObject _ricePrefab;
     [SerializeField] Transform _spawnPoint;
@@ -39,7 +36,6 @@ public class RiceSpawn : XRBaseInteractable
         if (!_riceSpawned)
         {
             _riceSpawned = true;
-            Debug.LogWarning("Triggered, Rice spawned");
 
             GameObject _newRice = SpawnManager.Instance.SpawnObject(_ricePrefab,
                                                                         _spawnPoint,

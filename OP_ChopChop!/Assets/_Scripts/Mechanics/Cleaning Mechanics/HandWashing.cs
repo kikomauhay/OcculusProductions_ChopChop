@@ -9,13 +9,15 @@ public class HandWashing : MonoBehaviour
 
     public int CleanRate { get; private set; }
 
-    [SerializeField] bool _isDirty;
+    [SerializeField] bool _isDirty,_isWet;
+    [SerializeField] Collider _handWashCollider;
     [SerializeField] float _timer;
 
     void Start()
     {
         CleanRate = 100;    
         _isDirty = true;
+        _isWet = false;
 
         StartCoroutine(DirtifyHands());
 
@@ -32,22 +34,19 @@ public class HandWashing : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Sponge>() == null) return;
+        if (other.gameObject.name.Contains("Water"))
+        {
+            _isWet = true;
+            StartCoroutine(WetToggle());
+        }
 
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             if (_isDirty)
             {
-                
+                other.gameObject.GetComponent<Ingredient>().Contaminate();
             }
         }
-
-
-        //change sponge into soap or something along the way
-        //same sht with plate, velocity things
-        //instantiate bubble vfx
-        //set dirty to false after a few seconds of cleaning
-
     }
 
     IEnumerator DirtifyHands()
@@ -64,5 +63,11 @@ public class HandWashing : MonoBehaviour
 
         _isDirty = false;
         Debug.Log($"Hand Dirty is {_isDirty}");
+    }
+
+    IEnumerator WetToggle()
+    {
+        yield return new WaitForSeconds(5F);
+        _isWet = false;
     }
 }
