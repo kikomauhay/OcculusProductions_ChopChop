@@ -6117,8 +6117,6 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  Left: {fileID: 481505696}
-  Right: {fileID: 561360456}
   _ricePrefab: {fileID: 5821176368316166534, guid: 2222bdfaa7d2bc44e92938ab59e05114,
     type: 3}
   _spawnPoint: {fileID: 0}
@@ -7700,6 +7698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CustomersServed: 0
+  _startingPlayerMoney: 9999
   _endOfDayReceipt: {fileID: 0}
 --- !u!1001 &1909420319
 PrefabInstance:

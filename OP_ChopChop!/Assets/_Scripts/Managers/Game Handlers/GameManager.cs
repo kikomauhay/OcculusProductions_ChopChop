@@ -31,24 +31,29 @@ public class GameManager : Singleton<GameManager>
     public bool CanPause { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
 
+
     // SCORING VALUES
     List<float> _customerSRScores;
     public int CustomersServed; // will be used for difficulty increase 
 
+    [SerializeField] float _startingPlayerMoney;
     [SerializeField] RestaurantReceipt _endOfDayReceipt;
 
 #endregion
 
 #region Unity_Methods
 
-    protected override void Awake() => base.Awake();
+    protected override void Awake() 
+    {
+        base.Awake();
+        CurrentPlayerMoney = _startingPlayerMoney;
+    }
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
         _endOfDayReceipt = MainMenuHandler.Instance.gameObject?.
                            GetComponentInChildren<RestaurantReceipt>();
 
-        CurrentPlayerMoney = 9999f; // test
         CustomersServed = 0;
 
         CanPause = true;
