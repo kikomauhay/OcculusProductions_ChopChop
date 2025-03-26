@@ -8,7 +8,7 @@ public class Water : MonoBehaviour
     {
         if(other.gameObject.GetComponent<Sponge>() != null)
         {
-            other.gameObject.GetComponent<Sponge>().Wet();
+            other.gameObject.GetComponent<Sponge>().ToggleWetness();
         }
     }
 }
