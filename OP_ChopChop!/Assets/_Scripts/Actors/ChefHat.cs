@@ -1,6 +1,6 @@
 using System.Collections;
 
-public class ChefHat : StaticInstance<ChefHat> {
+public class ChefHat : PersistentSingleton<ChefHat> {
 
     public bool HatWorn { get; private set; } = false;
 
@@ -15,7 +15,7 @@ public class ChefHat : StaticInstance<ChefHat> {
 
     IEnumerator PreService()
     {
-        SceneHandler.Instance.GoToScene("MainGameScene");
+        SceneHandler.Instance.GoToMainScene();
         yield return null;
 
         GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
