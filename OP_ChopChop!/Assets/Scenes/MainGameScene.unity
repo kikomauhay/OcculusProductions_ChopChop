@@ -660,7 +660,7 @@ PrefabInstance:
     - target: {fileID: 2256566160567747343, guid: 5ab3e672be634b5419c451c218720ae4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.092
+      value: 1.293
       objectReference: {fileID: 0}
     - target: {fileID: 2256566160567747343, guid: 5ab3e672be634b5419c451c218720ae4,
         type: 3}
@@ -702,6 +702,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -1.081
       objectReference: {fileID: 0}
+    - target: {fileID: 9144608172590987474, guid: 5ab3e672be634b5419c451c218720ae4,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8a473b1d7eaa40b4995b01df5fec9c5e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ab3e672be634b5419c451c218720ae4, type: 3}
 --- !u!4 &218511033 stripped
@@ -3303,8 +3308,6 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  Left: {fileID: 1015803965}
-  Right: {fileID: 406391514}
   _ricePrefab: {fileID: 5821176368316166534, guid: 2222bdfaa7d2bc44e92938ab59e05114,
     type: 3}
   _spawnPoint: {fileID: 824663047}
@@ -6771,6 +6774,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CustomersServed: 0
+  _startingPlayerMoney: 0
   _endOfDayReceipt: {fileID: 0}
 --- !u!1 &2030309113
 GameObject:
