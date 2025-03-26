@@ -7,8 +7,12 @@ public class Water : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.GetComponent<Sponge>() != null)
-        {
             other.gameObject.GetComponent<Sponge>().ToggleWetness();
+        
+
+        if(other.gameObject.GetComponent <HandWashing>() != null)
+        {
+            other.gameObject.GetComponent<HandWashing>().
         }
     }
 }
