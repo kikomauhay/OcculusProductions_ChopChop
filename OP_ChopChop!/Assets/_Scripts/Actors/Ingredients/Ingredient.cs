@@ -63,7 +63,6 @@ public abstract class Ingredient : MonoBehaviour
     {
         GameManager.Instance.OnStartService -= StartDecaying;
         GameManager.Instance.OnEndService -= Expire;
-        Reposition();
     }
 
 #endregion
@@ -92,7 +91,6 @@ public abstract class Ingredient : MonoBehaviour
         IngredientState = IngredientState.CONTAMINATED;
         IsFresh = false;
         ChangeMaterial();
-        Reposition();
     }
     protected void ChangeMaterial() 
     {
@@ -122,7 +120,6 @@ public abstract class Ingredient : MonoBehaviour
             GetComponent<MeshRenderer>().material = m;
     }
     void StartDecaying() => StartCoroutine(DecayIngredient());
-    public void Reposition() => transform.position = _startPosition;
 
 #endregion
 
