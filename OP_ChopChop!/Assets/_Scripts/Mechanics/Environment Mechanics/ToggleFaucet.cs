@@ -6,7 +6,6 @@ using UnityEngine;
 public class ToggleFaucet : XRBaseInteractable
 {
     [SerializeField] GameObject _water;
-    bool _faucetToggle;
 
     protected override void OnEnable()
     {
@@ -26,14 +25,14 @@ public class ToggleFaucet : XRBaseInteractable
         {
             interactionManager = FindObjectOfType<XRInteractionManager>();
         }
-        _faucetToggle = false;
+        _water.gameObject.SetActive(false);
     }
 
     void FaucetSwitch(SelectEnterEventArgs args)
     {
         if (_water != null)
         {
-            _water.SetActive(!_water.activeSelf);
+            _water.gameObject.SetActive(!_water.gameObject.activeSelf);
         }
         base.OnSelectEntered(args);
     }
