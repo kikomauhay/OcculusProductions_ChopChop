@@ -42,7 +42,7 @@ public class CustomerOrder : MonoBehaviour
     {
         GameManager.Instance.OnEndService += DestroyOrderUI;
 
-        CustomerDishType = DishType.NIGIRI_SALMON; // (DishType)Random.Range(0, 4);
+        CustomerDishType = DishType.NIGIRI_TUNA; // (DishType)Random.Range(0, 4);
 
         _customerScore = 100f;         // will decrease overtime
         _patienceDecreaseRate = 1.65f; // referenced from the document
@@ -166,7 +166,6 @@ public class CustomerOrder : MonoBehaviour
         */
 
         // final actions
-        Debug.LogWarning("WHAT IS THIS FOOD??");
         GameManager.Instance.IncrementCustomersServed();
         MakeSeatEmpty();
     }       

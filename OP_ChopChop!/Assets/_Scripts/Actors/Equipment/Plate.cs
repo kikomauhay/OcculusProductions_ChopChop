@@ -75,14 +75,4 @@ public class Plate : Equipment
         else
             _boxTrigger.enabled = false;
     }
-
-#region Testing
-
-    void test()
-    {
-        if (Input.GetKeyUp(KeyCode.Space))
-            ToggleClean(); // test
-    }
-
-#endregion
 }

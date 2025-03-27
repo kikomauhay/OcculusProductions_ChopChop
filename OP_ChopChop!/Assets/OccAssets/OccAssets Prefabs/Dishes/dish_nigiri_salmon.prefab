@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3457868543464867073}
   - component: {fileID: 3349734629091904578}
   - component: {fileID: 5961307397439932865}
+  - component: {fileID: 6292864696264548769}
   m_Layer: 0
   m_Name: dish_nigiri_salmon
   m_TagString: Untagged
@@ -310,7 +311,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73bc3b0813aa4dc49bba7a5a37f9bf1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rottenMat: {fileID: 0}
+--- !u!114 &6292864696264548769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7531625885797523667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 743a916b100adae4d9f58e1c401605c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cleanMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
+  _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
+  _boxTrigger: {fileID: 1901435816059076958}
 --- !u!1001 &7485841999434344279
 PrefabInstance:
   m_ObjectHideFlags: 0
