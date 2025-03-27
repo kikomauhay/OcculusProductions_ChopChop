@@ -45,17 +45,18 @@ public class RiceIngredient : Ingredient
         if (!ing.IsFresh) return;
 
         // gets the freshness rates of both ingredients before deleting them
-        
         if (ing.IngredientType == IngredientType.SALMON)
-        {
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+        {            
             Destroy(gameObject);
             Destroy(other.gameObject);
 
-            food.FoodType = DishType.NIGIRI_SALMON;
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+
             foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[0],
                                                             transform,
                                                             SpawnObjectType.FOOD);
+            food = foodToSpawn.GetComponent<Food>();
+            food.FoodType = DishType.NIGIRI_SALMON;
         }
         else if (ing.IngredientType == IngredientType.TUNA)
         {
@@ -63,15 +64,15 @@ public class RiceIngredient : Ingredient
             Destroy(gameObject);
             Destroy(other.gameObject);
             
-            food.FoodType = DishType.NIGIRI_TUNA;
             foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[1],
                                                             transform,
                                                             SpawnObjectType.FOOD);
+            food = foodToSpawn.GetComponent<Food>();
+            food.FoodType = DishType.NIGIRI_TUNA;
         }
         else return;
 
         // sets up the food's score
-        food = foodToSpawn.GetComponent<Food>();
         food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
     }
 
