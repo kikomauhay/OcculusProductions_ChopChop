@@ -3,13 +3,10 @@ using UnityEngine;
 
 public class HandWashing : MonoBehaviour
 {
-
-    //had another epiphany, gani pag kagising can you put all the coroutines inside cleanmanager na lang.
-    //maiwan lang dito should be the ontrigger stay pala
-
     public int CleanRate { get; private set; }
+    public bool IsWet { get; private set; }
 
-    [SerializeField] bool _isDirty,_isWet;
+    [SerializeField] bool _isDirty;
     [SerializeField] Collider _handWashCollider;
     [SerializeField] float _timer;
 
@@ -17,7 +14,7 @@ public class HandWashing : MonoBehaviour
     {
         CleanRate = 100;    
         _isDirty = true;
-        _isWet = false;
+        IsWet = false;
 
         StartCoroutine(DirtifyHands());
 
@@ -31,21 +28,27 @@ public class HandWashing : MonoBehaviour
             _isDirty = true;
         else _isDirty = false;
 
+        if (IsWet)
+            StartCoroutine(WetToggle());
+
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name.Contains("Water"))
-        {
-            _isWet = true;
-            StartCoroutine(WetToggle());
-        }
-
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             if (_isDirty)
             {
                 other.gameObject.GetComponent<Ingredient>().Contaminate();
             }
+        }
+
+        if (other.gameObject.GetComponent<HandWashing>() != null)
+        {
+            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
+                                                   transform, 
+                                                   3F);
+
+            //Increment Clean rate by random float
         }
     }
 
@@ -68,6 +71,6 @@ public class HandWashing : MonoBehaviour
     IEnumerator WetToggle()
     {
         yield return new WaitForSeconds(5F);
-        _isWet = false;
+        IsWet = false;
     }
 }

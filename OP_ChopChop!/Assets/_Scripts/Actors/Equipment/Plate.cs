@@ -36,6 +36,9 @@ public class Plate : Equipment
 
         if (other.GetComponent<Sponge>().IsWet && !IsClean)
         {
+            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
+                                                   transform, 
+                                                   3F);
             StopCoroutine(DoCleaning());
             StartCoroutine(DoCleaning());
             DishWash();

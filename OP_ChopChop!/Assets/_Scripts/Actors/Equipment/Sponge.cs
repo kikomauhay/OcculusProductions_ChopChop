@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Collections;
 using UnityEngine;
 
 public class Sponge : Equipment
@@ -19,6 +20,7 @@ public class Sponge : Equipment
     public void ToggleWetness() 
     {
         IsWet = !IsWet;
+        StartCoroutine(Dry());
 
         if (!IsClean)
         {
@@ -29,5 +31,12 @@ public class Sponge : Equipment
         // ternary operator syntax -> condition ? val_if_true : val_if_false
         GetComponent<Renderer>().material = IsWet ? 
                                             _wetMat : _cleanMat;
+    }
+
+    IEnumerator Dry()
+    {
+        yield return new WaitForSeconds(6F);
+        IsWet = false ;
+        GetComponent<Renderer>().material = _cleanMat;
     }
 }
