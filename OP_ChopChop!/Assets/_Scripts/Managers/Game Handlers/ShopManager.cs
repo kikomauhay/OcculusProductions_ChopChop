@@ -19,7 +19,6 @@ public class ShopManager : Singleton<ShopManager>
 
     [SerializeField] TextMeshProUGUI _txtPlayerMoney;
 
-
     [SerializeField] List<GameObject> _salmonSlabs, _tunaSlabs;
 
     public const int MAX_ORDER_COUNT = 3;
