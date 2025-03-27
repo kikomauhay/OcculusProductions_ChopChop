@@ -62,7 +62,7 @@ public class GameManager : Singleton<GameManager>
         IsPaused = false;
 
         _customerSRScores = new List<float>(); 
-        ChangeShift(GameShift.PRE_SERVICE);
+        ChangeShift(GameShift.SERVICE);
 
         Debug.Log(_endOfDayReceipt.gameObject.activeSelf);
     }

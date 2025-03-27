@@ -7,18 +7,15 @@ public class ColliderCheck : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (CustomerOrder == null)
-        {
-            Debug.LogError("null CustomerOrder");
-            return;
-        }
+        if (CustomerOrder == null) return;
 
+        // player served an ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             CustomerOrder.CustomerSR = 0f;
             StartCoroutine(CustomerOrder.AngryReaction());
             Destroy(other.gameObject); // destroys the ingredient on collision
-            StartCoroutine(DisableColider());
+            StartCoroutine(DisableCollider());
 
             return;
         }
@@ -47,16 +44,24 @@ public class ColliderCheck : MonoBehaviour
         }
 
         // finishing actions for the plate
+        Destroy(collidedDish);   
+
+        StartCoroutine(DisableCollider());
+        StartCoroutine(Delay());
+
         plate.ToggleClean();      
         plate.TogglePlated();
-        Destroy(collidedDish.gameObject);   
-        StartCoroutine(DisableColider());
     }
 
-    IEnumerator DisableColider()
+    IEnumerator DisableCollider()
     {
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(3f);
         GetComponent<Collider>().enabled = true;
+    }
+
+    IEnumerator Delay()
+    {
+        yield return null;
     }
 }
