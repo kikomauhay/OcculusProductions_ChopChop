@@ -25,20 +25,38 @@ public class Plate : Equipment
         _boxTrigger.enabled = true;
     }
     void OnTriggerEnter(Collider other)
-    {              
-        if (other.GetComponent<Food>() != null && !IsPlated)
+    {
+        /*if (IsPlated) return;
+
+        // plating logic
+        if (other.gameObject.GetComponent<Food>() != null)
+        {
+            Food food = other.gameObject.GetComponent<Food>();
+
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+            StartCoroutine(AttachToPlate(food));
+            return;
+        }
+
+        if (other.gameObject.GetComponent<Sponge>() != null)
+        {
+            
+        }
+            */
+
+        if (other.gameObject.GetComponent<Food>() != null && !IsPlated)
         {
             Destroy(gameObject);
             Destroy(other.gameObject);
 
-            StartCoroutine(PlateTheFood(other.GetComponent<Food>()));
+            StartCoroutine(AttachToPlate(other.GetComponent<Food>()));
         }
 
-        if (other.GetComponent<Sponge>().IsWet && !IsClean)
+        if (other.gameObject.GetComponent<Sponge>().IsWet && !IsClean)
         {
-            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
-                                                   transform, 
-                                                   3F);
+            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 3f);
+            
             StopCoroutine(DoCleaning());
             StartCoroutine(DoCleaning());
             DishWash();
@@ -46,16 +64,18 @@ public class Plate : Equipment
     }
     void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Sponge>() != null) 
+        if (other.gameObject.GetComponent<Sponge>() != null) 
             StopCoroutine(DoCleaning());
     }
 
     IEnumerator DoCleaning()
     {
         yield return new WaitForSeconds(2f);
-        ToggleClean();
+
+        if (!IsClean)
+            ToggleClean();
     }
-    IEnumerator PlateTheFood(Food food)
+    IEnumerator AttachToPlate(Food food)
     {
         TogglePlated();
         yield return new WaitForSeconds(1.5f);

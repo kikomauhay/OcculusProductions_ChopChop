@@ -47,7 +47,7 @@ public class Enumerations : MonoBehaviour {}
         TUNA
     }
     public enum IngredientState // IN A CERTAIN ORDER (DON'T RE-ORDER)
-{ 
+    { 
         DEFAULT, 
         EXPIRED, 
         CONTAMINATED, 

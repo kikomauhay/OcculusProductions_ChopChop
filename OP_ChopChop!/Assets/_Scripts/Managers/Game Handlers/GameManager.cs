@@ -64,7 +64,7 @@ public class GameManager : Singleton<GameManager>
         _customerSRScores = new List<float>(); 
         ChangeShift(GameShift.PRE_SERVICE);
 
-        Debug.Log(_endOfDayReceipt.gameObject.activeSelf);
+        Debug.Log(CurrentPlayerMoney);
     }
     IEnumerator StartShiftCountdown()
     {
