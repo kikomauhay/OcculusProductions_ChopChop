@@ -33,7 +33,6 @@ public class Trash : MonoBehaviour
 
     void DestroyIngredient(Ingredient ing)
     {
-        
         Destroy(gameObject);
     }
 
