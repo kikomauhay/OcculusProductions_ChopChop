@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
@@ -45,7 +44,7 @@ public class CustomerOrder : MonoBehaviour
         CustomerDishType = DishType.NIGIRI_TUNA; // (DishType)Random.Range(0, 4);
 
         _customerScore = 100f;         // will decrease overtime
-        _patienceDecreaseRate = 1.65f; // referenced from the document
+        _patienceDecreaseRate = 0.5f; // 1.65f; // referenced from the document
         
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
@@ -58,7 +57,7 @@ public class CustomerOrder : MonoBehaviour
 
 #region Spawning_Helpers
 
-    void CreateCustomerUI() // find a fix so that SpawnMan does the spawning instead
+    void CreateCustomerUI()
     {
         _customerOrderUI = Instantiate(_dishOrdersUI[(int)CustomerDishType], // aligns customer UI & customer order
                                        _orderUITransform.position,

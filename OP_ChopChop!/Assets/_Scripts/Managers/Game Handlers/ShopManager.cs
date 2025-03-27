@@ -26,7 +26,7 @@ public class ShopManager : Singleton<ShopManager>
 
 #endregion
 
-    #region Unity_Methods
+#region Unity_Methods
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
