@@ -7,6 +7,8 @@ public class ToggleFaucet : XRBaseInteractable
 {
     [SerializeField] GameObject _water;
 
+    bool _enabled = false;
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -26,14 +28,23 @@ public class ToggleFaucet : XRBaseInteractable
             interactionManager = FindObjectOfType<XRInteractionManager>();
         }
         _water.gameObject.SetActive(false);
+        _enabled = false;
     }
 
     void FaucetSwitch(SelectEnterEventArgs args)
     {
-        if (_water != null)
+        if (_water != null && !_enabled)
         {
+            _enabled = true;
             _water.gameObject.SetActive(!_water.gameObject.activeSelf);
+            StartCoroutine(Cooldown());
         }
         base.OnSelectEntered(args);
+    }
+
+    IEnumerator Cooldown()
+    {
+        yield return new WaitForSeconds(2F);
+        _enabled = false ;
     }
 }

@@ -42,7 +42,8 @@ public class HandWashing : MonoBehaviour
             }
         }
 
-        if (other.gameObject.GetComponent<HandWashing>() != null)
+        if (other.gameObject.GetComponent<HandWashing>() != null
+            && IsWet)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
                                                    transform, 
