@@ -113,6 +113,7 @@ public class GameManager : Singleton<GameManager>
     }
     public void DeductMoney(float amt)
     {
+        Debug.Log("Minus Player Money");
         if (amt < 0f) return;
 
         CurrentPlayerMoney -= amt;

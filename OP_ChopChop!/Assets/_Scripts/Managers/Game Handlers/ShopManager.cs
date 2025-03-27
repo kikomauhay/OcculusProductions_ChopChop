@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Collections;
+using UnityEngine.UI;
+using System;
 
 public class ShopManager : Singleton<ShopManager> 
 {
@@ -20,6 +23,9 @@ public class ShopManager : Singleton<ShopManager>
     [SerializeField] TextMeshProUGUI _txtPlayerMoney;
 
     [SerializeField] List<GameObject> _salmonSlabs, _tunaSlabs;
+
+    [Header("Button")]
+    [SerializeField] private Button[] interactableButtons;
 
     public const int MAX_ORDER_COUNT = 3;
 
@@ -42,9 +48,21 @@ public class ShopManager : Singleton<ShopManager>
         _tunaSlabs = new List<GameObject>();
     }
 
-#endregion
+    #endregion
 
-#region Buying
+    #region Debugging code for button
+    /*
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.W)) 
+        { 
+            BuySalmon();
+        }
+    }
+    */
+    #endregion
+
+    #region Buying
 
     public void BuySalmon()
     {
@@ -54,6 +72,11 @@ public class ShopManager : Singleton<ShopManager>
         GameObject salmon = SpawnManager.Instance.SpawnObject(_salmonPrefab,
                                                                  _salmonTransform.transform,
                                                                  SpawnObjectType.INGREDIENT);
+
+        StartCoroutine(ButtonCooldownTimer(0));
+
+        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+
         _salmonSlabs.Add(salmon);
     }
     public void BuyTuna()
@@ -64,6 +87,11 @@ public class ShopManager : Singleton<ShopManager>
         GameObject tuna = SpawnManager.Instance.SpawnObject(_tunaPrefab,
                                                             _tunaTransform.transform,
                                                             SpawnObjectType.INGREDIENT);
+        
+        StartCoroutine(ButtonCooldownTimer(1));
+       
+        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+
         _tunaSlabs.Add(tuna);
     }
     public void BuyRice()
@@ -71,13 +99,24 @@ public class ShopManager : Singleton<ShopManager>
         GameManager.Instance.DeductMoney(_ricePrice);
         Debug.LogError("Rice spanwing hasn't been added yet!");
 
+        StartCoroutine(ButtonCooldownTimer(2));
+
+        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+
         // insert code here to reset Rice at rice cooker
     }
 
     public void RemoveFromTunaList(GameObject obj) => _tunaSlabs.Remove(obj);
     public void RemoveFromSalmonList(GameObject obj) => _salmonSlabs.Remove(obj);
 
+    private IEnumerator ButtonCooldownTimer(int index)
+    {
+        interactableButtons[index].interactable = false;
 
+        yield return new WaitForSeconds(2f);
+
+        interactableButtons[index].interactable = true;
+    }
 
 
 
