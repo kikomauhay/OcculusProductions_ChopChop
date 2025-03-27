@@ -12,7 +12,7 @@ public class Water : MonoBehaviour
 
         if(other.gameObject.GetComponent <HandWashing>() != null)
         {
-            other.gameObject.GetComponent<HandWashing>().
+            other.gameObject.GetComponent<HandWashing>().ToggleWet();
         }
     }
 }
