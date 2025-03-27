@@ -52,6 +52,11 @@ public class HandWashing : MonoBehaviour
         }
     }
 
+    public void ToggleWet()
+    {
+        IsWet = true;
+    }
+
     IEnumerator DirtifyHands()
     {
         if (_isDirty) yield break;
