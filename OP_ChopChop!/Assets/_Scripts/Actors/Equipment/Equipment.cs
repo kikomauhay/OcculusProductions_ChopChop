@@ -48,8 +48,7 @@ public abstract class Equipment : MonoBehaviour
                                                 _cleanMat : _dirtyMat;
     }
     public void ResetUsageCounter() => _usageCounter = 0;
-
-    protected void IncrementCounter()
+    public void IncrementCounter()
     {
         _usageCounter++;
 
@@ -65,7 +64,6 @@ public abstract class Equipment : MonoBehaviour
 #region Reposition
 
     public void ResetPosition() => StartCoroutine(Reposition());
-
     IEnumerator Reposition()
     {
         yield return new WaitForSeconds(Random.Range(7f, 10f));

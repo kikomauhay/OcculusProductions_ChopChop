@@ -26,12 +26,12 @@ public class ShopManager : Singleton<ShopManager>
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start()
     {
-        _txtPlayerMoney.text = $"{GameManager.Instance.CurrentPlayerMoney}";
-
         // Ingredient prices
         _txtSalmonPrice.text = _salmonPrice.ToString();
         _txtTunaPrice.text = _tunaPrice.ToString();
         _txtRicePrice.text = _ricePrice.ToString();
+
+        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
     }
 
 #endregion

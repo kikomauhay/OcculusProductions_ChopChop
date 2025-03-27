@@ -22,6 +22,7 @@ public class Trash : MonoBehaviour
                 break;
 
             case TrashableType.EQUIPMENT:
+                DoEquipmentLogic(obj.GetComponent<Equipment>());
                 break;
 
             default: break;

@@ -107,7 +107,6 @@ public class CustomerOrder : MonoBehaviour
     IEnumerator CustomerLostPatience() // customer wasn't served
     {
         _appearance.SetAngryEmotion(2);
-        Debug.LogWarning("$#%$ THIS!");
         yield return new WaitForSeconds(2f);
 
         MakeSeatEmpty();
@@ -123,7 +122,6 @@ public class CustomerOrder : MonoBehaviour
         StartCoroutine(_appearance.DoChweing(_customerScore));
 
         // final actions
-        Debug.LogWarning("YUMMY!");
         GameManager.Instance.IncrementCustomersServed();
         GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
         MakeSeatEmpty();
