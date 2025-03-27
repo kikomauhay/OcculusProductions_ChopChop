@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
@@ -10,7 +11,6 @@ using UnityEngine;
 [RequireComponent(typeof(CustomerAppearance), typeof(CustomerActions))]
 public class CustomerOrder : MonoBehaviour
 {
-
 #region Readers
 
     public DishType CustomerDishType { get; private set; } // what dish the cust omer wants to order   
@@ -40,7 +40,9 @@ public class CustomerOrder : MonoBehaviour
 
     void Start()
     {
-        CustomerDishType = DishType.NIGIRI_SALMON;
+        GameManager.Instance.OnEndService += DestroyOrderUI;
+
+        CustomerDishType = DishType.NIGIRI_TUNA; // (DishType)Random.Range(0, 4);
 
         _customerScore = 100f;         // will decrease overtime
         _patienceDecreaseRate = 1.65f; // referenced from the document
@@ -49,11 +51,16 @@ public class CustomerOrder : MonoBehaviour
         StartCoroutine(PatienceCountdown());
     }
 
+    void Reset()
+    {
+        GameManager.Instance.OnEndService -= DestroyOrderUI;
+    }
+
 #region Spawning_Helpers
 
     void CreateCustomerUI() // find a fix so that SpawnMan does the spawning instead
     {
-        _customerOrderUI = Instantiate(_dishOrdersUI[Random.Range(0, _dishOrdersUI.Length)],
+        _customerOrderUI = Instantiate(_dishOrdersUI[(int)CustomerDishType], // aligns customer UI & customer order
                                        _orderUITransform.position,
                                        _orderUITransform.rotation);
     }
@@ -64,11 +71,12 @@ public class CustomerOrder : MonoBehaviour
         GameManager.Instance.AddToCustomerScores(CustomerSR);
 
         // destroys both the customer and its UI
-        Destroy(_customerOrderUI);
+        DestroyOrderUI();
         Destroy(gameObject);
     }
     public bool OrderIsSameAs(Dish dish) => dish?.OrderDishType == CustomerDishType;
-    
+    void DestroyOrderUI() => Destroy(_customerOrderUI);
+
 #endregion
 
 #region Enumerators
@@ -158,7 +166,6 @@ public class CustomerOrder : MonoBehaviour
         */
 
         // final actions
-        Debug.LogWarning("WHAT IS THIS FOOD??");
         GameManager.Instance.IncrementCustomersServed();
         MakeSeatEmpty();
     }       

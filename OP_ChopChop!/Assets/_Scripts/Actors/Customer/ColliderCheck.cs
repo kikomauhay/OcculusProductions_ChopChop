@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class ColliderCheck : MonoBehaviour
@@ -7,53 +8,52 @@ public class ColliderCheck : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (CustomerOrder == null)
-        {
-            Debug.LogError("null CustomerOrder");
-            return;
-        }
+        if (CustomerOrder == null) return;
 
+        // player served an ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             CustomerOrder.CustomerSR = 0f;
             StartCoroutine(CustomerOrder.AngryReaction());
             Destroy(other.gameObject); // destroys the ingredient on collision
-            StartCoroutine(DisableColider());
+            StartCoroutine(DisableCollider());
 
             return;
         }
 
-        Dish collidedDish = other.gameObject.GetComponentInChildren<Dish>();
         Plate plate = other.gameObject.GetComponent<Plate>();
+        Dish dish = other.gameObject.GetComponent<Dish>();
+        Food food = other.gameObject.GetComponentInChildren<Food>();
 
         // customer reaction based on the given order
-        if (collidedDish.IsContaminated)
+        if (dish.IsContaminated)
         {
             // ORDER IS EXPIRED OR CONTAMINATED
             CustomerOrder.CustomerSR = 0f;
-            StartCoroutine(CustomerOrder.ExpiredReaction());            
+            StartCoroutine(CustomerOrder.ExpiredReaction());
         }
-        else if (CustomerOrder.OrderIsSameAs(collidedDish))
+        else if (CustomerOrder.OrderIsSameAs(dish))
         {
             // CORRECT ORDER
-            CustomerOrder.CustomerSR = (collidedDish.DishScore + CustomerOrder.PatienceRate) / 2f;
-            StartCoroutine(CustomerOrder.HappyReaction());            
+            CustomerOrder.CustomerSR = (dish.DishScore + CustomerOrder.PatienceRate) / 2f;
+            StartCoroutine(CustomerOrder.HappyReaction());
         }
-        else 
+        else
         {
             // WRONG ORDER
             CustomerOrder.CustomerSR = 0f;
-            StartCoroutine(CustomerOrder.AngryReaction());            
+            StartCoroutine(CustomerOrder.AngryReaction());
         }
 
         // finishing actions for the plate
-        plate.ToggleClean();      
+        Destroy(food.gameObject);
+        StartCoroutine(DisableCollider());
+
+        plate.ToggleClean();
         plate.TogglePlated();
-        Destroy(collidedDish.gameObject);   
-        StartCoroutine(DisableColider());
     }
 
-    IEnumerator DisableColider()
+    IEnumerator DisableCollider()
     {
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(3f);

@@ -61,11 +61,7 @@ public class SpawnManager : Singleton<SpawnManager>
             SpawnCustomer(GiveAvaiableSeat());
 
             // coroutine should stop spawning once all seats are full
-            if (_seatedCustomers.Count == MAX_CUSTOMER_COUNT)
-            {
-                Debug.LogWarning("All seats full. Stopped customer spawning.");
-                yield break;
-            }
+            if (_seatedCustomers.Count == MAX_CUSTOMER_COUNT) yield break;   
         }
     }
 
@@ -171,27 +167,5 @@ public class SpawnManager : Singleton<SpawnManager>
         StopAllCoroutines(); 
     }
     
-#endregion
-
-#region Testing
-
-    void test()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SpawnVFX((VFXType)Random.Range(0, _vfxPrefabs.Length),
-                      transform, 
-                      Random.Range(1f, 5f));
-        }
-
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            // SpawnFoodItem(_platePrefab, SpawnObjectType.INGREDIENT, transform);
-
-            RemoveCustomer(_seatedCustomers[Random.Range(0, _seatedCustomers.Count)]);
-            Debug.LogWarning("Deleted a random customer");
-        }
-    }
-
 #endregion
 }
