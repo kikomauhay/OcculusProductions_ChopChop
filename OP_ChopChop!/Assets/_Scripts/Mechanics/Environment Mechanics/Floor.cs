@@ -11,11 +11,15 @@ public class Floor : MonoBehaviour
         switch (obj.GetComponent<Trashable>().TrashTypes)
         {
             case TrashableType.INGREDIENT:
-                DoIngredientLogic(obj.GetComponent<Ingredient>());
+                obj.GetComponent<Ingredient>().Contaminate();
                 break;
 
             case TrashableType.FOOD:
-                DoFoodLogic(obj.GetComponent<Food>());
+                obj.GetComponent<Food>().Contaminate();
+                break;
+
+            case TrashableType.DISH:
+                obj.GetComponent<Dish>().Contaminate();
                 break;
 
             case TrashableType.EQUIPMENT:
@@ -26,35 +30,25 @@ public class Floor : MonoBehaviour
         }
     }
 
-#region Collision_Logic
-
-    void DoIngredientLogic(Ingredient ing)
-    {
-        ing.ContaminateIngredient();
-        Debug.LogWarning($"{ing.gameObject.name} has been contaminated!");
-    }
-
-    void DoFoodLogic(Food food)
-    {
-        food.SetContaminated();
-        Debug.LogWarning($"{food.gameObject.name} has been contaminated!");
-    }
-
     void DoEquipmentLogic(Equipment eq)
     {
         eq.ResetPosition();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
         
-        // other logic for equipment child classes
-        
-        if (eq.GetComponent<Plate>().IsClean)
+        // additional logic for equipment child classes
+        if (eq.GetComponent<Plate>() != null)
         {
-            eq.ToggleClean();
+            if (eq.GetComponent<Plate>().IsClean)
+                eq.ToggleClean();
 
-            Debug.LogWarning($"{eq.gameObject.name} has gotten dirty!");
-        }  
+            SoundManager.Instance.PlaySound("plate dropped", SoundGroup.EQUIPMENT);
+        }
+
+        if (eq.GetComponent<Knife>() != null)
+        {
+            // ternary operator syntax -> condition ? val_if_true : val_if_false
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? "knife dropped 01" : "knife dropped 02",
+                                            SoundGroup.EQUIPMENT);
+        }
     } 
-
-#endregion
-
 }

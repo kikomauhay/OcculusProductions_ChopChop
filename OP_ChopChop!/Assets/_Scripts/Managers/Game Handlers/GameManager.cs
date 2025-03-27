@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using System;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -25,35 +27,44 @@ public class GameManager : Singleton<GameManager>
 
     public Action OnStartService, OnEndService, OnTraining;
 
-    public GameShift CurrentShift { get; private set; }
-    public float AvailableMoney { get; private set; }
+    public GameShift CurrentShift { get; private set; } = GameShift.DEFAULT;
+
     public bool IsPaused { get; private set; }
     public bool CanPause { get; private set; }
+    public float CurrentPlayerMoney { get; private set; }
+    public const float MAX_MONEY = 9999f; 
 
     // SCORING VALUES
     List<float> _customerSRScores;
     public int CustomersServed; // will be used for difficulty increase 
 
-    [SerializeField] private GameObject endOfDayReceipt;
-    private RestaurantReceipt receiptScript;
-    
+    [SerializeField] float _startingPlayerMoney;
+    [SerializeField] RestaurantReceipt _endOfDayReceipt;
 
 #endregion
 
 #region Unity_Methods
 
-    protected override void Awake() => base.Awake();
+    protected override void Awake() 
+    {
+        base.Awake();
+        CurrentPlayerMoney = _startingPlayerMoney;
+    }
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
-        receiptScript = endOfDayReceipt.GetComponent<RestaurantReceipt>(); //To assign the script from the receipt
-        CurrentShift = GameShift.DEFAULT;
-        AvailableMoney = 0f;
+        _endOfDayReceipt = MainMenuHandler.Instance.gameObject?.
+                           GetComponentInChildren<RestaurantReceipt>();
+
         CustomersServed = 0;
+
         CanPause = true;
         IsPaused = false;
 
+        _customerSRScores = new List<float>(); 
         ChangeShift(GameShift.PRE_SERVICE);
+
+        Debug.Log(_endOfDayReceipt.gameObject.activeSelf);
     }
     IEnumerator StartShiftCountdown()
     {
@@ -73,11 +84,18 @@ public class GameManager : Singleton<GameManager>
 
         IsPaused = !IsPaused;
 
-        if (IsPaused) 
+        if (IsPaused)
+        {
             Time.timeScale = 0f;
-        
-        else 
+            MainMenuHandler.Instance?.TogglePlayIcon(false);
+            MainMenuHandler.Instance?.TogglePausePanel(true);
+        } 
+        else
+        {
             Time.timeScale = 1f;
+            MainMenuHandler.Instance?.TogglePausePanel(false);
+            MainMenuHandler.Instance?.TogglePlayIcon(true);
+        }
     }
 
     // SCORING-RELATED
@@ -85,25 +103,30 @@ public class GameManager : Singleton<GameManager>
     public void IncrementCustomersServed() => CustomersServed++;
 
     // CASH-RELATED
-    public void AddMoney(float amt) 
+    public void AddMoney(float amt)
     {
         if (amt < 0f) return;
 
-        AvailableMoney += amt;
+        CurrentPlayerMoney += amt;
+
+        CurrentPlayerMoney = Mathf.Clamp(CurrentPlayerMoney, 0f, MAX_MONEY);
     }
     public void DeductMoney(float amt)
     {
         if (amt < 0f) return;
 
-        AvailableMoney -= amt;
+        CurrentPlayerMoney -= amt;
 
-        if (AvailableMoney < 0f)
-            AvailableMoney = 0f;
+        if (CurrentPlayerMoney < 0f)
+            CurrentPlayerMoney = 0f;
+
+        CurrentPlayerMoney = Mathf.Clamp(CurrentPlayerMoney, 0f, MAX_MONEY);
     }
     
     // GAME SHIFTING
     public void ChangeShift(GameShift chosenShift)
     {
+        // can't go to the same shift again
         if (chosenShift == CurrentShift) return;
 
         CurrentShift = chosenShift;
@@ -139,94 +162,86 @@ public class GameManager : Singleton<GameManager>
     void DoTraining() // sandbox mode
     {
         // no ingredient decaying or equipment dirtying
-
         OnTraining?.Invoke();
+        CanPause = true;
     }
-    void DoPreService()
-    {
-        // buying of ingredients
-        // rice cooking preparation
-        // storing ingredients
-        // clean kitchen 
 
-        StartCoroutine(TestShiftCountdown(testTimer, GameShift.SERVICE)); 
-    }
-    void DoService()
+    void DoPreService() => 
+        StartCoroutine(TestShiftCountdown(30f, GameShift.SERVICE)); 
+    
+    void DoService() // customer spawning + cooking, serving, & cleaning
     {
-        // customer spawning + cooking, serving, & cleaning
-
         OnStartService?.Invoke(); // all ingredients start decaying
 
         // 5 min timer once the shift ends
-        StartCoroutine(StartShiftCountdown());
+        // StartCoroutine(StartShiftCountdown());
+
+        // sample 2 mins for testing
+        StartCoroutine(TestShiftCountdown(120f, GameShift.POST_SERVICE)); 
     }
+
     void DoPostService()
     {
         OnEndService?.Invoke(); // forces to expire all remaining ingredients
+        TurnOnEndOfDayReceipt();
 
-        // shop closes and you get the rating for the day
-        // clean the remaining dishes
-
-        DoPostServiceRating();
+        // goes back to pre-service to test
+        StartCoroutine(TestShiftCountdown(20f, GameShift.PRE_SERVICE));
     }
 
     #endregion
 
-    #region Resto_Rating
+#region Resto_Rating
     void DoCustomerRating()
     {
         float customerScore = GetAverageOf(_customerSRScores);
 
-        int indexCustomerRating = receiptScript.ReturnScoretoIndexRating(customerScore);
+        int indexCustomerRating = _endOfDayReceipt.ReturnScoretoIndexRating(customerScore);
 
-        receiptScript.GiveCustomerRating(indexCustomerRating);
+        _endOfDayReceipt.GiveCustomerRating(indexCustomerRating);
     }
-
     void DoKitchenRating()
-    {
-        float kitchenScore = CleaningManager.Instance.KitchenScore;
+    {   
+        float kitchenScore = KitchenCleaningManager.Instance.KitchenScore;
 
-        int indexKitchenRating = receiptScript.ReturnScoretoIndexRating(kitchenScore);
+        int indexKitchenRating = _endOfDayReceipt.ReturnScoretoIndexRating(kitchenScore);
 
-        receiptScript.GiveKitchenRating(indexKitchenRating);
+        _endOfDayReceipt.GiveKitchenRating(indexKitchenRating);
     }
-
     void DoPostServiceRating()
     {
         // END-OF-DAY RESTAURANT RATING 
-        float finalScore = (CleaningManager.Instance.KitchenScore + 
-                            GetAverageOf(_customerSRScores)) / 2f;
+        float finalScore = (KitchenCleaningManager.Instance.KitchenScore + 
+                            GetAverageOf(_customerSRScores)) / 2f;      
 
-        int indexPostServiceRating = receiptScript.ReturnScoretoIndexRating(finalScore);
+    
+        int indexPostServiceRating = _endOfDayReceipt.ReturnScoretoIndexRating(finalScore);
 
-        receiptScript.GiveRestaurantRating(indexPostServiceRating);
-
-        Debug.LogWarning($"Final score for the day: {finalScore}");
-
-        /* UI CODE 
-            - shows the total customers served
-            - shows the amt of customers that left
-            - show the LETTERED SCORE to the player 
-            - shows how much money you gained
-            - add a button where the player goes back to the training mode
-        */
+        _endOfDayReceipt.GiveRestaurantRating(indexPostServiceRating);
     }
 
     void TurnOnEndOfDayReceipt()
     {
-        DoCustomerRating();
+        MainMenuHandler.Instance.TogglePlayIcon(false); //turns OFF the play button to display the receipt screen
+        MainMenuHandler.Instance.ToggleEODPanel();
+        MainMenuHandler.Instance.ToggleLiveWallpaper();
+
+        CanPause = false;
+
+        _endOfDayReceipt.gameObject.SetActive(true);
+
+        // DoCustomerRating();
         DoKitchenRating();
         DoPostServiceRating();
 
-        CustomersServed = receiptScript.totalcustomerServed;
-        receiptScript.GiveTotalCustomerServed();
-        endOfDayReceipt.SetActive(true);
+        CustomersServed = _endOfDayReceipt.totalcustomerServed;
+        _endOfDayReceipt.GiveTotalCustomerServed();
     }
 
     float GetAverageOf(List<float> list) 
     {
         // prevents a div/0 case
-        if (list.Count < 1) return float.NaN;
+        if (list.Count < 1) return -1f;
         
         float n = 0f;
 
@@ -260,18 +275,9 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Return) && CurrentShift == GameShift.POST_SERVICE)
             ChangeShift(GameShift.TRAINING);
             
-            // throw new NullReferenceException("test");
-            //Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
+        // throw new NullReferenceException("test");
+        //Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
     }  
-
-    IEnumerator PrintState() 
-    { 
-        while (true) 
-        {
-            yield return new WaitForSeconds(2f);
-            Debug.Log(CurrentShift);
-        }
-    }
     IEnumerator TestShiftCountdown(float timer, GameShift shift)
     {
         yield return new WaitForSeconds(timer);

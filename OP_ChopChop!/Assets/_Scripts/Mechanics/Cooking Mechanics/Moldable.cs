@@ -28,10 +28,11 @@ public class Moldable : MonoBehaviour
         {
             _moldCounter = 0;
 
+            //added this to test if it will stop molding other rice
             if (_moldStageIndex < _moldedStages.Length) // prevents out of range errors
             { 
-                _moldStageIndex++;
-                _rice.OnRiceMolded?.Invoke(_moldStageIndex);
+                this._moldStageIndex++;
+                this._rice.OnRiceMolded?.Invoke(_moldStageIndex);
             }
 
             MoldInstantiate(_moldedStages[_moldStageIndex]);

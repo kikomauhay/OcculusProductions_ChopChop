@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class CustomerAppearance : MonoBehaviour 
 {
-    public Sprite[] MadFaces => _madFaces;
-
 #region Members
 
     [Header("Customer Material Renderers")]
@@ -17,8 +15,10 @@ public class CustomerAppearance : MonoBehaviour
     [Header("Face Types")] 
     [SerializeField] Sprite[] _reactionFaces; // 0 = neutral, 1 = happy, 2 = sus
     [SerializeField] Sprite[] _chewingFaces;  // 0-1 = normal, 2-3 = sus
-    [SerializeField] Sprite[] _madFaces;      // 0 = angry, 1 = angrier, 2 = angriest
-
+    [SerializeField] Sprite[] _madFaces; // 0 = angry, 1 = angrier, 2 = angriest
+                                         // angry     = less than 50 pts in patience meter
+                                         // angrier   = got the wrong order 
+                                         // angriest  = customer lost all patience 
 #endregion
 
     void Start()
@@ -31,7 +31,10 @@ public class CustomerAppearance : MonoBehaviour
 
         _face.sprite = _reactionFaces[0];
     }
-    public void ChangeEmotion(FaceVariant type)
+
+#region Reaction_Methods
+
+    public void SetFacialEmotion(FaceVariant type)
     {
         switch (type)
         {
@@ -42,10 +45,6 @@ public class CustomerAppearance : MonoBehaviour
             case FaceVariant.HAPPY:
                 _face.sprite = _reactionFaces[1];
                 break;
-            
-            case FaceVariant.MAD:
-                _face.sprite = _madFaces[0];
-                break;
 
             case FaceVariant.SUS:
                 _face.sprite = _reactionFaces[2];
@@ -54,8 +53,17 @@ public class CustomerAppearance : MonoBehaviour
             default: break;
         }
     }
+    public void SetAngryEmotion(int type)
+    {
+        if (type < 0 || type > _madFaces.Length) 
+        {
+            Debug.LogError($"{type} was out of range!");
+            return;
+        }
 
-    public IEnumerator DoChweing(float patienceRate)
+        _face.sprite = _madFaces[type];
+    }
+    public IEnumerator DoChweing(float patienceRate) // I am not proud of this
     {
         yield return new WaitForSeconds(1f);
 
@@ -82,6 +90,8 @@ public class CustomerAppearance : MonoBehaviour
         _face.sprite = _chewingFaces[3];
         yield return new WaitForSeconds(1f);
     }
+
+#endregion
 }
 
 [System.Serializable]
