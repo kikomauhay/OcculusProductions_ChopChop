@@ -41,7 +41,7 @@ public class CustomerOrder : MonoBehaviour
     {
         GameManager.Instance.OnEndService += DestroyOrderUI;
 
-        CustomerDishType = (DishType)Random.Range(0, 4);
+        CustomerDishType = DishType.NIGIRI_SALMON; // (DishType)Random.Range(0, 4);
 
         _customerScore = 100f;         // will decrease overtime
         _patienceDecreaseRate = 0.5f; // 1.65f; // referenced from the document
@@ -125,7 +125,8 @@ public class CustomerOrder : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         // chewing + animations
-        _actions.TriggerEating();
+        // _actions.TriggerEating();
+        // Debug.LogWarning("YUMMY");
         StartCoroutine(_appearance.DoChweing(_customerScore));
 
         // final actions

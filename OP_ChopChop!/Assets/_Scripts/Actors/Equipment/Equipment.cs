@@ -71,5 +71,4 @@ public abstract class Equipment : MonoBehaviour
     }
 
 #endregion
-
 }

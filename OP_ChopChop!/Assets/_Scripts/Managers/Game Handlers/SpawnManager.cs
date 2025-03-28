@@ -39,12 +39,12 @@ public class SpawnManager : Singleton<SpawnManager>
         base.OnApplicationQuit();
         Reset();
     }
-    void Start() 
+    void Start() // BIND TO EVENTS
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
     }
-    void Reset() 
+    void Reset() // UNBIND FROM EVENTS
     {
         GameManager.Instance.OnStartService -= StartCustomerSpawning;
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
@@ -55,6 +55,7 @@ public class SpawnManager : Singleton<SpawnManager>
         yield return new WaitForSeconds(_initialCustomerSpawnTime);
         SpawnCustomer(GiveAvaiableSeat());
 
+        /*
         while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
             yield return new WaitForSeconds(_customerSpawnInterval);  
@@ -63,6 +64,7 @@ public class SpawnManager : Singleton<SpawnManager>
             // coroutine should stop spawning once all seats are full
             if (_seatedCustomers.Count == MAX_CUSTOMER_COUNT) yield break;   
         }
+        */
     }
 
 #endregion
@@ -85,17 +87,10 @@ public class SpawnManager : Singleton<SpawnManager>
     }    
     void SpawnCustomer(int idx)
     {
-        if (idx == -1)
-        {
-            Debug.LogWarning("All seats are full!");
-            return;
-        }
-        if (GameManager.Instance.CurrentShift != GameShift.SERVICE)
-        {
-            Debug.LogWarning("Game is not in the service phase!");
-            return;
-        }
+        if (idx == -1) return;
 
+        if (GameManager.Instance.CurrentShift != GameShift.SERVICE) return;
+        
         GameObject customer = SpawnObject(_customerPrefab, 
                                           _customerSeats[idx].transform, 
                                           SpawnObjectType.CUSTOMER);

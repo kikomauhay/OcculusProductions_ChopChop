@@ -26,17 +26,17 @@ public abstract class Food : MonoBehaviour
 
     protected void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Plate>() == null ||
-            !other.gameObject.GetComponent<Plate>().IsClean)
-        {
-            return;
-        }
+        if (other.gameObject.GetComponent<Plate>() == null) return;
+        
+        if (!other.gameObject.GetComponent<Plate>().IsClean) return;
+
+        if (IsContaminated) return;
+
+        Destroy(other.gameObject);
+        CreateDish(other.transform);
+        Destroy(gameObject);
 
         SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform, 1f);
-        CreateDish(other.transform);
-
-        Destroy(gameObject);
-        Destroy(other.gameObject);
     }
 
     public abstract void CreateDish(Transform t);

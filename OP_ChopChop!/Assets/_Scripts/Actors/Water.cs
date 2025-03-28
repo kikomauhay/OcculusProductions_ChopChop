@@ -1,18 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Water : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<Sponge>() != null)
-            other.gameObject.GetComponent<Sponge>().ToggleWetness();
-        
-
-        if(other.gameObject.GetComponent <HandWashing>() != null)
+        if (other.gameObject.GetComponent<Sponge>() != null)
         {
-            other.gameObject.GetComponent<HandWashing>().ToggleWet();
+            Sponge sponge = other.gameObject.GetComponent<Sponge>();
+            
+            if (!sponge.IsWet) 
+                sponge.ToggleWetness();
+        }
+
+        if (other.gameObject.GetComponent<HandWashing>() != null)
+        {
+            HandWashing handWash = other.gameObject.GetComponent<HandWashing>();
+
+            if (!handWash.IsWet)
+                handWash.ToggleWet();
         }
     }
 }

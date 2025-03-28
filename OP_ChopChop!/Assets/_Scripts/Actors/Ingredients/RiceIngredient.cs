@@ -12,12 +12,8 @@ public class RiceIngredient : Ingredient
 
     protected override void Start() 
     {
-
         base.Start();
         OnRiceMolded += ChangeRiceMold;
-
-        //_moldType = MoldType.UNMOLDED;
-        //_ingredientType = IngredientType.RICE;
     }
     protected override void Reset()
     {
@@ -27,11 +23,6 @@ public class RiceIngredient : Ingredient
 
     void OnTriggerEnter(Collider other) // combination of the food
     {
-        /* -COLLISION RULES-
-            * rice can't combine with another rice
-            * food spawning only occurs when the ingredient is still FRESH
-        */
-
         if (other.gameObject.name == name || 
             _moldType != MoldType.PERFECT) 
         {

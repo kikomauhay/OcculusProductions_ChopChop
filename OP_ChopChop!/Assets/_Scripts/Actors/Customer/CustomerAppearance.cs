@@ -67,28 +67,30 @@ public class CustomerAppearance : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
+        float chewTime = 2f;
+
         if (patienceRate > 50) // is happy is a customer pateince meter or 50+
         {
             _face.sprite = _chewingFaces[0];    
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(chewTime);
 
             _face.sprite = _chewingFaces[1];
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(chewTime);
 
             _face.sprite = _chewingFaces[0];
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(chewTime);
 
             yield break;
         }
 
         _face.sprite = _chewingFaces[3];
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(chewTime);
 
         _face.sprite = _chewingFaces[4];
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(chewTime);
 
         _face.sprite = _chewingFaces[3];
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(chewTime);
     }
 
 #endregion
