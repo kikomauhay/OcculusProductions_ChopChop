@@ -30,12 +30,17 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         // KitchenScore = 100f;
         _decayTimer = 5f;
         _decayRate = 5f;
-        _cleanlinessThreshold = 90f; // kitchen needs to go below this score to start cleaning 
+        _cleanlinessThreshold = 100f; // kitchen needs to go below this score to start cleaning 
         _canClean = false;           // prevents the player from cleaning too much
 
         // ToggleAllColliders();
     }
-    
+
+    private void Update()
+    {
+        Debug.LogWarning(KitchenScore);
+    }
+
     void Reset() 
     {
         OnCleanedArea -= IncreaseCleanRate;   
@@ -108,15 +113,14 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     {
         KitchenScore = 100;
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(10f);
                 
         while (KitchenScore > 0) 
         {
             yield return new WaitForSeconds(_decayTimer);
             KitchenScore -= _decayRate;
 
-            // no need to focus too much on cleaning
-            if (KitchenScore < _cleanlinessThreshold && !_canClean)
+            if (KitchenScore < 70F && !_canClean)
             {
                 _canClean = true;
                 ToggleKitchenColliders();
