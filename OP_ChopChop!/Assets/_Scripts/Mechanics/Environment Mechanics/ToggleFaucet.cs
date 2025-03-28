@@ -33,12 +33,12 @@ public class ToggleFaucet : XRBaseInteractable
 
     void FaucetSwitch(SelectEnterEventArgs args)
     {
-        if (_water != null && !_enabled)
-        {
-            _enabled = true;
-            _water.gameObject.SetActive(!_water.gameObject.activeSelf);
-            StartCoroutine(Cooldown());
-        }
+        if (_water == null || _enabled) return;
+        
+        _enabled = true;
+        _water.SetActive(!_water.activeSelf);
+        StartCoroutine(Cooldown());
+        
         base.OnSelectEntered(args);
     }
 

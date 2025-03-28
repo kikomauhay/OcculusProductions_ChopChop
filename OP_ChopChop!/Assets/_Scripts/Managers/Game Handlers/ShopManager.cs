@@ -51,15 +51,15 @@ public class ShopManager : Singleton<ShopManager>
     #endregion
 
     #region Debugging code for button
-    /*
+
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W)) 
-        { 
+        if (Input.GetKeyDown(KeyCode.W))
+        {
             BuySalmon();
         }
     }
-    */
+
     #endregion
 
     #region Buying
