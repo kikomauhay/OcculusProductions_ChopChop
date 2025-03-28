@@ -8,7 +8,8 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     public Action OnCleanedArea, OnStartDecayAgain;
     public float KitchenScore { get; private set; } = 80f; // overall cleanliness meter of the kitchen
 
-    [SerializeField] Collider[] _handWashColliders, _kitchenWashColliders;
+    [SerializeField] Collider[] _handWashColliders; 
+    [SerializeField] GameObject[] _kitchenWashColliders;
     float _decayTimer, _decayRate, _cleanlinessThreshold; 
     bool _canClean;
 
@@ -75,8 +76,8 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
     void ToggleKitchenColliders()
     {
-        foreach (Collider col in _kitchenWashColliders)
-            col.enabled = !col.enabled;
+        foreach (GameObject gameObject in _kitchenWashColliders)
+            gameObject.SetActive(!gameObject.activeSelf);
     }
     void ToggleHandWashColliders()
     {
