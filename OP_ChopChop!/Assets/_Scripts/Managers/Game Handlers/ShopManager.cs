@@ -69,6 +69,7 @@ public class ShopManager : Singleton<ShopManager>
         if (_salmonSlabs.Count > MAX_ORDER_COUNT) return;
 
         GameManager.Instance.DeductMoney(_salmonPrice);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _salmonTransform, 2F);
         GameObject salmon = SpawnManager.Instance.SpawnObject(_salmonPrefab,
                                                                  _salmonTransform.transform,
                                                                  SpawnObjectType.INGREDIENT);
@@ -84,6 +85,7 @@ public class ShopManager : Singleton<ShopManager>
         if (_tunaSlabs.Count > MAX_ORDER_COUNT) return;
 
         GameManager.Instance.DeductMoney(_tunaPrice);
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _tunaTransform, 2F);
         GameObject tuna = SpawnManager.Instance.SpawnObject(_tunaPrefab,
                                                             _tunaTransform.transform,
                                                             SpawnObjectType.INGREDIENT);
