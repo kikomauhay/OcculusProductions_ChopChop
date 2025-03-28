@@ -73,11 +73,6 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
 #region Private_Functions
 
-    void ToggleAllColliders()
-    {
-        ToggleKitchenColliders();
-        ToggleHandWashColliders();
-    }
     void ToggleKitchenColliders()
     {
         foreach (Collider col in _kitchenWashColliders)

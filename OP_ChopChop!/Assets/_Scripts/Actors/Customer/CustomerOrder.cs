@@ -41,7 +41,7 @@ public class CustomerOrder : MonoBehaviour
     {
         GameManager.Instance.OnEndService += DestroyOrderUI;
 
-        CustomerDishType = DishType.NIGIRI_TUNA; // (DishType)Random.Range(0, 4);
+        CustomerDishType = (DishType)Random.Range(0, 4);
 
         _customerScore = 100f;         // will decrease overtime
         _patienceDecreaseRate = 0.5f; // 1.65f; // referenced from the document

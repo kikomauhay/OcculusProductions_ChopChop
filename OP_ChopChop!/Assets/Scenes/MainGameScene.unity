@@ -830,6 +830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collider: {fileID: 0}
 --- !u!65 &223499116
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1101,6 +1102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collider: {fileID: 0}
 --- !u!1 &282752834
 GameObject:
   m_ObjectHideFlags: 0
@@ -2624,6 +2626,12 @@ PrefabInstance:
       propertyPath: _initialCustomerSpawnTime
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7564253948250721294, guid: 6d8e178db82292546afbe87fe1212197,
+        type: 3}
+      propertyPath: _vfxPrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 7213758601407137198, guid: 17ae512bf627727499a5abe0553f38bb,
+        type: 3}
     - target: {fileID: 7564253949787706566, guid: 6d8e178db82292546afbe87fe1212197,
         type: 3}
       propertyPath: m_Name
@@ -3524,6 +3532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collider: {fileID: 0}
 --- !u!65 &755570539
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6136,6 +6145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collider: {fileID: 0}
 --- !u!65 &1263188999
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6194,6 +6204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collider: {fileID: 0}
 --- !u!65 &1275272432
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6252,6 +6263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collider: {fileID: 0}
 --- !u!65 &1278920650
 BoxCollider:
   m_ObjectHideFlags: 0

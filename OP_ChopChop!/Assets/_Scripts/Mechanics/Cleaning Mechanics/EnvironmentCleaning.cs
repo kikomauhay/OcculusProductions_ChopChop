@@ -3,15 +3,28 @@ using UnityEngine;
 
 public class EnvironmentCleaning : MonoBehaviour
 {
-    private Collider _collider;
+    [SerializeField]private Collider _collider;
+
+    bool _coroutineActivated = false;
 
     private void Awake()
     {
         _collider = GetComponent<Collider>();
     }
 
-    void OnEnable() => StartCoroutine(SpawnStinkyVFX());
-    void OnDisable() => StopCoroutine(SpawnStinkyVFX());
+    /*    void OnEnable() => StartCoroutine(SpawnStinkyVFX());
+        void OnDisable() => StopCoroutine(SpawnStinkyVFX());*/
+
+    private void Update()
+    {
+        if (_collider.enabled && !_coroutineActivated)
+        {
+            _coroutineActivated = true;
+            StartCoroutine(SpawnStinkyVFX());
+        }
+        else if (!_collider.enabled) 
+            StopCoroutine(SpawnStinkyVFX());
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -37,10 +50,11 @@ public class EnvironmentCleaning : MonoBehaviour
 
     IEnumerator SpawnStinkyVFX()
     {
-        //SpawnManager.Instance.SpawnVFX(VFXType.STINKY, transform, 5f);
+        Debug.Log("Meow");
 
         while (_collider.enabled)
         {
+            Debug.Log("Baho naman");
             Vector3 randPoint = RandomColliderPoint(_collider);
             GameObject tempGameObj = new GameObject("TempSpawnPoint");
             tempGameObj.transform.position = randPoint;
@@ -48,6 +62,7 @@ public class EnvironmentCleaning : MonoBehaviour
             yield return new WaitForSeconds(5f);
             SpawnManager.Instance.SpawnVFX(VFXType.STINKY, tempGameObj.transform , 5f);
             Destroy(tempGameObj, 0.1F);
+            _coroutineActivated = false;
         }
     }
 }
