@@ -12,24 +12,18 @@ public class EnvironmentCleaning : MonoBehaviour
         _collider = GetComponent<Collider>();
     }
 
-    private void Update()
-    {
-        if (_collider.enabled && !_coroutineActivated)
-        {
-            _coroutineActivated = true;
-            StartCoroutine(SpawnStinkyVFX());
-        }
-        else if (!_collider.enabled) 
-            StopCoroutine(SpawnStinkyVFX());
-    }
+    void OnEnable() => StartCoroutine(SpawnStinkyVFX());
+    void OnDisable() => StopCoroutine(SpawnStinkyVFX());
+
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Sponge>() == null) return;
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
+        if (sponge == null) return;
          
-        if (other.gameObject.GetComponent<Sponge>().IsWet)
+        if (sponge.IsWet)
         {
-            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
+            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, sponge.transform, 5f);
             KitchenCleaningManager.Instance.OnCleanedArea?.Invoke();
         }
     }
@@ -47,11 +41,8 @@ public class EnvironmentCleaning : MonoBehaviour
 
     IEnumerator SpawnStinkyVFX()
     {
-        Debug.Log("Meow");
-
-        while (_collider.enabled)
+        while (gameObject.activeSelf)
         {
-            Debug.Log("Baho naman");
             Vector3 randPoint = RandomColliderPoint(_collider);
             GameObject tempGameObj = new GameObject("TempSpawnPoint");
             tempGameObj.transform.position = randPoint;
