@@ -12,9 +12,6 @@ public class EnvironmentCleaning : MonoBehaviour
         _collider = GetComponent<Collider>();
     }
 
-    /*    void OnEnable() => StartCoroutine(SpawnStinkyVFX());
-        void OnDisable() => StopCoroutine(SpawnStinkyVFX());*/
-
     private void Update()
     {
         if (_collider.enabled && !_coroutineActivated)

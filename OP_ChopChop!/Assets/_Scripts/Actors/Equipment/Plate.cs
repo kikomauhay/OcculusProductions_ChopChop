@@ -24,35 +24,8 @@ public class Plate : Equipment
         IsPlated = false;
         _boxTrigger.enabled = true;
     }
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other) // plate + food collision happens on Food.cs
     {
-        /*if (IsPlated) return;
-
-        // plating logic
-        if (other.gameObject.GetComponent<Food>() != null)
-        {
-            Food food = other.gameObject.GetComponent<Food>();
-
-            Destroy(other.gameObject);
-            Destroy(gameObject);
-            StartCoroutine(AttachToPlate(food));
-            return;
-        }
-
-        if (other.gameObject.GetComponent<Sponge>() != null)
-        {
-            
-        }
-            */
-
-        if (other.gameObject.GetComponent<Food>() != null && !IsPlated)
-        {
-            Destroy(gameObject);
-            Destroy(other.gameObject);
-
-            StartCoroutine(AttachToPlate(other.GetComponent<Food>()));
-        }
-
         if (other.gameObject.GetComponent<Sponge>().IsWet && !IsClean)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 3f);
@@ -77,9 +50,9 @@ public class Plate : Equipment
     }
     IEnumerator AttachToPlate(Food food)
     {
-        TogglePlated();
         yield return new WaitForSeconds(1.5f);
         food.CreateDish(transform);
+        TogglePlated();
     }
 
 #endregion
