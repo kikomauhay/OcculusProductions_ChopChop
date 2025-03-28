@@ -53,16 +53,13 @@ public class GameManager : Singleton<GameManager>
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
-        _endOfDayReceipt = MainMenuHandler.Instance.gameObject?.
-                           GetComponentInChildren<RestaurantReceipt>();
-
         CustomersServed = 0;
 
         CanPause = true;
         IsPaused = false;
 
-        _customerSRScores = new List<float>(); 
-        ChangeShift(GameShift.PRE_SERVICE);
+        _customerSRScores = new List<float>(); // { 100f, 90f, 80f, 80f }; 
+        ChangeShift(GameShift.SERVICE);
 
         Debug.Log(CurrentPlayerMoney);
     }
@@ -168,26 +165,27 @@ public class GameManager : Singleton<GameManager>
     }
 
     void DoPreService() => 
-        StartCoroutine(TestShiftCountdown(30f, GameShift.SERVICE)); 
+        StartCoroutine(ShiftCountdown(30f, GameShift.SERVICE)); 
     
     void DoService() // customer spawning + cooking, serving, & cleaning
     {
         OnStartService?.Invoke(); // all ingredients start decaying
 
-        // 5 min timer once the shift ends
-        // StartCoroutine(StartShiftCountdown());
-
         // sample 2 mins for testing
-        StartCoroutine(TestShiftCountdown(120f, GameShift.POST_SERVICE)); 
+        StartCoroutine(ShiftCountdown(120f, GameShift.POST_SERVICE)); 
     }
 
     void DoPostService()
     {
-        OnEndService?.Invoke(); // forces to expire all remaining ingredients
+        // forces to expire all remaining ingredients
+        // remaining customers despawn + their order UI 
+        OnEndService?.Invoke(); 
+
+        // enables EOD receipt in the right side of the game
         TurnOnEndOfDayReceipt();
 
         // goes back to pre-service to test
-        StartCoroutine(TestShiftCountdown(20f, GameShift.PRE_SERVICE));
+        StartCoroutine(ShiftCountdown(20f, GameShift.PRE_SERVICE));
     }
 
     #endregion
@@ -223,15 +221,19 @@ public class GameManager : Singleton<GameManager>
 
     void TurnOnEndOfDayReceipt()
     {
-        MainMenuHandler.Instance.TogglePlayIcon(false); //turns OFF the play button to display the receipt screen
+        CanPause = false;
+        
+        // enables the EOD receipt
         MainMenuHandler.Instance.ToggleEODPanel();
+        _endOfDayReceipt = MainMenuHandler.Instance.gameObject?.
+                           GetComponentInChildren<RestaurantReceipt>();
+
+        // turns OFF the play button & live wallpaper
+        MainMenuHandler.Instance.TogglePlayIcon(false); 
         MainMenuHandler.Instance.ToggleLiveWallpaper();
 
-        CanPause = false;
-
-        _endOfDayReceipt.gameObject.SetActive(true);
-
-        // DoCustomerRating();
+        // Gives the lettered-score to the EOD receipt  
+        DoCustomerRating();
         DoKitchenRating();
         DoPostServiceRating();
 
@@ -279,7 +281,7 @@ public class GameManager : Singleton<GameManager>
         // throw new NullReferenceException("test");
         //Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
     }  
-    IEnumerator TestShiftCountdown(float timer, GameShift shift)
+    IEnumerator ShiftCountdown(float timer, GameShift shift)
     {
         yield return new WaitForSeconds(timer);
         ChangeShift(shift);

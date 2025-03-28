@@ -26,6 +26,8 @@ public class Plate : Equipment
     }
     void OnTriggerEnter(Collider other) // plate + food collision happens on Food.cs
     {
+        if (other.gameObject.GetComponent<Sponge>() == null) return;
+
         if (other.gameObject.GetComponent<Sponge>().IsWet && !IsClean)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 3f);

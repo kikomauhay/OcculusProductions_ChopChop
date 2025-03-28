@@ -6,7 +6,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 {
     // Standardized script for activating colliders on the hand, will draft it up and will ask help from isagani to clean up the code later
     public Action OnCleanedArea, OnStartDecayAgain;
-    public float KitchenScore { get; private set; } = 80f; // overall cleanliness meter of the kitchen
+    public float KitchenScore { get; private set; } // overall cleanliness meter of the kitchen
 
     [SerializeField] Collider[] _handWashColliders; 
     [SerializeField] GameObject[] _kitchenWashColliders;
@@ -28,20 +28,14 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         GameManager.Instance.OnStartService += StartKitchenDecay;
         GameManager.Instance.OnEndService += StopAllCoroutines;
 
-        // KitchenScore = 100f;
+        KitchenScore = 100f;
         _decayTimer = 5f;
         _decayRate = 5f;
-        _cleanlinessThreshold = 100f; // kitchen needs to go below this score to start cleaning 
+        _cleanlinessThreshold = 80f; // kitchen needs to go below this score to start cleaning 
         _canClean = false;           // prevents the player from cleaning too much
 
         // ToggleAllColliders();
     }
-
-    private void Update()
-    {
-        Debug.LogWarning(KitchenScore);
-    }
-
     void Reset() 
     {
         OnCleanedArea -= IncreaseCleanRate;   
@@ -49,31 +43,11 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         GameManager.Instance.OnEndService -= StopAllCoroutines;
     }
 
-    void StartKitchenDecay() => StartCoroutine(DecayKitchen());
-
 #endregion
-
-    void test()
-    {
-        if (Input.GetKeyDown(KeyCode.Space)) 
-        {
-            ToggleHandWashColliders();
-            ToggleKitchenColliders();
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Escape))
-            IncreaseCleanRate();
-
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            _canClean = !_canClean;
-            // Debug.Log($"Can clean: {_canClean}");
-        }
-    }   
-
 
 #region Private_Functions
 
+    void StartKitchenDecay() => StartCoroutine(DecayKitchen());
     void ToggleKitchenColliders()
     {
         foreach (GameObject gameObject in _kitchenWashColliders)

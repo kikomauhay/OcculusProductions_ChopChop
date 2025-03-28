@@ -25,14 +25,11 @@ public class MainMenuHandler : Singleton<MainMenuHandler>
     public void ToggleEODPanel() => _eodPanel.SetActive(!_eodPanel.activeSelf);
     public void ToggleLiveWallpaper() => _liveWallpaper.SetActive(!_liveWallpaper.activeSelf);
 
-
-
     public void ExitSettingsPanel()
     {
         settingsPanel.SetActive(false);
         pausePanel.SetActive(true);
     }
-
     public void ToggleSettingsPanel(bool isTrue)
     {
         settingsPanel.SetActive(isTrue);
