@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
         GameObject obj = other.gameObject;
 
@@ -20,6 +20,10 @@ public class Floor : MonoBehaviour
 
             case TrashableType.DISH:
                 obj.GetComponent<Dish>().Contaminate();
+                SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                                "plate placed 01" : 
+                                                "plate placed 02", 
+                                                SoundGroup.EQUIPMENT);
                 break;
 
             case TrashableType.EQUIPMENT:
@@ -41,7 +45,8 @@ public class Floor : MonoBehaviour
             if (eq.GetComponent<Plate>().IsClean)
                 eq.ToggleClean();
 
-            SoundManager.Instance.PlaySound("plate dropped", SoundGroup.EQUIPMENT);
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? "plate placed 01" : "plate placed 02", 
+                                            SoundGroup.EQUIPMENT);
         }
 
         if (eq.GetComponent<Knife>() != null)
