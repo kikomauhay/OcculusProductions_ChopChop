@@ -32,7 +32,9 @@ public class GameManager : Singleton<GameManager>
     public bool IsPaused { get; private set; }
     public bool CanPause { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
-    public const float MAX_MONEY = 9999f; 
+    public const float MAX_MONEY = 9999f;
+
+    const float FIVE_MINUTES = 300f; // shift duration for Service
 
     // SCORING VALUES
     List<float> _customerSRScores;
@@ -69,7 +71,6 @@ public class GameManager : Singleton<GameManager>
         ChangeShift(GameShift.POST_SERVICE);
     }
     
-
 #endregion
 
 #region Public
@@ -107,6 +108,7 @@ public class GameManager : Singleton<GameManager>
         CurrentPlayerMoney += amt;
 
         CurrentPlayerMoney = Mathf.Clamp(CurrentPlayerMoney, 0f, MAX_MONEY);
+        SoundManager.Instance.PlaySound("earn money", SoundGroup.GAME);
     }
     public void DeductMoney(float amt)
     {
@@ -163,16 +165,15 @@ public class GameManager : Singleton<GameManager>
         OnTraining?.Invoke();
         CanPause = true;
     }
-
     void DoPreService() => 
         StartCoroutine(ShiftCountdown(30f, GameShift.SERVICE)); 
-    
     void DoService() // customer spawning + cooking, serving, & cleaning
     {
         OnStartService?.Invoke(); // all ingredients start decaying
 
         // sample 2 mins for testing
         StartCoroutine(ShiftCountdown(120f, GameShift.POST_SERVICE)); 
+        // StartCoroutine(ShiftCountdown(FIVE_MINUTES, GameShift.POST_SERVICE));
     }
 
     void DoPostService()
@@ -187,8 +188,14 @@ public class GameManager : Singleton<GameManager>
         // goes back to pre-service to test
         StartCoroutine(ShiftCountdown(20f, GameShift.PRE_SERVICE));
     }
+    IEnumerator ShiftCountdown(float timer, GameShift shift)
+    {
+        yield return new WaitForSeconds(timer);
+        SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
+        ChangeShift(shift);
+    }
 
-    #endregion
+#endregion
 
 #region Resto_Rating
     void DoCustomerRating()
@@ -218,7 +225,6 @@ public class GameManager : Singleton<GameManager>
 
         _endOfDayReceipt.GiveRestaurantRating(indexPostServiceRating);
     }
-
     void TurnOnEndOfDayReceipt()
     {
         CanPause = false;
@@ -240,7 +246,6 @@ public class GameManager : Singleton<GameManager>
         CustomersServed = _endOfDayReceipt.totalcustomerServed;
         _endOfDayReceipt.GiveTotalCustomerServed();
     }
-
     float GetAverageOf(List<float> list) 
     {
         // prevents a div/0 case
@@ -252,39 +257,6 @@ public class GameManager : Singleton<GameManager>
             n += list[i];
 
         return n / list.Count;
-    }
-
-#endregion
-
-#region Testing
-
-    // TESTING
-    float testTimer = 2f;
-
-    void test() 
-    {
-        if (Input.GetKeyDown(KeyCode.Escape)) 
-        {
-            float rndm = UnityEngine.Random.Range(80f, 100f);
-            _customerSRScores.Add(rndm);
-
-            Debug.Log($"Score: {rndm}; Count: {_customerSRScores.Count}");
-        }        
-
-        if (Input.GetKeyDown(KeyCode.Alpha1)) ChangeShift(GameShift.PRE_SERVICE);
-
-        if (Input.GetKeyDown(KeyCode.Alpha2)) ChangeShift(GameShift.SERVICE);
-
-        if (Input.GetKeyDown(KeyCode.Return) && CurrentShift == GameShift.POST_SERVICE)
-            ChangeShift(GameShift.TRAINING);
-            
-        // throw new NullReferenceException("test");
-        //Debug.Log($"Total Score: {GetAverageOf(_foodScores)}");
-    }  
-    IEnumerator ShiftCountdown(float timer, GameShift shift)
-    {
-        yield return new WaitForSeconds(timer);
-        ChangeShift(shift);
     }
 
 #endregion

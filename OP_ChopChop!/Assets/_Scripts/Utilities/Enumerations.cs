@@ -106,6 +106,7 @@ public class Enumerations : MonoBehaviour {}
         EQUIPMENT,
         APPLIANCES,
         FOOD,
-        GAME
+        GAME,
+        VFX
     }
 #endregion

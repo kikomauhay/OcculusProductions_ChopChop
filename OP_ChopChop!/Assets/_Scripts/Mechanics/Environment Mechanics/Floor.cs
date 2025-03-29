@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
         GameObject obj = other.gameObject;
 
@@ -11,15 +11,20 @@ public class Floor : MonoBehaviour
         switch (obj.GetComponent<Trashable>().TrashTypes)
         {
             case TrashableType.INGREDIENT:
-                obj.GetComponent<Ingredient>().Contaminate();
+                DoIngredientLogic(obj.GetComponent<Ingredient>());
                 break;
 
             case TrashableType.FOOD:
                 obj.GetComponent<Food>().Contaminate();
+                SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
                 break;
 
             case TrashableType.DISH:
                 obj.GetComponent<Dish>().Contaminate();
+                SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                                "plate placed 01" : 
+                                                "plate placed 02", 
+                                                SoundGroup.EQUIPMENT);
                 break;
 
             case TrashableType.EQUIPMENT:
@@ -27,6 +32,17 @@ public class Floor : MonoBehaviour
                 break;
 
             default: break;
+        }
+    }
+
+    void DoIngredientLogic(Ingredient ing)
+    {
+        ing.Contaminate();
+        
+        if (ing.IngredientType == IngredientType.SALMON ||
+            ing.IngredientType == IngredientType.TUNA)
+        {
+            SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
         }
     }
 
@@ -41,7 +57,8 @@ public class Floor : MonoBehaviour
             if (eq.GetComponent<Plate>().IsClean)
                 eq.ToggleClean();
 
-            SoundManager.Instance.PlaySound("plate dropped", SoundGroup.EQUIPMENT);
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? "plate placed 01" : "plate placed 02", 
+                                            SoundGroup.EQUIPMENT);
         }
 
         if (eq.GetComponent<Knife>() != null)

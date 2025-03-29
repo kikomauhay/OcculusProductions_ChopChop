@@ -156,6 +156,7 @@ public abstract class Ingredient : MonoBehaviour
             {
                 FreshnessRate = 0f;
                 IngredientState = IngredientState.EXPIRED;
+                SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
                 ChangeMaterial();
             }
         }

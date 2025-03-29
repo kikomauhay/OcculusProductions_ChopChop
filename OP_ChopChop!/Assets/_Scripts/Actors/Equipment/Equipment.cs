@@ -63,11 +63,16 @@ public abstract class Equipment : MonoBehaviour
 
 #region Reposition
 
-    public void ResetPosition() => StartCoroutine(Reposition());
+    public void ResetPosition() 
+    {
+        transform.position = _startPosition;
+        transform.rotation = Quaternion.identity;
+    }
+    
     IEnumerator Reposition()
     {
         yield return new WaitForSeconds(Random.Range(7f, 10f));
-        transform.position = _startPosition;
+        // transform.position = _startPosition;
     }
 
 #endregion
