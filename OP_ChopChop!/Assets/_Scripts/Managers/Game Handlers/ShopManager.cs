@@ -56,7 +56,7 @@ public class ShopManager : Singleton<ShopManager>
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            BuySalmon();
+            BuyTuna();
         }
     }
 
@@ -67,7 +67,7 @@ public class ShopManager : Singleton<ShopManager>
 
     public void BuySalmon()
     {
-        if (_salmonSlabs.Count > MAX_ORDER_COUNT) 
+        if (_salmonSlabs.Count >= MAX_ORDER_COUNT) 
         {
             SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
             return;
@@ -88,7 +88,7 @@ public class ShopManager : Singleton<ShopManager>
     }
     public void BuyTuna()
     {
-        if (_tunaSlabs.Count > MAX_ORDER_COUNT)
+        if (_tunaSlabs.Count >= MAX_ORDER_COUNT)
         {
             SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
             return;
