@@ -48,9 +48,9 @@ public class ShopManager : Singleton<ShopManager>
         _tunaSlabs = new List<GameObject>();
     }
 
-    #endregion
+#endregion
 
-    #region Debugging code for button
+#region Debugging code for button
 
     private void Update()
     {
@@ -60,29 +60,39 @@ public class ShopManager : Singleton<ShopManager>
         }
     }
 
-    #endregion
-
-    #region Buying
+    
+#endregion
+    
+#region Buying
 
     public void BuySalmon()
     {
-        if (_salmonSlabs.Count > MAX_ORDER_COUNT) return;
+        if (_salmonSlabs.Count > MAX_ORDER_COUNT) 
+        {
+            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            return;
+        }
 
         GameManager.Instance.DeductMoney(_salmonPrice);
         SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _salmonTransform, 2F);
         GameObject salmon = SpawnManager.Instance.SpawnObject(_salmonPrefab,
-                                                                 _salmonTransform.transform,
-                                                                 SpawnObjectType.INGREDIENT);
+                                                              _salmonTransform.transform,
+                                                              SpawnObjectType.INGREDIENT);
 
         StartCoroutine(ButtonCooldownTimer(0));
 
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-
         _salmonSlabs.Add(salmon);
+
+        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
     }
     public void BuyTuna()
     {
-        if (_tunaSlabs.Count > MAX_ORDER_COUNT) return;
+        if (_tunaSlabs.Count > MAX_ORDER_COUNT)
+        {
+            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            return;
+        }
 
         GameManager.Instance.DeductMoney(_tunaPrice);
         SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _tunaTransform, 2F);
@@ -104,7 +114,8 @@ public class ShopManager : Singleton<ShopManager>
         StartCoroutine(ButtonCooldownTimer(2));
 
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-
+        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+        
         // insert code here to reset Rice at rice cooker
     }
 
@@ -119,8 +130,5 @@ public class ShopManager : Singleton<ShopManager>
 
         interactableButtons[index].interactable = true;
     }
-
-
-
-    #endregion
+#endregion
 }

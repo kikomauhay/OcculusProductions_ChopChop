@@ -4,8 +4,7 @@ using System;
 public class SoundManager : Singleton<SoundManager>
 {
     public AudioSource SoundSource;
-    public Sound[] EquipmentSounds, ApplianceSounds, FoodSounds, GameSounds;
-
+    public Sound[] EquipmentSounds, ApplianceSounds, FoodSounds, GameSounds, VFXSounds;
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
@@ -49,6 +48,10 @@ public class SoundManager : Singleton<SoundManager>
 
             case SoundGroup.GAME:
                 s = Array.Find(GameSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.VFX:
+                s = Array.Find(VFXSounds, i => i.name == title);
                 break;
 
             default:

@@ -11,11 +11,12 @@ public class Floor : MonoBehaviour
         switch (obj.GetComponent<Trashable>().TrashTypes)
         {
             case TrashableType.INGREDIENT:
-                obj.GetComponent<Ingredient>().Contaminate();
+                DoIngredientLogic(obj.GetComponent<Ingredient>());
                 break;
 
             case TrashableType.FOOD:
                 obj.GetComponent<Food>().Contaminate();
+                SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
                 break;
 
             case TrashableType.DISH:
@@ -31,6 +32,17 @@ public class Floor : MonoBehaviour
                 break;
 
             default: break;
+        }
+    }
+
+    void DoIngredientLogic(Ingredient ing)
+    {
+        ing.Contaminate();
+        
+        if (ing.IngredientType == IngredientType.SALMON ||
+            ing.IngredientType == IngredientType.TUNA)
+        {
+            SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
         }
     }
 

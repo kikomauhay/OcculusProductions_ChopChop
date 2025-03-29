@@ -2,7 +2,14 @@ using UnityEngine;
 
 public class Water : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    void OnEnable() => 
+        SoundManager.Instance.PlaySound("tap water", SoundGroup.APPLIANCES);
+
+    // stops playing the water sfx
+    void OnDisable() => 
+        SoundManager.Instance.SoundSource.Stop();    
+
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Sponge>() != null)
         {

@@ -73,6 +73,11 @@ public class Moldable : MonoBehaviour
         Quaternion rot = transform.rotation;
         Destroy(gameObject);
         Instantiate(moldPrefab, pos, rot);
+
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                        "rice mold 01" : 
+                                        "rice mold 02",
+                                        SoundGroup.FOOD);    
     }
 
     IEnumerator test()
