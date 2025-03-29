@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
@@ -30,6 +31,9 @@ public class CustomerOrder : MonoBehaviour
     [SerializeField] CustomerActions _actions;
     [SerializeField] CustomerAppearance _appearance;
     GameObject _customerOrderUI;
+
+    [Header("MoneyRewardTxt")]
+    [SerializeField] private TextMeshProUGUI _txtMoneyReward;
 
     // TIMERS
     [SerializeField] float _patienceDecreaseRate; // 1.65; deduction rate to use
