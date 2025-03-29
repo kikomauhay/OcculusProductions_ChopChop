@@ -42,7 +42,7 @@ public class Sliceable : MonoBehaviour
             }
 
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
-
+            
             // ternary operator syntax -> condition ? val_if_true : val_if_false
             SoundManager.Instance.PlaySound(Random.value > 0.5f ? "fish slice 01" : "fish slice 02",
                                             SoundGroup.FOOD);

@@ -10,6 +10,8 @@ public class Plate : Equipment
     [Tooltip("The Box Collider Component")] 
     [SerializeField] Collider _boxTrigger;
 
+    public Collider BoxTrigger => _boxTrigger;
+
 #endregion
 
 #region Unity_Methods

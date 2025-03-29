@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
-    void OnCollisionEnter(Collision other)
+    void OnCollisionEnter(Collision  other)
     {
         GameObject obj = other.gameObject;
 
@@ -20,7 +20,7 @@ public class Floor : MonoBehaviour
                 break;
 
             case TrashableType.DISH:
-                obj.GetComponent<Dish>().Contaminate();
+                obj.GetComponent<Dish>().HitTheFloor();
                 SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
                                                 "plate placed 01" : 
                                                 "plate placed 02", 

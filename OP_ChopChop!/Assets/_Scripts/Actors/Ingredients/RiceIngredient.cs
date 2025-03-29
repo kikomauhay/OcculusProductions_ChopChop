@@ -42,6 +42,7 @@ public class RiceIngredient : Ingredient
             Destroy(other.gameObject);
 
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+            SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
 
             foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[0],
                                                             transform,
@@ -52,6 +53,8 @@ public class RiceIngredient : Ingredient
         else if (ing.IngredientType == IngredientType.TUNA)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+            SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+
             Destroy(gameObject);
             Destroy(other.gameObject);
             
