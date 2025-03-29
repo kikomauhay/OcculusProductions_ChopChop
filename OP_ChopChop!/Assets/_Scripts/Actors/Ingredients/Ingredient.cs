@@ -91,6 +91,8 @@ public abstract class Ingredient : MonoBehaviour
         IsFresh = false;
         ChangeMaterial();
     }
+    public void Stored() => IngredientState = IngredientState.STORED;
+    public void Unstored() => IngredientState = IngredientState.DEFAULT;
     protected void ChangeMaterial() 
     {
         // the material of the ingredient changes based on the freshness rate
