@@ -26,6 +26,7 @@ public class HandWashing : MonoBehaviour
 
         if (CleanRate <= 0)
             _isDirty = true;
+            
         else _isDirty = false;
 
         if (IsWet)

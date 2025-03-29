@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEngine.TextCore.Text;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -65,6 +66,7 @@ public class GameManager : Singleton<GameManager>
 
         Debug.Log(CurrentPlayerMoney);
     }
+
     IEnumerator StartShiftCountdown()
     {
         yield return new WaitForSeconds(300f); // 5 minutes
@@ -173,7 +175,6 @@ public class GameManager : Singleton<GameManager>
 
         // sample 2 mins for testing
         StartCoroutine(ShiftCountdown(120f, GameShift.POST_SERVICE)); 
-        // StartCoroutine(ShiftCountdown(FIVE_MINUTES, GameShift.POST_SERVICE));
     }
 
     void DoPostService()
@@ -208,10 +209,9 @@ public class GameManager : Singleton<GameManager>
     }
     void DoKitchenRating()
     {   
-        float kitchenScore = KitchenCleaningManager.Instance.KitchenScore;
-
-        int indexKitchenRating = _endOfDayReceipt.ReturnScoretoIndexRating(kitchenScore);
-
+        int indexKitchenRating = 
+            _endOfDayReceipt.ReturnScoretoIndexRating(KitchenCleaningManager.Instance.KitchenScore);
+        
         _endOfDayReceipt.GiveKitchenRating(indexKitchenRating);
     }
     void DoPostServiceRating()
