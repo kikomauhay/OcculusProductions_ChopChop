@@ -30,7 +30,8 @@ public class ColliderCheck : MonoBehaviour
         {
             // ORDER IS EXPIRED OR CONTAMINATED
             CustomerOrder.CustomerSR = 0f;
-            StartCoroutine(CustomerOrder.ExpiredReaction());
+            
+            // DO GAME OVER LOGIC
         }
         else if (CustomerOrder.OrderIsSameAs(dish))
         {
@@ -51,6 +52,7 @@ public class ColliderCheck : MonoBehaviour
 
         plate.ToggleClean();
         plate.TogglePlated();
+        dish.EnableBoxCollider();
     }
 
     IEnumerator DisableCollider()

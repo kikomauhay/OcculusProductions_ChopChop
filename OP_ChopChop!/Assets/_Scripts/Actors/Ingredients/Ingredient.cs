@@ -54,7 +54,6 @@ public abstract class Ingredient : MonoBehaviour
         _startPosition = transform.position;
 
         ChangeMaterial();
-
         // in case some ingredients are spawned during Service time
         if (GameManager.Instance.CurrentShift == GameShift.SERVICE)
             StartDecaying();        

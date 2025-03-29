@@ -44,6 +44,6 @@ public class ToggleFaucet : XRBaseInteractable
     IEnumerator Cooldown()
     {
         yield return new WaitForSeconds(2F);
-        _enabled = false ;
+        _enabled = false;
     }
 }

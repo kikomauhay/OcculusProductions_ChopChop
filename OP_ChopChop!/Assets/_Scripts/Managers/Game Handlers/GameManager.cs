@@ -166,7 +166,7 @@ public class GameManager : Singleton<GameManager>
         CanPause = true;
     }
     void DoPreService() => 
-        StartCoroutine(ShiftCountdown(30f, GameShift.SERVICE)); 
+        StartCoroutine(ShiftCountdown(5f, GameShift.SERVICE)); 
     void DoService() // customer spawning + cooking, serving, & cleaning
     {
         OnStartService?.Invoke(); // all ingredients start decaying
