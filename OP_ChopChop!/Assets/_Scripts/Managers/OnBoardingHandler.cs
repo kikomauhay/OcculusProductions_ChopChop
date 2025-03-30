@@ -10,23 +10,24 @@ using UnityEngine;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
-    int _tutorialIndex = 0;
+    // int _tutorialIndex = 0;
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
         GameManager.Instance.ChangeShift(GameShift.TRAINING);
-        // StartCoroutine(ChangeToMainGame());
+        StartCoroutine(ChangeToMainGame());
     }
+
     IEnumerator ChangeToMainGame()
     {
-        Debug.Log("waiting 5s to change to main game scene");
+        float time = 5f;
 
-        yield return new WaitForSeconds(5f);
+        Debug.Log($"waiting {time}s to change to main game scene");
+
+        yield return new WaitForSeconds(time);
         StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
         GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
-        
-        Debug.Log("2. went to main game scene");
     } 
 }
