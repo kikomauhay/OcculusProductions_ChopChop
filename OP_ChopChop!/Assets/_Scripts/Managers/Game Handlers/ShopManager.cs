@@ -79,6 +79,7 @@ public class ShopManager : StaticInstance<ShopManager>
                                                               SpawnObjectType.INGREDIENT);
 
         StartCoroutine(ButtonCooldownTimer(0));
+        StartCoroutine(FiveSecDelay());
 
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
         _salmonSlabs.Add(salmon);
@@ -100,6 +101,7 @@ public class ShopManager : StaticInstance<ShopManager>
                                                             SpawnObjectType.INGREDIENT);
         
         StartCoroutine(ButtonCooldownTimer(1));
+        StartCoroutine(FiveSecDelay());
        
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
         _tunaSlabs.Add(tuna);
@@ -122,6 +124,10 @@ public class ShopManager : StaticInstance<ShopManager>
     public void RemoveFromTunaList(GameObject obj) => _tunaSlabs.Remove(obj);
     public void RemoveFromSalmonList(GameObject obj) => _salmonSlabs.Remove(obj);
 
+#endregion
+
+#region Enumerators
+
     private IEnumerator ButtonCooldownTimer(int index)
     {
         interactableButtons[index].interactable = false;
@@ -130,5 +136,12 @@ public class ShopManager : StaticInstance<ShopManager>
 
         interactableButtons[index].interactable = true;
     }
+
+    private IEnumerator FiveSecDelay()
+    {
+        yield return new WaitForSeconds(5f);
+    } 
+
+
 #endregion
 }

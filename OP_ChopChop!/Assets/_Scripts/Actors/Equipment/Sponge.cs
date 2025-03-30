@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +7,8 @@ public class Sponge : Equipment
 
     [SerializeField] Material _wetMat;
 
+#region Unity_Methods
+
     protected override void Start()
     {
         base.Start();
@@ -16,11 +17,19 @@ public class Sponge : Equipment
         IsWet = false;
         _maxUsageCounter = 10;
     }
+    protected override void OnTriggerEnter(Collider other) {}
+    IEnumerator Dry()
+    {
+        yield return new WaitForSeconds(6f);
+        IsWet = false;
+        GetComponent<Renderer>().material = _cleanMat;
+    }
 
-    public void ToggleWetness() 
+#endregion
+
+    public void ToggleWet() 
     {
         IsWet = !IsWet;
-        StartCoroutine(Dry());
 
         if (!IsClean)
         {
@@ -28,15 +37,10 @@ public class Sponge : Equipment
             return;
         }
 
+        StartCoroutine(Dry());
+
         // ternary operator syntax -> condition ? val_if_true : val_if_false
         GetComponent<Renderer>().material = IsWet ? 
                                             _wetMat : _cleanMat;
-    }
-
-    IEnumerator Dry()
-    {
-        yield return new WaitForSeconds(6F);
-        IsWet = false ;
-        GetComponent<Renderer>().material = _cleanMat;
     }
 }

@@ -31,27 +31,23 @@ public class Trash : MonoBehaviour
 
 #region Functions
 
+
     void DestroyIngredient(Ingredient ing)
     {
         Destroy(gameObject);
+        ing.Trashed();
     }
 
     void DestroyFood(Food food)
     {
         Destroy(gameObject);
+        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
     }
 
     void DoEquipmentLogic(Equipment eq)
     {
-        eq.ResetPosition();
+        eq.HitTheFloor();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
-
-        // other logic for equipment child classes
-
-        if (eq.GetComponent<Plate>().IsClean)
-        {
-            eq.ToggleClean();
-        }
     }
 
     private void AttachToHand(GameObject _spawnedPlate, IXRSelectInteractor _interactor)

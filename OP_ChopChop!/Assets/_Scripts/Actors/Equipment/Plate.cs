@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class Plate : Equipment
@@ -26,40 +25,13 @@ public class Plate : Equipment
         IsPlated = false;
         _boxTrigger.enabled = true;
     }
-    void OnTriggerEnter(Collider other) // plate + food collision happens on Food.cs
-    {
-        if (other.gameObject.GetComponent<Sponge>() == null) return;
-
-        if (other.gameObject.GetComponent<Sponge>().IsWet && !IsClean)
-        {
-            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 3f);
-            
-            StopCoroutine(DoCleaning());
-            StartCoroutine(DoCleaning());
-            DishWash();
-        }
-    }
-    void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.GetComponent<Sponge>() != null) 
-            StopCoroutine(DoCleaning());
-    }
-
-    IEnumerator DoCleaning()
-    {
-        yield return new WaitForSeconds(2f);
-
-        if (!IsClean)
-            ToggleClean();
-    }
-    IEnumerator AttachToPlate(Food food)
-    {
-        yield return new WaitForSeconds(1.5f);
-        food.CreateDish(transform);
-        TogglePlated();
-    }
 
 #endregion
+    protected override void DoCleaning()
+    {
+        base.DoCleaning();
+        DishWash();
+    }
 
     public void TogglePlated() => IsPlated = !IsPlated;
     private void DishWash()
