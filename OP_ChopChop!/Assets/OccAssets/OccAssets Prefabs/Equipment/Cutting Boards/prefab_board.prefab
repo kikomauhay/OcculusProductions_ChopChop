@@ -72,6 +72,8 @@ GameObject:
   - component: {fileID: 7495563665285652651}
   - component: {fileID: 6767982668594769160}
   - component: {fileID: 1457232360}
+  - component: {fileID: 1284006871778379696}
+  - component: {fileID: 5123939408169586166}
   m_Layer: 0
   m_Name: prefab_board
   m_TagString: Untagged
@@ -158,3 +160,30 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.80782163, y: 0.05275301, z: 0.5340054}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1284006871778379696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2540340067586023334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 0
+--- !u!114 &5123939408169586166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2540340067586023334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7078e57eb677bef448994fa7db941ca6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cleanMat: {fileID: 2100000, guid: 356fe598a8eac214e9b8f5794f2191e3, type: 2}
+  _dirtyMat: {fileID: 2100000, guid: f3c1061055659554db9992ed0f4993d4, type: 2}

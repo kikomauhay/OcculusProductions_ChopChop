@@ -9,4 +9,12 @@ public class Board : Equipment {
         name = "Chopping Board";
         _maxUsageCounter = 10;
     }
+
+    void Update() => test();
+
+    void test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            ToggleClean();
+    }
 }

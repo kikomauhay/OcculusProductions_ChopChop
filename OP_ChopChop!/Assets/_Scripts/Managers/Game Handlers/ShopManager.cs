@@ -20,7 +20,7 @@ public class ShopManager : StaticInstance<ShopManager>
     [SerializeField] TextMeshProUGUI _txtSalmonPrice, _txtTunaPrice;
 
     [SerializeField] TextMeshProUGUI _txtPlayerMoney;
-    
+
     [SerializeField] List<GameObject> _salmonSlabs, _tunaSlabs;
 
     [Header("Button")]
@@ -102,8 +102,9 @@ public class ShopManager : StaticInstance<ShopManager>
         StartCoroutine(ButtonCooldownTimer(1));
        
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-
         _tunaSlabs.Add(tuna);
+
+        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
     }
     public void BuyRice()
     {
