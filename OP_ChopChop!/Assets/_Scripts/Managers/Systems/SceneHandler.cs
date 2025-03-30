@@ -11,8 +11,11 @@ public class SceneHandler : Singleton<SceneHandler>
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
 
-    void Start() => 
-        SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
+    void Start() 
+    {
+        SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
+        Debug.LogWarning("went to main game scene!");
+    }
 
     public void GoToMainScene()
     {
@@ -52,4 +55,6 @@ public class SceneHandler : Singleton<SceneHandler>
     {
         yield return null;
     }
+
+
 }
