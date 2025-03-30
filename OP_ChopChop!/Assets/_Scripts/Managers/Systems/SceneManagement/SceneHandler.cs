@@ -25,8 +25,11 @@ public class SceneHandler : Singleton<SceneHandler>
         _fadeOutStartColor.a = 0f;
     }
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    // void Start() => SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
-
+    void Start() 
+    {
+        SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
+        Debug.LogWarning("loaded to main game scene!");
+    }
     void Update()
     {
         test();
