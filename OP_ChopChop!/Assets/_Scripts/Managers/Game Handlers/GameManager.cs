@@ -37,7 +37,7 @@ public class GameManager : Singleton<GameManager>
     List<float> _customerSRScores;
     public int CustomersServed; // will be used for difficulty increase 
 
-    [SerializeField] float _startingPlayerMoney;
+    [SerializeField] float _startingPlayerMoney, _testTimer;
     [SerializeField] RestaurantReceipt _endOfDayReceipt;
 
 #endregion
@@ -55,7 +55,9 @@ public class GameManager : Singleton<GameManager>
         CustomersServed = 0;
         IsPaused = false;
 
+        // these should be empty when testing is done
         _customerSRScores = new List<float>() { 100f, 90f, 80f, 80f }; 
+        
         // ChangeShift(GameShift.TRAINING);
         // Debug.Log(CurrentPlayerMoney);
     }
@@ -153,40 +155,28 @@ public class GameManager : Singleton<GameManager>
 
 #endregion
 
-#region Shift_Methods    
+#region GameShifts
 
-    void DoPreService() 
-    {
-        Debug.Log(CurrentShift);
-        StartCoroutine(ShiftCountdown(5f, GameShift.SERVICE));         
-    }
+    void DoPreService() => // change to 3 mins when done testing
+        StartCoroutine(ShiftCountdown(30f, GameShift.SERVICE));         
+    
     void DoService() // customer spawning + cooking, serving, & cleaning
     {
-        Debug.Log(CurrentShift);
         OnStartService?.Invoke(); // all ingredients start decaying
 
-        // sample 2 mins for testing
-        StartCoroutine(ShiftCountdown(30f, GameShift.POST_SERVICE)); 
+        // change to 5 mins when done testing
+        StartCoroutine(ShiftCountdown(120f, GameShift.POST_SERVICE)); 
     }
-
-    void DoPostService()
+    void DoPostService() // rating calculations
     {
-        // forces to expire all remaining ingredients
-        // remaining customers despawn + their order UI 
-        Debug.Log(CurrentShift);
         OnEndService?.Invoke(); 
-
-        // enables EOD receipt in the right side of the game
         TurnOnEndOfDayReceipt();
-
-        // goes back to pre-service to test
-        StartCoroutine(ShiftCountdown(20f, GameShift.PRE_SERVICE));
-        // StartCoroutine(ChangeToTrainingScene());
+        StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
     }
 
 #endregion
 
-#region Resto_Rating
+#region EOD_Rating
     void DoCustomerRating()
     {
         float customerScore = GetAverageOf(_customerSRScores);
@@ -216,7 +206,6 @@ public class GameManager : Singleton<GameManager>
     void TurnOnEndOfDayReceipt()
     {
         // enables the EOD receipt
-
         MainMenuHandler.Instance.ToggleEODPanel();
         _endOfDayReceipt = MainMenuHandler.Instance.gameObject?.
                         GetComponentInChildren<RestaurantReceipt>();
@@ -247,17 +236,5 @@ public class GameManager : Singleton<GameManager>
     }
 
 #endregion
-
-
-    IEnumerator ChangeToTrainingScene()
-    {
-        Debug.Log("waiting 10s to change to training scene");
-
-        yield return new WaitForSeconds(10f);
-        StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
-
-
-        Debug.Log("3. went back to training scene!");    
-    }
 
 }
