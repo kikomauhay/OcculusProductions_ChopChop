@@ -29,50 +29,92 @@ public abstract class Equipment : MonoBehaviour
 
         GameManager.Instance.OnStartService += ResetPosition;
     }
-    protected void Reset() 
+    protected void OnDestroy() 
     {
         ResetPosition();
         GameManager.Instance.OnStartService -= ResetPosition;
     }
+    protected virtual void OnTriggerEnter(Collider other) 
+    {
+        if (other.gameObject.GetComponent<Sponge>() == null) return;
+        
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+        if (!sponge.IsWet) return;
+
+        // sponge contaminates the equipment
+        if (IsClean && !sponge.IsClean)
+        {
+            GetComponent<MeshRenderer>().material = _dirtyMat;
+            _usageCounter = _maxUsageCounter;
+            IsClean = false;
+            return;
+        }
+
+        if (!IsClean && sponge.IsClean)
+            DoCleaning();
+    }
+    protected void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.GetComponent<Sponge>() != null)
+            StopCoroutine(CleanEquipment());
+    }
     
 #endregion
+
+#region Public
+
+    public void HitTheFloor()
+    {
+        _usageCounter = _maxUsageCounter;
+        IncrementUseCounter();
+        ResetPosition();
+    }
+    public void IncrementUseCounter()
+    {
+        _usageCounter++;
+
+        if (_usageCounter >= _maxUsageCounter)
+        {
+            GetComponent<MeshRenderer>().material = _dirtyMat;
+            IsClean = false;
+        }
+    }
+
+#endregion
+    
+    protected void ResetPosition() 
+    {
+        transform.position = _startPosition;
+        transform.rotation = Quaternion.identity;
+    }
     
 #region Cleaning
 
-    public void ToggleClean() 
+    void ToggleClean() 
     {
         IsClean = !IsClean;
 
         // ternary operator syntax -> condition ? val_if_true : val_if_false
         GetComponent<MeshRenderer>().material = IsClean ? 
                                                 _cleanMat : _dirtyMat;
-    }
-    public void ResetUsageCounter() => _usageCounter = 0;
-    public void IncrementCounter()
-    {
-        _usageCounter++;
 
-        if (_usageCounter == _maxUsageCounter)
-        {
+        if (IsClean)
+            _usageCounter = 0;
+    }    
+    protected virtual void DoCleaning()
+    {
+        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 3f);
+        
+        StopCoroutine(CleanEquipment());
+        StartCoroutine(CleanEquipment());
+    }
+    protected IEnumerator CleanEquipment()
+    {
+        yield return new WaitForSeconds(2f);
+
+        if (!IsClean)
             ToggleClean();
-            Debug.LogWarning($"{name} got dirty from being used too much!");
-        }
-    }
-
-#endregion
-
-#region Reposition
-
-    public void ResetPosition() 
-    {
-        transform.position = _startPosition;
-        transform.rotation = Quaternion.identity;
-    }
-    
-    IEnumerator Reposition()
-    {
-        yield return new WaitForSeconds(Random.Range(7f, 10f));
-        // transform.position = _startPosition;
     }
 
 #endregion

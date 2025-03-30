@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using System.Collections;
 using UnityEngine.UI;
-using System;
+using UnityEngine;
+using TMPro;
 
-public class ShopManager : Singleton<ShopManager> 
+public class ShopManager : StaticInstance<ShopManager> 
 {
 #region Members
 
@@ -80,6 +79,7 @@ public class ShopManager : Singleton<ShopManager>
                                                               SpawnObjectType.INGREDIENT);
 
         StartCoroutine(ButtonCooldownTimer(0));
+        StartCoroutine(FiveSecDelay());
 
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
         _salmonSlabs.Add(salmon);
@@ -101,10 +101,12 @@ public class ShopManager : Singleton<ShopManager>
                                                             SpawnObjectType.INGREDIENT);
         
         StartCoroutine(ButtonCooldownTimer(1));
+        StartCoroutine(FiveSecDelay());
        
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-
         _tunaSlabs.Add(tuna);
+
+        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
     }
     public void BuyRice()
     {
@@ -122,6 +124,10 @@ public class ShopManager : Singleton<ShopManager>
     public void RemoveFromTunaList(GameObject obj) => _tunaSlabs.Remove(obj);
     public void RemoveFromSalmonList(GameObject obj) => _salmonSlabs.Remove(obj);
 
+#endregion
+
+#region Enumerators
+
     private IEnumerator ButtonCooldownTimer(int index)
     {
         interactableButtons[index].interactable = false;
@@ -130,5 +136,12 @@ public class ShopManager : Singleton<ShopManager>
 
         interactableButtons[index].interactable = true;
     }
+
+    private IEnumerator FiveSecDelay()
+    {
+        yield return new WaitForSeconds(5f);
+    } 
+
+
 #endregion
 }

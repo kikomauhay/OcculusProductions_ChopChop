@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -9,8 +10,23 @@ using UnityEngine;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
+    int _tutorialIndex = 0;
+
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
+    void Start() 
+    {
+        GameManager.Instance.ChangeShift(GameShift.TRAINING);
+        // StartCoroutine(ChangeToMainGame());
+    }
+    IEnumerator ChangeToMainGame()
+    {
+        Debug.Log("waiting 5s to change to main game scene");
 
-    int _tutorialIndex = 0;
+        yield return new WaitForSeconds(5f);
+        StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
+        GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
+        
+        Debug.Log("2. went to main game scene");
+    } 
 }

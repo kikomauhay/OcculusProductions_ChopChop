@@ -2,9 +2,6 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using System;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEngine.TextCore.Text;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -31,7 +28,6 @@ public class GameManager : Singleton<GameManager>
     public GameShift CurrentShift { get; private set; } = GameShift.DEFAULT;
 
     public bool IsPaused { get; private set; }
-    public bool CanPause { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
     public const float MAX_MONEY = 9999f;
 
@@ -48,29 +44,27 @@ public class GameManager : Singleton<GameManager>
 
 #region Unity_Methods
 
-    protected override void Awake() 
+    protected override void Awake() // set starting money
     {
         base.Awake();
         CurrentPlayerMoney = _startingPlayerMoney;
     }
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    void Start() 
+    void Start() // sets shift to pre-service
     {
         CustomersServed = 0;
-
-        CanPause = true;
         IsPaused = false;
 
-        _customerSRScores = new List<float>(); // { 100f, 90f, 80f, 80f }; 
-        ChangeShift(GameShift.SERVICE);
-
-        Debug.Log(CurrentPlayerMoney);
+        _customerSRScores = new List<float>() { 100f, 90f, 80f, 80f }; 
+        // ChangeShift(GameShift.TRAINING);
+        // Debug.Log(CurrentPlayerMoney);
     }
 
-    IEnumerator StartShiftCountdown()
+    IEnumerator ShiftCountdown(float timer, GameShift shift)
     {
-        yield return new WaitForSeconds(300f); // 5 minutes
-        ChangeShift(GameShift.POST_SERVICE);
+        yield return new WaitForSeconds(timer);
+        SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
+        ChangeShift(shift);
     }
     
 #endregion
@@ -80,7 +74,7 @@ public class GameManager : Singleton<GameManager>
     // GAME PAUSING
     public void TogglePause()
     {
-        if (!CanPause) return;
+        if (!SceneHandler.Instance.CanPause) return;
 
         IsPaused = !IsPaused;
 
@@ -134,10 +128,10 @@ public class GameManager : Singleton<GameManager>
         CurrentShift = chosenShift;
 
         switch (chosenShift)
-        {   
+        {
             case GameShift.TRAINING:
-                DoTraining();
-                break;         
+                OnTraining?.Invoke();
+                break;
 
             case GameShift.PRE_SERVICE:
                 DoPreService();
@@ -152,35 +146,34 @@ public class GameManager : Singleton<GameManager>
                 break; 
 
             default:
-                Debug.LogError("Invalid state chosen");
+                Debug.LogError("Invalid state chosen!");
                 break;
         }
     }
 
 #endregion
 
-#region Game_Shifts
+#region Shift_Methods    
 
-    void DoTraining() // sandbox mode
+    void DoPreService() 
     {
-        // no ingredient decaying or equipment dirtying
-        OnTraining?.Invoke();
-        CanPause = true;
+        Debug.Log(CurrentShift);
+        StartCoroutine(ShiftCountdown(5f, GameShift.SERVICE));         
     }
-    void DoPreService() => 
-        StartCoroutine(ShiftCountdown(5f, GameShift.SERVICE)); 
     void DoService() // customer spawning + cooking, serving, & cleaning
     {
+        Debug.Log(CurrentShift);
         OnStartService?.Invoke(); // all ingredients start decaying
 
         // sample 2 mins for testing
-        StartCoroutine(ShiftCountdown(120f, GameShift.POST_SERVICE)); 
+        StartCoroutine(ShiftCountdown(30f, GameShift.POST_SERVICE)); 
     }
 
     void DoPostService()
     {
         // forces to expire all remaining ingredients
         // remaining customers despawn + their order UI 
+        Debug.Log(CurrentShift);
         OnEndService?.Invoke(); 
 
         // enables EOD receipt in the right side of the game
@@ -188,12 +181,7 @@ public class GameManager : Singleton<GameManager>
 
         // goes back to pre-service to test
         StartCoroutine(ShiftCountdown(20f, GameShift.PRE_SERVICE));
-    }
-    IEnumerator ShiftCountdown(float timer, GameShift shift)
-    {
-        yield return new WaitForSeconds(timer);
-        SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
-        ChangeShift(shift);
+        // StartCoroutine(ChangeToTrainingScene());
     }
 
 #endregion
@@ -227,15 +215,14 @@ public class GameManager : Singleton<GameManager>
     }
     void TurnOnEndOfDayReceipt()
     {
-        CanPause = false;
-        
         // enables the EOD receipt
+
         MainMenuHandler.Instance.ToggleEODPanel();
         _endOfDayReceipt = MainMenuHandler.Instance.gameObject?.
-                           GetComponentInChildren<RestaurantReceipt>();
+                        GetComponentInChildren<RestaurantReceipt>();
 
         // turns OFF the play button & live wallpaper
-        MainMenuHandler.Instance.TogglePlayIcon(false); 
+        MainMenuHandler.Instance.TogglePlayIcon(false);
         MainMenuHandler.Instance.ToggleLiveWallpaper();
 
         // Gives the lettered-score to the EOD receipt  
@@ -260,4 +247,17 @@ public class GameManager : Singleton<GameManager>
     }
 
 #endregion
+
+
+    IEnumerator ChangeToTrainingScene()
+    {
+        Debug.Log("waiting 10s to change to training scene");
+
+        yield return new WaitForSeconds(10f);
+        StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
+
+
+        Debug.Log("3. went back to training scene!");    
+    }
+
 }

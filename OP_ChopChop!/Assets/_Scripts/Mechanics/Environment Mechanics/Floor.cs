@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Floor : MonoBehaviour
@@ -48,15 +49,13 @@ public class Floor : MonoBehaviour
 
     void DoEquipmentLogic(Equipment eq)
     {
-        eq.ResetPosition();
+        eq.HitTheFloor();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        
+                
         // additional logic for equipment child classes
         if (eq.GetComponent<Plate>() != null)
         {
-            if (eq.GetComponent<Plate>().IsClean)
-                eq.ToggleClean();
-
+            // ternary operator syntax -> condition ? val_if_true : val_if_false
             SoundManager.Instance.PlaySound(Random.value > 0.5f ? "plate placed 01" : "plate placed 02", 
                                             SoundGroup.EQUIPMENT);
         }

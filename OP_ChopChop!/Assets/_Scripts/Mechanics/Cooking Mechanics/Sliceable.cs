@@ -37,7 +37,7 @@ public class Sliceable : MonoBehaviour
             if (_chopCounter >= 5)
             {
                 Sliced();
-                other.gameObject.GetComponent<Knife>().IncrementCounter();
+                other.gameObject.GetComponent<Knife>().IncrementUseCounter();
                 return;
             }
 

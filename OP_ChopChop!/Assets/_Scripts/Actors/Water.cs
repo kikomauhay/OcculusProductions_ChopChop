@@ -16,7 +16,10 @@ public class Water : MonoBehaviour
             Sponge sponge = other.gameObject.GetComponent<Sponge>();
             
             if (!sponge.IsWet) 
-                sponge.ToggleWetness();
+                sponge.ToggleWet();
+
+            if (!sponge.IsClean)
+                sponge.ToggleWet();
         }
 
         if (other.gameObject.GetComponent<HandWashing>() != null)

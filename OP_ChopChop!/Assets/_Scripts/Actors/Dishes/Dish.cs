@@ -37,7 +37,7 @@ public abstract class Dish : MonoBehaviour
         IsContaminated = true;
         
         if (GetComponent<Plate>().IsClean)
-            GetComponent<Plate>().ToggleClean();
+            GetComponent<Plate>().HitTheFloor();
 
         _food.GetComponent<MeshRenderer>().material = _contaminatedMat; 
         Debug.LogWarning("contaminated!");

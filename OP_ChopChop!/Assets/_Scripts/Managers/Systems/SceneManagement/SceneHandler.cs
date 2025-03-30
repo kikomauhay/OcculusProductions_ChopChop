@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class SceneHandler : Singleton<SceneHandler>
 {
-#region Members
+#region Readers
 
     public bool IsFadingIn { get; private set; }
     public bool IsFadingOut { get; private set; }
+    public bool CanPause { get; private set; }
+
+#endregion
+
+#region Members
     
     [SerializeField] Material _fadeOutMaterial;
     [SerializeField] Color _fadeOutStartColor;
 
-    [Range(0.1f, 10f)] 
-    [SerializeField] float _fadeInSpeed, _fadeOutSpeed;    
+    [Range(0.1f, 10f)] // default values => 5f 
+    [SerializeField] float _fadeInSpeed, _fadeOutSpeed;  
 
 #endregion
 
@@ -27,9 +32,14 @@ public class SceneHandler : Singleton<SceneHandler>
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     void Start() 
     {
-        SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
-        Debug.LogWarning("loaded to main game scene!");
+        CanPause = true;
+        IsFadingIn = false;
+        IsFadingOut = false;
+        
+        SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
+        Debug.Log("1. went to training scene");
     }
+        
     void Update()
     {
         test();
@@ -63,13 +73,15 @@ public class SceneHandler : Singleton<SceneHandler>
 
 #endregion
 
-    public void FadeOut()
+#region Scene_Transitions
+
+    void FadeOut()
     {
         _fadeOutMaterial.color = _fadeOutStartColor;
         IsFadingOut= true;
     }
 
-    public void FadeIn()
+    void FadeIn()
     {
         if (_fadeOutMaterial.color.a >= 1f)
         {
@@ -78,17 +90,10 @@ public class SceneHandler : Singleton<SceneHandler>
         }
     }
 
-    public void GoToMainScene()
-    {
-        SceneManager.UnloadSceneAsync("TrainingScene");
-        SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
-    }
-    public void GoToTrainingScene()
-    {
-        SceneManager.UnloadSceneAsync("MainGameScene");
-        SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
-    }
+#endregion
 
+
+    /* -OLD FADE IN CODE- 
     IEnumerator CO_FadeIn()
     {
         float startAlpha = _fadeOutMaterial.color.a;
@@ -110,7 +115,6 @@ public class SceneHandler : Singleton<SceneHandler>
     {
         yield break;
     }
-
     IEnumerator LoadMainGameScene()
     {
         FadeOut();
@@ -120,5 +124,31 @@ public class SceneHandler : Singleton<SceneHandler>
 
         SceneManager.LoadSceneAsync("GaniScene");
         Debug.LogWarning("went to gani scene");
+    } */
+
+    public IEnumerator LoadScene(string sceneName)
+    {
+        FadeOut();
+
+        while (IsFadingOut)
+            yield return null;        
+
+        if (sceneName == "MainGameScene") 
+        {
+            SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
+            yield return null;          
+            SceneManager.UnloadSceneAsync("TrainingScene");
+        }
+        else if (sceneName == "TrainingScene")
+        {
+            SceneManager.UnloadSceneAsync("MainGameScene");
+            yield return null;
+            SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
+        }
+        else
+        {
+            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            Debug.LogError("Wrong scene named!");
+        }
     }
 }

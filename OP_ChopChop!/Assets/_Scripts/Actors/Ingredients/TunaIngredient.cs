@@ -5,4 +5,6 @@ public class TunaIngredient : Ingredient
         base.Start();
         name = "Tuna Ingredient";
     }
+    protected override void OnDestroy() => base.OnDestroy();
+
 }

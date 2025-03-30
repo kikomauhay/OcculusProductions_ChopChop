@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class ColliderCheck : MonoBehaviour
@@ -50,7 +49,7 @@ public class ColliderCheck : MonoBehaviour
         Destroy(food.gameObject);
         StartCoroutine(DisableCollider());
 
-        plate.ToggleClean();
+        plate.IncrementUseCounter();
         plate.TogglePlated();
         dish.EnableBoxCollider();
     }

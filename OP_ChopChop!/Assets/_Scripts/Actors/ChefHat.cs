@@ -15,7 +15,7 @@ public class ChefHat : PersistentSingleton<ChefHat> {
 
     IEnumerator PreService()
     {
-        SceneHandler.Instance.GoToMainScene();
+        // SceneHandler.Instance.GoToMainScene();
         yield return null;
 
         GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
