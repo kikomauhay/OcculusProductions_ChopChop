@@ -1945,6 +1945,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ~SpawnManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7564253948250721292, guid: 6d8e178db82292546afbe87fe1212197,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7564253948250721293, guid: 6d8e178db82292546afbe87fe1212197,
         type: 3}
       propertyPath: m_RootOrder

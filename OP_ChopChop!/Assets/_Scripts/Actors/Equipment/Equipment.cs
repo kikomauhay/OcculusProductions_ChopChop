@@ -69,6 +69,8 @@ public abstract class Equipment : MonoBehaviour
         _usageCounter = _maxUsageCounter;
         IncrementUseCounter();
         ResetPosition();
+
+        Debug.Log($"{name} has hit the floor!");
     }
     public void IncrementUseCounter()
     {
@@ -76,8 +78,9 @@ public abstract class Equipment : MonoBehaviour
 
         if (_usageCounter >= _maxUsageCounter)
         {
+            _usageCounter = _maxUsageCounter;
             GetComponent<MeshRenderer>().material = _dirtyMat;
-            IsClean = false;
+            IsClean = false;    
         }
     }
 

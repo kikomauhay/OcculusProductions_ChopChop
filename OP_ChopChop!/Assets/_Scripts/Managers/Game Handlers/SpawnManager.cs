@@ -41,12 +41,11 @@ public class SpawnManager : StaticInstance<SpawnManager>
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
     }
-    /*
     void OnDestroy() // UNBIND FROM EVENTS
     {
         GameManager.Instance.OnStartService -= StartCustomerSpawning;
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
-    } */
+    } 
     
     IEnumerator CreateCustomer()
     {

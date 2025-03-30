@@ -35,9 +35,9 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     }
     void OnDestroy() 
     {
-        // OnCleanedArea -= IncreaseCleanRate;
-        // GameManager.Instance.OnStartService -= StartKitchenDecay;
-        // GameManager.Instance.OnEndService -= StopAllCoroutines;
+        OnCleanedArea -= IncreaseCleanRate;
+        GameManager.Instance.OnStartService -= StartKitchenDecay;
+        GameManager.Instance.OnEndService -= StopAllCoroutines;
     }
 
 #endregion
