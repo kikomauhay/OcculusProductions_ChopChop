@@ -29,7 +29,7 @@ public abstract class Equipment : MonoBehaviour
 
         GameManager.Instance.OnStartService += ResetPosition;
     }
-    protected void Reset() 
+    protected void OnDestroy() 
     {
         ResetPosition();
         GameManager.Instance.OnStartService -= ResetPosition;

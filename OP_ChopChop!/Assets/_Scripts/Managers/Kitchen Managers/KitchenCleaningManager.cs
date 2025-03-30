@@ -17,11 +17,8 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 #region Unity_Methods
 
     protected override void Awake() => base.Awake();
-    protected override void OnApplicationQuit() 
-    {
-        base.OnApplicationQuit();
-        Reset();
-    }
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+        
     void Start()
     {
         OnCleanedArea += IncreaseCleanRate;
@@ -36,11 +33,11 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
         // ToggleAllColliders();
     }
-    void Reset() 
+    void OnDestroy() 
     {
-        OnCleanedArea -= IncreaseCleanRate;   
-        GameManager.Instance.OnStartService -= StartKitchenDecay;
-        GameManager.Instance.OnEndService -= StopAllCoroutines;
+        // OnCleanedArea -= IncreaseCleanRate;
+        // GameManager.Instance.OnStartService -= StartKitchenDecay;
+        // GameManager.Instance.OnEndService -= StopAllCoroutines;
     }
 
 #endregion

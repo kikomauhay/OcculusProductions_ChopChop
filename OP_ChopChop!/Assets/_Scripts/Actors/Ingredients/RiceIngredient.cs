@@ -15,9 +15,9 @@ public class RiceIngredient : Ingredient
         base.Start();
         OnRiceMolded += ChangeRiceMold;
     }
-    protected override void Reset()
+    protected override void OnDestroy()
     {
-        base.Reset();
+        base.OnDestroy();
         OnRiceMolded -= ChangeRiceMold;
     }
 

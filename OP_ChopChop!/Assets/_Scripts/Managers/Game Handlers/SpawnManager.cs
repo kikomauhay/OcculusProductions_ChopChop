@@ -8,7 +8,7 @@ using UnityEngine;
 ///
 /// </summary>
 
-public class SpawnManager : Singleton<SpawnManager>
+public class SpawnManager : StaticInstance<SpawnManager>
 {
 #region Members
 
@@ -34,28 +34,25 @@ public class SpawnManager : Singleton<SpawnManager>
 #region Unity_Methods
 
     protected override void Awake() => base.Awake();
-    protected override void OnApplicationQuit() 
-    {
-        base.OnApplicationQuit();
-        Reset();
-    }
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+    
     void Start() // BIND TO EVENTS
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
     }
-    void Reset() // UNBIND FROM EVENTS
+    /*
+    void OnDestroy() // UNBIND FROM EVENTS
     {
         GameManager.Instance.OnStartService -= StartCustomerSpawning;
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
-    }
+    } */
     
     IEnumerator CreateCustomer()
     {
         yield return new WaitForSeconds(_initialCustomerSpawnTime);
         SpawnCustomer(GiveAvaiableSeat());
 
-        /*
         while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
             yield return new WaitForSeconds(_customerSpawnInterval);  
@@ -64,9 +61,8 @@ public class SpawnManager : Singleton<SpawnManager>
             // coroutine should stop spawning once all seats are full
             if (_seatedCustomers.Count == MAX_CUSTOMER_COUNT) yield break;   
         }
-        */
     }
-
+    
 #endregion
 
 #region Spawning

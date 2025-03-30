@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using System.Collections;
 using UnityEngine.UI;
-using System;
+using UnityEngine;
+using TMPro;
 
-public class ShopManager : Singleton<ShopManager> 
+public class ShopManager : StaticInstance<ShopManager> 
 {
 #region Members
 
@@ -21,7 +20,7 @@ public class ShopManager : Singleton<ShopManager>
     [SerializeField] TextMeshProUGUI _txtSalmonPrice, _txtTunaPrice;
 
     [SerializeField] TextMeshProUGUI _txtPlayerMoney;
-
+    
     [SerializeField] List<GameObject> _salmonSlabs, _tunaSlabs;
 
     [Header("Button")]

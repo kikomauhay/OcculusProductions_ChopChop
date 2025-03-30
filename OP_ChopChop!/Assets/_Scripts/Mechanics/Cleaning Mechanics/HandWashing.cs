@@ -18,7 +18,7 @@ public class HandWashing : MonoBehaviour
 
         StartCoroutine(DirtifyHands());
 
-        Debug.Log($"Hand Dirty is {_isDirty}");
+        // Debug.Log($"Hand Dirty is {_isDirty}");
     }
 
     private void FixedUpdate()
@@ -72,7 +72,7 @@ public class HandWashing : MonoBehaviour
         }
 
         _isDirty = false;
-        Debug.Log($"Hand Dirty is {_isDirty}");
+        // Debug.Log($"Hand Dirty is {_isDirty}");
     }
 
     IEnumerator WetToggle()
