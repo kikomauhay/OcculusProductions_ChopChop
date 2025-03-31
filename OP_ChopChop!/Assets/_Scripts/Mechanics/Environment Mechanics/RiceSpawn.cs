@@ -38,8 +38,8 @@ public class RiceSpawn : XRBaseInteractable
             _riceSpawned = true;
 
             GameObject _newRice = SpawnManager.Instance.SpawnObject(_ricePrefab,
-                                                                        _spawnPoint,
-                                                                        SpawnObjectType.INGREDIENT);
+                                                                    _spawnPoint,
+                                                                    SpawnObjectType.INGREDIENT);
 
             XRGrabInteractable _grabInteractable = _newRice.GetComponent<XRGrabInteractable>();
             interactionManager.SelectEnter(args.interactorObject, _grabInteractable);
