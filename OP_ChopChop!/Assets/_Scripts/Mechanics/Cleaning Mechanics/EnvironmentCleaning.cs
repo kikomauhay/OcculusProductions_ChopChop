@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnvironmentCleaning : MonoBehaviour
 {
-    [SerializeField]private Collider _collider;
+    private Collider _collider;
 
     bool _coroutineActivated = false;
 
