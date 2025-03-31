@@ -58,12 +58,22 @@ public class Enumerations : MonoBehaviour {}
         UNMOLDED,
         GOOD,
         PERFECT,
-        BAD
-    }
+    BAD
+}
 
 #endregion
 
 #region Others
+
+    public enum GameDifficulty
+    { 
+        EASY, 
+        NORMAL,
+        HARD, 
+        HARDER, 
+        HARDEST
+    }
+
     public enum GameShift // IN A CERTAIN ORDER (DON'T RE-ORDER)
     {
         DEFAULT,

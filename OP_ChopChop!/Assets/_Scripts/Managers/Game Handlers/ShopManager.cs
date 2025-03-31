@@ -26,8 +26,6 @@ public class ShopManager : StaticInstance<ShopManager>
     [Header("Button")]
     [SerializeField] private Button[] interactableButtons;
 
-    public const int MAX_ORDER_COUNT = 3;
-
 #endregion
 
 #region Unity_Methods
@@ -66,18 +64,11 @@ public class ShopManager : StaticInstance<ShopManager>
 
     public void BuySalmon()
     {
-        if (_salmonSlabs.Count >= MAX_ORDER_COUNT) 
-        {
-            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
-            return;
-        }
-
         GameManager.Instance.DeductMoney(_salmonPrice);
         SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _salmonTransform, 2F);
         GameObject salmon = SpawnManager.Instance.SpawnObject(_salmonPrefab,
                                                               _salmonTransform.transform,
                                                               SpawnObjectType.INGREDIENT);
-
         StartCoroutine(ButtonCooldownTimer(0));
         StartCoroutine(FiveSecDelay());
 
@@ -88,18 +79,11 @@ public class ShopManager : StaticInstance<ShopManager>
     }
     public void BuyTuna()
     {
-        if (_tunaSlabs.Count >= MAX_ORDER_COUNT)
-        {
-            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
-            return;
-        }
-
         GameManager.Instance.DeductMoney(_tunaPrice);
         SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _tunaTransform, 2F);
         GameObject tuna = SpawnManager.Instance.SpawnObject(_tunaPrefab,
                                                             _tunaTransform.transform,
                                                             SpawnObjectType.INGREDIENT);
-        
         StartCoroutine(ButtonCooldownTimer(1));
         StartCoroutine(FiveSecDelay());
        

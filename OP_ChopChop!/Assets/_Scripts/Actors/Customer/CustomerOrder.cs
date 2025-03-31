@@ -47,7 +47,18 @@ public class CustomerOrder : MonoBehaviour
 
         CustomerDishType = DishType.NIGIRI_SALMON; // (DishType)Random.Range(0, 4);
 
-        _customerScore = 100f;         // will decrease overtime
+        
+        switch (GameManager.Instance.Difficulty) // will decrease overtime
+        {
+            case GameDifficulty.EASY:    _customerScore = 110f; break;
+            case GameDifficulty.NORMAL:  _customerScore = 100f; break;
+            case GameDifficulty.HARD:    _customerScore = 95f;  break;
+            case GameDifficulty.HARDER:  _customerScore = 90f;  break;
+            case GameDifficulty.HARDEST: _customerScore = 80f;  break;
+
+            default: break;
+        }
+
         _patienceDecreaseRate = 0.5f; // 1.65f; // referenced from the document
         
         CreateCustomerUI();

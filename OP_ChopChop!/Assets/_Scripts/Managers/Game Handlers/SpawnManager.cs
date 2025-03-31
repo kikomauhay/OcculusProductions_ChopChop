@@ -23,7 +23,6 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [SerializeField] CustomerSeat[] _customerSeats;
     [SerializeField] ColliderCheck[] _colliderChecks;
     List<GameObject> _seatedCustomers = new List<GameObject>();
-    const int MAX_CUSTOMER_COUNT = 4;
 
     [Header("Customer Spawning Timers"), Tooltip("Can be changed to use for testing")]
     [SerializeField] float _initialCustomerSpawnTime; // 2s
@@ -58,7 +57,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
             SpawnCustomer(GiveAvaiableSeat());
 
             // coroutine should stop spawning once all seats are full
-            if (_seatedCustomers.Count == MAX_CUSTOMER_COUNT) yield break;   
+            if (_seatedCustomers.Count == GameManager.Instance.MaxCustomerCount) 
+                yield break;
         }
     }
     

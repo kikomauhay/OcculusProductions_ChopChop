@@ -7,6 +7,8 @@ public class Sliceable : MonoBehaviour
 #region Members
 
     [SerializeField] private GameObject _currentPrefab, _nextPrefab;
+    [SerializeField] int _fishCuts;
+
     Collider _snap;
 
     IXRSelectInteractor _interactor;
@@ -81,17 +83,22 @@ public class Sliceable : MonoBehaviour
         GetComponent<Collider>().isTrigger = false;
     }
 
-    public void SetSnap(Collider snap)
-    {
-        _snap = snap;
-    }
+    public void SetSnap(Collider snap) => _snap = snap;
 
     IEnumerator DoCutting()
     {  
         yield return null;
-        SpawnManager.Instance.SpawnObject(_nextPrefab,
-                                          transform,
-                                          SpawnObjectType.INGREDIENT);
+
+        for (int i = 0; i < _fishCuts; i++)
+        {
+            Transform t = transform;
+
+            t.position = new Vector3(transform.position.x,
+                                     transform.position.y + Random.Range(0.1f, 1f),
+                                     transform.position.z);
+
+            SpawnManager.Instance.SpawnObject(_nextPrefab, t, SpawnObjectType.INGREDIENT);
+        }
 
         _snap.gameObject.GetComponent<Snap>().CallReset();
         yield return null;

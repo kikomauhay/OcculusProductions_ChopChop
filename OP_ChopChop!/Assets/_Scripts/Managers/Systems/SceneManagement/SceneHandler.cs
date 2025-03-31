@@ -9,6 +9,7 @@ public class SceneHandler : Singleton<SceneHandler>
     public bool IsFadingIn { get; private set; }
     public bool IsFadingOut { get; private set; }
     public bool CanPause { get; private set; }
+    
 
 #endregion
 
@@ -40,8 +41,10 @@ public class SceneHandler : Singleton<SceneHandler>
 
     public IEnumerator LoadScene(string sceneName)
     {
+        IsFadingOut = true;
         _fadeScreen.FadeOut();
         yield return new WaitForSeconds(_fadeScreen.FadeDuration);
+        IsFadingOut = false;
 
         if (sceneName == "MainGameScene") 
         {
@@ -61,7 +64,9 @@ public class SceneHandler : Singleton<SceneHandler>
             Debug.LogError("Wrong scene named!");
         } 
 
+        IsFadingIn = true;
         _fadeScreen.FadeIn();
         yield return new WaitForSeconds(_fadeScreen.FadeDuration);
+        IsFadingIn = false;
     }
 }

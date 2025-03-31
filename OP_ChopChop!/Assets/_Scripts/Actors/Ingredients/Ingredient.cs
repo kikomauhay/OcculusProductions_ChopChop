@@ -93,7 +93,11 @@ public abstract class Ingredient : MonoBehaviour
         ChangeMaterial();
     }
     public void Stored() => IngredientState = IngredientState.STORED;
-    public void Unstored() => IngredientState = IngredientState.DEFAULT;
+    public void Unstored()
+    {
+        StartCoroutine(Delay(2f));
+        IngredientState = IngredientState.DEFAULT;
+    }
     protected void ChangeMaterial() 
     {
         // the material of the ingredient changes based on the freshness rate
@@ -162,6 +166,11 @@ public abstract class Ingredient : MonoBehaviour
                 ChangeMaterial();
             }
         }
+    }
+
+    protected IEnumerator Delay(float time)
+    {
+        yield return new WaitForSeconds(time);
     }
 
 #endregion

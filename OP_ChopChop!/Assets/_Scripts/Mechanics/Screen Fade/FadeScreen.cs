@@ -1,22 +1,21 @@
 using System.Collections;
 using UnityEngine;
 
-public class FadeScreen : MonoBehaviour 
+public class FadeScreen : MonoBehaviour
 {
-
-#region Members
+    #region Members
 
     public float FadeDuration => _fadeDuration;
 
     [SerializeField] bool _fadeOnStart;
     [SerializeField] float _fadeDuration;
     [SerializeField] Color _fadeColor;
-    
-    Renderer _renderer; 
 
-#endregion 
+    Renderer _renderer;
 
-    void Start() 
+    #endregion
+
+    void Start()
     {
         _renderer = GetComponent<Renderer>();
 
@@ -24,7 +23,7 @@ public class FadeScreen : MonoBehaviour
             FadeIn();
     }
 
-#region Fading
+    #region Fading
 
     public void FadeIn() => Fade(1f, 0f);
     public void FadeOut() => Fade(0f, 1f);

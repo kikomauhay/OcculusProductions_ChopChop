@@ -26,6 +26,11 @@ public class GameManager : Singleton<GameManager>
     public Action OnStartService, OnEndService, OnTraining;
 
     public GameShift CurrentShift { get; private set; } = GameShift.DEFAULT;
+    
+    // DIFFICULTY
+    public GameDifficulty Difficulty { get; private set; }
+    public int MaxCustomerCount { get; set; }
+
 
     public bool IsPaused { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
@@ -35,31 +40,29 @@ public class GameManager : Singleton<GameManager>
 
     // SCORING VALUES
     List<float> _customerSRScores;
-    public int CustomersServed; // will be used for difficulty increase 
+    public int CustomersServed; // will be used for difficulty increase
+    float _finalScore;
 
-    [SerializeField] float _startingPlayerMoney, _testTimer;
+    [SerializeField] float _testTimer;
+    [SerializeField] float _startingPlayerMoney;
     [SerializeField] RestaurantReceipt _endOfDayReceipt;
 
 #endregion
 
 #region Unity_Methods
 
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();
     protected override void Awake() // set starting money
     {
         base.Awake();
+
         CurrentPlayerMoney = _startingPlayerMoney;
-    }
-    protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    void Start() // sets shift to pre-service
-    {
         CustomersServed = 0;
         IsPaused = false;
+        Difficulty = GameDifficulty.EASY;
 
         // these should be empty when testing is done
-        _customerSRScores = new List<float>() { 100f, 90f, 80f, 80f }; 
-        
-        // ChangeShift(GameShift.TRAINING);
-        // Debug.Log(CurrentPlayerMoney);
+        _customerSRScores = new List<float>() { 100f, 90f, 80f, 80f };
     }
 
     IEnumerator ShiftCountdown(float timer, GameShift shift)
@@ -120,8 +123,11 @@ public class GameManager : Singleton<GameManager>
 
         CurrentPlayerMoney = Mathf.Clamp(CurrentPlayerMoney, 0f, MAX_MONEY);
     }
-    
-    // GAME SHIFTING
+
+#endregion
+
+#region GameShifts
+
     public void ChangeShift(GameShift chosenShift)
     {
         // can't go to the same shift again
@@ -131,31 +137,17 @@ public class GameManager : Singleton<GameManager>
 
         switch (chosenShift)
         {
-            case GameShift.TRAINING:
-                OnTraining?.Invoke();
-                break;
-
-            case GameShift.PRE_SERVICE:
-                DoPreService();
-                break;
-
-            case GameShift.SERVICE:
-                DoService();
-                break; 
-
-            case GameShift.POST_SERVICE:
-                DoPostService();
-                break; 
+            case GameShift.TRAINING:     OnTraining?.Invoke(); break;
+            case GameShift.PRE_SERVICE:  DoPreService();       break;
+            case GameShift.SERVICE:      DoService();          break;
+            case GameShift.POST_SERVICE: DoPostService();      break;
 
             default:
                 Debug.LogError("Invalid state chosen!");
                 break;
         }
+        SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
     }
-
-#endregion
-
-#region GameShifts
 
     void DoPreService() => // change to 3 mins when done testing
         StartCoroutine(ShiftCountdown(30f, GameShift.SERVICE));         
@@ -163,6 +155,7 @@ public class GameManager : Singleton<GameManager>
     void DoService() // customer spawning + cooking, serving, & cleaning
     {
         OnStartService?.Invoke(); // all ingredients start decaying
+        _finalScore = 0;
 
         // change to 5 mins when done testing
         StartCoroutine(ShiftCountdown(120f, GameShift.POST_SERVICE)); 
@@ -177,32 +170,7 @@ public class GameManager : Singleton<GameManager>
 #endregion
 
 #region EOD_Rating
-    void DoCustomerRating()
-    {
-        float customerScore = GetAverageOf(_customerSRScores);
 
-        int indexCustomerRating = _endOfDayReceipt.ReturnScoretoIndexRating(customerScore);
-
-        _endOfDayReceipt.GiveCustomerRating(indexCustomerRating);
-    }
-    void DoKitchenRating()
-    {   
-        int indexKitchenRating = 
-            _endOfDayReceipt.ReturnScoretoIndexRating(KitchenCleaningManager.Instance.KitchenScore);
-        
-        _endOfDayReceipt.GiveKitchenRating(indexKitchenRating);
-    }
-    void DoPostServiceRating()
-    {
-        // END-OF-DAY RESTAURANT RATING 
-        float finalScore = (KitchenCleaningManager.Instance.KitchenScore + 
-                            GetAverageOf(_customerSRScores)) / 2f;      
-
-    
-        int indexPostServiceRating = _endOfDayReceipt.ReturnScoretoIndexRating(finalScore);
-
-        _endOfDayReceipt.GiveRestaurantRating(indexPostServiceRating);
-    }
     void TurnOnEndOfDayReceipt()
     {
         // enables the EOD receipt
@@ -210,18 +178,44 @@ public class GameManager : Singleton<GameManager>
         _endOfDayReceipt = MainMenuHandler.Instance.gameObject?.
                         GetComponentInChildren<RestaurantReceipt>();
 
-        // turns OFF the play button & live wallpaper
+        // disableas both the play button & live wallpaper
         MainMenuHandler.Instance.TogglePlayIcon(false);
         MainMenuHandler.Instance.ToggleLiveWallpaper();
 
-        // Gives the lettered-score to the EOD receipt  
+        // prints the important stuff in the EOD receipt  
         DoCustomerRating();
         DoKitchenRating();
         DoPostServiceRating();
 
+        // add the customers served in the EOD receipt
         CustomersServed = _endOfDayReceipt.totalcustomerServed;
         _endOfDayReceipt.GiveTotalCustomerServed();
+
+        // IMPLEMENT CODE TO CHANGE DIFFICULTY BASED ON _finalScore
     }
+    void DoCustomerRating()
+    {
+        float customerScore = GetAverageOf(_customerSRScores);
+        int indexCustomerRating = _endOfDayReceipt.ReturnScoretoIndexRating(customerScore);
+        _endOfDayReceipt.GiveCustomerRating(indexCustomerRating);
+    }
+    void DoKitchenRating() 
+    {   
+        int indexKitchenRating = 
+            _endOfDayReceipt.ReturnScoretoIndexRating(KitchenCleaningManager.Instance.KitchenScore);
+        _endOfDayReceipt.GiveKitchenRating(indexKitchenRating);
+    }
+    void DoPostServiceRating() // FINAL SCORE 
+    {
+        _finalScore = (KitchenCleaningManager.Instance.KitchenScore + 
+                       GetAverageOf(_customerSRScores)) / 2f;   
+        
+        int indexPostServiceRating = _endOfDayReceipt.ReturnScoretoIndexRating(_finalScore);
+        _endOfDayReceipt.GiveRestaurantRating(indexPostServiceRating);
+    }
+
+#endregion
+
     float GetAverageOf(List<float> list) 
     {
         // prevents a div/0 case
@@ -234,7 +228,4 @@ public class GameManager : Singleton<GameManager>
 
         return n / list.Count;
     }
-
-#endregion
-
 }
