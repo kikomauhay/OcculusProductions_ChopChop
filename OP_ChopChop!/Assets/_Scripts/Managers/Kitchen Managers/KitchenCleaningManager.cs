@@ -7,6 +7,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     // Standardized script for activating colliders on the hand, will draft it up and will ask help from isagani to clean up the code later
     public Action OnCleanedArea, OnStartDecayAgain;
     public float KitchenScore { get; private set; } // overall cleanliness meter of the kitchen
+    public int HandUsageCounter { get; private set; }
 
     [SerializeField] Collider[] _handWashColliders; 
     [SerializeField] GameObject[] _kitchenWashColliders;
@@ -26,6 +27,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         GameManager.Instance.OnEndService += StopAllCoroutines;
 
         KitchenScore = 100f;
+        HandUsageCounter = 30;
         _decayTimer = 5f;
         _decayRate = 5f;
         _cleanlinessThreshold = 80f; // kitchen needs to go below this score to start cleaning 
@@ -50,13 +52,22 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         foreach (GameObject gameObject in _kitchenWashColliders)
             gameObject.SetActive(!gameObject.activeSelf);
     }
-    void ToggleHandWashColliders()
-    {
-        foreach (Collider col in _handWashColliders)
-            col.enabled = !col.enabled;
-    }
 
 #endregion
+
+    public void ToggleHandWashColliders()
+    {
+        if(HandUsageCounter < 15)
+        {
+            foreach (Collider col in _handWashColliders)
+                col.enabled = !col.enabled;
+        }
+    }
+
+    public void DecrementUsageCount()
+    {
+        HandUsageCounter--;
+    }
 
     void IncreaseCleanRate() 
     {

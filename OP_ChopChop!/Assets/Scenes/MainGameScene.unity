@@ -2737,7 +2737,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -7256492796344892694, guid: 2de59c04b5c19ba42994e68a58fa8ac8, type: 3}
 --- !u!64 &870641224
@@ -2751,7 +2751,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6489095368106794211, guid: 38b562dc037762641a523f1da74ac14e, type: 3}
 --- !u!64 &870641225
@@ -2765,7 +2765,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6239853816707326207, guid: 38b562dc037762641a523f1da74ac14e, type: 3}
 --- !u!1 &900810347
@@ -5103,6 +5103,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1923682893}
     m_Modifications:
+    - target: {fileID: 1736227023, guid: 5ab3e672be634b5419c451c218720ae4, type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736227023, guid: 5ab3e672be634b5419c451c218720ae4, type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736227023, guid: 5ab3e672be634b5419c451c218720ae4, type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 365306835}
+    - target: {fileID: 1736227023, guid: 5ab3e672be634b5419c451c218720ae4, type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736227023, guid: 5ab3e672be634b5419c451c218720ae4, type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DecrementUsageCount
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736227023, guid: 5ab3e672be634b5419c451c218720ae4, type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: KitchenCleaningManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1736227023, guid: 5ab3e672be634b5419c451c218720ae4, type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1736227026, guid: 5ab3e672be634b5419c451c218720ae4, type: 3}
       propertyPath: m_IsTrigger
       value: 0

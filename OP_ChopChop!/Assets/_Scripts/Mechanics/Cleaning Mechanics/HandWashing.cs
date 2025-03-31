@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class HandWashing : MonoBehaviour
 {
-    public int CleanRate { get; private set; }
     public bool IsWet { get; private set; }
 
     [SerializeField] bool _isDirty;
@@ -11,20 +10,17 @@ public class HandWashing : MonoBehaviour
     [SerializeField] float _timer;
 
     void Start()
-    {
-        CleanRate = 100;    
+    { 
         _isDirty = true;
         IsWet = false;
-
-        StartCoroutine(DirtifyHands());
 
         // Debug.Log($"Hand Dirty is {_isDirty}");
     }
 
     private void FixedUpdate()
     {
-
-        if (CleanRate <= 0)
+        KitchenCleaningManager.Instance.ToggleHandWashColliders();
+        if (KitchenCleaningManager.Instance.HandUsageCounter <= 0)
             _isDirty = true;
             
         else _isDirty = false;
@@ -59,21 +55,7 @@ public class HandWashing : MonoBehaviour
         IsWet = true;
     }
 
-    IEnumerator DirtifyHands()
-    {
-        if (_isDirty) yield break;
-         
-        
-        while (CleanRate > 70)
-        {
-            yield return new WaitForSeconds(_timer);
-            CleanRate -= Random.Range(3, 5);
-            
-        }
 
-        _isDirty = false;
-        // Debug.Log($"Hand Dirty is {_isDirty}");
-    }
 
     IEnumerator WetToggle()
     {

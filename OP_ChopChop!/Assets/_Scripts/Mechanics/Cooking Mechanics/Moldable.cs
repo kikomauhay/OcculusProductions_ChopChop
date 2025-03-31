@@ -2,16 +2,17 @@ using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Moldable : XRBaseInteractable
+public class Moldable : MonoBehaviour
 {
     [SerializeField] GameObject[] _moldedStages;
     [SerializeField] RiceIngredient _rice;
     [SerializeField] int _moldLimitPerStage;
    
     private int _moldCounter, _moldStageIndex;
-    private HashSet<IXRSelectInteractor> _interactors = new HashSet<IXRSelectInteractor> ();
+    private HashSet<IXRSelectInteractor> _interactors = new HashSet<IXRSelectInteractor>();
+    
 
-    protected override void OnEnable()
+/*    protected override void OnEnable()
     {
         base.OnEnable();
         selectEntered.AddListener(InsertInteractor);
@@ -23,28 +24,23 @@ public class Moldable : XRBaseInteractable
         base.OnDisable();
         selectEntered.RemoveListener(InsertInteractor);
         selectExited.RemoveListener(MoldEvent);
-    }
+    }*/
 
     void Start()
     {
-        if (interactionManager == null)
-        {
-            interactionManager = FindObjectOfType<XRInteractionManager> ();
-        }
         _moldCounter = 0;
         _moldStageIndex = 0;
     }
 #region Functions
 
-    void InsertInteractor(SelectEnterEventArgs args)
+    public void InsertInteractor(SelectEnterEventArgs args)
     {
-        base.OnSelectEntered(args);
+        Debug.LogWarning("Meow interactor works");
         _interactors.Add(args.interactorObject);
     }
 
-    void MoldEvent(SelectExitEventArgs args)
+    public void MoldEvent()
     {
-        base.OnSelectExited(args);
         if(_interactors.Count >= 1)
         {
             _moldCounter++; 
@@ -77,11 +73,11 @@ public class Moldable : XRBaseInteractable
                                         "rice mold 02",
                                         SoundGroup.FOOD);
         
-        if(_grabInteractable && interactionManager != null)
+        if(_grabInteractable)
         {
             foreach(var interactor in _interactors)
             {
-                interactionManager.SelectEnter(interactor, _grabInteractable);
+                //interactionManager.SelectEnter(interactor, _grabInteractable);
             }
         }
     }
