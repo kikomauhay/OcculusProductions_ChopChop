@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 public class RestaurantReceipt : MonoBehaviour
 {
@@ -15,7 +13,7 @@ public class RestaurantReceipt : MonoBehaviour
     //index is set according to order of rating which is S to F.
     //0 = S....4 = F.
 
-    
+#region Ratings
 
     public void GiveTotalCustomerServed() => //Gives the text for the total customer Served;
         totalCustomerServedTxt.text = totalcustomerServed.ToString();
@@ -28,8 +26,8 @@ public class RestaurantReceipt : MonoBehaviour
 
     public void GiveRestaurantRating(int index) => 
         restaurantRatings[index].gameObject.SetActive(true);
-    
 
+#endregion
 
     public int ReturnScoretoIndexRating(float scoreToCheck) // return the int index for the rating for score to check
     {
@@ -50,5 +48,4 @@ public class RestaurantReceipt : MonoBehaviour
         
         else return -1;
     }
-    
 }
