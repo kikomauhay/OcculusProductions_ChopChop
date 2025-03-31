@@ -42,19 +42,19 @@ public abstract class Equipment : MonoBehaviour
 
         if (!sponge.IsWet) return;
 
+        if (!IsClean && sponge.IsClean)
+        {
+            DoCleaning();
+            sponge.IncrementUseCounter();
+            return;
+        }
+
         // sponge contaminates the equipment
         if (IsClean && !sponge.IsClean)
         {
             GetComponent<MeshRenderer>().material = _dirtyMat;
             _usageCounter = _maxUsageCounter;
             IsClean = false;
-            return;
-        }
-
-        if (!IsClean && sponge.IsClean)
-        {
-            DoCleaning();
-            sponge.IncrementUseCounter();
         }
     }
     protected void OnTriggerExit(Collider other)
