@@ -33,9 +33,9 @@ public class OrderBox : XRBaseInteractable
         {
             Destroy(transform.parent.gameObject);
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1F);
-            SpawnManager.Instance.SpawnObject(_fish,
-                                              transform,
-                                              SpawnObjectType.INGREDIENT);
+            GameObject newFish = SpawnManager.Instance.SpawnObject(_fish,
+                                                                   transform,
+                                                                   SpawnObjectType.INGREDIENT);
         }
     }
 }
