@@ -34,11 +34,11 @@ public abstract class Equipment : MonoBehaviour
         ResetPosition();
         GameManager.Instance.OnStartService -= ResetPosition;
     }
-    protected virtual void OnTriggerEnter(Collider other) 
+    protected virtual void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<Sponge>() == null) return;
-        
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+        if (sponge == null) return;
 
         if (!sponge.IsWet) return;
 
@@ -52,40 +52,95 @@ public abstract class Equipment : MonoBehaviour
         }
 
         if (!IsClean && sponge.IsClean)
+        {
             DoCleaning();
+            sponge.IncrementUseCounter();
+        }
     }
     protected void OnTriggerExit(Collider other)
     {
         if (other.gameObject.GetComponent<Sponge>() != null)
             StopCoroutine(CleanEquipment());
     }
-    
+    protected virtual void OnCollisionEnter(Collision other)
+    {
+        // equipment + another equipment
+        if (other.gameObject.GetComponent<Equipment>() != null)
+        {
+            Equipment eq = other.gameObject.GetComponent<Equipment>();
+            
+            if (!IsClean && eq.IsClean) 
+                eq.Contaminate();
+            
+            if (IsClean && !eq.IsClean) 
+                Contaminate();
+        }
+
+        // equipment + ingredient
+        if (other.gameObject.GetComponent<Ingredient>() != null)
+        {
+            Ingredient ing = other.gameObject.GetComponent<Ingredient>();
+
+            if (!IsClean && ing.IsFresh) 
+                ing.Contaminate();
+            
+            else if (IsClean && !ing.IsFresh) 
+                Contaminate();
+        }
+
+        // equipment + food
+        if (other.gameObject.GetComponent<Food>() != null)
+        {
+            Food food = other.gameObject.GetComponent<Food>();
+
+            // contamination logic
+            if (!IsClean && (food.IsContaminated || food.IsExpired)) 
+                food.Contaminate();
+            
+            else if (IsClean && (!food.IsExpired || !food.IsContaminated)) 
+                Contaminate();
+        }
+
+        // equipment + dish
+        if (other.gameObject.GetComponent<Dish>() != null)
+        {
+            Dish dish = other.gameObject.GetComponent<Dish>();
+
+            // contamination logic
+            if (!IsClean && (dish.IsContaminated || dish.IsExpired))
+                dish.HitTheFloor();
+
+            else if (IsClean && (!dish.IsExpired || !dish.IsContaminated))
+                Contaminate();
+        }
+    }
+
 #endregion
 
 #region Public
 
-    public void HitTheFloor()
+    public virtual void HitTheFloor()
     {
         _usageCounter = _maxUsageCounter;
         IncrementUseCounter();
         ResetPosition();
-
-        Debug.Log($"{name} has hit the floor!");
     }
     public void IncrementUseCounter()
     {
         _usageCounter++;
 
         if (_usageCounter >= _maxUsageCounter)
-        {
-            _usageCounter = _maxUsageCounter;
-            GetComponent<MeshRenderer>().material = _dirtyMat;
-            IsClean = false;    
-        }
+            Contaminate();
+    }
+    public void Contaminate()
+    {
+        _usageCounter = _maxUsageCounter;
+        IsClean = false;
+        GetComponent<MeshRenderer>().material = _dirtyMat;
     }
 
 #endregion
-    
+
     protected void ResetPosition() 
     {
         transform.position = _startPosition;
@@ -94,17 +149,7 @@ public abstract class Equipment : MonoBehaviour
     
 #region Cleaning
 
-    void ToggleClean() 
-    {
-        IsClean = !IsClean;
 
-        // ternary operator syntax -> condition ? val_if_true : val_if_false
-        GetComponent<MeshRenderer>().material = IsClean ? 
-                                                _cleanMat : _dirtyMat;
-
-        if (IsClean)
-            _usageCounter = 0;
-    }    
     protected virtual void DoCleaning()
     {
         SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 3f);
@@ -115,10 +160,14 @@ public abstract class Equipment : MonoBehaviour
     protected IEnumerator CleanEquipment()
     {
         yield return new WaitForSeconds(2f);
-
-        if (!IsClean)
-            ToggleClean();
+        GetCleaned();
+    }
+    void GetCleaned()
+    {
+        _usageCounter = 0;
+        IsClean = true;
+        GetComponent<MeshRenderer>().material = _cleanMat;
     }
 
-#endregion
+    #endregion
 }

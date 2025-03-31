@@ -191,7 +191,8 @@ public class GameManager : Singleton<GameManager>
         CustomersServed = _endOfDayReceipt.totalcustomerServed;
         _endOfDayReceipt.GiveTotalCustomerServed();
 
-        // IMPLEMENT CODE TO CHANGE DIFFICULTY BASED ON _finalScore
+        // CHANGE DIFFICULTY BASED ON _finalScore
+
     }
     void DoCustomerRating()
     {
@@ -211,10 +212,30 @@ public class GameManager : Singleton<GameManager>
                        GetAverageOf(_customerSRScores)) / 2f;   
         
         int indexPostServiceRating = _endOfDayReceipt.ReturnScoretoIndexRating(_finalScore);
+
+        ChangeDifficuty(indexPostServiceRating);
         _endOfDayReceipt.GiveRestaurantRating(indexPostServiceRating);
     }
 
 #endregion
+
+    void ChangeDifficuty(int score)
+    {
+        if (score < 3) // B or higher
+        {
+            int i = (int)Difficulty;
+            i++;
+            Difficulty = (GameDifficulty)i;
+        }
+        else if (score == 3) // C
+        {
+            // maintain difficulty
+        }
+        else // F
+        {
+            // game over logic
+        }
+    }
 
     float GetAverageOf(List<float> list) 
     {

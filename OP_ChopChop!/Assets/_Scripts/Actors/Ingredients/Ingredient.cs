@@ -64,10 +64,50 @@ public abstract class Ingredient : MonoBehaviour
         GameManager.Instance.OnStartService -= StartDecaying;
         GameManager.Instance.OnEndService -= Expire;
     }
+    protected virtual void OnCollisionEnter(Collision other)
+    {
+        // ingredient + another ingredient
+        if (other.gameObject.GetComponent<Ingredient>() != null)
+        {
+            Ingredient ing = other.gameObject.GetComponent<Ingredient>();
+
+            if (!IsFresh && ing.IsFresh)
+                ing.Contaminate();
+
+            else if (IsFresh && !ing.IsFresh)
+                Contaminate();
+        }
+
+        // ingredient + food
+        if (other.gameObject.GetComponent<Food>() != null)
+        {
+            Food food = other.gameObject.GetComponent<Food>();
+
+            // contamination logic
+            if (!IsFresh && (food.IsContaminated || food.IsExpired))
+                food.Contaminate();
+
+            else if (IsFresh && (!food.IsExpired || !food.IsContaminated))
+                Contaminate();
+        }
+
+        // ingredient + dish
+        if (other.gameObject.GetComponent<Dish>() != null)
+        {
+            Dish dish = other.gameObject.GetComponent<Dish>();
+
+            // contamination logic
+            if (!IsFresh && (dish.IsContaminated || dish.IsExpired))
+                dish.HitTheFloor();
+
+            else if (IsFresh && (!dish.IsExpired || !dish.IsContaminated))
+                Contaminate();
+        }
+    }
 
 #endregion
 
-#region Ingredint_Methods
+    #region Ingredint_Methods
 
     public void Trashed()
     {
