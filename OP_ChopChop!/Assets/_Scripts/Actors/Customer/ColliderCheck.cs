@@ -17,43 +17,42 @@ public class ColliderCheck : MonoBehaviour
             Destroy(other.gameObject); // destroys the ingredient on collision
             StartCoroutine(DisableCollider());
 
+            Debug.LogError("Game Over!");
             return;
         }
 
         Plate plate = other.gameObject.GetComponent<Plate>();
-        Dish dish = other.gameObject.GetComponent<Dish>();
-        Food food = other.gameObject.GetComponentInChildren<Food>();
-
+        Dish dish = other.gameObject.GetComponentInChildren<Dish>();
+        
         // customer reaction based on the given order
-        if (dish.IsContaminated)
-        {
-            // ORDER IS EXPIRED OR CONTAMINATED
-            CustomerOrder.CustomerSR = 0f;
-            
-            // DO GAME OVER LOGIC
-        }
-        else if (CustomerOrder.OrderIsSameAs(dish))
-        {
-            // CORRECT ORDER
-            CustomerOrder.CustomerSR = (dish.DishScore + CustomerOrder.PatienceRate) / 2f;
-            StartCoroutine(CustomerOrder.HappyReaction());
-        }
-        else
-        {
-            // WRONG ORDER
-            CustomerOrder.CustomerSR = 0f;
-            StartCoroutine(CustomerOrder.AngryReaction());
-        }
+        CheckDish(dish);
 
         // finishing actions for the plate
-        Destroy(food.gameObject);
+        Destroy(dish.gameObject);
         StartCoroutine(DisableCollider());
 
         plate.IncrementUseCounter();
         plate.TogglePlated();
         dish.EnableBoxCollider();
     }
-
+    void CheckDish(Dish d)
+    {
+        if (d.IsContaminated || d.IsExpired) // ORDER IS EXPIRED OR CONTAMINATED
+        {
+            CustomerOrder.CustomerSR = 0f;
+            Debug.LogError("Game Over!");
+        }
+        else if (CustomerOrder.OrderIsSameAs(d)) // CORRECT ORDER
+        {    
+            CustomerOrder.CustomerSR = (d.DishScore + CustomerOrder.PatienceRate) / 2f;
+            StartCoroutine(CustomerOrder.HappyReaction());
+        }
+        else // WRONG ORDER
+        {
+            CustomerOrder.CustomerSR = 0f;
+            StartCoroutine(CustomerOrder.AngryReaction());
+        }
+    }
     IEnumerator DisableCollider()
     {
         GetComponent<Collider>().enabled = false;

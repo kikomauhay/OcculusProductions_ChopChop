@@ -1,6 +1,6 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 /// 

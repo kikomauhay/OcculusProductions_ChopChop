@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Net.NetworkInformation;
 using UnityEngine;
 
 /// <summary>
@@ -18,17 +17,16 @@ public abstract class Dish : MonoBehaviour
     public bool IsContaminated { get; private set; } = false;
     public bool IsExpired { get; private set; } = false;
     public DishType OrderDishType { get; set; }
-
-    // can make this longer if needed
-    [SerializeField] float _decayTimer; // 10s default
-    [SerializeField] Material _expiredMat, _contaminatedMat;
-    [SerializeField] GameObject _food;
-
+    
 #endregion
+
+    [SerializeField] float _decayTimer; // 10s default (can be longer)
+    [SerializeField] Material _expiredMat, _contaminatedMat;
+
+#region Unity_Methods
 
     protected void Awake() => GetComponent<Plate>().BoxTrigger.enabled = false;
     protected void Start() => StartCoroutine(Decay());
-
     protected virtual void OnCollisionEnter(Collision other)
     {
         // dish + ingredient
@@ -81,7 +79,8 @@ public abstract class Dish : MonoBehaviour
         }
     }
 
-    // contaminate logic
+#endregion
+
     public void HitTheFloor()
     {
         if (IsExpired) return;
@@ -91,22 +90,18 @@ public abstract class Dish : MonoBehaviour
         if (GetComponent<Plate>().IsClean)
             GetComponent<Plate>().HitTheFloor();
 
-        _food.GetComponent<MeshRenderer>().material = _contaminatedMat; 
-        Debug.LogWarning("contaminated!");
+        GetComponentInChildren<MeshRenderer>().material = _contaminatedMat;
     }
-    protected IEnumerator Decay()
+    protected IEnumerator Decay() // Expiration logic
     {
         yield return new WaitForSeconds(_decayTimer);
-        
-        if (IsContaminated) yield break;
 
-        // expire logic
-        IsExpired = true;
-        _food.GetComponent<MeshRenderer>().material = _expiredMat;   
-
-        Debug.LogWarning("expired!");
+        if (!IsContaminated && !IsExpired)
+        {
+            IsExpired = true;
+            GetComponentInChildren<MeshRenderer>().material = _expiredMat;
+        }
     } 
-
     public IEnumerator EnableBoxCollider()
     {
         yield return new WaitForSeconds(1f);
