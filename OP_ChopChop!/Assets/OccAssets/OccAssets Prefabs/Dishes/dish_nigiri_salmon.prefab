@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 3930835306366909245}
   - component: {fileID: 7358564053924718375}
   - component: {fileID: 501169790940678748}
-  - component: {fileID: 4525514100020589422}
+  - component: {fileID: 251042103207957663}
+  - component: {fileID: 7484716085618778359}
   m_Layer: 0
   m_Name: food_nigiri_salmon
   m_TagString: Untagged
@@ -269,7 +270,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &4525514100020589422
+--- !u!114 &251042103207957663
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,7 +282,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trashType: 2
+  _trashType: 3
+--- !u!114 &7484716085618778359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022030412545437646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73bc3b0813aa4dc49bba7a5a37f9bf1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _decayTimer: 10
+  _expiredMat: {fileID: 2100000, guid: f54a32c163c4a894383b178de370a775, type: 2}
+  _contaminatedMat: {fileID: 2100000, guid: a4c6b3c27c6498f47bf4295749f2aa0e, type: 2}
 --- !u!1 &7531625885797523667
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +315,6 @@ GameObject:
   - component: {fileID: 3457868543464867073}
   - component: {fileID: 3349734629091904578}
   - component: {fileID: 6292864696264548769}
-  - component: {fileID: 5961307397439932865}
   m_Layer: 0
   m_Name: dish_nigiri_salmon
   m_TagString: Untagged
@@ -596,19 +611,3 @@ MonoBehaviour:
   _cleanMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
   _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
   _boxTrigger: {fileID: 1901435816059076958}
---- !u!114 &5961307397439932865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7531625885797523667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73bc3b0813aa4dc49bba7a5a37f9bf1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _decayTimer: 5
-  _expiredMat: {fileID: 2100000, guid: f54a32c163c4a894383b178de370a775, type: 2}
-  _contaminatedMat: {fileID: 2100000, guid: a4c6b3c27c6498f47bf4295749f2aa0e, type: 2}
-  _food: {fileID: 4022030412545437646}

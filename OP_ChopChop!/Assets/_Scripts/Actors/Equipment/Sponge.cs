@@ -18,29 +18,20 @@ public class Sponge : Equipment
         _maxUsageCounter = 10;
     }
     protected override void OnTriggerEnter(Collider other) {}
+    
     IEnumerator Dry()
     {
-        yield return new WaitForSeconds(6f);
-        IsWet = false;
         GetComponent<Renderer>().material = _cleanMat;
+        yield return new WaitForSeconds(4f);
+        IsWet = false;
     }
 
 #endregion
 
-    public void ToggleWet() 
+    public void SetWet() 
     {
-        IsWet = !IsWet;
-
-        if (!IsClean)
-        {
-            GetComponent<Renderer>().material = _dirtyMat;
-            return;
-        }
-
+        IsWet = true;
         StartCoroutine(Dry());
-
-        // ternary operator syntax -> condition ? val_if_true : val_if_false
-        GetComponent<Renderer>().material = IsWet ? 
-                                            _wetMat : _cleanMat;
+        DoCleaning();
     }
 }

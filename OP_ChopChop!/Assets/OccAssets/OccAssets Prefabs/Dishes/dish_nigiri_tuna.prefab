@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7837440649025443788}
   - component: {fileID: 4660512935316950984}
   - component: {fileID: 6547584655602542121}
+  - component: {fileID: 3689422269205357941}
   m_Layer: 0
   m_Name: food_nigiri_tuna
   m_TagString: Untagged
@@ -282,6 +283,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _trashType: 2
+--- !u!114 &3689422269205357941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4315941332954354561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73bc3b0813aa4dc49bba7a5a37f9bf1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _decayTimer: 10
+  _expiredMat: {fileID: 2100000, guid: cfa83527698872843b85bac2837cc3a3, type: 2}
+  _contaminatedMat: {fileID: 2100000, guid: 02fcd8e70a533aa41a75535e2cb2e058, type: 2}
 --- !u!1 &7068943804873736624
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +315,6 @@ GameObject:
   - component: {fileID: 2693304552162272354}
   - component: {fileID: 7811420576834989616}
   - component: {fileID: 2480346041438133046}
-  - component: {fileID: 4402043919637902363}
   m_Layer: 0
   m_Name: dish_nigiri_tuna
   m_TagString: Untagged
@@ -315,7 +330,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7068943804873736624}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.261}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -596,19 +611,3 @@ MonoBehaviour:
   _cleanMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
   _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
   _boxTrigger: {fileID: 1224727216559202365}
---- !u!114 &4402043919637902363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7068943804873736624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73bc3b0813aa4dc49bba7a5a37f9bf1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _decayTimer: 5
-  _expiredMat: {fileID: 2100000, guid: cfa83527698872843b85bac2837cc3a3, type: 2}
-  _contaminatedMat: {fileID: 2100000, guid: 02fcd8e70a533aa41a75535e2cb2e058, type: 2}
-  _food: {fileID: 4315941332954354561}

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RiceSpawn : XRBaseInteractable
 {
-
     [SerializeField] GameObject _ricePrefab;
     [SerializeField] Transform _spawnPoint;
 
@@ -15,7 +14,6 @@ public class RiceSpawn : XRBaseInteractable
         base.OnEnable();
         selectEntered.AddListener(RiceEvent);
     }
-
     protected override void OnDisable()
     {
         base.OnDisable();
@@ -33,25 +31,23 @@ public class RiceSpawn : XRBaseInteractable
 
     void RiceEvent(SelectEnterEventArgs args)
     {
-        if (!_riceSpawned)
-        {
-            _riceSpawned = true;
+        if (_riceSpawned) return;
 
-            GameObject _newRice = SpawnManager.Instance.SpawnObject(_ricePrefab,
-                                                                    _spawnPoint,
-                                                                    SpawnObjectType.INGREDIENT);
+        _riceSpawned = true;
+        GameObject newRice = SpawnManager.Instance.SpawnObject(_ricePrefab,
+                                                               _spawnPoint,
+                                                               SpawnObjectType.INGREDIENT);
 
-            XRGrabInteractable _grabInteractable = _newRice.GetComponent<XRGrabInteractable>();
-            interactionManager.SelectEnter(args.interactorObject, _grabInteractable);
+        XRGrabInteractable _grabInteractable = newRice.GetComponent<XRGrabInteractable>();
+        interactionManager.SelectEnter(args.interactorObject, _grabInteractable);
 
-            base.OnSelectEntered(args);
-            StartCoroutine(ResetBool());
-        }
+        base.OnSelectEntered(args);
+        StartCoroutine(ResetRiceSpawned());
     }
 
-    IEnumerator ResetBool()
+    IEnumerator ResetRiceSpawned()
     {
-        yield return new WaitForSeconds(4F);
+        yield return new WaitForSeconds(4f);
         _riceSpawned = false;    
     }
 }

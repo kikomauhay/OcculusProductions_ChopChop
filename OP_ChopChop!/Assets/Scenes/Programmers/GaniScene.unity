@@ -1382,6 +1382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CustomersServed: 0
+  _testTimer: 0
   _startingPlayerMoney: 0
   _endOfDayReceipt: {fileID: 0}
 --- !u!4 &1428837441 stripped
@@ -1900,6 +1901,75 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1001 &5803658975195173006
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7068943804873736624, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_Name
+      value: dish_nigiri_tuna
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.261
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7589196889346726666, guid: 82259b4e457a9c649ab0cb683f29eeca,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 82259b4e457a9c649ab0cb683f29eeca, type: 3}
 --- !u!1001 &7564253949097565752
 PrefabInstance:
   m_ObjectHideFlags: 0
