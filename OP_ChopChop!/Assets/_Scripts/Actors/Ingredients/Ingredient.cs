@@ -34,6 +34,7 @@ public abstract class Ingredient : MonoBehaviour
 
     [Tooltip("0 = good, 1 = comtaminated, 2 = expired")]
     [SerializeField] protected Material[] _stateMaterials;
+    [SerializeField] protected Material _outlineShaderMaterial;
 
     protected Vector3 _startPosition;
 
@@ -144,15 +145,18 @@ public abstract class Ingredient : MonoBehaviour
         // the lower the number, the worse it is
 
         Material m = null;
+        Material osm = null;
 
         switch (this.IngredientState)
         {
             case IngredientState.CONTAMINATED:
                 m = _stateMaterials[1];
+                osm = _outlineShaderMaterial;
                 break;
 
             case IngredientState.EXPIRED:
                 m = _stateMaterials[2];
+                osm = _outlineShaderMaterial;
                 break;
 
             case IngredientState.DEFAULT:
@@ -163,7 +167,19 @@ public abstract class Ingredient : MonoBehaviour
         }
 
         if (m != null)
-            GetComponent<MeshRenderer>().material = m;
+        {
+            MeshRenderer renderer = GetComponent<MeshRenderer>();
+
+            if (m != null)
+            {
+                renderer.materials = new Material[] { m, osm };
+            }
+            else
+            {
+                renderer.material = m;
+            }
+        }
+
     }
     void StartDecaying() => StartCoroutine(DecayIngredient());
 
