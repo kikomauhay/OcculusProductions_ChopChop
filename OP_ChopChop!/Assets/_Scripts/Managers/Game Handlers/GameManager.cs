@@ -64,7 +64,6 @@ public class GameManager : Singleton<GameManager>
         // these should be empty when testing is done
         _customerSRScores = new List<float>() { 100f, 90f, 80f, 80f };
     }
-
     IEnumerator ShiftCountdown(float timer, GameShift shift)
     {
         yield return new WaitForSeconds(timer);
@@ -192,7 +191,7 @@ public class GameManager : Singleton<GameManager>
         _endOfDayReceipt.GiveTotalCustomerServed();
 
         // CHANGE DIFFICULTY BASED ON _finalScore
-
+        
     }
     void DoCustomerRating()
     {
