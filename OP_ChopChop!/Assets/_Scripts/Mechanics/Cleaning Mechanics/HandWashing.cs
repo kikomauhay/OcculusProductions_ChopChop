@@ -13,13 +13,17 @@ public class HandWashing : MonoBehaviour
     private int _handUsage;
     private bool _hasSpawnedVFX;
 
+    private void Awake()
+    {
+        _handUsage = 20;        
+    }
+
     void Start()
     { 
         _handWashCollider.enabled = false;
         _isDirty = true;
         IsWet = false;
         _timer = 20F;
-        _handUsage = 20;
         _hasSpawnedVFX = false;
 
         // Debug.Log($"Hand Dirty is {_isDirty}");
