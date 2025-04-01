@@ -11,6 +11,7 @@ public class HandWashing : MonoBehaviour
 
     private float _timer;
     private int _handUsage;
+    private bool _hasSpawnedVFX;
 
     void Start()
     { 
@@ -19,6 +20,7 @@ public class HandWashing : MonoBehaviour
         IsWet = false;
         _timer = 20F;
         _handUsage = 20;
+        _hasSpawnedVFX = false;
 
         // Debug.Log($"Hand Dirty is {_isDirty}");
     }
@@ -39,7 +41,12 @@ public class HandWashing : MonoBehaviour
         if (_handUsage <= 0)
         {
             Dirtify();
-            SpawnManager.Instance.SpawnVFX(VFXType.STINKY, _handWashCollider.transform, 3F);
+
+            if(!_hasSpawnedVFX)
+            {
+                _hasSpawnedVFX = true;
+               StartCoroutine(SpawnVFXWithDelay());
+            }
         }
         else _isDirty = false;    
     }
@@ -57,6 +64,12 @@ public class HandWashing : MonoBehaviour
             if(other.gameObject.GetComponent<HandWashing>()._isDirty)
             {
                 Dirtify();
+
+                if (!_hasSpawnedVFX)
+                {
+                    _hasSpawnedVFX = true;
+                    StartCoroutine(SpawnVFXWithDelay());
+                }
             }
         }
     }
@@ -127,5 +140,12 @@ public class HandWashing : MonoBehaviour
         yield return new WaitForSeconds(5F);
         IsWet = false;
     }
-#endregion
+
+    private IEnumerator SpawnVFXWithDelay()
+    {
+        SpawnManager.Instance.SpawnVFX(VFXType.STINKY, _handWashCollider.transform, 3F);
+        yield return new WaitForSeconds(5f); // Delay before it can spawn again
+        _hasSpawnedVFX = false;
+    }
+    #endregion
 }
