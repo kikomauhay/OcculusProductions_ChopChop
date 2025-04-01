@@ -16,6 +16,7 @@ public class CustomerOrder : MonoBehaviour
     public DishType CustomerDishType { get; private set; } // what dish the cust omer wants to order   
     public float CustomerSR { get; set; }                  // (FoodScore of dish + _patienceRate) / 2
     public float PatienceRate => _patienceDecreaseRate;
+    public bool IsLastCustomer { get; set; } = false;
 
 #endregion
 
@@ -41,6 +42,7 @@ public class CustomerOrder : MonoBehaviour
 
     // REACTION FACES
     [SerializeField] float _reactionTimer;
+
 
 #endregion
 
@@ -68,8 +70,16 @@ public class CustomerOrder : MonoBehaviour
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
     }
-    void OnDestroy() => GameManager.Instance.OnEndService -= DestroyOrderUI;
+    void OnDestroy() 
+    {
+        GameManager.Instance.OnEndService -= DestroyOrderUI;
 
+        if (IsLastCustomer && GameManager.Instance.CurrentShift == GameShift.SERVICE)
+        {
+            GameManager.Instance.StopAllCoroutines();
+            GameManager.Instance.ChangeShift(GameShift.POST_SERVICE);
+        }
+    }
 #region Spawning_Helpers
 
     void CreateCustomerUI()
@@ -85,7 +95,7 @@ public class CustomerOrder : MonoBehaviour
         GameManager.Instance.AddToCustomerScores(CustomerSR);
 
         // destroys both the customer and its UI
-        DestroyOrderUI();
+        DestroyOrderUI();   
         Destroy(gameObject);
     }
     public bool OrderIsSameAs(Dish dish) => dish?.OrderDishType == CustomerDishType;

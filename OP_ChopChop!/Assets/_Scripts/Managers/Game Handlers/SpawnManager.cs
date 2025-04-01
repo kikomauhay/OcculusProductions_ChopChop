@@ -28,6 +28,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [SerializeField] float _initialCustomerSpawnTime; // 2s
     [SerializeField] float _customerSpawnInterval;    // 10s
 
+    int _spawnedCustomers;
+
 #endregion
 
 #region Unity_Methods
@@ -39,6 +41,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
+
+        _spawnedCustomers = 0;    
     }
     void OnDestroy() // UNBIND FROM EVENTS
     {
@@ -49,7 +53,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
     IEnumerator CreateCustomer()
     {
         // prevents from adding too many customers
-        if (_seatedCustomers.Count < GameManager.Instance.MaxCustomerCount) 
+        if (_spawnedCustomers < GameManager.Instance.MaxCustomerCount) 
         {
             yield return new WaitForSeconds(_initialCustomerSpawnTime);
             SpawnCustomer(GiveAvaiableSeat());
@@ -58,7 +62,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
             // coroutine should stop spawning once all seats are full
-            if (_seatedCustomers.Count >= GameManager.Instance.MaxCustomerCount) 
+            if (_spawnedCustomers >= GameManager.Instance.MaxCustomerCount) 
                 yield break;
 
             yield return new WaitForSeconds(_customerSpawnInterval);  
@@ -113,6 +117,10 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // adding random noises when the cats spawn
         StartCoroutine(customerActions.RandomMeowing());
+        _spawnedCustomers++;
+
+        if (_spawnedCustomers == GameManager.Instance.MaxCustomerCount)
+            customer.GetComponent<CustomerOrder>().IsLastCustomer = true;
     } 
 
 #endregion

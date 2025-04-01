@@ -29,7 +29,7 @@ public class CustomerActions : MonoBehaviour
                                         SoundGroup.CUSTOMER); 
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(20f, 30f));
+            yield return new WaitForSeconds(Random.Range(10f, 30f));
 
             SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                        "cat enter 01" : 
