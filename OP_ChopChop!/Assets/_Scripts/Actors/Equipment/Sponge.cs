@@ -1,38 +1,77 @@
 using System.Collections;
+using UnityEditor.ShortcutManagement;
 using UnityEngine;
 
-public class Sponge : Equipment
+[RequireComponent(typeof(Trashable))]
+public class Sponge : MonoBehaviour
 {
-    public bool IsWet { get; private set; } 
+#region Readers
 
-    [SerializeField] Material _wetMat;
+    public bool IsWet => _isWet;
+    public bool IsClean => _isClean;
+
+#endregion
+
+#region Members
+
+    [SerializeField] int _usageCounter, _maxUsageCounter;
+    [SerializeField] bool _isClean, _isWet;
+    [SerializeField] Material _wetMat, _cleanMat, _dirtyMat;
+
+    private MeshRenderer _rend;
+    private const float DRY_DURATION = 4f; 
+
+#endregion 
 
 #region Unity_Methods
 
-    protected override void Start()
+    void Start()
     {
-        base.Start();
-
         name = "Sponge";
-        IsWet = false;
-        _maxUsageCounter = 10;
+        _isWet = false;
+        _usageCounter = 0;
+
+        if (_maxUsageCounter == 0)
+            _maxUsageCounter = 10;
+
+        _rend = GetComponent<MeshRenderer>();
+        _rend.material = _isClean ? _cleanMat : _dirtyMat;
     }
-    protected override void OnTriggerEnter(Collider other) {}
     
-    IEnumerator Dry()
+    IEnumerator DrySponge()
     {
-        GetComponent<Renderer>().material = _cleanMat;
-        yield return new WaitForSeconds(4f);
-        IsWet = false;
+        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, DRY_DURATION);
+        yield return new WaitForSeconds(DRY_DURATION);
+
+        // makes the sponge clean
+        _rend.material = _cleanMat;
+        _isWet = false;
+        _isClean = true;
+        _usageCounter = 0;
     }
 
 #endregion
 
+#region Public
+
+    public void IncrementUseCounter()
+    {
+        _usageCounter++;
+
+        if (_usageCounter >= _maxUsageCounter)
+        {
+            // makes the sponge dirty
+            _usageCounter = _maxUsageCounter;
+            _rend.material = _dirtyMat;
+            _isClean = false;
+        }
+    }
     public void SetWet() 
     {
-        IsWet = true;
-        DoCleaning();
-        GetComponent<MeshRenderer>().material = _wetMat;
-        StartCoroutine(Dry());
+        _isWet = true;
+        _rend.material = _wetMat;
+        StartCoroutine(DrySponge());
     }
+
+#endregion
 }

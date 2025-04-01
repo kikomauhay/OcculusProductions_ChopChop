@@ -129,20 +129,18 @@ public class CustomerOrder : MonoBehaviour
     IEnumerator CustomerLostPatience() // customer wasn't served
     {
         _appearance.SetAngryEmotion(2);
-        yield return new WaitForSeconds(2f);
+        SoundManager.Instance.PlaySound("cat angry", SoundGroup.CUSTOMER);
+        yield return new WaitForSeconds(_reactionTimer);
 
         MakeSeatEmpty();
     }
     public IEnumerator HappyReaction() // customer got the correct order
     {
-        // initial reaction
+        // inital reaction
         _appearance.SetFacialEmotion(FaceVariant.HAPPY);
-        yield return new WaitForSeconds(_reactionTimer);
-
-        // chewing + animations
-        // _actions.TriggerEating();
-        // Debug.LogWarning("YUMMY");
         StartCoroutine(_appearance.DoChweing(_customerScore));
+        SoundManager.Instance.PlaySound("cat happy", SoundGroup.CUSTOMER);
+        yield return new WaitForSeconds(_reactionTimer);
 
         // final actions
         GameManager.Instance.IncrementCustomersServed();
@@ -154,28 +152,25 @@ public class CustomerOrder : MonoBehaviour
         // initial reaction
         _appearance.SetAngryEmotion(1);
         _customerScore = 0f;
+        SoundManager.Instance.PlaySound("cat angry", SoundGroup.CUSTOMER);
         yield return new WaitForSeconds(_reactionTimer);
 
-        /*
-        // chewing + animations
-        _actions.TriggerEating();
-        StartCoroutine(_appearance.DoChweing(_customerScore)); 
-        */
-
         // final actions
-        Debug.LogWarning("THIS IS NOT MY ORDER!");
         GameManager.Instance.IncrementCustomersServed();
         MakeSeatEmpty();
     }
     public IEnumerator ExpiredReaction() // customer got an expired order
     {
-        // initial reaction
+        // inital reaction
         _appearance.SetFacialEmotion(FaceVariant.SUS);
         _customerScore = 0f;
+        SoundManager.Instance.PlaySound("cat yuck", SoundGroup.CUSTOMER);
         yield return new WaitForSeconds(_reactionTimer);
 
         // final actions
         GameManager.Instance.IncrementCustomersServed();
+        
+        // change to game over screen
         MakeSeatEmpty();
     }       
 

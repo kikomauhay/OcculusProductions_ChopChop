@@ -48,17 +48,21 @@ public class SpawnManager : StaticInstance<SpawnManager>
     
     IEnumerator CreateCustomer()
     {
-        yield return new WaitForSeconds(_initialCustomerSpawnTime);
-        SpawnCustomer(GiveAvaiableSeat());
+        // prevents from adding too many customers
+        if (_seatedCustomers.Count < GameManager.Instance.MaxCustomerCount) 
+        {
+            yield return new WaitForSeconds(_initialCustomerSpawnTime);
+            SpawnCustomer(GiveAvaiableSeat());
+        }
 
         while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
+            // coroutine should stop spawning once all seats are full
+            if (_seatedCustomers.Count >= GameManager.Instance.MaxCustomerCount) 
+                yield break;
+
             yield return new WaitForSeconds(_customerSpawnInterval);  
             SpawnCustomer(GiveAvaiableSeat());
-
-            // coroutine should stop spawning once all seats are full
-            if (_seatedCustomers.Count == GameManager.Instance.MaxCustomerCount) 
-                yield break;
         }
     }
     
@@ -106,6 +110,9 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // prevents multiple customers getting the same seat 
         seat.IsEmpty = false;
+
+        // adding random noises when the cats spawn
+        StartCoroutine(customerActions.RandomMeowing());
     } 
 
 #endregion
