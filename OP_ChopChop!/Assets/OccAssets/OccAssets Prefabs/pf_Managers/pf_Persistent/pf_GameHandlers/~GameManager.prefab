@@ -44,7 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e0c2c10610fee4babb3ccab6f01353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Continue: {fileID: 1617547600516174291, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
   CustomersServed: 0
-  _startingPlayerMoney: 1000
   _testTimer: 5
+  _startingPlayerMoney: 1000
   _endOfDayReceipt: {fileID: 0}

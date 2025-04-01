@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.InputSystem;
 using UnityEngine;
 using System;
 
@@ -31,6 +32,7 @@ public class GameManager : Singleton<GameManager>
     public GameDifficulty Difficulty { get; private set; }
     public int MaxCustomerCount { get; set; }
 
+    public InputActionReference Continue;
 
     public bool IsPaused { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
@@ -64,7 +66,17 @@ public class GameManager : Singleton<GameManager>
 
         // these should be empty when testing is done
         _customerSRScores = new List<float>() { 100f, 90f, 80f, 80f };
+
+        Continue.action.Enable();
+        Continue.action.performed += RemoveLogo;
     }
+
+    void RemoveLogo(InputAction.CallbackContext context)
+    {
+        //unpause game, remove logo, and start onboarding
+        Continue.action.Disable();
+    }
+
     IEnumerator ShiftCountdown(float timer, GameShift shift)
     {
         yield return new WaitForSeconds(timer);
