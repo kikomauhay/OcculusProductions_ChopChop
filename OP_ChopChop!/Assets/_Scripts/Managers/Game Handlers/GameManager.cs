@@ -58,7 +58,7 @@ public class GameManager : Singleton<GameManager>
 
         CurrentPlayerMoney = _startingPlayerMoney;
         CustomersServed = 0;
-        MaxCustomerCount = 4;
+        MaxCustomerCount = 3;
         IsPaused = false;
         Difficulty = GameDifficulty.EASY;
 
