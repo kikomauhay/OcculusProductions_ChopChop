@@ -116,6 +116,7 @@ public class Enumerations : MonoBehaviour {}
         FOOD,
         GAME,
         VFX,
-        CUSTOMER
+        CUSTOMER,
+        TUTORIAL
     }
 #endregion
