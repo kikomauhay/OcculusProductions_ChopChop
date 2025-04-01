@@ -284,8 +284,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentPrefab: {fileID: 8873129294027024833}
-  _nextPrefab: {fileID: 6672124092448658755, guid: 9a911ccd5190df34abd3e212acd21bf2,
+  _nextPrefab: {fileID: 6478356933403155857, guid: 9a911ccd5190df34abd3e212acd21bf2,
     type: 3}
+  _fishCuts: 1
 --- !u!114 &-8674296536146262974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da93d8d7d8cacb841b99f6853e575221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ingredientType: 1
+  _ingredientType: 2
   _ingredientStats: {fileID: 11400000, guid: 8d861586e0d7fd446913bed80f383061, type: 2}
   _stateMaterials:
   - {fileID: 2100000, guid: f61028c0366953e4788046e2c616ef7c, type: 2}

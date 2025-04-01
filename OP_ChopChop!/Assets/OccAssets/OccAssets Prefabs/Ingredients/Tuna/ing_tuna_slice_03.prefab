@@ -286,6 +286,7 @@ MonoBehaviour:
   _currentPrefab: {fileID: 4967989956104480434}
   _nextPrefab: {fileID: 7924088626406575321, guid: 49b56e3e41ec91b4686b58e003d7a5d6,
     type: 3}
+  _fishCuts: 2
 --- !u!114 &8819714138878931063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da93d8d7d8cacb841b99f6853e575221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ingredientType: 1
+  _ingredientType: 2
   _ingredientStats: {fileID: 11400000, guid: 8d861586e0d7fd446913bed80f383061, type: 2}
   _stateMaterials:
   - {fileID: 2100000, guid: 6b201590df0208749bbceffdea1d6edf, type: 2}
