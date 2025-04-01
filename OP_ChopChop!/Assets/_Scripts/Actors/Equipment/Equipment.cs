@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
@@ -40,20 +41,20 @@ public abstract class Equipment : MonoBehaviour
     }
     protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
-        if (other.gameObject.GetComponent<Sponge>() == null) 
+        if (other.gameObject.GetComponent<Sponge>() != null) 
         {
             Sponge sponge = other.gameObject.GetComponent<Sponge>();
-
-            if (sponge.IsWet && sponge.IsClean)
+            
+            if (sponge.IsClean) 
             {
                 DoCleaning();
                 sponge.IncrementUseCounter();
-            }
-            else if (!sponge.IsClean && IsClean)
-            {
-                SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
-                Contaminate();
-            }
+                return;
+            }   
+
+            // sponge contaminates the equipment
+            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            Contaminate();
         }
     }
     protected void OnTriggerExit(Collider other)
