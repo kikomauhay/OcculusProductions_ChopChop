@@ -4,29 +4,34 @@ using UnityEngine;
 public class HandWashing : MonoBehaviour
 {
     public bool IsWet { get; private set; }
-    public Collider _handWashCollider;
 
+    [SerializeField] Collider _handWashCollider;
     [SerializeField] bool _isDirty;
+
     private float _timer;
+    private int _handUsage;
 
     void Start()
     { 
+        _handWashCollider.enabled = false;
         _isDirty = true;
         IsWet = false;
         _timer = 20F;
+        _handUsage = 20;
 
         // Debug.Log($"Hand Dirty is {_isDirty}");
     }
 
     private void FixedUpdate()
     {
-        if (KitchenCleaningManager.Instance.HandUsageCounter < 15)
+        if (_handUsage < 10)
         {
-            KitchenCleaningManager.Instance.ToggleHandWashColliders();
+            _handWashCollider.enabled = true;
         }
-        else if (KitchenCleaningManager.Instance.HandUsageCounter <= 0)
+        else if (_handUsage <= 0)
         {
             _isDirty = true;
+            SpawnManager.Instance.SpawnVFX(VFXType.STINKY, _handWashCollider.transform, 5F);
         }
         else _isDirty = false;    
     }
@@ -37,6 +42,13 @@ public class HandWashing : MonoBehaviour
             if (_isDirty)
             {
                 other.gameObject.GetComponent<Ingredient>().Contaminate();
+            }
+        }
+        else if(other.gameObject.GetComponent<HandWashing>() != null)
+        {
+            if(other.gameObject.GetComponent<HandWashing>()._isDirty)
+            {
+                _isDirty = true;
             }
         }
     }
@@ -53,7 +65,8 @@ public class HandWashing : MonoBehaviour
 
             if (_timer <= 0)
             {
-                KitchenCleaningManager.Instance.ResetHandUsage();
+                _handUsage = 20;
+                _handWashCollider.enabled = false;
             }
         }
     }
@@ -66,16 +79,22 @@ public class HandWashing : MonoBehaviour
             StartCoroutine(WetToggle());
     }
 
+#region Functions
+
     public void ToggleWet()
     {
         IsWet = true;
     }
 
-
+    public void DecrementUsage()
+    {
+        _handUsage--;
+    }
 
     IEnumerator WetToggle()
     {
         yield return new WaitForSeconds(5F);
         IsWet = false;
     }
+#endregion
 }

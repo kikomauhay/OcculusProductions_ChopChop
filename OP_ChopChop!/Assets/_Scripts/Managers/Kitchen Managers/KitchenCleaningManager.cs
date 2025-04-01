@@ -9,7 +9,6 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     public float KitchenScore { get; private set; } // overall cleanliness meter of the kitchen
     public int HandUsageCounter { get; private set; }
 
-    [SerializeField] Collider[] _handWashColliders; 
     [SerializeField] GameObject[] _kitchenWashColliders;
     float _decayTimer, _decayRate, _cleanlinessThreshold; 
     bool _canClean;
@@ -32,15 +31,6 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         _decayRate = 5f;
         _cleanlinessThreshold = 80f; // kitchen needs to go below this score to start cleaning 
         _canClean = false;           // prevents the player from cleaning too much
-
-        HandWashing[] handWashingScripts = FindObjectsOfType<HandWashing>();
-        _handWashColliders = new Collider[handWashingScripts.Length];
-        for (int i = 0; i < handWashingScripts.Length; i++)
-        {
-            _handWashColliders[i] = handWashingScripts[i]._handWashCollider;
-        }
-
-        ToggleHandWashColliders();
     }
     void OnDestroy() 
     {
@@ -61,22 +51,6 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     }
 
 #endregion
-
-    public void ToggleHandWashColliders()
-    {
-        foreach (Collider col in _handWashColliders)
-            col.enabled = !col.enabled;
-    }
-
-    public void DecrementUsageCount()
-    {
-        HandUsageCounter--;
-    }
-
-    public void ResetHandUsage()
-    {
-        HandUsageCounter = 30;
-    }
 
     void IncreaseCleanRate() 
     {
