@@ -54,7 +54,12 @@ public class GameManager : Singleton<GameManager>
 
 #region Unity
 
-    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+    protected override void OnApplicationQuit() 
+    {
+        base.OnApplicationQuit();
+        Continue.action.performed -= RemoveLogo;    
+    }
+
     protected override void Awake() // set starting money
     {
         base.Awake();
@@ -75,8 +80,10 @@ public class GameManager : Singleton<GameManager>
 
     void RemoveLogo(InputAction.CallbackContext context)
     {
-        //unpause game, remove logo, and start onboarding
+        // unpause game, remove logo, and start onboarding
+        ChangeShift(GameShift.TRAINING);
         Continue.action.Disable();
+        OnBoardingHandler.Instance.InventoryTutorial();
     }
 
     IEnumerator ShiftCountdown(float timer, GameShift shift)

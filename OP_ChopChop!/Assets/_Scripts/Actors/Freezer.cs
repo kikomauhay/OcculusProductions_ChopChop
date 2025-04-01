@@ -39,6 +39,12 @@ public class Freezer : MonoBehaviour
 
         if (ing == null) return;
 
+        if (GameManager.Instance.CurrentShift == GameShift.TRAINING)
+        {
+            StartCoroutine(OnBoardingHandler.Instance.IngredentTutorial());
+            return;
+        }
+
         // removes the ingredient to the freezer & changes its decay rate
         ing.Unstored();
         _ingredients.Remove(ing);
