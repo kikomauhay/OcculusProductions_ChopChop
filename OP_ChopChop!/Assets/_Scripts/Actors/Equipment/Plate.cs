@@ -25,15 +25,14 @@ public class Plate : Equipment
         IsPlated = false;
         _boxTrigger.enabled = true;
     }
-    /*
+    
     protected override void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                        "plate placed 01" : 
-                                        "plate placed 02",
+                                        "plate placed 01" : "plate placed 02",
                                         SoundGroup.EQUIPMENT);
-    } */
+    } 
 
 #endregion
 

@@ -13,7 +13,7 @@ public class CustomerOrder : MonoBehaviour
 {
 #region Readers
 
-    public DishType CustomerDishType { get; private set; } // what dish the cust omer wants to order   
+    public DishType CustomerDishType { get; private set; } // what dish the customer wants to order   
     public float CustomerSR { get; set; }                  // (FoodScore of dish + _patienceRate) / 2
     public float PatienceRate => _patienceDecreaseRate;
     public bool IsLastCustomer { get; set; } = false;
@@ -43,6 +43,7 @@ public class CustomerOrder : MonoBehaviour
     // REACTION FACES
     [SerializeField] float _reactionTimer;
 
+    [SerializeField] bool _isTutorial;
 
 #endregion
 
@@ -50,7 +51,7 @@ public class CustomerOrder : MonoBehaviour
     {
         GameManager.Instance.OnEndService += DestroyOrderUI;
 
-        CustomerDishType = DishType.NIGIRI_SALMON; // (DishType)Random.Range(0, 4);
+        CustomerDishType = _isTutorial ? DishType.NIGIRI_SALMON : (DishType)Random.Range(0, 4);
         
         switch (GameManager.Instance.Difficulty) // will decrease overtime
         {
