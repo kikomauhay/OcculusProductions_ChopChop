@@ -4,10 +4,11 @@ using UnityEngine;
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
 {
+    public bool IsClean => _isClean;
+
 #region Members
 
-    public bool IsClean { get; private set; }
-
+    [SerializeField] protected bool _isClean;
     [SerializeField] protected Material _cleanMat, _dirtyMat;
     protected Vector3 _startPosition;
 
@@ -15,54 +16,58 @@ public abstract class Equipment : MonoBehaviour
     protected int _usageCounter; // counter to know how many times equipment has been used
     protected int _maxUsageCounter; // max counter before it gets dirty
 
+    private bool _coroutineRunning;
+
 #endregion
 
 #region Unity_Methods
 
     protected virtual void Start() 
     {
-        _startPosition = transform.position;
-        _usageCounter = 0;
-
-        IsClean = true;
-        GetComponent<MeshRenderer>().material = _cleanMat;
-
         GameManager.Instance.OnStartService += ResetPosition;
+        
+        _coroutineRunning = false;
+        _startPosition = transform.position;
+
+        // ternary operator syntax -> condition ? val_if_true : val_if_false
+        _usageCounter = _isClean ? 0 : _maxUsageCounter;
+        GetComponent<MeshRenderer>().material = _isClean ? _cleanMat : _dirtyMat;
     }
     protected void OnDestroy() 
     {
         ResetPosition();
         GameManager.Instance.OnStartService -= ResetPosition;
     }
-    protected virtual void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
-        Sponge sponge = other.gameObject.GetComponent<Sponge>();
-
-        if (sponge == null) return;
-
-        if (!sponge.IsWet) return;
-
-        if (!IsClean && sponge.IsClean)
+        if (other.gameObject.GetComponent<Sponge>() == null) 
         {
-            DoCleaning();
-            sponge.IncrementUseCounter();
-            return;
-        }
+            Sponge sponge = other.gameObject.GetComponent<Sponge>();
 
-        // sponge contaminates the equipment
-        if (IsClean && !sponge.IsClean)
-        {
-            GetComponent<MeshRenderer>().material = _dirtyMat;
-            _usageCounter = _maxUsageCounter;
-            IsClean = false;
+            if (sponge.IsWet && sponge.IsClean)
+            {
+                DoCleaning();
+                sponge.IncrementUseCounter();
+            }
+            else if (!sponge.IsClean && IsClean)
+            {
+                SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+                Contaminate();
+            }
         }
     }
     protected void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponent<Sponge>() != null)
+        if (other.gameObject.GetComponent<Sponge>() == null) return;
+
+        if (_coroutineRunning)
+        {
             StopCoroutine(CleanEquipment());
+            _coroutineRunning = false;
+        }
     }
-    protected virtual void OnCollisionEnter(Collision other)
+    
+    /* protected virtual void OnCollisionEnter(Collision other)
     {
         // equipment + another equipment
         if (other.gameObject.GetComponent<Equipment>() != null)
@@ -113,7 +118,7 @@ public abstract class Equipment : MonoBehaviour
             else if (IsClean && (!dish.IsExpired || !dish.IsContaminated))
                 Contaminate();
         }
-    }
+    } */
 
 #endregion
 
@@ -129,13 +134,15 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter++;
 
+        Debug.Log($"{name} use counter: {_usageCounter}/{_maxUsageCounter}");
+
         if (_usageCounter >= _maxUsageCounter)
             Contaminate();
     }
     public void Contaminate()
     {
         _usageCounter = _maxUsageCounter;
-        IsClean = false;
+        _isClean = false;
         GetComponent<MeshRenderer>().material = _dirtyMat;
     }
 
@@ -149,25 +156,28 @@ public abstract class Equipment : MonoBehaviour
     
 #region Cleaning
 
-
     protected virtual void DoCleaning()
     {
-        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 3f);
+        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
         
-        StopCoroutine(CleanEquipment());
+        if (_coroutineRunning)
+            StopCoroutine(CleanEquipment());
+        
         StartCoroutine(CleanEquipment());
     }
     protected IEnumerator CleanEquipment()
     {
+        _coroutineRunning = true;
         yield return new WaitForSeconds(2f);
         GetCleaned();
     }
-    void GetCleaned()
+    protected void GetCleaned()
     {
         _usageCounter = 0;
-        IsClean = true;
+        _isClean = true;
         GetComponent<MeshRenderer>().material = _cleanMat;
+        _coroutineRunning = false;
     }
 
-    #endregion
+#endregion
 }

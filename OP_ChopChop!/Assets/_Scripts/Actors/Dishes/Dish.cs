@@ -102,9 +102,4 @@ public abstract class Dish : MonoBehaviour
             GetComponentInChildren<MeshRenderer>().material = _expiredMat;
         }
     } 
-    public IEnumerator EnableBoxCollider()
-    {
-        yield return new WaitForSeconds(1f);
-        GetComponent<Plate>().BoxTrigger.enabled = true;
-    }
 }

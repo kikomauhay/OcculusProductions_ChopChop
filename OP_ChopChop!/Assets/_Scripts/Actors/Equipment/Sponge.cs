@@ -31,7 +31,8 @@ public class Sponge : Equipment
     public void SetWet() 
     {
         IsWet = true;
-        StartCoroutine(Dry());
         DoCleaning();
+        GetComponent<MeshRenderer>().material = _wetMat;
+        StartCoroutine(Dry());
     }
 }
