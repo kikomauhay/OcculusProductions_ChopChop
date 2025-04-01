@@ -14,7 +14,7 @@ public class ColliderCheck : MonoBehaviour
         {
             CustomerOrder.CustomerSR = 0f;
 
-            StartCoroutine(CustomerOrder.AngryReaction());
+            StartCoroutine(CustomerOrder.ExpiredReaction());
             
             Destroy(other.gameObject); // destroys the ingredient on collision
             StartCoroutine(DisableCollider());
