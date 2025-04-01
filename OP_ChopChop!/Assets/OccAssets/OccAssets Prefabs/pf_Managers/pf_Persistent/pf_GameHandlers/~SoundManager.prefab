@@ -55,6 +55,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SoundSource: {fileID: 1381343949912312284}
+  MusicSource: {fileID: 0}
   EquipmentSounds:
   - {fileID: 11400000, guid: c07da3fdc28de4343a45614ebdecef07, type: 2}
   - {fileID: 11400000, guid: e751bf2d4f217014f92eed37bf1fa60c, type: 2}
@@ -88,6 +89,12 @@ MonoBehaviour:
   VFXSounds:
   - {fileID: 11400000, guid: c26e0c694a84e174c9d6ed627d3dd922, type: 2}
   - {fileID: 11400000, guid: 3a192c83a3c14754180abe2b96ccf940, type: 2}
+  CustomerSounds:
+  - {fileID: 11400000, guid: c4102ca3719033b4289fb7bee4057164, type: 2}
+  - {fileID: 11400000, guid: ba860c27891c6154fb79341430c805e1, type: 2}
+  - {fileID: 11400000, guid: a444f7f5e4159494783b56b9e8fb235d, type: 2}
+  - {fileID: 11400000, guid: 58dd6d70de6c9be429c0c1e3987aae1b, type: 2}
+  - {fileID: 11400000, guid: f24a541431731ed42b5f3710e565b185, type: 2}
 --- !u!1 &1381343949912312286
 GameObject:
   m_ObjectHideFlags: 0

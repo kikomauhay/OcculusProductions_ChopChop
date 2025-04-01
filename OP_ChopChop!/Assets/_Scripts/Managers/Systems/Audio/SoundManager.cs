@@ -3,16 +3,22 @@ using System;
 
 public class SoundManager : Singleton<SoundManager>
 {
-    public AudioSource SoundSource;
-    public Sound[] EquipmentSounds, ApplianceSounds, FoodSounds, GameSounds, VFXSounds;
+#region Members
+    
+    public AudioSource SoundSource, MusicSource;
+    public Sound[] EquipmentSounds, ApplianceSounds, FoodSounds;
+    public Sound[] GameSounds, VFXSounds, CustomerSounds;
+
+#endregion
+
+#region Unity
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
 
-#region Public
+#endregion
 
-    /*
-    public void PlaySound(string title)
+    /* public void PlaySound(string title)
     {
         Sound s = Array.Find(Sounds, i => i.name == title);
 
@@ -54,6 +60,10 @@ public class SoundManager : Singleton<SoundManager>
                 s = Array.Find(VFXSounds, i => i.name == title);
                 break;
 
+            case SoundGroup.CUSTOMER:
+                s = Array.Find(CustomerSounds, i => i.name == title);
+                break;
+
             default:
                 Debug.LogError("Wrong SoundGroup!");
                 break;
@@ -70,8 +80,15 @@ public class SoundManager : Singleton<SoundManager>
         else Debug.LogError("Sound not found!");
     }
 
-    public void ToggleMute() => SoundSource.mute = !SoundSource.mute;
-    public void SetSoundVolume(float v) => SoundSource.volume = v;
+#region Audio_Balancing
 
+    public void ToggleMute() 
+    {
+        SoundSource.mute = !SoundSource.mute;
+        MusicSource.mute = !MusicSource.mute;
+    }
+    public void SetSoundVolume(float v) => SoundSource.volume = v;
+    public void SetMusicVolume(float v) => MusicSource.volume = v;
+    
 #endregion
 }
