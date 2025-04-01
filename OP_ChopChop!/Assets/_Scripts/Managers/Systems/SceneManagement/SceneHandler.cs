@@ -6,8 +6,7 @@ public class SceneHandler : Singleton<SceneHandler>
 {
 #region Readers
 
-    public bool IsFadingIn { get; private set; }
-    public bool IsFadingOut { get; private set; }
+    public bool IsFading { get; private set; }
     public bool CanPause { get; private set; }
     
 
@@ -16,7 +15,6 @@ public class SceneHandler : Singleton<SceneHandler>
 #region Members
 
     [SerializeField] FadeScreen _fadeScreen;
-    [SerializeField] string _sceneName;
 
 #endregion
 
@@ -28,35 +26,32 @@ public class SceneHandler : Singleton<SceneHandler>
     void Start() 
     {
         CanPause = true;
-        IsFadingIn = false;
-        IsFadingOut = false;
+        IsFading = false;
                 
-        SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Additive);
-
-        if (_sceneName == "MainGameScene")
-            GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
+        SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
+        GameManager.Instance.ChangeShift(GameShift.TRAINING);
     }
 
 #endregion
 
     public IEnumerator LoadScene(string sceneName)
     {
-        IsFadingOut = true;
+        IsFading = true;
         _fadeScreen.FadeOut();
         yield return new WaitForSeconds(_fadeScreen.FadeDuration);
-        IsFadingOut = false;
+        IsFading = false;
 
         if (sceneName == "MainGameScene") 
         {
-            SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
-            yield return null;          
             SceneManager.UnloadSceneAsync("TrainingScene");
+            // yield return null;          
+            SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
         }
         else if (sceneName == "TrainingScene")
         {
-            SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
-            yield return null;
             SceneManager.UnloadSceneAsync("MainGameScene");
+            // yield return null;
+            SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
         }
         else
         {
@@ -64,9 +59,9 @@ public class SceneHandler : Singleton<SceneHandler>
             Debug.LogError("Wrong scene named!");
         } 
 
-        IsFadingIn = true;
+        IsFading = true;
         _fadeScreen.FadeIn();
         yield return new WaitForSeconds(_fadeScreen.FadeDuration);
-        IsFadingIn = false;
+        IsFading = false;
     }
 }
