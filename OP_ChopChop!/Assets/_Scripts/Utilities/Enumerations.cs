@@ -69,9 +69,7 @@ public class Enumerations : MonoBehaviour {}
     { 
         EASY, 
         NORMAL,
-        HARD, 
-        HARDER, 
-        HARDEST
+        HARD
     }
 
     public enum GameShift // IN A CERTAIN ORDER (DON'T RE-ORDER)

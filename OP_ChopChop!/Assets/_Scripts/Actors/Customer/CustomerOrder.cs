@@ -51,15 +51,12 @@ public class CustomerOrder : MonoBehaviour
         GameManager.Instance.OnEndService += DestroyOrderUI;
 
         CustomerDishType = DishType.NIGIRI_SALMON; // (DishType)Random.Range(0, 4);
-
         
         switch (GameManager.Instance.Difficulty) // will decrease overtime
         {
-            case GameDifficulty.EASY:    _customerScore = 110f; break;
-            case GameDifficulty.NORMAL:  _customerScore = 100f; break;
-            case GameDifficulty.HARD:    _customerScore = 95f;  break;
-            case GameDifficulty.HARDER:  _customerScore = 90f;  break;
-            case GameDifficulty.HARDEST: _customerScore = 80f;  break;
+            case GameDifficulty.EASY:   _customerScore = 110f; break;
+            case GameDifficulty.NORMAL: _customerScore = 100f; break;
+            case GameDifficulty.HARD:   _customerScore = 90f;  break;
 
             default: break;
         }
@@ -76,8 +73,7 @@ public class CustomerOrder : MonoBehaviour
 
         if (IsLastCustomer && GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
-            GameManager.Instance.StopAllCoroutines();
-            GameManager.Instance.ChangeShift(GameShift.POST_SERVICE);
+            GameManager.Instance.DoShiftGameOver();
         }
     }
 #region Spawning_Helpers
@@ -108,7 +104,7 @@ public class CustomerOrder : MonoBehaviour
     IEnumerator PatienceCountdown()
     {
         // grace period before it actually starts counting down
-        yield return new WaitForSeconds(1.5f); 
+        yield return new WaitForSeconds(2f); 
 
         while (_customerScore > 0f)
         {

@@ -49,7 +49,7 @@ public class GameManager : Singleton<GameManager>
 
 #endregion
 
-#region Unity_Methods
+#region Unity
 
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     protected override void Awake() // set starting money
@@ -71,7 +71,7 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
         ChangeShift(shift);
     }
-    
+
 #endregion
 
 #region Public
@@ -124,6 +124,17 @@ public class GameManager : Singleton<GameManager>
         CurrentPlayerMoney = Mathf.Clamp(CurrentPlayerMoney, 0f, MAX_MONEY);
     }
 
+    // GAME OVER-RELATED
+    public void DoShiftGameOver() // forces the player to end shift
+    {
+        StopAllCoroutines();
+        ChangeShift(GameShift.POST_SERVICE);
+    }
+    public void DoEndGameOver() // player gets a failing grade by the end
+    {
+    
+    }
+
 #endregion
 
 #region GameShifts
@@ -168,8 +179,11 @@ public class GameManager : Singleton<GameManager>
     {
         OnEndService?.Invoke(); 
         TurnOnEndOfDayReceipt();
-        StartCoroutine(Delay(_testTimer * 2f));
-        StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
+
+        Debug.Log("Removed auto transition to go back to TrainingScene");
+
+        // StartCoroutine(Delay(_testTimer * 2f));
+        // StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
     }
 
 #endregion
@@ -224,23 +238,26 @@ public class GameManager : Singleton<GameManager>
 
 #endregion
 
+#region Helpers
+
     void ChangeDifficuty(int score)
     {
         if (score < 3) // B or higher
         {
-            int i = (int)Difficulty;
-            i++;
-            Difficulty = (GameDifficulty)i;
+            if (Difficulty != GameDifficulty.HARD)
+                Difficulty++;
+ 
             MaxCustomerCount++;
         }
         else if (score == 3) // C
         {
-            // maintain difficulty
+            if (Difficulty != GameDifficulty.EASY)
+                Difficulty++;
+
+            if (MaxCustomerCount > 3)
+                MaxCustomerCount--;
         }
-        else // F
-        {
-            // game over logic
-        }
+        else DoEndGameOver();
     }
     float GetAverageOf(List<float> list) 
     {
@@ -255,8 +272,5 @@ public class GameManager : Singleton<GameManager>
         return n / list.Count;
     }
 
-    IEnumerator Delay(float time)
-    {
-        yield return new WaitForSeconds(time);
-    }
+#endregion
 }

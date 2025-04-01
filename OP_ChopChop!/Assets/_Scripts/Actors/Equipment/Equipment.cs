@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
@@ -10,7 +9,7 @@ public abstract class Equipment : MonoBehaviour
 #region Members
 
     [SerializeField] protected bool _isClean;
-    [SerializeField] protected Material _cleanMat, _dirtyMat;
+    [SerializeField] protected Material _outlineTexture, _cleanMat, _dirtyMat;
     protected Vector3 _startPosition;
 
     // DIRTY MECHANIC
@@ -68,7 +67,7 @@ public abstract class Equipment : MonoBehaviour
         }
     }
     
-    /* protected virtual void OnCollisionEnter(Collision other)
+    protected virtual void OnCollisionEnter(Collision other)
     {
         // equipment + another equipment
         if (other.gameObject.GetComponent<Equipment>() != null)
@@ -119,7 +118,7 @@ public abstract class Equipment : MonoBehaviour
             else if (IsClean && (!dish.IsExpired || !dish.IsContaminated))
                 Contaminate();
         }
-    } */
+    }
 
 #endregion
 

@@ -567,7 +567,8 @@ MonoBehaviour:
   _appearance: {fileID: 8242136411445390342}
   _txtMoneyReward: {fileID: 8319630481065733669}
   _patienceDecreaseRate: 0
-  _customerScore: 0
+  _customerScore: 100
+  _reactionTimer: 2
 --- !u!114 &8242136411445390343
 MonoBehaviour:
   m_ObjectHideFlags: 0
