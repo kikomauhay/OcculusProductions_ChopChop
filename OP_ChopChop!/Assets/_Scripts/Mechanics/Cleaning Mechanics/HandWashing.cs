@@ -4,30 +4,31 @@ using UnityEngine;
 public class HandWashing : MonoBehaviour
 {
     public bool IsWet { get; private set; }
+    public Collider _handWashCollider;
 
     [SerializeField] bool _isDirty;
-    [SerializeField] Collider _handWashCollider;
-    [SerializeField] float _timer;
+    private float _timer;
 
     void Start()
     { 
         _isDirty = true;
         IsWet = false;
+        _timer = 20F;
 
         // Debug.Log($"Hand Dirty is {_isDirty}");
     }
 
     private void FixedUpdate()
     {
-        KitchenCleaningManager.Instance.ToggleHandWashColliders();
-        if (KitchenCleaningManager.Instance.HandUsageCounter <= 0)
+        if (KitchenCleaningManager.Instance.HandUsageCounter < 15)
+        {
+            KitchenCleaningManager.Instance.ToggleHandWashColliders();
+        }
+        else if (KitchenCleaningManager.Instance.HandUsageCounter <= 0)
+        {
             _isDirty = true;
-            
-        else _isDirty = false;
-
-        if (IsWet)
-            StartCoroutine(WetToggle());
-
+        }
+        else _isDirty = false;    
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -38,16 +39,31 @@ public class HandWashing : MonoBehaviour
                 other.gameObject.GetComponent<Ingredient>().Contaminate();
             }
         }
+    }
 
+    private void OnTriggerStay(Collider other)
+    {
         if (other.gameObject.GetComponent<HandWashing>() != null
             && IsWet)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
-                                                   transform, 
+                                                   _handWashCollider.transform, 
                                                    3F);
+            _timer -= Time.deltaTime;
 
-            //Increment Clean rate by random float
+            if (_timer <= 0)
+            {
+                KitchenCleaningManager.Instance.ResetHandUsage();
+            }
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        _timer = 20F;
+
+        if (IsWet)
+            StartCoroutine(WetToggle());
     }
 
     public void ToggleWet()

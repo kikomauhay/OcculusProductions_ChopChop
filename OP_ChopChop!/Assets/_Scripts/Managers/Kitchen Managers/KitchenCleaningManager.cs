@@ -33,7 +33,14 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         _cleanlinessThreshold = 80f; // kitchen needs to go below this score to start cleaning 
         _canClean = false;           // prevents the player from cleaning too much
 
-        // ToggleAllColliders();
+        HandWashing[] handWashingScripts = FindObjectsOfType<HandWashing>();
+        _handWashColliders = new Collider[handWashingScripts.Length];
+        for (int i = 0; i < handWashingScripts.Length; i++)
+        {
+            _handWashColliders[i] = handWashingScripts[i]._handWashCollider;
+        }
+
+        ToggleHandWashColliders();
     }
     void OnDestroy() 
     {
@@ -57,16 +64,18 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
     public void ToggleHandWashColliders()
     {
-        if(HandUsageCounter < 15)
-        {
-            foreach (Collider col in _handWashColliders)
-                col.enabled = !col.enabled;
-        }
+        foreach (Collider col in _handWashColliders)
+            col.enabled = !col.enabled;
     }
 
     public void DecrementUsageCount()
     {
         HandUsageCounter--;
+    }
+
+    public void ResetHandUsage()
+    {
+        HandUsageCounter = 30;
     }
 
     void IncreaseCleanRate() 
