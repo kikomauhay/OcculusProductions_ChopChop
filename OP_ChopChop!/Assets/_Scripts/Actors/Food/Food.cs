@@ -16,7 +16,7 @@ public abstract class Food : MonoBehaviour
     public DishType FoodType { get; set; }
 
     [SerializeField] protected GameObject _dishPrefab;
-    [SerializeField] protected Material _rottenMat, _contaminatedMat;
+    [SerializeField] protected Material _rottenMat, _contaminatedMat, _outlineTexture;
 
 #region Unity
 
@@ -103,13 +103,15 @@ public abstract class Food : MonoBehaviour
         if (IsExpired) return;
 
         IsContaminated = true;
-        GetComponent<MeshRenderer>().material = _contaminatedMat;
+        GetComponent<MeshRenderer>().materials = new Material[] { _contaminatedMat, 
+                                                                  _outlineTexture };
     }
     public void Expire()
     {
         if (IsContaminated) return;
 
         IsExpired = true;
-        GetComponent<MeshRenderer>().material = _rottenMat;
+        GetComponent<MeshRenderer>().materials = new Material[] { _rottenMat,
+                                                                  _outlineTexture };
     }
 }
