@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
-    void OnCollisionEnter(Collision  other)
+    void OnCollisionEnter(Collision other)
     {
         GameObject obj = other.gameObject;
 

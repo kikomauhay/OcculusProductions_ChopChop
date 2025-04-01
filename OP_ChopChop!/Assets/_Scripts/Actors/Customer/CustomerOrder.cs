@@ -39,6 +39,9 @@ public class CustomerOrder : MonoBehaviour
     [SerializeField] float _patienceDecreaseRate; // 1.65; deduction rate to use
     [SerializeField] float _customerScore;        // 100; starts at 100 and decreases over time
 
+    // REACTION FACES
+    [SerializeField] float _reactionTimer;
+
 #endregion
 
     void Start()
@@ -59,16 +62,13 @@ public class CustomerOrder : MonoBehaviour
             default: break;
         }
 
-        _patienceDecreaseRate = 0.5f; // 1.65f; // referenced from the document
+        if (_patienceDecreaseRate == 0f)
+            _patienceDecreaseRate = 1.65f; // referenced from the document
         
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
     }
-
-    void Reset()
-    {
-        GameManager.Instance.OnEndService -= DestroyOrderUI;
-    }
+    void OnDestroy() => GameManager.Instance.OnEndService -= DestroyOrderUI;
 
 #region Spawning_Helpers
 
@@ -137,7 +137,7 @@ public class CustomerOrder : MonoBehaviour
     {
         // initial reaction
         _appearance.SetFacialEmotion(FaceVariant.HAPPY);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(_reactionTimer);
 
         // chewing + animations
         // _actions.TriggerEating();
@@ -154,7 +154,7 @@ public class CustomerOrder : MonoBehaviour
         // initial reaction
         _appearance.SetAngryEmotion(1);
         _customerScore = 0f;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(_reactionTimer);
 
         /*
         // chewing + animations
@@ -172,13 +172,7 @@ public class CustomerOrder : MonoBehaviour
         // initial reaction
         _appearance.SetFacialEmotion(FaceVariant.SUS);
         _customerScore = 0f;
-        yield return new WaitForSeconds(0.5f);
-
-        /*
-        // chewing + animation
-        _actions.TriggerEating();
-        StartCoroutine(_appearance.DoChweing(_customerScore));
-        */
+        yield return new WaitForSeconds(_reactionTimer);
 
         // final actions
         GameManager.Instance.IncrementCustomersServed();

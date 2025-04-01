@@ -13,7 +13,9 @@ public class ColliderCheck : MonoBehaviour
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             CustomerOrder.CustomerSR = 0f;
+
             StartCoroutine(CustomerOrder.AngryReaction());
+            
             Destroy(other.gameObject); // destroys the ingredient on collision
             StartCoroutine(DisableCollider());
 
@@ -33,14 +35,18 @@ public class ColliderCheck : MonoBehaviour
 
         plate.IncrementUseCounter();
         plate.TogglePlated();
-        dish.EnableBoxCollider();
+        
     }
+
+#region Helpers
+
     void CheckDish(Dish d)
     {
         if (d.IsContaminated || d.IsExpired) // ORDER IS EXPIRED OR CONTAMINATED
         {
             CustomerOrder.CustomerSR = 0f;
             Debug.LogError("Game Over!");
+            StartCoroutine(CustomerOrder.ExpiredReaction());
         }
         else if (CustomerOrder.OrderIsSameAs(d)) // CORRECT ORDER
         {    
@@ -59,4 +65,6 @@ public class ColliderCheck : MonoBehaviour
         yield return new WaitForSeconds(3f);
         GetComponent<Collider>().enabled = true;
     }
+
+#endregion
 }
