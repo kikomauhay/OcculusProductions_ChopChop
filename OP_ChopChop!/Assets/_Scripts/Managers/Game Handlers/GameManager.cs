@@ -58,6 +58,7 @@ public class GameManager : Singleton<GameManager>
 
         CurrentPlayerMoney = _startingPlayerMoney;
         CustomersServed = 0;
+        MaxCustomerCount = 4;
         IsPaused = false;
         Difficulty = GameDifficulty.EASY;
 
@@ -148,8 +149,11 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
     }
 
-    void DoPreService() => // change to 3 mins when done testing
-        StartCoroutine(ShiftCountdown(30f, GameShift.SERVICE));         
+    void DoPreService() // change to 3 mins when done testing
+    {
+        Debug.Log($"waiting {_testTimer}s to change to service");
+        StartCoroutine(ShiftCountdown(_testTimer, GameShift.SERVICE));         
+    } 
     
     void DoService() // customer spawning + cooking, serving, & cleaning
     {
@@ -157,7 +161,8 @@ public class GameManager : Singleton<GameManager>
         _finalScore = 0;
 
         // change to 5 mins when done testing
-        StartCoroutine(ShiftCountdown(120f, GameShift.POST_SERVICE)); 
+        Debug.Log($"waiting {_testTimer * 10f}s to change to service");
+        StartCoroutine(ShiftCountdown(_testTimer * 10f, GameShift.POST_SERVICE)); 
     }
     void DoPostService() // rating calculations
     {
@@ -225,6 +230,7 @@ public class GameManager : Singleton<GameManager>
             int i = (int)Difficulty;
             i++;
             Difficulty = (GameDifficulty)i;
+            MaxCustomerCount++;
         }
         else if (score == 3) // C
         {
@@ -235,7 +241,6 @@ public class GameManager : Singleton<GameManager>
             // game over logic
         }
     }
-
     float GetAverageOf(List<float> list) 
     {
         // prevents a div/0 case

@@ -14,10 +14,17 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    void Start() 
+
+
+    void Start() => StartCoroutine(ChangeToMainGame());
+    // void Update() => test();    
+    void test()
     {
-        GameManager.Instance.ChangeShift(GameShift.TRAINING);
-        StartCoroutine(ChangeToMainGame());
+        if (Input.GetKeyDown(KeyCode.Return) && !SceneHandler.Instance.IsFading)
+        {
+            StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
+            GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
+        }
     }
 
     IEnumerator ChangeToMainGame()
