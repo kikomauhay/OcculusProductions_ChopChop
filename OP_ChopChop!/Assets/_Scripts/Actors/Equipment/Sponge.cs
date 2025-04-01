@@ -19,7 +19,7 @@ public class Sponge : MonoBehaviour
     [SerializeField] Material _wetMat, _cleanMat, _dirtyMat;
 
     private MeshRenderer _rend;
-    private const float DRY_DURATION = 4f; 
+    private const float WET_DURATION = 10f; 
 
 #endregion 
 
@@ -40,8 +40,8 @@ public class Sponge : MonoBehaviour
     
     IEnumerator DrySponge()
     {
-        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, DRY_DURATION);
-        yield return new WaitForSeconds(DRY_DURATION);
+        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, WET_DURATION);
+        yield return new WaitForSeconds(WET_DURATION);
 
         // makes the sponge clean
         _rend.material = _cleanMat;
