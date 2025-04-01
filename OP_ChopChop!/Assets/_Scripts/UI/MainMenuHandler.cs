@@ -1,11 +1,13 @@
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class MainMenuHandler : StaticInstance<MainMenuHandler>
 {
     [SerializeField] private GameObject playIcon;
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject settingsPanel, _eodPanel, _liveWallpaper;
+    [SerializeField] private TextMeshProUGUI _currentPhaseTxt;
 
     [SerializeField] private Slider masterSlider;  //We need to fix this slider for the volumeeeeee
 
@@ -34,5 +36,10 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
     {
         settingsPanel.SetActive(isTrue);
         pausePanel.SetActive(false);
+    }
+
+    public void UpdateNameOfPhaseTxt(string phase)
+    {
+        _currentPhaseTxt.text = phase;
     }
 }

@@ -1081,7 +1081,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aa8e0952f36a8345a6e4986bcce8432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _handWashColliders: []
   _kitchenWashColliders:
   - {fileID: 1278920647}
   - {fileID: 1263188996}
@@ -2666,7 +2665,7 @@ PrefabInstance:
     - target: {fileID: 6786887230358626773, guid: 866565e8a80e26b4c9eecdf15876ed2c,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6786887230358626773, guid: 866565e8a80e26b4c9eecdf15876ed2c,
         type: 3}
