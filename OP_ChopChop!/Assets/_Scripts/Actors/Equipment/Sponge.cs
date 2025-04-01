@@ -20,7 +20,6 @@ public class Sponge : MonoBehaviour
 
     private MeshRenderer _rend;
     private const float WET_DURATION = 10f; 
-
 #endregion 
 
 #region Unity_Methods

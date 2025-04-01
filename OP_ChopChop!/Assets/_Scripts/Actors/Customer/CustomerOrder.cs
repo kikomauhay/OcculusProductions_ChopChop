@@ -73,7 +73,8 @@ public class CustomerOrder : MonoBehaviour
 
         if (IsLastCustomer && GameManager.Instance.CurrentShift == GameShift.SERVICE)
         {
-            GameManager.Instance.DoShiftGameOver();
+            GameManager.Instance.StopAllCoroutines();
+            GameManager.Instance.ChangeShift(GameShift.POST_SERVICE);
         }
     }
 #region Spawning_Helpers
@@ -175,9 +176,7 @@ public class CustomerOrder : MonoBehaviour
 
         // final actions
         GameManager.Instance.IncrementCustomersServed();
-        
-        // change to game over screen
-        MakeSeatEmpty();
+        StartCoroutine(GameManager.Instance.CloseDownShop());
     }       
 
 #endregion
