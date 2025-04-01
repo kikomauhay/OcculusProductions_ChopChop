@@ -35,7 +35,6 @@ public class ColliderCheck : MonoBehaviour
 
         plate.IncrementUseCounter();
         plate.TogglePlated();
-        
     }
 
 #region Helpers

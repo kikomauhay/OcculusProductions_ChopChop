@@ -6,8 +6,10 @@ public class SoundManager : Singleton<SoundManager>
 #region Members
     
     public AudioSource SoundSource, MusicSource;
+    
     public Sound[] EquipmentSounds, ApplianceSounds, FoodSounds;
     public Sound[] GameSounds, VFXSounds, CustomerSounds;
+    public Sound[] TutorialSounds;
 
 #endregion
 
