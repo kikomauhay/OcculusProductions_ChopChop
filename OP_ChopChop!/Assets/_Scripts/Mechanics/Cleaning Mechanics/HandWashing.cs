@@ -7,9 +7,11 @@ public class HandWashing : MonoBehaviour
 
     [SerializeField] Collider _handWashCollider;
     [SerializeField] bool _isDirty;
+    [SerializeField] Material _handMaterial, _outlineTexture, _warningOutlineTexture;
 
     private float _timer;
     private int _handUsage;
+    private bool _hasSpawnedVFX;
 
     void Start()
     { 
@@ -18,20 +20,33 @@ public class HandWashing : MonoBehaviour
         IsWet = false;
         _timer = 20F;
         _handUsage = 20;
+        _hasSpawnedVFX = false;
 
         // Debug.Log($"Hand Dirty is {_isDirty}");
     }
 
     private void FixedUpdate()
     {
+        //test
+        if(Input.GetKeyUp(KeyCode.S))
+        {
+            DecrementUsage();
+        }
+
         if (_handUsage < 10)
         {
             _handWashCollider.enabled = true;
+            WarningIndicator();
         }
-        else if (_handUsage <= 0)
+        if (_handUsage <= 0)
         {
-            _isDirty = true;
-            SpawnManager.Instance.SpawnVFX(VFXType.STINKY, _handWashCollider.transform, 5F);
+            Dirtify();
+
+            if(!_hasSpawnedVFX)
+            {
+                _hasSpawnedVFX = true;
+               StartCoroutine(SpawnVFXWithDelay());
+            }
         }
         else _isDirty = false;    
     }
@@ -48,7 +63,13 @@ public class HandWashing : MonoBehaviour
         {
             if(other.gameObject.GetComponent<HandWashing>()._isDirty)
             {
-                _isDirty = true;
+                Dirtify();
+
+                if (!_hasSpawnedVFX)
+                {
+                    _hasSpawnedVFX = true;
+                    StartCoroutine(SpawnVFXWithDelay());
+                }
             }
         }
     }
@@ -71,6 +92,28 @@ public class HandWashing : MonoBehaviour
         }
     }
 
+    private void Dirtify()
+    {
+        _isDirty = true;
+        if(_isDirty)
+        {
+            SkinnedMeshRenderer r = GetComponentInChildren<SkinnedMeshRenderer>();
+            if(r != null)
+            {
+                r.materials = new Material[] { _handMaterial, _outlineTexture };
+            }
+        }
+    }
+
+    private void WarningIndicator()
+    {
+        SkinnedMeshRenderer r = GetComponentInChildren<SkinnedMeshRenderer>();
+        if(r!=null)
+        {
+            r.materials = new Material[] { _handMaterial, _warningOutlineTexture };
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         _timer = 20F;
@@ -88,6 +131,7 @@ public class HandWashing : MonoBehaviour
 
     public void DecrementUsage()
     {
+        Debug.LogWarning(_handUsage);
         _handUsage--;
     }
 
@@ -96,5 +140,12 @@ public class HandWashing : MonoBehaviour
         yield return new WaitForSeconds(5F);
         IsWet = false;
     }
-#endregion
+
+    private IEnumerator SpawnVFXWithDelay()
+    {
+        SpawnManager.Instance.SpawnVFX(VFXType.STINKY, _handWashCollider.transform, 3F);
+        yield return new WaitForSeconds(5f); // Delay before it can spawn again
+        _hasSpawnedVFX = false;
+    }
+    #endregion
 }

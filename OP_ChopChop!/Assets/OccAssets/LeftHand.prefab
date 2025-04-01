@@ -398,6 +398,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _handWashCollider: {fileID: 8532352744552057297}
   _isDirty: 0
+  _handMaterial: {fileID: 2100000, guid: 3637b758ff163493f8bb8b6d7e96d7ae, type: 2}
+  _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
 --- !u!65 &8532352744552057297
 BoxCollider:
   m_ObjectHideFlags: 0

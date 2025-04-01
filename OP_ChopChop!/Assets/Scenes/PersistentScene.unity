@@ -2151,7 +2151,7 @@ BoxCollider:
   m_GameObject: {fileID: 391014581179187536}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.02, y: 0.02, z: 0.02}
   m_Center: {x: 0.05, y: -0.03, z: 0}
@@ -2288,6 +2288,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _handWashCollider: {fileID: 391014581179187540}
   _isDirty: 0
+  _handMaterial: {fileID: 2100000, guid: 3637b758ff163493f8bb8b6d7e96d7ae, type: 2}
+  _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _warningOutlineTexture: {fileID: 2100000, guid: 6aca4faf3d6202f43916a5b4db927a14,
+    type: 2}
 --- !u!114 &391014581342121440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2831,7 +2835,7 @@ BoxCollider:
   m_GameObject: {fileID: 391014581656222644}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.02, y: 0.02, z: 0.02}
   m_Center: {x: -0.05, y: -0.03, z: 0}
@@ -2985,6 +2989,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _handWashCollider: {fileID: 391014581656222647}
   _isDirty: 0
+  _handMaterial: {fileID: 2100000, guid: 3637b758ff163493f8bb8b6d7e96d7ae, type: 2}
+  _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _warningOutlineTexture: {fileID: 2100000, guid: 6aca4faf3d6202f43916a5b4db927a14,
+    type: 2}
 --- !u!114 &391014582062678172
 MonoBehaviour:
   m_ObjectHideFlags: 0
