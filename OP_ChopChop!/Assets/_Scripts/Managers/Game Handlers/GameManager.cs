@@ -168,6 +168,7 @@ public class GameManager : Singleton<GameManager>
     {
         OnEndService?.Invoke(); 
         TurnOnEndOfDayReceipt();
+        StartCoroutine(Delay(_testTimer * 2f));
         StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
     }
 
@@ -252,5 +253,10 @@ public class GameManager : Singleton<GameManager>
             n += list[i];
 
         return n / list.Count;
+    }
+
+    IEnumerator Delay(float time)
+    {
+        yield return new WaitForSeconds(time);
     }
 }

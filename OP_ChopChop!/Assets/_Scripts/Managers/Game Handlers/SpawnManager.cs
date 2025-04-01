@@ -28,6 +28,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [SerializeField] float _initialCustomerSpawnTime; // 2s
     [SerializeField] float _customerSpawnInterval;    // 10s
 
+    int _spawnedCustoemrs;
+
 #endregion
 
 #region Unity_Methods
@@ -39,6 +41,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
+
+        _spawnedCustoemrs = 0;    
     }
     void OnDestroy() // UNBIND FROM EVENTS
     {
@@ -113,6 +117,10 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // adding random noises when the cats spawn
         StartCoroutine(customerActions.RandomMeowing());
+        _spawnedCustoemrs++;
+
+        if (_spawnedCustoemrs == GameManager.Instance.MaxCustomerCount)
+            customer.GetComponent<CustomerOrder>().IsLastCustomer = true;
     } 
 
 #endregion
