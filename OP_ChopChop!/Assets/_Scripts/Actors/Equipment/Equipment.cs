@@ -143,7 +143,7 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter = _maxUsageCounter;
         _isClean = false;
-        GetComponent<MeshRenderer>().material = _dirtyMat;
+        GetComponent<MeshRenderer>().materials = new Material[] { _dirtyMat, _outlineTexture };
     }
 
 #endregion
