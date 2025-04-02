@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class TunaIngredient : Ingredient
 {
     protected override void Start()
