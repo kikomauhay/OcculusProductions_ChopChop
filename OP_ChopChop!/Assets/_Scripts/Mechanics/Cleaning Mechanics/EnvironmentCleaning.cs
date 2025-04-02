@@ -5,8 +5,6 @@ public class EnvironmentCleaning : MonoBehaviour
 {
     private Collider _collider;
 
-    bool _coroutineActivated = false;
-
     private void Awake()
     {
         _collider = GetComponent<Collider>();
@@ -50,7 +48,6 @@ public class EnvironmentCleaning : MonoBehaviour
             yield return new WaitForSeconds(5f);
             SpawnManager.Instance.SpawnVFX(VFXType.STINKY, tempGameObj.transform , 5f);
             Destroy(tempGameObj, 0.1F);
-            _coroutineActivated = false;
         }
     }
 }
