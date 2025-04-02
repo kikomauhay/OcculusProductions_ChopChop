@@ -31,16 +31,15 @@ public class Trash : MonoBehaviour
 
 #region Functions
 
-
     void DestroyIngredient(Ingredient ing)
     {
-        Destroy(gameObject);
+        Destroy(ing.gameObject);
         ing.Trashed();
     }
 
     void DestroyFood(Food food)
     {
-        Destroy(gameObject);
+        Destroy(food.gameObject);
         SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
     }
 

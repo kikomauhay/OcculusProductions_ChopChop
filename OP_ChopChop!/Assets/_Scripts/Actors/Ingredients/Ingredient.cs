@@ -21,6 +21,7 @@ public abstract class Ingredient : MonoBehaviour
     public IngredientState IngredientState { get; private set; } // changes inside this script
     public float FreshnessRate { get; private set; } // the higher the score, the better
     public bool IsFresh { get; private set; }        // changes inside the enumerator
+    public int SliceIndex => _sliceIndex;
 
 #endregion
 
@@ -29,6 +30,7 @@ public abstract class Ingredient : MonoBehaviour
     public Action OnTrashed;
 
     [Header("Ingredient Components")]
+    [SerializeField] int _sliceIndex;
     [SerializeField] protected IngredientType _ingredientType; // will be used by the child classes
     [SerializeField] protected IngredientStats _ingredientStats;
 

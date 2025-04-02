@@ -83,7 +83,8 @@ public class GameManager : Singleton<GameManager>
         // unpause game, remove logo, and start onboarding
         ChangeShift(GameShift.TRAINING);
         Continue.action.Disable();
-        OnBoardingHandler.Instance.InventoryTutorial();
+
+        StartCoroutine(OnBoardingHandler.Instance.InventoryTutorial());
     }
 
     IEnumerator ShiftCountdown(float timer, GameShift shift)
@@ -99,7 +100,7 @@ public class GameManager : Singleton<GameManager>
 
     // GAME PAUSING
     public void TogglePause()
-    {
+    {   
         if (!SceneHandler.Instance.CanPause) return;
 
         IsPaused = !IsPaused;

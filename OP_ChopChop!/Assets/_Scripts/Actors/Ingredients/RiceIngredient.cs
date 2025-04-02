@@ -35,7 +35,46 @@ public class RiceIngredient : Ingredient
 
         if (!ing.IsFresh) return;
 
-        // gets the freshness rates of both ingredients before deleting them
+        // sashimi spawning
+        if (ing.SliceIndex == 3)
+        {
+            Dish dish = null;
+
+            if (ing.IngredientType == IngredientType.SALMON)
+            {
+                Destroy(gameObject);
+                Destroy(other.gameObject);
+
+                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+                SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+
+                foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[2],
+                                                                transform,
+                                                                SpawnObjectType.DISH);
+                dish = foodToSpawn.GetComponent<Dish>();
+                dish.OrderDishType = DishType.SASHIMI_SALMON;
+            }
+            else if (ing.IngredientType == IngredientType.TUNA)
+            {
+                Destroy(gameObject);
+                Destroy(other.gameObject);
+
+                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+                SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+
+                foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[3],
+                                                                transform,
+                                                                SpawnObjectType.DISH);
+               dish = foodToSpawn.GetComponent<Dish>();
+               dish.OrderDishType = DishType.SASHIMI_TUNA;
+            }
+
+            // sets up the dish's score
+            dish.DishScore = (FreshnessRate + ing.FreshnessRate) / 2f;
+            return;
+        }
+
+        // nigiri spawning
         if (ing.IngredientType == IngredientType.SALMON)
         {            
             Destroy(gameObject);
