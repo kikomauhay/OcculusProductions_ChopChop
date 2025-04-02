@@ -9,6 +9,12 @@ public class Trash : MonoBehaviour
     {
         GameObject obj = other.gameObject;
 
+        if (obj.GetComponent<SalmonIngredient>() != null)
+        {
+            Destroy(obj);
+            StartCoroutine(OnBoardingHandler.Instance.FoodPreparationTutorial());
+        }
+
         if (obj.GetComponent<Trashable>() == null) return;
         
         switch(obj.GetComponent<Trashable>().TrashTypes)
