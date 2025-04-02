@@ -3,7 +3,7 @@ using System;
 
 public class RiceIngredient : Ingredient
 {
-    [Header("Finished Dishes"), Tooltip("0 = salmon nigiri, 1 = tuna nigiri")]
+    [Header("Finished Dishes"), Tooltip("0 = salmon nigiri, 1 = tuna nigiri, 2 = salmon sashimi, 3 = tuna sashimi")]
     [SerializeField] GameObject[] _foodPrefabs; 
 
     [Header("Molding Attributes")]
@@ -73,6 +73,8 @@ public class RiceIngredient : Ingredient
             dish.DishScore = (FreshnessRate + ing.FreshnessRate) / 2f;
             return;
         }
+
+        if (ing.SliceIndex != 4) return;
 
         // nigiri spawning
         if (ing.IngredientType == IngredientType.SALMON)

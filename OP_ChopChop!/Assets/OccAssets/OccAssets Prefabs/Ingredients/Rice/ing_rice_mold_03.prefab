@@ -352,6 +352,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66126108b4485a44b12f6cb792ce21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sliceIndex: 0
   _ingredientType: 0
   _ingredientStats: {fileID: 11400000, guid: 6ab4ecd27a1bf534f83999d53cdf3f0e, type: 2}
   _stateMaterials:
@@ -363,4 +364,6 @@ MonoBehaviour:
   _foodPrefabs:
   - {fileID: 5778702139965393049, guid: ee59e60ddd11e66429b96b45594c629e, type: 3}
   - {fileID: 962565321575026586, guid: bc29908154ef6634d90d1996069d24e8, type: 3}
+  - {fileID: 8589455853079741865, guid: babd4f77cefd2be4794cf66bf84f318a, type: 3}
+  - {fileID: 5618999308171318900, guid: 6f234b21a3eb86347a34b9bcf0cdb5b3, type: 3}
   _moldType: 2
