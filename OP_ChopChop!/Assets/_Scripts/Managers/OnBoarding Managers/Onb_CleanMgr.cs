@@ -3,18 +3,29 @@ using UnityEngine;
 
 public class Onb_CleanMgr : StaticInstance<Onb_CleanMgr> 
 {
+    Collider _collider;
+
+#region Unity
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
 
-    //Enable GameObject once you reach onb_P6
+    [SerializeField] GameObject _dirtySpot;
 
-    void OnEnable() => StartCoroutine(SpawnStinkyVFX());
-    void OnDisable() => StopCoroutine(SpawnStinkyVFX());
-
-    private void OnTriggerEnter(Collider other)
+    void Start ()
+    {
+        _collider = GetComponent<Collider>();
+        _collider.enabled = false;
+    }
+    void OnDisable() 
+    {
+        StopCoroutine(SpawnStinkyVFX());
+        StartCoroutine(OnBoardingHandler.Instance.NextCustomerTutorial());
+    }
+private void OnTriggerEnter(Collider other)
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
         if (sponge == null) return;
 
         if (sponge.IsWet)
@@ -24,21 +35,27 @@ public class Onb_CleanMgr : StaticInstance<Onb_CleanMgr>
         }
     }
 
-    IEnumerator SpawnStinkyVFX()
+#endregion
+
+#region Enumerators
+
+    public IEnumerator SpawnStinkyVFX()
     {
+        _collider.enabled = true;
+        
         while (gameObject.activeSelf)
         {
-
             yield return new WaitForSeconds(5f);
-            SpawnManager.Instance.SpawnVFX(VFXType.STINKY, transform, 5f);
+            SpawnManager.Instance.SpawnVFX(VFXType.STINKY, _dirtySpot.transform, 5f);
         }
     }
 
     IEnumerator DisableObject()
     {
-        yield return new WaitForSeconds(5F);
-        this.gameObject.SetActive(false);
-        //proceed to onb_P7 once disabled
+        yield return new WaitForSeconds(5f);
+        _collider.enabled = false;
+        gameObject.SetActive(false);
     }
 
+#endregion
 }
