@@ -4,6 +4,8 @@ public class Plate : Equipment
 {
 #region Members
 
+    [SerializeField] bool _isTutorial, _isDirtyTest; 
+
     public bool IsPlated { get; private set; }
 
     [Tooltip("The Box Collider Component")] 
@@ -24,6 +26,9 @@ public class Plate : Equipment
 
         IsPlated = false;
         _boxTrigger.enabled = true;
+
+        if (_isDirtyTest)
+            Contaminate();
     }
     
     protected override void OnCollisionEnter(Collision other)

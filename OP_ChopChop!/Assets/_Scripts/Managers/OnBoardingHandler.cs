@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 /// <summary>
@@ -96,6 +94,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         StartCoroutine(EnableMoldingPanel());
         StopAllCoroutines();
+
+        _moldingPanel.SetActive(false);
+        _slicingPanel.SetActive(false);
     }
     public IEnumerator ServingTutorial()
     {
