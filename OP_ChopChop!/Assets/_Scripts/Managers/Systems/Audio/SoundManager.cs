@@ -66,6 +66,10 @@ public class SoundManager : Singleton<SoundManager>
                 s = Array.Find(CustomerSounds, i => i.name == title);
                 break;
 
+            case SoundGroup.TUTORIAL:
+                s = Array.Find(TutorialSounds, i => i.name == title);
+                break;
+
             default:
                 Debug.LogError("Wrong SoundGroup!");
                 break;

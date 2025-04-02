@@ -22,16 +22,8 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-
-    // void Update() => test();    
-    void test()
-    {
-        if (Input.GetKeyDown(KeyCode.Return) && !SceneHandler.Instance.IsFading)
-        {
-            StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
-            GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
-        }
-    }
+    
+    
 
 #region Helpers
 
@@ -45,14 +37,13 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                     _ingTransform.position, _ingTransform.rotation,
                     transform);
     }
-
     void SpawnNextCustomers()
     {
-        Instantiate(_tutorialCustomers[2], 
+        Instantiate(_tutorialCustomers[1], 
                     _chairs[1].position, _chairs[1].rotation, 
                     transform);
 
-        GameObject customer = Instantiate(_tutorialCustomers[2],
+        GameObject customer = Instantiate(_tutorialCustomers[1],
                               _chairs[2].position, _chairs[2].rotation,
                               transform);
 
@@ -83,8 +74,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public IEnumerator InventoryTutorial()
     {
-        SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(22f);
+        SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+        // SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
+        // yield return new WaitForSeconds(22f);
 
         SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(21f);

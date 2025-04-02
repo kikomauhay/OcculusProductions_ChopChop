@@ -50,16 +50,17 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] float _startingPlayerMoney;
     [SerializeField] RestaurantReceipt _endOfDayReceipt;
 
+    [SerializeField] GameObject _logo;
+
 #endregion
 
 #region Unity
 
-    protected override void OnApplicationQuit() 
+    protected override void OnApplicationQuit()
     {
-        base.OnApplicationQuit();
-        Continue.action.performed -= RemoveLogo;    
+        base.OnApplicationQuit(); 
+        Continue.action.performed -= RemoveLogo;
     }
-
     protected override void Awake() // set starting money
     {
         base.Awake();
@@ -83,7 +84,7 @@ public class GameManager : Singleton<GameManager>
         // unpause game, remove logo, and start onboarding
         ChangeShift(GameShift.TRAINING);
         Continue.action.Disable();
-        Continue.action.performed -= RemoveLogo;
+        _logo.SetActive(false);
 
         StartCoroutine(OnBoardingHandler.Instance.InventoryTutorial());
     }
