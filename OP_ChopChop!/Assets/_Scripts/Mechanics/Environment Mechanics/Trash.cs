@@ -13,6 +13,7 @@ public class Trash : MonoBehaviour
         {
             Destroy(obj);
             StartCoroutine(OnBoardingHandler.Instance.FoodPreparationTutorial());
+            return;
         }
 
         if (obj.GetComponent<Trashable>() == null) return;
