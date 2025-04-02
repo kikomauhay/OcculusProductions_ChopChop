@@ -47,7 +47,7 @@ public class Enumerations : MonoBehaviour {}
         TUNA
     }
     public enum IngredientState // IN A CERTAIN ORDER (DON'T RE-ORDER)
-{ 
+    { 
         DEFAULT, 
         EXPIRED, 
         CONTAMINATED, 
@@ -58,12 +58,20 @@ public class Enumerations : MonoBehaviour {}
         UNMOLDED,
         GOOD,
         PERFECT,
-        BAD
-    }
+    BAD
+}
 
 #endregion
 
 #region Others
+
+    public enum GameDifficulty
+    { 
+        EASY, 
+        NORMAL,
+        HARD
+    }
+
     public enum GameShift // IN A CERTAIN ORDER (DON'T RE-ORDER)
     {
         DEFAULT,
@@ -101,5 +109,14 @@ public class Enumerations : MonoBehaviour {}
         MAD,
         SUS
     }
-
+    public enum SoundGroup
+    { 
+        EQUIPMENT,
+        APPLIANCES,
+        FOOD,
+        GAME,
+        VFX,
+        CUSTOMER,
+        TUTORIAL
+    }
 #endregion

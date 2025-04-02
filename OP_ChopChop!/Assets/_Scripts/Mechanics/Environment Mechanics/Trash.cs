@@ -1,5 +1,5 @@
-using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine;
 
 public class Trash : MonoBehaviour
 {
@@ -16,37 +16,37 @@ public class Trash : MonoBehaviour
             case TrashableType.INGREDIENT:
                 DestroyIngredient(obj.GetComponent<Ingredient>());
                 break;
+
             case TrashableType.FOOD:
                 DestroyFood(obj.GetComponent<Food>());
                 break;
+
             case TrashableType.EQUIPMENT:
+                DoEquipmentLogic(obj.GetComponent<Equipment>());
                 break;
+
+            default: break;
         }
     }
 
-    #region Functions
+#region Functions
 
     void DestroyIngredient(Ingredient ing)
     {
-        Destroy(gameObject);
+        Destroy(ing.gameObject);
+        ing.Trashed();
     }
 
     void DestroyFood(Food food)
     {
-        Destroy(gameObject);
+        Destroy(food.gameObject);
+        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
     }
 
     void DoEquipmentLogic(Equipment eq)
     {
-        eq.ResetPosition();
+        eq.HitTheFloor();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
-
-        // other logic for equipment child classes
-
-        if (eq.GetComponent<Plate>().IsClean)
-        {
-            eq.ToggleClean();
-        }
     }
 
     private void AttachToHand(GameObject _spawnedPlate, IXRSelectInteractor _interactor)
@@ -69,5 +69,5 @@ public class Trash : MonoBehaviour
         }
     }
 
-    #endregion
+#endregion
 }

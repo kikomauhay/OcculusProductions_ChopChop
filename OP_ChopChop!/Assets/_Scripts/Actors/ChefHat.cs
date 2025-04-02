@@ -1,6 +1,6 @@
-using UnityEngine;
+using System.Collections;
 
-public class ChefHat : StaticInstance<ChefHat> {
+public class ChefHat : PersistentSingleton<ChefHat> {
 
     public bool HatWorn { get; private set; } = false;
 
@@ -10,6 +10,14 @@ public class ChefHat : StaticInstance<ChefHat> {
     public void StartService() 
     {
         HatWorn = true;
-        GameManager.Instance.ChangeShift(GameShift.SERVICE);
+        StartCoroutine(PreService());
+    }
+
+    IEnumerator PreService()
+    {
+        StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
+        yield return null;
+
+        GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
     }
 }

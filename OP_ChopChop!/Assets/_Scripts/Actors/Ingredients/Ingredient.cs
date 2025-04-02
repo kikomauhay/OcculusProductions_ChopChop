@@ -9,6 +9,7 @@ using System;
 /// 
 /// </summary>
 
+[RequireComponent(typeof(Trashable))]
 public abstract class Ingredient : MonoBehaviour
 {
 #region Readers
@@ -19,117 +20,172 @@ public abstract class Ingredient : MonoBehaviour
     // INGREDIENT ATTRIBUTES
     public IngredientState IngredientState { get; private set; } // changes inside this script
     public float FreshnessRate { get; private set; } // the higher the score, the better
-    public bool IsProperlyStored { get; set; }       // is changed outside the script
     public bool IsFresh { get; private set; }        // changes inside the enumerator
+    public int SliceIndex => _sliceIndex;
 
 #endregion
 
 #region Members
 
+    public Action OnTrashed;
+
     [Header("Ingredient Components")]
+    [SerializeField] int _sliceIndex;
     [SerializeField] protected IngredientType _ingredientType; // will be used by the child classes
-    [SerializeField] protected StateMaterials _stateMaterials;
     [SerializeField] protected IngredientStats _ingredientStats;
+
+    [Tooltip("0 = good, 1 = comtaminated, 2 = expired")]
+    [SerializeField] protected Material[] _stateMaterials;
+    [SerializeField] protected Material _outlineShaderMaterial;
 
     protected Vector3 _startPosition;
 
 #endregion
 
+#region Unity_Methods
+
     protected virtual void Start() 
     {
         // ingredients will only decay once the shift has started  
         GameManager.Instance.OnStartService += StartDecaying;
-        GameManager.Instance.OnEndService += ExpireIngredient;
+        GameManager.Instance.OnEndService += Expire;
 
         IngredientState = IngredientState.DEFAULT;   
 
         FreshnessRate = 100f;     
-        IsFresh = true;           
-        IsProperlyStored = false; 
+        IsFresh = true;
         _startPosition = transform.position;
 
         ChangeMaterial();
-
+        
         // in case some ingredients are spawned during Service time
         if (GameManager.Instance.CurrentShift == GameShift.SERVICE)
             StartDecaying();        
     }
-    protected virtual void Reset() 
+    protected virtual void OnDestroy() 
     {
         GameManager.Instance.OnStartService -= StartDecaying;
-        GameManager.Instance.OnEndService -= ExpireIngredient;
-        Reposition();
+        GameManager.Instance.OnEndService -= Expire;
+    }
+    protected virtual void OnCollisionEnter(Collision other)
+    {
+        // ingredient + another ingredient
+        if (other.gameObject.GetComponent<Ingredient>() != null)
+        {
+            Ingredient ing = other.gameObject.GetComponent<Ingredient>();
+
+            if (!IsFresh && ing.IsFresh)
+                ing.Contaminate();
+
+            else if (IsFresh && !ing.IsFresh)
+                Contaminate();
+        }
+
+        // ingredient + food
+        if (other.gameObject.GetComponent<Food>() != null)
+        {
+            Food food = other.gameObject.GetComponent<Food>();
+
+            // contamination logic
+            if (!IsFresh && (food.IsContaminated || food.IsExpired))
+                food.Contaminate();
+
+            else if (IsFresh && (!food.IsExpired || !food.IsContaminated))
+                Contaminate();
+        }
+
+        // ingredient + dish
+        if (other.gameObject.GetComponent<Dish>() != null)
+        {
+            Dish dish = other.gameObject.GetComponent<Dish>();
+
+            // contamination logic
+            if (!IsFresh && (dish.IsContaminated || dish.IsExpired))
+                dish.HitTheFloor();
+
+            else if (IsFresh && (!dish.IsExpired || !dish.IsContaminated))
+                Contaminate();
+        }
     }
 
-#region State_Actions
+#endregion
 
-    public void TrashIngredient() // idk if we need this
+    #region Ingredint_Methods
+
+    public void Trashed()
     {
-        // removes the food from the game entirely
-        // could add more punishment later on 
+        OnTrashed?.Invoke();
 
         IngredientState = IngredientState.CONTAMINATED;
         IsFresh = false;
         FreshnessRate = 0f;
-        SoundManager.Instance.PlaySound("dispose food");
+        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
         ChangeMaterial();
-
-        Debug.LogWarning($"{name} has been trashed!");
-
-
-        // add Destroy() ??
     }
-    public void ExpireIngredient()
+    public void Expire()
     {
         IngredientState = IngredientState.EXPIRED;
         IsFresh = false;
 
         ChangeMaterial();
-        
-        Debug.LogWarning($"{name} has expired!");
     } 
-    public void ContaminateIngredient()
+    public void Contaminate()
     {
         IngredientState = IngredientState.CONTAMINATED;
         IsFresh = false;
         ChangeMaterial();
-        Reposition();
-        
-        Debug.LogWarning($"{name} has been contaminated!");
     }
-
-#endregion
-
+    public void Stored() => IngredientState = IngredientState.STORED;
+    public void Unstored()
+    {
+        StartCoroutine(Delay(2f));
+        IngredientState = IngredientState.DEFAULT;
+    }
     protected void ChangeMaterial() 
     {
         // the material of the ingredient changes based on the freshness rate
         // the lower the number, the worse it is
 
         Material m = null;
+        Material osm = null;
 
         switch (this.IngredientState)
         {
             case IngredientState.CONTAMINATED:
-                m = _ingredientStats.Materials[2];
+                m = _stateMaterials[1];
+                osm = _outlineShaderMaterial;
                 break;
 
             case IngredientState.EXPIRED:
-                m = _ingredientStats.Materials[1];
+                m = _stateMaterials[2];
+                osm = _outlineShaderMaterial;
                 break;
 
             case IngredientState.DEFAULT:
-                m = _ingredientStats.Materials[0];
+                m = _stateMaterials[0];
                 break;
 
             default: break;
         }
 
         if (m != null)
-            GetComponent<MeshRenderer>().material = m;
-    }
+        {
+            MeshRenderer renderer = GetComponent<MeshRenderer>();
 
+            if (m != null)
+            {
+                renderer.materials = new Material[] { m, osm };
+            }
+            else
+            {
+                renderer.material = m;
+            }
+        }
+
+    }
     void StartDecaying() => StartCoroutine(DecayIngredient());
-    public void Reposition() => transform.position = _startPosition;
+
+#endregion
 
 #region Enumerators
 
@@ -164,23 +220,16 @@ public abstract class Ingredient : MonoBehaviour
             {
                 FreshnessRate = 0f;
                 IngredientState = IngredientState.EXPIRED;
+                SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
+                ChangeMaterial();
             }
-
-            ChangeMaterial();
         }
     }
 
-    #endregion
+    protected IEnumerator Delay(float time)
+    {
+        yield return new WaitForSeconds(time);
+    }
 
-}
-
-[Serializable]
-public struct StateMaterials
-{
-    public Material[] ExpiredMats => _expiredMaterials;
-    public Material[] FreshMats => _freshMaterials;
-    public Material[] ContaminatedMats => _contaminatedMaterials;
-
-    [Tooltip("0 = thick cut, 1 = thick strip, 2 = thin slice")]
-    [SerializeField] Material[] _expiredMaterials, _freshMaterials, _contaminatedMaterials;
+#endregion
 }

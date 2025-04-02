@@ -3,7 +3,7 @@ using System;
 
 public class RiceIngredient : Ingredient
 {
-    [Header("Finished Dishes"), Tooltip("0 = salmon nigiri, 1 = tuna nigiri")]
+    [Header("Finished Dishes"), Tooltip("0 = salmon nigiri, 1 = tuna nigiri, 2 = salmon sashimi, 3 = tuna sashimi")]
     [SerializeField] GameObject[] _foodPrefabs; 
 
     [Header("Molding Attributes")]
@@ -12,57 +12,104 @@ public class RiceIngredient : Ingredient
 
     protected override void Start() 
     {
-
         base.Start();
         OnRiceMolded += ChangeRiceMold;
-        //_moldType = MoldType.UNMOLDED;
-        //_ingredientType = IngredientType.RICE;
     }
-    protected override void Reset()
+    protected override void OnDestroy()
     {
-        base.Reset();
+        base.OnDestroy();
         OnRiceMolded -= ChangeRiceMold;
     }
 
     void OnTriggerEnter(Collider other) // combination of the food
     {
-        if (other.gameObject.name == name) return;
-
-        if (_moldType != MoldType.PERFECT) return;
+        if (other.gameObject.name == name || 
+            _moldType != MoldType.PERFECT) 
+        {
+            return;
+        }
 
         Ingredient ing = other.GetComponent<Ingredient>();
-        Vector3 pos = transform.position;
-        Quaternion rot = transform.rotation;
-
-        // gets the freshness rates of both ingredients before deleting them
-        
-        // only nigiris for now (makis will be added on SPARK)
-        
-        GameObject foodToSpawn;
+        GameObject foodToSpawn = null;
         Food food = null;
 
-        if (ing.IngredientType == IngredientType.SALMON)
+        if (!ing.IsFresh) return;
+
+        // sashimi spawning
+        if (ing.SliceIndex == 3)
         {
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+            Dish dish = null;
+
+            if (ing.IngredientType == IngredientType.SALMON)
+            {
+                Destroy(gameObject);
+                Destroy(other.gameObject);
+
+                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+                SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+
+                foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[2],
+                                                                transform,
+                                                                SpawnObjectType.DISH);
+                dish = foodToSpawn.GetComponent<Dish>();
+                dish.OrderDishType = DishType.SASHIMI_SALMON;
+            }
+            else if (ing.IngredientType == IngredientType.TUNA)
+            {
+                Destroy(gameObject);
+                Destroy(other.gameObject);
+
+                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+                SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+
+                foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[3],
+                                                                transform,
+                                                                SpawnObjectType.DISH);
+               dish = foodToSpawn.GetComponent<Dish>();
+               dish.OrderDishType = DishType.SASHIMI_TUNA;
+            }
+
+            // sets up the dish's score
+            dish.DishScore = (FreshnessRate + ing.FreshnessRate) / 2f;
+            return;
+        }
+
+        if (ing.SliceIndex != 4) return;
+
+        // nigiri spawning
+        if (ing.IngredientType == IngredientType.SALMON)
+        {            
             Destroy(gameObject);
             Destroy(other.gameObject);
-            foodToSpawn = Instantiate(_foodPrefabs[0], pos, rot);
+
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+            SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+
+            foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[0],
+                                                            transform,
+                                                            SpawnObjectType.FOOD);
+            food = foodToSpawn.GetComponent<Food>();
+            food.FoodType = DishType.NIGIRI_SALMON;
         }
         else if (ing.IngredientType == IngredientType.TUNA)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+            SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+
             Destroy(gameObject);
             Destroy(other.gameObject);
-            foodToSpawn = Instantiate(_foodPrefabs[1], pos, rot);
+            
+            foodToSpawn = SpawnManager.Instance.SpawnObject(_foodPrefabs[1],
+                                                            transform,
+                                                            SpawnObjectType.FOOD);
+            food = foodToSpawn.GetComponent<Food>();
+            food.FoodType = DishType.NIGIRI_TUNA;
         }
         else return;
 
         // sets up the food's score
-        food = foodToSpawn.GetComponent<Food>();
         food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
-        food.FoodType = DishType.NIGIRI_SALMON; // only salmon for now (will add tuna later)
     }
 
     void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;
-    // change to incrementing index so you don't need to get a parameter
 }
