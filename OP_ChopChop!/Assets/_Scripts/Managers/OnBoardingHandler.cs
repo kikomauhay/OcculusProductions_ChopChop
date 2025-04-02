@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ using UnityEngine;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
-    // int _tutorialIndex = 0;
+    public bool TutorialDone { get; private set; } = false;
 
     [SerializeField] GameObject _slicingPanel, _moldingPanel, _salmonPrefab;
 
@@ -45,6 +46,18 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                     transform);
     }
 
+    void SpawnNextCustomers()
+    {
+        Instantiate(_tutorialCustomers[2], 
+                    _chairs[1].position, _chairs[1].rotation, 
+                    transform);
+
+        GameObject customer = Instantiate(_tutorialCustomers[2],
+                              _chairs[2].position, _chairs[2].rotation,
+                              transform);
+
+        customer.GetComponent<CustomerOrder>().IsLastCustomer = true;
+    }
     IEnumerator EnableSlicingPanel()
     {
         while (true)
@@ -104,10 +117,30 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         yield return new WaitForSeconds(14f);
 
         SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(22f);
+        yield return new WaitForSeconds(4f);
+
+        StartCoroutine(Onb_CleanMgr.Instance.SpawnStinkyVFX());
+        yield return new WaitForSeconds(18f);
     }
 
-    
+    public IEnumerator NextCustomerTutorial()
+    {
+        SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(10f);
+
+        SpawnNextCustomers();
+    }
+    public IEnumerator EndOfDayTutorial()
+    {
+        SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(22f);
+
+        SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(7f);
+
+        TutorialDone = true;
+    }
+
 
 #endregion
 

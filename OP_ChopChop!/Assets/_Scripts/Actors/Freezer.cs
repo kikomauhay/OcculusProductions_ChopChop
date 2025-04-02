@@ -4,7 +4,8 @@ using UnityEngine;
 public class Freezer : MonoBehaviour
 {
 
-    List<Ingredient> _ingredients;
+    [SerializeField] bool _isTutorial;
+    [SerializeField] List<Ingredient> _ingredients;
     const int MAX_CAPACITY = 3;
 
     private void OnTriggerEnter(Collider other)
@@ -39,6 +40,8 @@ public class Freezer : MonoBehaviour
 
         if (ing == null) return;
 
+        _ingredients.Remove(ing);
+        
         if (GameManager.Instance.CurrentShift == GameShift.TRAINING)
         {
             StartCoroutine(OnBoardingHandler.Instance.IngredentTutorial());
@@ -47,7 +50,6 @@ public class Freezer : MonoBehaviour
 
         // removes the ingredient to the freezer & changes its decay rate
         ing.Unstored();
-        _ingredients.Remove(ing);
 
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                         "door closed 01" : "door closed 02",
