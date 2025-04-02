@@ -49,13 +49,6 @@ public class ShopManager : StaticInstance<ShopManager>
 
 #region Debugging code for button
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            BuyTuna();
-        }
-    }
 
     
 #endregion
@@ -64,45 +57,55 @@ public class ShopManager : StaticInstance<ShopManager>
 
     public void BuySalmon()
     {
-        GameManager.Instance.DeductMoney(_salmonPrice);
-        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _salmonTransform, 2F);
-        GameObject salmon = SpawnManager.Instance.SpawnObject(_salmonPrefab,
-                                                              _salmonTransform.transform,
-                                                              SpawnObjectType.INGREDIENT);
-        StartCoroutine(ButtonCooldownTimer(0));
-        StartCoroutine(FiveSecDelay());
+        if (GameManager.Instance.CurrentPlayerMoney > 0)
+        {
+            GameManager.Instance.DeductMoney(_salmonPrice);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _salmonTransform, 2F);
+            GameObject salmon = SpawnManager.Instance.SpawnObject(_salmonPrefab,
+                                                                  _salmonTransform.transform,
+                                                                  SpawnObjectType.INGREDIENT);
+            StartCoroutine(ButtonCooldownTimer(0));
+            StartCoroutine(FiveSecDelay());
 
-        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-        _salmonSlabs.Add(salmon);
+            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+            _salmonSlabs.Add(salmon);
 
-        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+        }
     }
     public void BuyTuna()
     {
-        GameManager.Instance.DeductMoney(_tunaPrice);
-        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _tunaTransform, 2F);
-        GameObject tuna = SpawnManager.Instance.SpawnObject(_tunaPrefab,
-                                                            _tunaTransform.transform,
-                                                            SpawnObjectType.INGREDIENT);
-        StartCoroutine(ButtonCooldownTimer(1));
-        StartCoroutine(FiveSecDelay());
-       
-        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-        _tunaSlabs.Add(tuna);
+        if(GameManager.Instance.CurrentPlayerMoney > 0)
+        {
+            GameManager.Instance.DeductMoney(_tunaPrice);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _tunaTransform, 2F);
+            GameObject tuna = SpawnManager.Instance.SpawnObject(_tunaPrefab,
+                                                                _tunaTransform.transform,
+                                                                SpawnObjectType.INGREDIENT);
+            StartCoroutine(ButtonCooldownTimer(1));
+            StartCoroutine(FiveSecDelay());
 
-        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+            _tunaSlabs.Add(tuna);
+
+            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+        }
+
     }
     public void BuyRice()
     {
-        GameManager.Instance.DeductMoney(_ricePrice);
-        Debug.LogError("Rice spanwing hasn't been added yet!");
+        if (GameManager.Instance.CurrentPlayerMoney > 0)
+        {
+            GameManager.Instance.DeductMoney(_ricePrice);
+            Debug.LogError("Rice spanwing hasn't been added yet!");
 
-        StartCoroutine(ButtonCooldownTimer(2));
+            StartCoroutine(ButtonCooldownTimer(2));
 
-        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
-        
-        // insert code here to reset Rice at rice cooker
+            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+
+            // insert code here to reset Rice at rice cooker
+        }
     }
 
     public void RemoveFromTunaList(GameObject obj) => _tunaSlabs.Remove(obj);
