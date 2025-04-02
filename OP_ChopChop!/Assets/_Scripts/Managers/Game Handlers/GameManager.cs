@@ -83,6 +83,7 @@ public class GameManager : Singleton<GameManager>
         // unpause game, remove logo, and start onboarding
         ChangeShift(GameShift.TRAINING);
         Continue.action.Disable();
+        Continue.action.performed -= RemoveLogo;
 
         StartCoroutine(OnBoardingHandler.Instance.InventoryTutorial());
     }
