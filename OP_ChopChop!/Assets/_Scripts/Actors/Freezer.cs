@@ -4,9 +4,8 @@ using UnityEngine;
 public class Freezer : MonoBehaviour
 {
 
-    [SerializeField] bool _isTutorial;
-    [SerializeField] List<Ingredient> _ingredients;
-    const int MAX_CAPACITY = 3;
+    [SerializeField] private bool _isTutorial;
+    [SerializeField] private List<Ingredient> _ingredients;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -15,11 +14,6 @@ public class Freezer : MonoBehaviour
         if (ing == null) return;
 
         if (!ing.IsFresh)
-        {
-            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
-            return;
-        }
-        if (_ingredients.Count >= MAX_CAPACITY)
         {
             SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
             return;

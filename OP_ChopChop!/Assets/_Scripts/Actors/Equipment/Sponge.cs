@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditor.ShortcutManagement;
 using UnityEngine;
 
 [RequireComponent(typeof(Trashable))]
@@ -14,12 +13,13 @@ public class Sponge : MonoBehaviour
 
 #region Members
 
-    [SerializeField] int _usageCounter, _maxUsageCounter;
-    [SerializeField] bool _isClean, _isWet;
-    [SerializeField] Material _wetMat, _cleanMat, _dirtyMat;
+    [SerializeField] private int _usageCounter, _maxUsageCounter;
+    [SerializeField] private bool _isClean, _isWet;
+    [SerializeField] private Material _wetMat, _cleanMat, _dirtyMat;
 
     private MeshRenderer _rend;
     private const float WET_DURATION = 10f; 
+    
 #endregion 
 
 #region Unity_Methods
