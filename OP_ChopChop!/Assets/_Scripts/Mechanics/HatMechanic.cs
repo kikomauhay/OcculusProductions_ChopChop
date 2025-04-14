@@ -8,7 +8,7 @@ public class HatMechanic : MonoBehaviour
 
         if (GameManager.Instance.CurrentShift == GameShift.TRAINING) 
         {
-            // disable all onboarding stuff
+            OnBoardingHandler.Instance.Disable();
             other.gameObject.GetComponent<ChefHat>().StartService();
         }
     }

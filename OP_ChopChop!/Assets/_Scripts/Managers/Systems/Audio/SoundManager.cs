@@ -86,6 +86,12 @@ public class SoundManager : Singleton<SoundManager>
     }
     public void SetSoundVolume(float v) => SoundSource.volume = v;
     public void SetMusicVolume(float v) => MusicSource.volume = v;
+    public void StopMusic() => MusicSource.Stop();
+    public void StopAllAudio()
+    {
+        StopMusic();
+        SoundSource.Stop();
+    }
     
 #endregion
 }

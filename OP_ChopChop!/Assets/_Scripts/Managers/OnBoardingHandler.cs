@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -26,6 +27,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     
 #endregion
+
+    public void Disable() => gameObject.SetActive(false);
+    
     
 #region Helpers
 
@@ -135,7 +139,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 
 #endregion
-
 
     IEnumerator ChangeToMainGame()
     {

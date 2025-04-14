@@ -20,9 +20,9 @@ public class SceneHandler : Singleton<SceneHandler>
 
 #region Unity_Methods
 
-    protected override void Awake() => base.Awake();
-    
+    protected override void Awake() => base.Awake();    
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
+    
     void Start() 
     {
         CanPause = true;
