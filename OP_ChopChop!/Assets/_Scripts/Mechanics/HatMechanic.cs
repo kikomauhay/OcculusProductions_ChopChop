@@ -6,8 +6,10 @@ public class HatMechanic : MonoBehaviour
     {
         if (other.gameObject.GetComponent<ChefHat>() == null) return;
 
-        if (GameManager.Instance.CurrentShift != GameShift.TRAINING) return;
-
-        other.gameObject.GetComponent<ChefHat>().StartService();
+        if (GameManager.Instance.CurrentShift == GameShift.TRAINING) 
+        {
+            // disable all onboarding stuff
+            other.gameObject.GetComponent<ChefHat>().StartService();
+        }
     }
 }

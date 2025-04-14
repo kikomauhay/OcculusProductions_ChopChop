@@ -20,22 +20,6 @@ public class SoundManager : Singleton<SoundManager>
 
 #endregion
 
-    /* public void PlaySound(string title)
-    {
-        Sound s = Array.Find(Sounds, i => i.name == title);
-
-        if (s != null)
-        {
-            SoundSource.volume = s.volume;
-            SoundSource.clip = s.clip;
-            SoundSource.loop = s.loop;
-            SoundSource.spatialBlend = 1f;
-            SoundSource.PlayOneShot(s.clip);
-        }
-        else Debug.LogError("Sound not found!");
-    }
-    */
-
     public void PlaySound(string title, SoundGroup type) 
     {
         Sound s = null;
@@ -81,6 +65,13 @@ public class SoundManager : Singleton<SoundManager>
             SoundSource.clip = s.clip;
             SoundSource.loop = s.loop;
             SoundSource.spatialBlend = 1f;
+            SoundSource.PlayOneShot(s.clip);
+
+            if (s.loop) 
+            { 
+                SoundSource.Play();
+                return;
+            }
             SoundSource.PlayOneShot(s.clip);
         }
         else Debug.LogError("Sound not found!");

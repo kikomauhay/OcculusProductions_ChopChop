@@ -4,8 +4,8 @@ using UnityEngine;
 public class Freezer : MonoBehaviour
 {
 
-    [SerializeField] bool _isTutorial;
-    [SerializeField] List<Ingredient> _ingredients;
+    [SerializeField] private bool _isTutorial;
+    [SerializeField] private List<Ingredient> _ingredients;
 
     private void OnTriggerEnter(Collider other)
     {

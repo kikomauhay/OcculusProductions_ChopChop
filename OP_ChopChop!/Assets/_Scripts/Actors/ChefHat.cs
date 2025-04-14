@@ -10,7 +10,7 @@ public class ChefHat : PersistentSingleton<ChefHat> {
         StartCoroutine(PreService());
     }
 
-    IEnumerator PreService()
+    private IEnumerator PreService()
     {
         StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
         yield return null;

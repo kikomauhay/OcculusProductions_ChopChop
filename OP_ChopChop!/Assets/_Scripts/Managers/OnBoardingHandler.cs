@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -11,20 +10,23 @@ using UnityEngine;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
-    public bool TutorialDone { get; private set; } = false;
+#region Members
 
-    [SerializeField] GameObject _slicingPanel, _moldingPanel, _salmonPrefab;
+    [SerializeField] private GameObject _slicingPanel, _moldingPanel, _salmonPrefab;
 
-    [SerializeField] Transform _ingTransform;
+    [SerializeField] private Transform _ingTransform;
 
-    [SerializeField] Transform[] _chairs;
-    [SerializeField] GameObject[] _tutorialCustomers;
+    [SerializeField] private Transform[] _chairs;
+    [SerializeField] private GameObject[] _tutorialCustomers;
 
+#endregion
+
+#region Unity
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     
+#endregion
     
-
 #region Helpers
 
     void SpawnFirstCustomer()
@@ -129,8 +131,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(7f);
-
-        TutorialDone = true;
     }
 
 
