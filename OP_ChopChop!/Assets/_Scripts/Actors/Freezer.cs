@@ -38,7 +38,7 @@ public class Freezer : MonoBehaviour
         
         if (GameManager.Instance.CurrentShift == GameShift.TRAINING)
         {
-            StartCoroutine(OnBoardingHandler.Instance.IngredentTutorial());
+            StartCoroutine(OnBoardingHandler.Instance.TestIngredentTutorial());
             return;
         }
 
