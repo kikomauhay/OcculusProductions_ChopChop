@@ -86,7 +86,7 @@ public class GameManager : Singleton<GameManager>
         Continue.action.Disable();
         _logo.SetActive(false);
 
-        StartCoroutine(OnBoardingHandler.Instance.InventoryTutorial());
+        StartCoroutine(OnBoardingHandler.Instance.StartingTutorial());
     }
 
     IEnumerator ShiftCountdown(float timer, GameShift shift)

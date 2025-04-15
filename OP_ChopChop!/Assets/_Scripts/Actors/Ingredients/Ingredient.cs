@@ -20,7 +20,7 @@ public abstract class Ingredient : MonoBehaviour
     // INGREDIENT ATTRIBUTES
     public IngredientState IngredientState { get; private set; } // changes inside this script
     public float FreshnessRate { get; private set; } // the higher the score, the better
-    public bool IsFresh { get; private set; }        // changes inside the enumerator
+    public bool IsFresh => _isFresh;                 // changes inside the enumerator
     public int SliceIndex => _sliceIndex;
 
 #endregion
@@ -33,6 +33,7 @@ public abstract class Ingredient : MonoBehaviour
     [SerializeField] int _sliceIndex;
     [SerializeField] protected IngredientType _ingredientType; // will be used by the child classes
     [SerializeField] protected IngredientStats _ingredientStats;
+    [SerializeField] protected bool _isFresh;
 
     [Tooltip("0 = good, 1 = comtaminated, 2 = expired")]
     [SerializeField] protected Material[] _stateMaterials;
@@ -52,8 +53,7 @@ public abstract class Ingredient : MonoBehaviour
 
         IngredientState = IngredientState.DEFAULT;   
 
-        FreshnessRate = 100f;     
-        IsFresh = true;
+        FreshnessRate = 100f;   
         _startPosition = transform.position;
 
         ChangeMaterial();
@@ -61,12 +61,48 @@ public abstract class Ingredient : MonoBehaviour
         // in case some ingredients are spawned during Service time
         if (GameManager.Instance.CurrentShift == GameShift.SERVICE)
             StartDecaying();        
+
+        Debug.Log(SliceIndex);
     }
     protected virtual void OnDestroy() 
     {
         GameManager.Instance.OnStartService -= StartDecaying;
         GameManager.Instance.OnEndService -= Expire;
     }
+
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        // this will only work when the plate has no children
+        if (transform.childCount > 1) return;
+
+        // nothing will happen if plate & rice collide
+        if (_ingredientType == IngredientType.RICE) return;
+        
+        Plate plate = other.gameObject.GetComponent<Plate>();
+
+        if (plate != null) 
+        {
+            if (!plate.IsClean) return;
+
+            if (_sliceIndex != 4) return; 
+
+            Destroy(gameObject);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+            SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+
+            GameObject dishToSpawn = SpawnManager.Instance.SpawnSashimi(_ingredientType, transform);
+
+            // set's up the dish
+            Dish dish = dishToSpawn.GetComponentInChildren<Dish>();
+            dish.DishScore = FreshnessRate;
+            dish.OrderDishType = _ingredientType == IngredientType.SALMON ? 
+                                 DishType.SASHIMI_SALMON :
+                                 DishType.SASHIMI_TUNA;
+
+            Destroy(other.gameObject);
+        }
+    }
+
     protected virtual void OnCollisionEnter(Collision other)
     {
         // ingredient + another ingredient
@@ -110,14 +146,14 @@ public abstract class Ingredient : MonoBehaviour
 
 #endregion
 
-    #region Ingredint_Methods
+#region Ingredint_Methods
 
     public void Trashed()
     {
         OnTrashed?.Invoke();
 
         IngredientState = IngredientState.CONTAMINATED;
-        IsFresh = false;
+        _isFresh = false;
         FreshnessRate = 0f;
         SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
         ChangeMaterial();
@@ -125,14 +161,14 @@ public abstract class Ingredient : MonoBehaviour
     public void Expire()
     {
         IngredientState = IngredientState.EXPIRED;
-        IsFresh = false;
+        _isFresh = false;
 
         ChangeMaterial();
     } 
     public void Contaminate()
     {
         IngredientState = IngredientState.CONTAMINATED;
-        IsFresh = false;
+        _isFresh = false;
         ChangeMaterial();
     }
     public void Stored() => IngredientState = IngredientState.STORED;
@@ -225,7 +261,6 @@ public abstract class Ingredient : MonoBehaviour
             }
         }
     }
-
     protected IEnumerator Delay(float time)
     {
         yield return new WaitForSeconds(time);

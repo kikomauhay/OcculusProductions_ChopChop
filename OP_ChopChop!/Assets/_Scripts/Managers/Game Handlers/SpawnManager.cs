@@ -13,20 +13,21 @@ public class SpawnManager : StaticInstance<SpawnManager>
 #region Members
 
     [Header("Prefabs"), Tooltip("0 = smoke, 1 = bubble, 2 = sparkle, 3 = stinky")]
-    [SerializeField] GameObject[] _vfxPrefabs;
-    [SerializeField] GameObject _customerPrefab;
+    [SerializeField] private GameObject[] _vfxPrefabs;
+    [SerializeField] private GameObject _customerPrefab, _salmonSashiPrefab, _tunaSashimiPrefab;
+
 
     [Header("Instantiated Bins"), Tooltip("0 = ingredients, 1 = foods, 2 = dishes, 3 = customers, 4 = VFXs")]
-    [SerializeField] Transform[] _bins; // avoids clutters in the hierarchy  
+    [SerializeField] private Transform[] _bins; // avoids clutters in the hierarchy  
 
     [Header("Customer Components")]
-    [SerializeField] CustomerSeat[] _customerSeats;
-    [SerializeField] ColliderCheck[] _colliderChecks;
-    List<GameObject> _seatedCustomers = new List<GameObject>();
+    [SerializeField] private CustomerSeat[] _customerSeats;
+    [SerializeField] private ColliderCheck[] _colliderChecks;
+    private List<GameObject> _seatedCustomers = new List<GameObject>();
 
     [Header("Customer Spawning Timers"), Tooltip("Can be changed to use for testing")]
-    [SerializeField] float _initialCustomerSpawnTime; // 2s
-    [SerializeField] float _customerSpawnInterval;    // 10s
+    [SerializeField] private float _initialCustomerSpawnTime; // 2s
+    [SerializeField] private float _customerSpawnInterval;    // 10s
 
     int _spawnedCustomers;
 
@@ -74,6 +75,13 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
 #region Spawning
 
+    public GameObject SpawnSashimi(IngredientType type, Transform t)
+    {
+        if (type == IngredientType.RICE) return null;
+
+        return Instantiate(type == IngredientType.SALMON ? _salmonSashiPrefab : _tunaSashimiPrefab,
+                           t.position, t.rotation);
+    }
     public void SpawnVFX(VFXType type, Transform t, float destroyTime)
     {   
         GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type], 

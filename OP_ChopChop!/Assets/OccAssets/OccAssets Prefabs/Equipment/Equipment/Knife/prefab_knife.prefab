@@ -293,6 +293,8 @@ MonoBehaviour:
   _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
   _cleanMat: {fileID: 2100000, guid: 8a473b1d7eaa40b4995b01df5fec9c5e, type: 2}
   _dirtyMat: {fileID: 2100000, guid: ca45a7bdec982ab45a64dc72daff7545, type: 2}
+  _usageCounter: 0
+  _maxUsageCounter: 5
 --- !u!114 &-5580437301031096976
 MonoBehaviour:
   m_ObjectHideFlags: 0

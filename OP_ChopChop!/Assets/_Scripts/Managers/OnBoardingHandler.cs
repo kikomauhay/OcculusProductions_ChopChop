@@ -2,16 +2,11 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// 
-/// Acts as the tutorial for the player
-/// Makes sure that the player doens't break the sequence of the onboarding  
-/// 
-/// </summary>
-
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
 #region Members
+
+    public Action OnVoiceLineStart, OnVoiceLineEnd; 
 
     [SerializeField] private GameObject _slicingPanel, _moldingPanel, _salmonPrefab;
 
@@ -23,6 +18,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 #endregion
 
 #region Unity
+
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     
@@ -36,12 +32,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     void SpawnFirstCustomer()
     {
         Instantiate(_tutorialCustomers[0], 
-                    _chairs[0].position, _chairs[0].rotation,
-                    transform);
+                    _chairs[0].position, 
+                    _chairs[0].rotation);
         
         Instantiate(_salmonPrefab, 
-                    _ingTransform.position, _ingTransform.rotation,
-                    transform);
+                    _ingTransform.position, 
+                    _ingTransform.rotation);
     }
     void SpawnNextCustomers()
     {
@@ -76,18 +72,114 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 #endregion
 
-#region OnBoarding
+#region New OnBoarding
 
-    public IEnumerator InventoryTutorial()
+    public IEnumerator StartingTutorial() // hand washing
     {
-        SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
-        // SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
-        // yield return new WaitForSeconds(22f);
+        // triggered by pressing A in the controller
 
-        SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(21f);
+        SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(22f);
+
+        // highlight faucet knob
+        // disable highlight when player is interacting
     }
-    public IEnumerator IngredentTutorial()
+    public IEnumerator IngredientOrderingTutorial() // ordering of salmon slab
+    {        
+        // triggered by closing the faucet knob (needs to only happen once)
+
+        SoundManager.Instance.StopAllAudio();
+        SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(11f);
+
+        // highlight order screen
+        // disable highlight when player is interacting
+    }
+    public IEnumerator FreezerTutrial()
+    {
+        // triggered by the spawning a salmon slab (needs to only happen once)
+
+        SoundManager.Instance.StopAllAudio();
+        SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(20f);
+
+        // highlight ONLY ONE freezer
+        // disable highlight when player is interacting
+    }
+    public IEnumerator ChoppingTutorial()
+    {
+        // triggered when the slab exits the fridge (needs to only happen once)
+
+        SoundManager.Instance.StopAllAudio();
+        SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(14f);
+
+        // highlight knife 
+        // disable highlight when the knife is picked up
+    }
+    public IEnumerator MoldingTutorial()
+    {
+        // triggered after the salmon is thinly sliced
+
+        SoundManager.Instance.StopAllAudio();
+        SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(8f);
+
+        // highlight rice cooker
+        // disable highlight when player picks up rice
+    }
+    public IEnumerator FoodCombinationTutorial()
+    {
+        // triggered after the salmon is thinly sliced
+
+        SoundManager.Instance.StopAllAudio();
+        SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(8f);
+
+        // highlight a plate
+        // disable highlight when the plate is picked up
+    }
+    public IEnumerator SecondCustomerTutorial()
+    {
+        // triggers after you serve to Atrium
+
+        SoundManager.Instance.StopAllAudio();
+        SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(8f);
+
+        // highlight order screen
+        // disable highlight when player is interacting
+    }
+
+    public IEnumerator CleaningTutorial()
+    {
+        // triggers after the second customer is served
+
+        SoundManager.Instance.StopAllAudio();
+        SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(8f);
+
+        // highlight sponge
+        // disable highlight when the sponge is picked up
+    }
+
+    public IEnumerator PostServiceTutorial()
+    {
+        // triggers after you're done cleaning
+
+        SoundManager.Instance.StopAllAudio();
+        SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(8f);
+
+        // highlight main menu screen
+        // disable highlight when player is interacting
+    }
+    
+#endregion
+
+#region Old Onboarding
+
+    public IEnumerator TestIngredentTutorial()
     {
         SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(30f);

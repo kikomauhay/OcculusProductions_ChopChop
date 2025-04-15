@@ -18,7 +18,7 @@ public class SceneHandler : Singleton<SceneHandler>
 
 #endregion
 
-#region Unity_Methods
+#region Unity
 
     protected override void Awake() => base.Awake();    
     protected override void OnApplicationQuit() => base.OnApplicationQuit();

@@ -13,9 +13,8 @@ public abstract class Equipment : MonoBehaviour
     protected Vector3 _startPosition;
 
     // DIRTY MECHANIC
-    protected int _usageCounter; // counter to know how many times equipment has been used
-    protected int _maxUsageCounter; // max counter before it gets dirty
-
+    [SerializeField] protected int _maxUsageCounter; // max counter before it gets dirty
+    protected int _usageCounter;                     // counter to know how many times equipment has been used
     private bool _coroutineRunning;
 
 #endregion
@@ -29,9 +28,8 @@ public abstract class Equipment : MonoBehaviour
         _coroutineRunning = false;
         _startPosition = transform.position;
 
-        // ternary operator syntax -> condition ? val_if_true : val_if_false
-        _usageCounter = _isClean ? 0 : _maxUsageCounter;
-        GetComponent<MeshRenderer>().material = _isClean ? _cleanMat : _dirtyMat;
+        _usageCounter = 0;
+        GetComponent<MeshRenderer>().material = _cleanMat;
     }
     protected void OnDestroy() 
     {

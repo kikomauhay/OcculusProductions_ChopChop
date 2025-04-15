@@ -25,8 +25,8 @@ public abstract class Dish : MonoBehaviour
 
 #region Unity_Methods
 
-    protected void Awake() => GetComponent<Plate>().BoxTrigger.enabled = false;
-    protected void Start() => StartCoroutine(Decay());
+    // protected void Awake() => GetComponent<Plate>().BoxTrigger.enabled = false;
+    protected void Start() => StartCoroutine(Decay());    
     protected virtual void OnCollisionEnter(Collision other)
     {
         // dish + ingredient

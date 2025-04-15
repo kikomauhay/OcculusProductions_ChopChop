@@ -128,6 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 582ac001044ac8d4d87ce1b0835e676d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
 --- !u!1 &1597545420897823763
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,6 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 582ac001044ac8d4d87ce1b0835e676d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
 --- !u!1 &1597545421573541968
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,6 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 582ac001044ac8d4d87ce1b0835e676d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
 --- !u!1 &1597545421980820010
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,6 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 582ac001044ac8d4d87ce1b0835e676d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
 --- !u!1 &7564253948246715538
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,6 +566,10 @@ MonoBehaviour:
   - {fileID: 1981580915582403093, guid: 247f3a9b29b2e7a43960b4b13aa0aa3f, type: 3}
   - {fileID: 7213758601407137198, guid: 17ae512bf627727499a5abe0553f38bb, type: 3}
   _customerPrefab: {fileID: 8242136411445390340, guid: 6abd3fb3e935698469b673cfaa3eaab2,
+    type: 3}
+  _salmonSashiPrefab: {fileID: 8589455853079741865, guid: babd4f77cefd2be4794cf66bf84f318a,
+    type: 3}
+  _tunaSashimiPrefab: {fileID: 5618999308171318900, guid: 6f234b21a3eb86347a34b9bcf0cdb5b3,
     type: 3}
   _bins:
   - {fileID: 7564253948246715539}
