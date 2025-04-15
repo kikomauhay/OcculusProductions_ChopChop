@@ -470,7 +470,7 @@ BoxCollider:
   m_GameObject: {fileID: 5618999308171318900}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.14, y: -0.03, z: 0.16}
   m_Center: {x: 0, y: 0.03, z: 0}
@@ -668,6 +668,7 @@ MonoBehaviour:
   _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
   _cleanMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
   _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
+  _maxUsageCounter: 0
   _boxTrigger: {fileID: 5618999308171318888}
 --- !u!114 &5618999308171318903
 MonoBehaviour:

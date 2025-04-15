@@ -353,8 +353,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66126108b4485a44b12f6cb792ce21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sliceIndex: 0
   _ingredientType: 0
   _ingredientStats: {fileID: 11400000, guid: 6ab4ecd27a1bf534f83999d53cdf3f0e, type: 2}
+  _isFresh: 1
   _stateMaterials:
   - {fileID: 2100000, guid: c18325fa6d7e9194aaabb2ca9a3c5cdf, type: 2}
   - {fileID: 2100000, guid: 2250e3df82ea3d746bfcccdea1feee13, type: 2}

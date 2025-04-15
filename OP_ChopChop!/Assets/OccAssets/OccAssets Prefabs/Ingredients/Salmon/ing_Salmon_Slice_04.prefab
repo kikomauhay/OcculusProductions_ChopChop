@@ -321,12 +321,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d0a61dc6b2809f418a3cae42df6da65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sliceIndex: 4
   _ingredientType: 1
   _ingredientStats: {fileID: 11400000, guid: 8d861586e0d7fd446913bed80f383061, type: 2}
+  _isFresh: 1
   _stateMaterials:
   - {fileID: 2100000, guid: c1852a7f87ade4d4388dc7e6735a2761, type: 2}
   - {fileID: 2100000, guid: 641df16b7135ee5439c5321fccae8aee, type: 2}
   - {fileID: 2100000, guid: 1a75f0e690193654cbde248509affaaa, type: 2}
   _outlineShaderMaterial: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e,
     type: 2}
-  _sliceIndex: 4

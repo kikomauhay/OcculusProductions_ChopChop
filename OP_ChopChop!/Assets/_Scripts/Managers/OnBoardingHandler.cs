@@ -1,13 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
-
-/// <summary>
-/// 
-/// Acts as the tutorial for the player
-/// Makes sure that the player doens't break the sequence of the onboarding  
-/// 
-/// </summary>
+using UnityEngine.Experimental.Rendering;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
@@ -23,6 +16,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 #endregion
 
 #region Unity
+
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     
@@ -36,12 +30,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     void SpawnFirstCustomer()
     {
         Instantiate(_tutorialCustomers[0], 
-                    _chairs[0].position, _chairs[0].rotation,
-                    transform);
+                    _chairs[0].position, 
+                    _chairs[0].rotation);
         
         Instantiate(_salmonPrefab, 
-                    _ingTransform.position, _ingTransform.rotation,
-                    transform);
+                    _ingTransform.position, 
+                    _ingTransform.rotation);
     }
     void SpawnNextCustomers()
     {
@@ -78,14 +72,17 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 #region OnBoarding
 
+    public IEnumerator StartingTutorial() // hand washing
+    {
+        SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(22f);
+
+        // highlight faucet knob
+    }
     public IEnumerator InventoryTutorial()
     {
-        SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
-        // SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
-        // yield return new WaitForSeconds(22f);
-
         SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(21f);
+        yield return new WaitForSeconds(12f);
     }
     public IEnumerator IngredentTutorial()
     {

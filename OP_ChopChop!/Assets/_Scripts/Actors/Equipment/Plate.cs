@@ -4,8 +4,6 @@ public class Plate : Equipment
 {
 #region Members
 
-    [SerializeField] bool _isTutorial, _isDirtyTest; 
-
     public bool IsPlated { get; private set; }
 
     [Tooltip("The Box Collider Component")] 
@@ -24,13 +22,22 @@ public class Plate : Equipment
         name = "Plate";
         _maxUsageCounter = 1;
 
-        IsPlated = false;
-        _boxTrigger.enabled = true;
+        if (transform.childCount > 1)
+        {
+            IsPlated = true;
+            _boxTrigger.enabled = false;
+        }
+        else 
+        {
+            IsPlated = false;
+            _boxTrigger.enabled = true;
+        }
 
-        if (_isDirtyTest)
-            Contaminate();
+        Debug.Log($"Is clean: {IsClean}");
     }
-    
+
+    protected override void OnTriggerEnter(Collider other) => base.OnTriggerEnter(other);
+
     protected override void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
