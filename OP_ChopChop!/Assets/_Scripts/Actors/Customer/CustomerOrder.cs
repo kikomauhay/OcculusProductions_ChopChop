@@ -26,24 +26,22 @@ public class CustomerOrder : MonoBehaviour
     [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
     [SerializeField] private Transform _orderUITransform; // Spawning of the order
     
-    [SerializeField] int _minCash, _maxCash; // testing
+    [SerializeField] private int _minCash, _maxCash; // testing
 
     [Header("Customer Components")]
-    [SerializeField] CustomerActions _actions;
-    [SerializeField] CustomerAppearance _appearance;
-    GameObject _customerOrderUI;
+    [SerializeField] private CustomerAppearance _appearance;
+    private GameObject _customerOrderUI;
 
     [Header("MoneyRewardTxt")]
     [SerializeField] private TextMeshProUGUI _txtMoneyReward;
 
     // TIMERS
-    [SerializeField] float _patienceDecreaseRate; // 1.65; deduction rate to use
-    [SerializeField] float _customerScore;        // 100; starts at 100 and decreases over time
+    [SerializeField] private float _patienceDecreaseRate; // 1.65; deduction rate to use
+    private float _customerScore;        // 100; starts at 100 and decreases over time
 
     // REACTION FACES
-    [SerializeField] float _reactionTimer;
-
-    [SerializeField] bool _isTutorial;
+    [SerializeField] private float _reactionTimer;
+    [SerializeField] private bool _isTutorial;
 
 #endregion
 
@@ -51,19 +49,24 @@ public class CustomerOrder : MonoBehaviour
     {
         GameManager.Instance.OnEndService += DestroyOrderUI;
 
-        CustomerDishType = _isTutorial ? DishType.NIGIRI_SALMON : (DishType)Random.Range(0, 4);
-        
         switch (GameManager.Instance.Difficulty) // will decrease overtime
         {
             case GameDifficulty.EASY:   _customerScore = 110f; break;
             case GameDifficulty.NORMAL: _customerScore = 100f; break;
             case GameDifficulty.HARD:   _customerScore = 90f;  break;
-
-            default: break;
+            default:                                           break;
         }
 
-        if (_patienceDecreaseRate == 0f)
+        if (_isTutorial)
+        {
+            CustomerDishType = DishType.NIGIRI_SALMON;
+            _patienceDecreaseRate = 0f;
+        }
+        else 
+        {
+            CustomerDishType = (DishType)Random.Range(0, 4);
             _patienceDecreaseRate = 1.65f; // referenced from the document
+        }        
         
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
