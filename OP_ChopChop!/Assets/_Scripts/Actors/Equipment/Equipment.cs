@@ -173,7 +173,8 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter = 0;
         _isClean = true;
-        GetComponent<MeshRenderer>().material = _cleanMat;
+        //GetComponent<MeshRenderer>().material = _cleanMat;
+        GetComponent<MeshRenderer>().materials = new Material[] { _cleanMat };
         _coroutineRunning = false;
     }
 
