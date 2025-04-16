@@ -14,7 +14,8 @@ public class SceneHandler : Singleton<SceneHandler>
 
 #region Members
 
-    [SerializeField] FadeScreen _fadeScreen;
+    [SerializeField] private FadeScreen _fadeScreen;
+    [SerializeField] private string _sceneName;
 
 #endregion
 
@@ -28,8 +29,10 @@ public class SceneHandler : Singleton<SceneHandler>
         CanPause = true;
         IsFading = false;
                 
-        SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
-        GameManager.Instance.ChangeShift(GameShift.TRAINING);
+        SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Additive);
+        GameManager.Instance.ChangeShift(_sceneName == "TrainingScene" ? 
+                                         GameShift.TRAINING : 
+                                         GameShift.PRE_SERVICE);
     }
 
 #endregion

@@ -115,9 +115,6 @@ public class SpawnManager : StaticInstance<SpawnManager>
         // links a box collider & seat to the customer
         collider.CustomerOrder = customer.GetComponent<CustomerOrder>();
         _seatedCustomers.Add(customer);
-
-        // sets the actions of the customer
-        customerActions.TargetSeat = seat.transform.position;
         customerActions.SeatIndex = idx;
 
         // prevents multiple customers getting the same seat 

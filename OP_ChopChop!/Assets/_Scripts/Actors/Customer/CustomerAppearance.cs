@@ -6,16 +6,16 @@ public class CustomerAppearance : MonoBehaviour
 #region Members
 
     [Header("Customer Material Renderers")]
-    [SerializeField] SpriteRenderer _face;
-    [SerializeField] MeshRenderer _ears, _tail, _body;
+    [SerializeField] private SpriteRenderer _face;
+    [SerializeField] private MeshRenderer _ears, _tail, _body;
 
     [Tooltip("0 = Calico, 1 = Siamese, 2 = Tabby, 3 = Torbie, 4 = Tuxedo")] 
-    [SerializeField] SkinVariant[] _skinVariants;
+    [SerializeField] private SkinVariant[] _skinVariants;
 
     [Header("Face Types")] 
-    [SerializeField] Sprite[] _reactionFaces; // 0 = neutral, 1 = happy, 2 = sus
-    [SerializeField] Sprite[] _chewingFaces;  // 0-1 = normal, 2-3 = sus
-    [SerializeField] Sprite[] _madFaces; // 0 = angry, 1 = angrier, 2 = angriest
+    [SerializeField] private Sprite[] _reactionFaces; // 0 = neutral, 1 = happy, 2 = sus
+    [SerializeField] private Sprite[] _chewingFaces;  // 0-1 = normal, 2-3 = sus
+    [SerializeField] private Sprite[] _madFaces; // 0 = angry, 1 = angrier, 2 = angriest
                                          // angry     = less than 50 pts in patience meter
                                          // angrier   = got the wrong order 
                                          // angriest  = customer lost all patience 

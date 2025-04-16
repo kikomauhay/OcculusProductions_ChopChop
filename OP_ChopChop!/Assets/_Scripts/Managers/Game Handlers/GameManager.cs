@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine.InputSystem;
+using System.Collections;
 using UnityEngine;
 using System;
 
@@ -39,18 +39,17 @@ public class GameManager : Singleton<GameManager>
     public float CurrentPlayerMoney { get; private set; }
     public const float MAX_MONEY = 9999f;
 
-    const float FIVE_MINUTES = 300f; // shift duration for Service
+    private const float FIVE_MINUTES = 300f; // shift duration for Service
 
     // SCORING VALUES
-    List<float> _customerSRScores;
+    private List<float> _customerSRScores;
     public int CustomersServed; // will be used for difficulty increase
-    float _finalScore;
+    private float _finalScore;
 
-    [SerializeField] float _testTimer;
-    [SerializeField] float _startingPlayerMoney;
-    [SerializeField] RestaurantReceipt _endOfDayReceipt;
-
-    [SerializeField] GameObject _logo;
+    [SerializeField] private float _testTimer;
+    [SerializeField] private float _startingPlayerMoney;
+    [SerializeField] private RestaurantReceipt _endOfDayReceipt;
+    [SerializeField] private GameObject _logo;
 
 #endregion
 
@@ -85,6 +84,9 @@ public class GameManager : Singleton<GameManager>
         ChangeShift(GameShift.TRAINING);
         Continue.action.Disable();
         _logo.SetActive(false);
+        
+        // used for testing so that you won't hear the voice lines in MGS
+        if (CurrentShift == GameShift.PRE_SERVICE) return;
 
         StartCoroutine(OnBoardingHandler.Instance.StartingTutorial());
     }
