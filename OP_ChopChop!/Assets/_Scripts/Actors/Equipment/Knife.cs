@@ -7,6 +7,6 @@ public class Knife : Equipment
         base.Start();
 
         name = "Knife";
-        _maxUsageCounter = 15;
+        //_maxUsageCounter = 10;
     }
 }

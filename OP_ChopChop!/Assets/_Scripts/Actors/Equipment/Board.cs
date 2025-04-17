@@ -11,6 +11,6 @@ public class Board : Equipment {
         Instance = this;
 
         name = "Chopping Board";
-        _maxUsageCounter = 80; //original value 10;
+        //_maxUsageCounter = 40; //original value 10;
     }
 }
