@@ -608,15 +608,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743a916b100adae4d9f58e1c401605c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isClean: 0
+  _isClean: 1
   _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
   _cleanMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
   _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
-  _isTutorial: 0
-  _isDirtyTest: 0
-  _salmonSashiPrefab: {fileID: 8589455853079741865, guid: babd4f77cefd2be4794cf66bf84f318a,
-    type: 3}
-  _tunaSashimiPrefab: {fileID: 5618999308171318900, guid: 6f234b21a3eb86347a34b9bcf0cdb5b3,
-    type: 3}
+  _maxUsageCounter: 0
   _boxTrigger: {fileID: 1901435816059076958, guid: 4a86d31137598b14fabad122af278644,
     type: 3}
