@@ -1,3 +1,4 @@
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class Knife : Equipment
@@ -5,8 +6,6 @@ public class Knife : Equipment
     protected override void Start() 
     {
         base.Start();
-
         name = "Knife";
-        //_maxUsageCounter = 10;
     }
 }

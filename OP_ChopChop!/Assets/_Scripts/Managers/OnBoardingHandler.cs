@@ -1,19 +1,21 @@
-using System;
 using System.Collections;
 using UnityEngine;
+using System;
+using Unity.XR.CoreUtils;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
 #region Members
 
-    public Action OnVoiceLineStart, OnVoiceLineEnd; 
-
     [SerializeField] private GameObject _slicingPanel, _moldingPanel, _salmonPrefab;
-
     [SerializeField] private Transform _ingTransform;
-
     [SerializeField] private Transform[] _chairs;
     [SerializeField] private GameObject[] _tutorialCustomers;
+
+    [Header("On-Boarding Components")]
+    [SerializeField] private Material _oulineMaterial;
+    [SerializeField] private Renderer _rend;
+    [SerializeField] private GameObject _faucetKnob;
 
 #endregion
 
@@ -82,6 +84,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         yield return new WaitForSeconds(22f);
 
         // highlight faucet knob
+        _rend = _faucetKnob.GetComponent<Renderer>(); 
+        // _rend.AddMaterial();
+
+        
         // disable highlight when player is interacting
     }
     public IEnumerator IngredientOrderingTutorial() // ordering of salmon slab
