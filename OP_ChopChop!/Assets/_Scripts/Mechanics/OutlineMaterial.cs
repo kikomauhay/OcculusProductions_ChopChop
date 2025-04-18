@@ -12,6 +12,19 @@ public class OutlineMaterial : MonoBehaviour
         _mat = _rend.material;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            EnableHighlight();
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            DisableHighlight();
+        }
+    }
+
     public void EnableHighlight() => _rend.materials = new Material[] { _mat, _outlineMat };
-    public void DisableHighlight() => _rend.material = _mat;    
+    public void DisableHighlight() => _rend.materials = new Material[] { _mat };  
 }
