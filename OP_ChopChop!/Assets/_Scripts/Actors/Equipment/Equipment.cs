@@ -11,6 +11,7 @@ public abstract class Equipment : MonoBehaviour
     [SerializeField] protected bool _isClean;
     [SerializeField] protected Material _outlineTexture, _cleanMat, _dirtyMat;
     protected Vector3 _startPosition;
+    protected Renderer _rend;
 
     // DIRTY MECHANIC
     [SerializeField] protected int _maxUsageCounter; // max counter before it gets dirty
@@ -29,7 +30,8 @@ public abstract class Equipment : MonoBehaviour
         _startPosition = transform.position;
 
         _usageCounter = 0;
-        GetComponent<MeshRenderer>().material = _cleanMat;
+        _rend = GetComponent<Renderer>();
+        _rend.material = _cleanMat;
     }
     protected void OnDestroy() 
     {
@@ -141,7 +143,7 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter = _maxUsageCounter;
         _isClean = false;
-        GetComponent<MeshRenderer>().materials = new Material[] { _dirtyMat, _outlineTexture };
+        _rend.materials = new Material[] { _dirtyMat, _outlineTexture };
     }
 
 #endregion
@@ -173,8 +175,7 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter = 0;
         _isClean = true;
-        //GetComponent<MeshRenderer>().material = _cleanMat;
-        GetComponent<MeshRenderer>().materials = new Material[] { _cleanMat };
+        _rend.materials = new Material[] { _cleanMat };
         _coroutineRunning = false;
     }
 
