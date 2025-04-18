@@ -200,7 +200,8 @@ public class GameManager : Singleton<GameManager>
         Debug.Log($"waiting {_testTimer}s to change to service");
         StartCoroutine(ShiftCountdown(_testTimer, GameShift.SERVICE));
 
-        MainMenuHandler.Instance.UpdateNameOfPhaseTxt("Pre-Service");
+        ClockScript.Instance.UpdateTimeRemaining(_testTimer);
+        ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
     }     
     void DoService()
     {
@@ -211,7 +212,8 @@ public class GameManager : Singleton<GameManager>
         Debug.Log($"waiting {_testTimer * 10f}s to change to service");
         StartCoroutine(ShiftCountdown(_testTimer * 10f, GameShift.POST_SERVICE));
 
-        MainMenuHandler.Instance.UpdateNameOfPhaseTxt("Service");
+        ClockScript.Instance.UpdateTimeRemaining(_testTimer);
+        ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
     }
     void DoPostService() // rating calculations
     {
