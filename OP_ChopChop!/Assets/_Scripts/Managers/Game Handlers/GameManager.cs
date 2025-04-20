@@ -88,7 +88,7 @@ public class GameManager : Singleton<GameManager>
         // used for testing so that you won't hear the voice lines in MGS
         if (CurrentShift == GameShift.PRE_SERVICE) return;
 
-        StartCoroutine(OnBoardingHandler.Instance.StartingTutorial());
+        StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
     }
 
     IEnumerator ShiftCountdown(float timer, GameShift shift)

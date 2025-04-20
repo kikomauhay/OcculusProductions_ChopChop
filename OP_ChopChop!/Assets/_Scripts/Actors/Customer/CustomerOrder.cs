@@ -26,28 +26,32 @@ public class CustomerOrder : MonoBehaviour
     [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
     [SerializeField] private Transform _orderUITransform; // Spawning of the order
     
-    [SerializeField] private int _minCash, _maxCash; // testing
+    [Header("Money-earned Range")]
+    [SerializeField] private int _minCash;
+    [SerializeField] private int _maxCash; // testing
 
-    [Header("Customer Components")]
-    [SerializeField] private CustomerAppearance _appearance;
-    private GameObject _customerOrderUI;
-
-    [Header("MoneyRewardTxt")]
-    [SerializeField] private TextMeshProUGUI _txtMoneyReward;
-
-    // TIMERS
+    [Header("Money Reward Text"), SerializeField] private TextMeshProUGUI _txtMoneyReward;
     [SerializeField] private float _patienceDecreaseRate; // 1.65; deduction rate to use
-    private float _customerScore;        // 100; starts at 100 and decreases over time
 
-    // REACTION FACES
-    [SerializeField] private float _reactionTimer;
+    [Space(10f), SerializeField] private float _reactionTimer;
+
+    [Header("Onboarding")] 
     [SerializeField] private bool _isTutorial;
+    [SerializeField] private bool _isTunaCustomer;
 
+#region Not Serialized
+    
+    private CustomerAppearance _appearance;
+    private GameObject _customerOrderUI;
+    private float _customerScore; // starts at 100 and decreases over time
+
+#endregion
 #endregion
 
     void Start()
     {
         GameManager.Instance.OnEndService += DestroyOrderUI;
+        _appearance = GetComponent<CustomerAppearance>();
 
         switch (GameManager.Instance.Difficulty) // will decrease overtime
         {
@@ -59,8 +63,10 @@ public class CustomerOrder : MonoBehaviour
 
         if (_isTutorial)
         {
-            CustomerDishType = DishType.NIGIRI_SALMON;
             _patienceDecreaseRate = 0f;
+            CustomerDishType = _isTunaCustomer ? 
+                               DishType.NIGIRI_TUNA : 
+                               DishType.NIGIRI_SALMON;
         }
         else 
         {

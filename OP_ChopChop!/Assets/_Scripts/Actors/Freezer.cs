@@ -26,6 +26,9 @@ public class Freezer : MonoBehaviour
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                         "door opened 01" : "door opened 02",
                                         SoundGroup.APPLIANCES);
+
+        if (_isTutorial)
+            GetComponent<OutlineMaterial>().DisableHighlight();
     }
 
     private void OnTriggerExit(Collider other)
@@ -35,12 +38,9 @@ public class Freezer : MonoBehaviour
         if (ing == null) return;
 
         _ingredients.Remove(ing);
-        
-        if (GameManager.Instance.CurrentShift == GameShift.TRAINING)
-        {
-            StartCoroutine(OnBoardingHandler.Instance.TestIngredentTutorial());
-            return;
-        }
+
+        if (_isTutorial)
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(3));
 
         // removes the ingredient to the freezer & changes its decay rate
         ing.Unstored();

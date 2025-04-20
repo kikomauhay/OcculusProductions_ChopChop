@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class RiceSpawn : XRBaseInteractable
 {
-    [SerializeField] GameObject _ricePrefab;
-    [SerializeField] Transform _spawnPoint;
+    [SerializeField] private GameObject _ricePrefab;
+    [SerializeField] private Transform _spawnpoint;
+    [SerializeField] private bool _isTutorial;
 
     private bool _riceSpawned;
 
@@ -23,19 +24,20 @@ public class RiceSpawn : XRBaseInteractable
     private void Start()
     {
         if (interactionManager == null)
-        {
             interactionManager = FindObjectOfType<XRInteractionManager>();
-        }
+        
         _riceSpawned = false;
     }
 
-    void RiceEvent(SelectEnterEventArgs args)
+    private void RiceEvent(SelectEnterEventArgs args)
     {
         if (_riceSpawned) return;
 
         _riceSpawned = true;
-        GameObject newRice = SpawnManager.Instance.SpawnObject(_ricePrefab,
-                                                               _spawnPoint,
+
+        GameObject newRice = _isTutorial ? 
+                             Instantiate(_ricePrefab, transform.position, transform.rotation) :
+                             SpawnManager.Instance.SpawnObject(_ricePrefab, _spawnpoint,
                                                                SpawnObjectType.INGREDIENT);
 
         XRGrabInteractable _grabInteractable = newRice.GetComponent<XRGrabInteractable>();
@@ -43,9 +45,15 @@ public class RiceSpawn : XRBaseInteractable
 
         base.OnSelectEntered(args);
         StartCoroutine(ResetRiceSpawned());
+        
+        if (_isTutorial)
+        {
+            GetComponentInParent<OutlineMaterial>().DisableHighlight();
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(5));
+        }
     }
 
-    IEnumerator ResetRiceSpawned()
+    private IEnumerator ResetRiceSpawned()
     {
         yield return new WaitForSeconds(4f);
         _riceSpawned = false;    

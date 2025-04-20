@@ -1,12 +1,13 @@
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections;
 using UnityEngine;
-
 public class ToggleFaucet : XRBaseInteractable
 {
-    [SerializeField] GameObject _water;
+    [SerializeField] private GameObject _water;
+    [SerializeField] private bool _isTutorial;
 
-    bool _enabled = false;
+    private bool _enabled = false;
+    private int _toggleCounter;
 
     protected override void OnEnable()
     {
@@ -28,6 +29,7 @@ public class ToggleFaucet : XRBaseInteractable
         }
         _water.gameObject.SetActive(false);
         _enabled = false;
+        _toggleCounter = 0;
     }
 
     void FaucetSwitch(SelectEnterEventArgs args)
@@ -40,6 +42,17 @@ public class ToggleFaucet : XRBaseInteractable
         
         StartCoroutine(Cooldown());
         base.OnSelectEntered(args);
+
+        if (_isTutorial)
+        {
+            _toggleCounter++;
+
+            if (_toggleCounter == 2)
+            {
+                GetComponent<OutlineMaterial>().DisableHighlight();
+                StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(1));
+            }
+        }
     }
 
     IEnumerator Cooldown()

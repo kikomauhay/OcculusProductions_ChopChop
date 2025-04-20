@@ -581,6 +581,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
+  _stinkyVFX: {fileID: 0}
+  _bubbleVFX: {fileID: 0}
 --- !u!65 &223499116
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2043,6 +2046,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
+  _stinkyVFX: {fileID: 0}
+  _bubbleVFX: {fileID: 0}
 --- !u!65 &755570539
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2459,7 +2465,8 @@ MonoBehaviour:
       m_Calls: []
   _ricePrefab: {fileID: 5821176368316166534, guid: 2222bdfaa7d2bc44e92938ab59e05114,
     type: 3}
-  _spawnPoint: {fileID: 824663047}
+  _spawnpoint: {fileID: 0}
+  _isTutorial: 0
 --- !u!65 &824663049
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4107,6 +4114,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _water: {fileID: 174258265}
+  _isTutorial: 0
 --- !u!1 &1263188996
 GameObject:
   m_ObjectHideFlags: 0
@@ -4152,6 +4160,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
+  _stinkyVFX: {fileID: 0}
+  _bubbleVFX: {fileID: 0}
 --- !u!65 &1263188999
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4210,6 +4221,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
+  _stinkyVFX: {fileID: 0}
+  _bubbleVFX: {fileID: 0}
 --- !u!65 &1275272432
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4268,6 +4282,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5250ed6444f8a674ba1914d24694461e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
+  _stinkyVFX: {fileID: 0}
+  _bubbleVFX: {fileID: 0}
 --- !u!65 &1278920650
 BoxCollider:
   m_ObjectHideFlags: 0
