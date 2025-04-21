@@ -20,7 +20,6 @@ public class Onb_CleanMgr : StaticInstance<Onb_CleanMgr>
     void OnDisable() 
     {
         StopCoroutine(SpawnStinkyVFX());
-        StartCoroutine(OnBoardingHandler.Instance.NextCustomerTutorial());
     }
 private void OnTriggerEnter(Collider other)
     {

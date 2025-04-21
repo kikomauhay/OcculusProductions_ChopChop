@@ -81,6 +81,12 @@ public class CustomerOrder : MonoBehaviour
     {
         GameManager.Instance.OnEndService -= DestroyOrderUI;
 
+        if (_isTunaCustomer)
+        {
+            OnBoardingHandler.Instance.CallOnboarding(8);
+            return;
+        }
+
         if (!IsLastCustomer) return;
 
         if (GameManager.Instance.CurrentShift == GameShift.SERVICE)
@@ -88,11 +94,6 @@ public class CustomerOrder : MonoBehaviour
             GameManager.Instance.StopAllCoroutines();
             GameManager.Instance.ChangeShift(GameShift.POST_SERVICE);
         }
-        else if (GameManager.Instance.CurrentShift == GameShift.TRAINING)
-        {
-            StartCoroutine(OnBoardingHandler.Instance.EndOfDayTutorial());
-        }
-
     }
 #region Spawning_Helpers
 

@@ -10,6 +10,7 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
     [SerializeField] private TextMeshProUGUI _currentPhaseTxt;
 
     [SerializeField] private Slider masterSlider;  //We need to fix this slider for the volumeeeeee
+    [Space(10f), SerializeField] private bool _isTutorial;
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
