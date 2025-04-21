@@ -3,28 +3,67 @@ using UnityEngine;
 
 public class EnvironmentCleaning : MonoBehaviour
 {
-    private Collider _collider;
+#region Members 
+
+    [SerializeField] private bool _isTutorial;
+    [SerializeField] private GameObject _stinkyVFX, _bubbleVFX;
+
+#region Not Serialized
+    private Collider _col;
+    private GameObject _bubble, _stinky;
+
+#endregion
+#endregion
+
+#region Unity
+
+    private void OnEnable() => StartCoroutine(SpawnStinkyVFX());
+    private void OnDisable() => StopCoroutine(SpawnStinkyVFX());
 
     private void Awake()
     {
-        _collider = GetComponent<Collider>();
+        _col = GetComponent<Collider>();
+        
+        if (_isTutorial)
+            _col.enabled = false;    
     }
-
-    void OnEnable() => StartCoroutine(SpawnStinkyVFX());
-    void OnDisable() => StopCoroutine(SpawnStinkyVFX());
-
 
     private void OnTriggerEnter(Collider other)
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
+     
         if (sponge == null) return;
-         
-        if (sponge.IsWet)
+        
+        if (sponge.IsWet && !_isTutorial)
         {
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, sponge.transform, 5f);
             KitchenCleaningManager.Instance.OnCleanedArea?.Invoke();
         }
+        
+        if (_isTutorial)
+        {
+            _bubble = Instantiate(_bubbleVFX, transform.position, transform.rotation);       
+        
+        }
     }
+
+    private IEnumerator SpawnStinkyVFX()
+    {
+        if (_isTutorial) yield break;
+
+        while (gameObject.activeSelf)
+        {
+            Vector3 randPoint = RandomColliderPoint(_col);
+            GameObject tempGameObj = new GameObject("TempSpawnPoint");
+            tempGameObj.transform.position = randPoint;
+
+            yield return new WaitForSeconds(5f);
+            SpawnManager.Instance.SpawnVFX(VFXType.STINKY, tempGameObj.transform, 5f);
+            Destroy(tempGameObj, 0.1F);
+        }
+    }
+
+#endregion 
 
     private Vector3 RandomColliderPoint(Collider col)
     {
@@ -37,17 +76,12 @@ public class EnvironmentCleaning : MonoBehaviour
                            Random.Range(bounds.min.z, bounds.max.z));
     }
 
-    IEnumerator SpawnStinkyVFX()
+    public void TriggerStinky()
     {
-        while (gameObject.activeSelf)
-        {
-            Vector3 randPoint = RandomColliderPoint(_collider);
-            GameObject tempGameObj = new GameObject("TempSpawnPoint");
-            tempGameObj.transform.position = randPoint;
+        if (!_isTutorial) return;
 
-            yield return new WaitForSeconds(5f);
-            SpawnManager.Instance.SpawnVFX(VFXType.STINKY, tempGameObj.transform , 5f);
-            Destroy(tempGameObj, 0.1F);
-        }
+        _stinky = Instantiate(_bubbleVFX, transform.position, transform.rotation);
     }
+   
+
 }

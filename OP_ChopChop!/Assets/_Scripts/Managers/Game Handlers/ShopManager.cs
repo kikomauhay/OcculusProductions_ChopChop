@@ -9,22 +9,27 @@ public class ShopManager : StaticInstance<ShopManager>
 #region Members
 
     [SerializeField] GameObject _salmonPrefab, _tunaPrefab;
-    [SerializeField] Transform _salmonTransform, _tunaTransform;
+    [SerializeField] Transform _spawnpoint;
 
     [Header("Ingredient Prices")]
-    [SerializeField] int _ricePrice;
-    [SerializeField] int _salmonPrice, _tunaPrice;
+    [SerializeField] private int _ricePrice;
+    [SerializeField] private int _salmonPrice, _tunaPrice;
 
     [Header("Ingredient UI")]
-    [SerializeField] TextMeshProUGUI _txtRicePrice;
-    [SerializeField] TextMeshProUGUI _txtSalmonPrice, _txtTunaPrice;
+    [SerializeField] private TextMeshProUGUI _txtRicePrice;
+    [SerializeField] private TextMeshProUGUI _txtSalmonPrice, _txtTunaPrice;
 
-    [SerializeField] TextMeshProUGUI _txtPlayerMoney;
+    [SerializeField] private TextMeshProUGUI _txtPlayerMoney;
 
-    [SerializeField] List<GameObject> _salmonSlabs, _tunaSlabs;
 
     [Header("Button")]
-    [SerializeField] private Button[] interactableButtons;
+    [SerializeField] private Button[] _interactableButtons;
+
+    [Header("OnBoarding")]
+    [SerializeField] private bool _isTutorial;
+
+    private bool _tutorialPlayed;
+
 
 #endregion
 
@@ -40,9 +45,7 @@ public class ShopManager : StaticInstance<ShopManager>
         _txtRicePrice.text = _ricePrice.ToString();
 
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-
-        _salmonSlabs = new List<GameObject>();
-        _tunaSlabs = new List<GameObject>();
+        _tutorialPlayed = false;
     }
 
 #endregion
@@ -57,59 +60,101 @@ public class ShopManager : StaticInstance<ShopManager>
 
     public void BuySalmon()
     {
+        if (_isTutorial)
+        {
+            // UX when the player has pressed the button
+            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            StartCoroutine(ButtonCooldownTimer(0));
+
+            // waiting time for the salmon to spawn
+            StartCoroutine(DeliveryWaitTime());
+            Instantiate(_salmonPrefab, transform.position, transform.rotation);
+
+            // removes the highlight and triggers the next tutorial  
+            if (!_tutorialPlayed)
+            {          
+                GetComponent<OutlineMaterial>().DisableHighlight();
+                StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(2));
+                _tutorialPlayed = true;
+            }
+
+            return;
+        }       
+
         if (GameManager.Instance.CurrentPlayerMoney > 0)
         {
-            GameManager.Instance.DeductMoney(_salmonPrice);
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _salmonTransform, 2F);
-            GameObject salmon = SpawnManager.Instance.SpawnObject(_salmonPrefab,
-                                                                  _salmonTransform.transform,
-                                                                  SpawnObjectType.INGREDIENT);
-            StartCoroutine(ButtonCooldownTimer(0));
-            StartCoroutine(FiveSecDelay());
-
-            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-            _salmonSlabs.Add(salmon);
-
+            // UX when the player has pressed the button
             SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            StartCoroutine(ButtonCooldownTimer(0));
+            
+            // deduction of money
+            GameManager.Instance.DeductMoney(_salmonPrice);
+            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+            
+            // waiting time before the salmon spawns
+            StartCoroutine(DeliveryWaitTime());
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
+            GameObject salmon = SpawnManager.Instance.SpawnObject(_salmonPrefab,
+                                                                  _spawnpoint.transform,
+                                                                  SpawnObjectType.INGREDIENT);
         }
     }
     public void BuyTuna()
     {
-        if(GameManager.Instance.CurrentPlayerMoney > 0)
+        if (_isTutorial)
         {
-            GameManager.Instance.DeductMoney(_tunaPrice);
-            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _tunaTransform, 2F);
-            GameObject tuna = SpawnManager.Instance.SpawnObject(_tunaPrefab,
-                                                                _tunaTransform.transform,
-                                                                SpawnObjectType.INGREDIENT);
-            StartCoroutine(ButtonCooldownTimer(1));
-            StartCoroutine(FiveSecDelay());
-
-            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-            _tunaSlabs.Add(tuna);
-
+            // UX when the player has pressed the button
             SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
-        }
+            StartCoroutine(ButtonCooldownTimer(1));
 
+            // waiting time for the tuna to spawn
+            StartCoroutine(DeliveryWaitTime());
+            Instantiate(_tunaPrefab, transform.position, transform.rotation);
+            return;
+        }  
+
+        if (GameManager.Instance.CurrentPlayerMoney > 0)
+        {
+            // UX when the player has pressed the button
+            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            StartCoroutine(ButtonCooldownTimer(1));
+           
+            // deduction of money
+            GameManager.Instance.DeductMoney(_tunaPrice);
+            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();            
+            
+            // waiting time before the tuna spawns
+            StartCoroutine(DeliveryWaitTime());
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
+            GameObject tuna = SpawnManager.Instance.SpawnObject(_tunaPrefab,
+                                                                _spawnpoint.transform,
+                                                                SpawnObjectType.INGREDIENT);
+        }
     }
     public void BuyRice()
     {
+        if (_isTutorial) 
+        {
+            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            return;
+        }
+
         if (GameManager.Instance.CurrentPlayerMoney > 0)
         {
-            GameManager.Instance.DeductMoney(_ricePrice);
-            Debug.LogError("Rice spanwing hasn't been added yet!");
-
-            StartCoroutine(ButtonCooldownTimer(2));
-
-            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+            // UX when the player has pressed the button
             SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            StartCoroutine(ButtonCooldownTimer(2));
+            
+            // deduction of money
+            GameManager.Instance.DeductMoney(_ricePrice);
+            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
 
-            // insert code here to reset Rice at rice cooker
+            // waiting time before the rice spawns
+            StartCoroutine(DeliveryWaitTime());
+
+            // insert code below to reset the Rice at the Rice Cooker
         }
     }
-
-    public void RemoveFromTunaList(GameObject obj) => _tunaSlabs.Remove(obj);
-    public void RemoveFromSalmonList(GameObject obj) => _salmonSlabs.Remove(obj);
 
 #endregion
 
@@ -117,18 +162,15 @@ public class ShopManager : StaticInstance<ShopManager>
 
     private IEnumerator ButtonCooldownTimer(int index)
     {
-        interactableButtons[index].interactable = false;
-
+        _interactableButtons[index].interactable = false;
         yield return new WaitForSeconds(2f);
-
-        interactableButtons[index].interactable = true;
+        _interactableButtons[index].interactable = true;
     }
 
-    private IEnumerator FiveSecDelay()
+    private IEnumerator DeliveryWaitTime()
     {
         yield return new WaitForSeconds(5f);
     } 
-
 
 #endregion
 }

@@ -23,6 +23,7 @@ public abstract class Ingredient : MonoBehaviour
     public bool IsFresh => _isFresh;                 // changes inside the enumerator
     public int SliceIndex => _sliceIndex;
 
+
 #endregion
 
 #region Members

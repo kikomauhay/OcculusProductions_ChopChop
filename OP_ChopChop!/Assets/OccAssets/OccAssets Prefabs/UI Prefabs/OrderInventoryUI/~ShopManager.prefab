@@ -2392,8 +2392,7 @@ MonoBehaviour:
     type: 3}
   _tunaPrefab: {fileID: 5049336539331271684, guid: c34b20aa4b309d2478bca28cc5a33757,
     type: 3}
-  _salmonTransform: {fileID: 1646482215}
-  _tunaTransform: {fileID: 1646482215}
+  _spawnpoint: {fileID: 1646482215}
   _ricePrice: 50
   _salmonPrice: 100
   _tunaPrice: 70
@@ -2401,12 +2400,11 @@ MonoBehaviour:
   _txtSalmonPrice: {fileID: 8946947378307029268}
   _txtTunaPrice: {fileID: 7318283706988463373}
   _txtPlayerMoney: {fileID: 7208262895775594932}
-  _salmonSlabs: []
-  _tunaSlabs: []
-  interactableButtons:
+  _interactableButtons:
   - {fileID: 1696801737730508055}
   - {fileID: 4379672902651748861}
   - {fileID: 5340195205307591855}
+  _isTutorial: 0
 --- !u!1 &7633227258215998624
 GameObject:
   m_ObjectHideFlags: 0

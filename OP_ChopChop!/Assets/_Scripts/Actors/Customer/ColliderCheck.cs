@@ -5,7 +5,7 @@ public class ColliderCheck : MonoBehaviour
 {
     public CustomerOrder CustomerOrder { get; set; }
 
-    [SerializeField] bool _isTutorial;
+    [SerializeField] private bool _isTutorial;
 
     void OnTriggerEnter(Collider other)
     {
@@ -39,7 +39,7 @@ public class ColliderCheck : MonoBehaviour
         plate.TogglePlated();
 
         if (_isTutorial)
-            StartCoroutine(OnBoardingHandler.Instance.ServingTutorial());
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(7));
     }
 
 #region Helpers

@@ -5,11 +5,13 @@ public class Plate : Equipment
 #region Members
 
     public bool IsPlated { get; private set; }
+    public Collider BoxTrigger => _boxTrigger;
+
 
     [Tooltip("The Box Collider Component")] 
-    [SerializeField] Collider _boxTrigger;
+    [SerializeField] private Collider _boxTrigger;
 
-    public Collider BoxTrigger => _boxTrigger;
+    [SerializeField] private bool _isTutorial;
 
 #endregion
 
@@ -36,7 +38,22 @@ public class Plate : Equipment
         Debug.Log($"Is clean: {IsClean}");
     }
 
-    protected override void OnTriggerEnter(Collider other) => base.OnTriggerEnter(other);
+    protected override void OnTriggerEnter(Collider other) 
+    {
+        base.OnTriggerEnter(other);
+
+        if (!_isTutorial) return;
+        
+        Ingredient ing = other.gameObject.GetComponent<Ingredient>(); 
+
+        if (ing != null)
+        {
+            if (ing.IngredientType != IngredientType.SALMON) return;
+
+            GetComponent<OutlineMaterial>().DisableHighlight();
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(6));
+        }
+    }
 
     protected override void OnCollisionEnter(Collision other)
     {

@@ -1,21 +1,26 @@
 using System.Collections;
 using UnityEngine;
-using System;
-using Unity.XR.CoreUtils;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
 #region Members
 
-    [SerializeField] private GameObject _slicingPanel, _moldingPanel, _salmonPrefab;
-    [SerializeField] private Transform _ingTransform;
-    [SerializeField] private Transform[] _chairs;
-    [SerializeField] private GameObject[] _tutorialCustomers;
+    [Header("Objects"), Tooltip("This is sequentually organized.")]
+    [SerializeField] private GameObject _faucetKnob; 
+    [SerializeField] private GameObject _orderScreen, _freezer, _knife;
+    [SerializeField] private GameObject _riceCooker, _plate, _sponge, _menuScreen;
+    [SerializeField] private GameObject _stinkyVFX;
+    
+    [Header("Customers")]
+    [SerializeField] private GameObject _atriumPrefab;
+    [SerializeField] private GameObject _tunaCustomerPrefab;
 
-    [Header("On-Boarding Components")]
-    [SerializeField] private Material _oulineMaterial;
-    [SerializeField] private Renderer _rend;
-    [SerializeField] private GameObject _faucetKnob;
+    [Header("Panels")]
+    [SerializeField] private GameObject _slicingPanel;
+    [SerializeField] private GameObject _moldingPanel;
+
+    [Space(10f), SerializeField] private Transform _spawnpoint;
+    [Space(10f), SerializeField] private Collider _dirtyCollider;
 
 #endregion
 
@@ -23,37 +28,17 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    
-#endregion
 
-    public void Disable() => gameObject.SetActive(false);
-    
-    
-#region Helpers
-
-    void SpawnFirstCustomer()
+    private void OnTriggerEnter(Collider other)
     {
-        Instantiate(_tutorialCustomers[0], 
-                    _chairs[0].position, 
-                    _chairs[0].rotation);
-        
-        Instantiate(_salmonPrefab, 
-                    _ingTransform.position, 
-                    _ingTransform.rotation);
-    }
-    void SpawnNextCustomers()
-    {
-        Instantiate(_tutorialCustomers[1], 
-                    _chairs[1].position, _chairs[1].rotation, 
-                    transform);
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
 
-        GameObject customer = Instantiate(_tutorialCustomers[1],
-                              _chairs[2].position, _chairs[2].rotation,
-                              transform);
+        if (sponge == null) return;
 
-        customer.GetComponent<CustomerOrder>().IsLastCustomer = true;
+
     }
-    IEnumerator EnableSlicingPanel()
+
+    private IEnumerator EnableSlicingPanel()
     {
         while (true)
         {
@@ -62,7 +47,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             _slicingPanel.SetActive(false);
         }
     }
-    IEnumerator EnableMoldingPanel()
+    private IEnumerator EnableMoldingPanel()
     {
         while (true)
         {
@@ -71,24 +56,81 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             _moldingPanel.SetActive(false);
         }
     }
-
+    
 #endregion
 
-#region New OnBoarding
+    public void Disable() => gameObject.SetActive(false);
 
-    public IEnumerator StartingTutorial() // hand washing
+
+#region New Onboarding
+
+    public IEnumerator CallOnboarding(int mode)
     {
-        // triggered by pressing A in the controller
+        if (SoundManager.Instance.SoundPlaying()) yield break;
 
-        SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(22f);
+        SoundManager.Instance.StopAllAudio();
 
-        // highlight faucet knob
-        _rend = _faucetKnob.GetComponent<Renderer>(); 
-        // _rend.AddMaterial();
+        switch (mode)
+        {
+            case 0: // STARTING TUTORIAL
+                Instantiate(_atriumPrefab, _spawnpoint.position, _spawnpoint.rotation);
+                SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
+                yield return new WaitForSeconds(20f);
+                _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight(); 
+                break;
+            
+            case 1: // INGREDIENT ORDERING TUTORIAL
+                SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
+                yield return new WaitForSeconds(10f);
+                _orderScreen.GetComponent<OutlineMaterial>().EnableHighlight(); 
+                break;
 
-        
-        // disable highlight when player is interacting
+            case 2: // FREEZER TUTORIAL
+                SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
+                yield return new WaitForSeconds(3f);
+                _freezer.GetComponent<OutlineMaterial>().EnableHighlight();
+                break;
+
+            case 3: // CHOPPING TUTORIAL
+                SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
+                yield return new WaitForSeconds(5f);
+                _knife.GetComponent<OutlineMaterial>().EnableHighlight();
+                break;
+
+            case 4: // MOLDING TUTORIAL
+                SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
+                yield return new WaitForSeconds(5f);
+                _riceCooker.GetComponent<OutlineMaterial>().EnableHighlight();
+                break;
+
+            case 5: // FOOD COMBINATION TUTORIAL
+                SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
+                yield return new WaitForSeconds(10f);
+                _plate.GetComponent<OutlineMaterial>().EnableHighlight();
+                break;
+
+            case 6: // SECOND CUSTOMER TUTORIAL
+                SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
+                yield return new WaitForSeconds(12f);
+                Instantiate(_tunaCustomerPrefab, _spawnpoint.position, _spawnpoint.rotation);
+                break;
+
+            case 7: // CLEANING TUTORIAL
+                SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
+                yield return new WaitForSeconds(10f);
+                _sponge.GetComponent<OutlineMaterial>().EnableHighlight();
+                _dirtyCollider.enabled = true;
+                Instantiate(_stinkyVFX, _dirtyCollider.transform.position, _dirtyCollider.transform.rotation);
+                break;
+
+            case 8: // POST-SERVICE TUTORIAL
+                SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
+                yield return new WaitForSeconds(8f);
+                _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
+                break;
+
+            default: break;
+        }   
     }
     public IEnumerator IngredientOrderingTutorial() // ordering of salmon slab
     {        
@@ -129,7 +171,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         SoundManager.Instance.StopAllAudio();
         SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(10f);
 
         // highlight rice cooker
         // disable highlight when player picks up rice
@@ -156,7 +198,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         // highlight order screen
         // disable highlight when player is interacting
     }
-
     public IEnumerator CleaningTutorial()
     {
         // triggers after the second customer is served
@@ -168,7 +209,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         // highlight sponge
         // disable highlight when the sponge is picked up
     }
-
     public IEnumerator PostServiceTutorial()
     {
         // triggers after you're done cleaning
@@ -195,7 +235,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(2f);
 
-        SpawnFirstCustomer();
+        /// SpawnAtrium();
         yield return new WaitForSeconds(15f);
 
         StartCoroutine(EnableSlicingPanel());
@@ -224,7 +264,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
 
-        SpawnNextCustomers();
+        // SpawnNextCustomers();
     }
     public IEnumerator EndOfDayTutorial()
     {
@@ -235,17 +275,5 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         yield return new WaitForSeconds(7f);
     }
 
-
 #endregion
-
-    IEnumerator ChangeToMainGame()
-    {
-        float time = 5f;
-
-        Debug.Log($"waiting {time}s to change to main game scene");
-
-        yield return new WaitForSeconds(time);
-        StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
-        GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
-    } 
 }
