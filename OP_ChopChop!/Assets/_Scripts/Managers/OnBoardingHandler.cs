@@ -33,9 +33,8 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
 
-        if (sponge == null) return;
-
-
+        if (sponge != null) 
+            StartCoroutine(DoCleaning());
     }
 
     private IEnumerator EnableSlicingPanel()
@@ -59,10 +58,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     
 #endregion
 
-    public void Disable() => gameObject.SetActive(false);
 
-
-#region New Onboarding
 
     public IEnumerator CallOnboarding(int mode)
     {
@@ -95,12 +91,14 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                 SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(5f);
                 _knife.GetComponent<OutlineMaterial>().EnableHighlight();
+                EnableSlicingPanel();
                 break;
 
             case 4: // MOLDING TUTORIAL
                 SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(5f);
                 _riceCooker.GetComponent<OutlineMaterial>().EnableHighlight();
+                EnableMoldingPanel();
                 break;
 
             case 5: // FOOD COMBINATION TUTORIAL
@@ -118,9 +116,8 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 7: // CLEANING TUTORIAL
                 SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(10f);
-                _sponge.GetComponent<OutlineMaterial>().EnableHighlight();
-                _dirtyCollider.enabled = true;
-                Instantiate(_stinkyVFX, _dirtyCollider.transform.position, _dirtyCollider.transform.rotation);
+                
+                TriggerStinky();
                 break;
 
             case 8: // POST-SERVICE TUTORIAL
@@ -132,148 +129,30 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             default: break;
         }   
     }
-    public IEnumerator IngredientOrderingTutorial() // ordering of salmon slab
-    {        
-        // triggered by closing the faucet knob (needs to only happen once)
 
-        SoundManager.Instance.StopAllAudio();
-        SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(11f);
+#region Helpers
 
-        // highlight order screen
-        // disable highlight when player is interacting
-    }
-    public IEnumerator FreezerTutrial()
+    public void Disable() => gameObject.SetActive(false);
+    public void TriggerStinky()
     {
-        // triggered by the spawning a salmon slab (needs to only happen once)
-
-        SoundManager.Instance.StopAllAudio();
-        SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(20f);
-
-        // highlight ONLY ONE freezer
-        // disable highlight when player is interacting
+        // makes the sponge more visible
+        _sponge.GetComponent<OutlineMaterial>().EnableHighlight();
+        
+        // enbles the cleaning logic
+        _dirtyCollider.enabled = true;
+        _stinkyVFX = Instantiate(_stinkyVFX, 
+                                 _dirtyCollider.transform.position, 
+                                 _dirtyCollider.transform.rotation);
     }
-    public IEnumerator ChoppingTutorial()
+
+#endregion    
+
+    private IEnumerator DoCleaning()
     {
-        // triggered when the slab exits the fridge (needs to only happen once)
-
-        SoundManager.Instance.StopAllAudio();
-        SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(14f);
-
-        // highlight knife 
-        // disable highlight when the knife is picked up
-    }
-    public IEnumerator MoldingTutorial()
-    {
-        // triggered after the salmon is thinly sliced
-
-        SoundManager.Instance.StopAllAudio();
-        SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(10f);
-
-        // highlight rice cooker
-        // disable highlight when player picks up rice
-    }
-    public IEnumerator FoodCombinationTutorial()
-    {
-        // triggered after the salmon is thinly sliced
-
-        SoundManager.Instance.StopAllAudio();
-        SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(8f);
-
-        // highlight a plate
-        // disable highlight when the plate is picked up
-    }
-    public IEnumerator SecondCustomerTutorial()
-    {
-        // triggers after you serve to Atrium
-
-        SoundManager.Instance.StopAllAudio();
-        SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(8f);
-
-        // highlight order screen
-        // disable highlight when player is interacting
-    }
-    public IEnumerator CleaningTutorial()
-    {
-        // triggers after the second customer is served
-
-        SoundManager.Instance.StopAllAudio();
-        SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(8f);
-
-        // highlight sponge
-        // disable highlight when the sponge is picked up
-    }
-    public IEnumerator PostServiceTutorial()
-    {
-        // triggers after you're done cleaning
-
-        SoundManager.Instance.StopAllAudio();
-        SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(8f);
-
-        // highlight main menu screen
-        // disable highlight when player is interacting
-    }
-    
-#endregion
-
-#region Old Onboarding
-
-    public IEnumerator TestIngredentTutorial()
-    {
-        SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(30f);
-    }
-    public IEnumerator FoodPreparationTutorial()
-    {
-        SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(2f);
 
-        /// SpawnAtrium();
-        yield return new WaitForSeconds(15f);
-
-        StartCoroutine(EnableSlicingPanel());
-        yield return new WaitForSeconds(3f);
-
-        StartCoroutine(EnableMoldingPanel());
-        StopAllCoroutines();
-
-        _moldingPanel.SetActive(false);
-        _slicingPanel.SetActive(false);
+        Destroy(_stinkyVFX);
+        _dirtyCollider.enabled = true;
+        CallOnboarding(8);
     }
-    public IEnumerator ServingTutorial()
-    {
-        SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(14f);
-
-        SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(4f);
-
-        StartCoroutine(Onb_CleanMgr.Instance.SpawnStinkyVFX());
-        yield return new WaitForSeconds(18f);
-    }
-
-    public IEnumerator NextCustomerTutorial()
-    {
-        SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(10f);
-
-        // SpawnNextCustomers();
-    }
-    public IEnumerator EndOfDayTutorial()
-    {
-        SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(22f);
-
-        SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(7f);
-    }
-
-#endregion
 }
