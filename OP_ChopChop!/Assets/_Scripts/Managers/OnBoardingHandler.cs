@@ -1,6 +1,4 @@
 using System.Collections;
-using System.ComponentModel;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
@@ -68,6 +66,8 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public IEnumerator CallOnboarding(int mode)
     {
+        if (SoundManager.Instance.SoundPlaying()) yield break;
+
         SoundManager.Instance.StopAllAudio();
 
         switch (mode)
@@ -275,17 +275,5 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         yield return new WaitForSeconds(7f);
     }
 
-
 #endregion
-
-    IEnumerator ChangeToMainGame()
-    {
-        float time = 5f;
-
-        Debug.Log($"waiting {time}s to change to main game scene");
-
-        yield return new WaitForSeconds(time);
-        StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
-        GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
-    } 
 }

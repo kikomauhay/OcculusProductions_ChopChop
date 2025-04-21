@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
 using System;
+using System.Runtime.CompilerServices;
+using System.Reflection;
+using Unity.VisualScripting;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -40,6 +43,7 @@ public class GameManager : Singleton<GameManager>
     public const float MAX_MONEY = 9999f;
 
     private const float FIVE_MINUTES = 300f; // shift duration for Service
+    private const float ONE_MINUTE = 60f; // shift duration for Service
 
     // SCORING VALUES
     private List<float> _customerSRScores;
@@ -50,6 +54,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private float _startingPlayerMoney;
     [SerializeField] private RestaurantReceipt _endOfDayReceipt;
     [SerializeField] private GameObject _logo;
+    [Space(10f), SerializeField] private bool _isDebugging;
 
 #endregion
 
@@ -80,6 +85,8 @@ public class GameManager : Singleton<GameManager>
 
     void RemoveLogo(InputAction.CallbackContext context)
     {
+        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+
         // unpause game, remove logo, and start onboarding
         ChangeShift(GameShift.TRAINING);
         Continue.action.Disable();
@@ -197,20 +204,24 @@ public class GameManager : Singleton<GameManager>
 
     void DoPreService() // change to 1 min when done testing
     {
-        Debug.Log($"waiting {_testTimer}s to change to service");
-        StartCoroutine(ShiftCountdown(_testTimer, GameShift.SERVICE));
+        float serviceTimer = _isDebugging ? _testTimer : ONE_MINUTE;
+        
+        Debug.Log($"waiting {serviceTimer}s to change to service");
+        StartCoroutine(ShiftCountdown(serviceTimer, GameShift.SERVICE));
 
-        ClockScript.Instance.UpdateTimeRemaining(_testTimer);
+        ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
         ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
     }     
     void DoService()
     {
+        float timer = _isDebugging ? _testTimer * 10f : FIVE_MINUTES; 
+
         OnStartService?.Invoke(); // all ingredients start decaying
         _finalScore = 0;
 
         // change to 5 mins when done testing
-        Debug.Log($"waiting {_testTimer * 10f}s to change to service");
-        StartCoroutine(ShiftCountdown(_testTimer * 10f, GameShift.POST_SERVICE));
+        Debug.Log($"waiting {timer}s to change to service");
+        StartCoroutine(ShiftCountdown(timer, GameShift.POST_SERVICE));
 
         ClockScript.Instance.UpdateTimeRemaining(_testTimer);
         ClockScript.Instance.UpdateNameOfPhaseTxt("Service");

@@ -92,6 +92,11 @@ public class SoundManager : Singleton<SoundManager>
         StopMusic();
         SoundSource.Stop();
     }
+
+    public bool SoundPlaying() => SoundSource.isPlaying;
+    public bool MusicPlaying() => MusicSource.isPlaying;
+    public bool AudioPlaying() => SoundPlaying() && MusicPlaying();
+    
     
 #endregion
 }
