@@ -13,46 +13,15 @@ public class HandWashing : MonoBehaviour
     private int _handUsage;
     private bool _hasSpawnedVFX;
 
-    private void Awake()
-    {
-        _handUsage = 20;        
-    }
-
     void Start()
     { 
         _handWashCollider.enabled = false;
-        _isDirty = true;
+        _isDirty = false;
         IsWet = false;
         _timer = 20F;
         _hasSpawnedVFX = false;
 
         // Debug.Log($"Hand Dirty is {_isDirty}");
-    }
-
-    private void FixedUpdate()
-    {
-        //test
-        if(Input.GetKeyUp(KeyCode.S))
-        {
-            DecrementUsage();
-        }
-
-        if (_handUsage < 10)
-        {
-            _handWashCollider.enabled = true;
-            WarningIndicator();
-        }
-        if (_handUsage <= 0)
-        {
-            Dirtify();
-
-            if(!_hasSpawnedVFX)
-            {
-                _hasSpawnedVFX = true;
-               StartCoroutine(SpawnVFXWithDelay());
-            }
-        }
-        else _isDirty = false;    
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -61,19 +30,6 @@ public class HandWashing : MonoBehaviour
             if (_isDirty)
             {
                 other.gameObject.GetComponent<Ingredient>().Contaminate();
-            }
-        }
-        else if(other.gameObject.GetComponent<HandWashing>() != null)
-        {
-            if(other.gameObject.GetComponent<HandWashing>()._isDirty)
-            {
-                Dirtify();
-
-                if (!_hasSpawnedVFX)
-                {
-                    _hasSpawnedVFX = true;
-                    StartCoroutine(SpawnVFXWithDelay());
-                }
             }
         }
     }
@@ -96,7 +52,17 @@ public class HandWashing : MonoBehaviour
         }
     }
 
-    private void Dirtify()
+    private void OnTriggerExit(Collider other)
+    {
+        _timer = 20F;
+
+        if (IsWet)
+            StartCoroutine(WetToggle());
+    }
+
+#region Functions
+
+    public void Dirtify()
     {
         _isDirty = true;
         if(_isDirty)
@@ -109,7 +75,7 @@ public class HandWashing : MonoBehaviour
         }
     }
 
-    private void WarningIndicator()
+    public void WarningIndicator()
     {
         SkinnedMeshRenderer r = GetComponentInChildren<SkinnedMeshRenderer>();
         if(r!=null)
@@ -118,25 +84,13 @@ public class HandWashing : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    public void Cleaned()
     {
-        _timer = 20F;
-
-        if (IsWet)
-            StartCoroutine(WetToggle());
+        _isDirty = false;
     }
-
-#region Functions
-
     public void ToggleWet()
     {
         IsWet = true;
-    }
-
-    public void DecrementUsage()
-    {
-        Debug.LogWarning(_handUsage);
-        _handUsage--;
     }
 
     IEnumerator WetToggle()
