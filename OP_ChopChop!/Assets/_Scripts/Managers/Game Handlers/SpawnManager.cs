@@ -60,7 +60,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
             SpawnCustomer(GiveAvaiableSeat());
         }
 
-        while (GameManager.Instance.CurrentShift == GameShift.SERVICE)
+        while (GameManager.Instance.CurrentShift == GameShift.Service)
         {
             // coroutine should stop spawning once all seats are full
             if (_spawnedCustomers >= GameManager.Instance.MaxCustomerCount) 
@@ -100,7 +100,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
     {
         if (idx == -1) return;
 
-        if (GameManager.Instance.CurrentShift != GameShift.SERVICE) return;
+        if (GameManager.Instance.CurrentShift != GameShift.Service) return;
         
         GameObject customer = SpawnObject(_customerPrefab, 
                                           _customerSeats[idx].transform, 

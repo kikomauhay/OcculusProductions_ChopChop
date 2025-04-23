@@ -60,7 +60,7 @@ public abstract class Ingredient : MonoBehaviour
         ChangeMaterial();
         
         // in case some ingredients are spawned during Service time
-        if (GameManager.Instance.CurrentShift == GameShift.SERVICE)
+        if (GameManager.Instance.CurrentShift == GameShift.Service)
             StartDecaying();        
 
         Debug.Log(SliceIndex);

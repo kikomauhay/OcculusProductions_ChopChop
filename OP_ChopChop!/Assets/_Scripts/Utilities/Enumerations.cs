@@ -74,11 +74,11 @@ public class Enumerations : MonoBehaviour {}
 
     public enum GameShift // IN A CERTAIN ORDER (DON'T RE-ORDER)
     {
-        DEFAULT,
-        TRAINING,
-        PRE_SERVICE,
-        SERVICE,
-        POST_SERVICE
+        Default,
+        Training,
+        PreService,
+        Service,
+        PostService
     }
     public enum TrashableType 
     { 

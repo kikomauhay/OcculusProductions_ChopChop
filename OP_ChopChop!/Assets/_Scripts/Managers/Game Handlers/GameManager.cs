@@ -26,7 +26,7 @@ public class GameManager : Singleton<GameManager>
 
     public Action OnStartService, OnEndService, OnTraining;
 
-    public GameShift CurrentShift { get; private set; } = GameShift.DEFAULT;
+    public GameShift CurrentShift { get; private set; } = GameShift.Default;
     
     // DIFFICULTY
     public GameDifficulty Difficulty { get; private set; }
@@ -37,8 +37,8 @@ public class GameManager : Singleton<GameManager>
     public bool IsGameOver { get; private set; }
     public bool IsPaused { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
-    public const float MAX_MONEY = 9999f;
 
+    public const float MAX_MONEY = 9999f;
     private const float FIVE_MINUTES = 300f; // shift duration for Service
     private const float ONE_MINUTE = 60f; // shift duration for Service
 
@@ -86,19 +86,34 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
 
         // unpause game, remove logo, and start onboarding
-        ChangeShift(GameShift.TRAINING);
+        ChangeShift(GameShift.Training);
         Continue.action.Disable();
         _logo.SetActive(false);
     }
 
     IEnumerator ShiftCountdown(float timer, GameShift shift)
     {
-        yield return new WaitForSeconds(timer);
+        if (timer < 1) yield break;
+
+        while (timer != 0)
+        {
+            yield return new WaitForSeconds(1f);
+            timer--;
+            ClockScript.Instance.UpdateTimeRemaining(timer);
+        }
+
         SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
         ChangeShift(shift);
     }
 
     private void Update()
+    {
+        Test();
+
+        ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
+    }
+
+    private void Test()
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
             StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
@@ -127,6 +142,7 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Alpha8))
             StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(8));
     }
+
 #endregion
 
 #region Public
@@ -188,7 +204,7 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(4f);
 
         StopAllCoroutines();
-        ChangeShift(GameShift.POST_SERVICE);
+        ChangeShift(GameShift.PostService);
     }
     public IEnumerator GameOver()
     {
@@ -212,10 +228,10 @@ public class GameManager : Singleton<GameManager>
 
         switch (chosenShift)
         {
-            case GameShift.TRAINING:     OnTraining?.Invoke(); break;
-            case GameShift.PRE_SERVICE:  DoPreService();       break;
-            case GameShift.SERVICE:      DoService();          break;
-            case GameShift.POST_SERVICE: DoPostService();      break;
+            case GameShift.Training:     OnTraining?.Invoke(); break;
+            case GameShift.PreService:  DoPreService();       break;
+            case GameShift.Service:      DoService();          break;
+            case GameShift.PostService: DoPostService();      break;
 
             default:
                 Debug.LogError("Invalid state chosen!");
@@ -226,16 +242,19 @@ public class GameManager : Singleton<GameManager>
 
     void DoPreService() // change to 1 min when done testing
     {
+        ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
+
         float serviceTimer = _isDebugging ? _testTimer : ONE_MINUTE;
         
         Debug.Log($"waiting {serviceTimer}s to change to service");
-        StartCoroutine(ShiftCountdown(serviceTimer, GameShift.SERVICE));
+        StartCoroutine(ShiftCountdown(serviceTimer, GameShift.Service));
 
-        ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
-        ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
+        // ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
     }     
     void DoService()
     {
+        ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
+
         float timer = _isDebugging ? _testTimer * 10f : FIVE_MINUTES; 
 
         OnStartService?.Invoke(); // all ingredients start decaying
@@ -243,10 +262,9 @@ public class GameManager : Singleton<GameManager>
 
         // change to 5 mins when done testing
         Debug.Log($"waiting {timer}s to change to service");
-        StartCoroutine(ShiftCountdown(timer, GameShift.POST_SERVICE));
+        StartCoroutine(ShiftCountdown(timer, GameShift.PostService));
 
-        ClockScript.Instance.UpdateTimeRemaining(_testTimer);
-        ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
+        // ClockScript.Instance.UpdateTimeRemaining(_testTimer);
     }
     void DoPostService() // rating calculations
     {

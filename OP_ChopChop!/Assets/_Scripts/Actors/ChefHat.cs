@@ -12,6 +12,6 @@ public class ChefHat : PersistentSingleton<ChefHat> {
         StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
         yield return null;
 
-        GameManager.Instance.ChangeShift(GameShift.PRE_SERVICE);
+        GameManager.Instance.ChangeShift(GameShift.PreService);
     }
 }

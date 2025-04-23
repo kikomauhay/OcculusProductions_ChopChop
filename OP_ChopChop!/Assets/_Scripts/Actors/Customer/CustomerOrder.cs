@@ -96,10 +96,10 @@ public class CustomerOrder : MonoBehaviour
 
         if (!IsLastCustomer) return;
 
-        if (GameManager.Instance.CurrentShift == GameShift.SERVICE)
+        if (GameManager.Instance.CurrentShift == GameShift.Service)
         {
             GameManager.Instance.StopAllCoroutines();
-            GameManager.Instance.ChangeShift(GameShift.POST_SERVICE);
+            GameManager.Instance.ChangeShift(GameShift.PostService);
         }
     }
 
