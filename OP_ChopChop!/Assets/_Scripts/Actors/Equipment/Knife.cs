@@ -15,7 +15,7 @@ public class Knife : Equipment
     {
         if (!_isTutorial) return;
 
-        GetComponent<OutlineMaterial>().DisableHighlight();
+        GetComponentInChildren<OutlineMaterial>().DisableHighlight();
         StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(4));
     }
 }

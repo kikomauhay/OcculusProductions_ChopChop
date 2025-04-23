@@ -99,7 +99,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 3: // CHOPPING TUTORIAL
                 SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(5f);
-                _knife.GetComponent<OutlineMaterial>().EnableHighlight();
+                _knife.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
                 EnableSlicingPanel();
                 break;
 
