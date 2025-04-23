@@ -31,8 +31,8 @@ public class SceneHandler : Singleton<SceneHandler>
                 
         SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Additive);
         GameManager.Instance.ChangeShift(_sceneName == "TrainingScene" ? 
-                                         GameShift.TRAINING : 
-                                         GameShift.PRE_SERVICE);
+                                         GameShift.Training : 
+                                         GameShift.PreService);
     }
 
 #endregion
