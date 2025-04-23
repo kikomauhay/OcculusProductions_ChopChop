@@ -3,9 +3,6 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
 using System;
-using System.Runtime.CompilerServices;
-using System.Reflection;
-using Unity.VisualScripting;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -93,7 +90,7 @@ public class GameManager : Singleton<GameManager>
         _logo.SetActive(false);
         
         // used for testing so that you won't hear the voice lines in MGS
-        //if (CurrentShift == GameShift.PRE_SERVICE) return;
+        // if (CurrentShift == GameShift.PRE_SERVICE) return;
 
         StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
     }
@@ -105,6 +102,35 @@ public class GameManager : Singleton<GameManager>
         ChangeShift(shift);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(1));
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(2));
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(3));
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(4));
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(5));
+
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(6));
+
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(7));
+
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(8));
+    }
 #endregion
 
 #region Public
