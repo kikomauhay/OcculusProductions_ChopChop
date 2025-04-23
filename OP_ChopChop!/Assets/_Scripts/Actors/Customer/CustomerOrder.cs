@@ -18,9 +18,11 @@ public class CustomerOrder : MonoBehaviour
     public float PatienceRate => _patienceDecreaseRate;
     public bool IsLastCustomer { get; set; } = false;
 
-#endregion
+    #endregion
 
-#region Members
+    #region Members
+
+    public System.Action OnTrainingEnded;
 
     [Header("Dish UI")]
     [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
@@ -67,19 +69,24 @@ public class CustomerOrder : MonoBehaviour
             CustomerDishType = _isTunaCustomer ? 
                                DishType.NIGIRI_TUNA : 
                                DishType.NIGIRI_SALMON;
+
+            OnBoardingHandler.Instance.OnTutorialEnd += Cleanup;
         }
         else 
         {
-            CustomerDishType = (DishType)Random.Range(0, 4);
             _patienceDecreaseRate = 1.65f; // referenced from the document
+            CustomerDishType = (DishType)Random.Range(0, _dishOrdersUI.Length);
         }        
         
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
     }
-    void OnDestroy() 
+    void OnDestroy()
     {
         GameManager.Instance.OnEndService -= DestroyOrderUI;
+
+        if (_isTutorial)
+            OnBoardingHandler.Instance.OnTutorialEnd -= Cleanup;
 
         if (_isTunaCustomer)
         {
@@ -95,7 +102,10 @@ public class CustomerOrder : MonoBehaviour
             GameManager.Instance.ChangeShift(GameShift.POST_SERVICE);
         }
     }
-#region Spawning_Helpers
+
+    private void Cleanup() => Destroy(gameObject);
+
+    #region Spawning_Helpers
 
     void CreateCustomerUI()
     {
