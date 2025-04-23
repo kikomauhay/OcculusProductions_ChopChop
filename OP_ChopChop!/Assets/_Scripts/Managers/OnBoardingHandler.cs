@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
-    #region Members
+#region Members
 
     public bool TutorialPlaying { get; private set; } = false;
+
+    public System.Action OnTutorialEnd;
 
     [Header("Objects"), Tooltip("This is sequentually organized.")]
     [SerializeField] private GameObject _faucetKnob; 
@@ -21,7 +23,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private GameObject _slicingPanel;
     [SerializeField] private GameObject _moldingPanel;
 
-    [Space(10f), SerializeField] private Transform _spawnpoint;
+    [Space(10f), SerializeField] private Transform _customerSpawnpoint;
     [Space(10f), SerializeField] private Collider _dirtyCollider;
 
 #endregion
@@ -60,8 +62,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     
 #endregion
 
-
-
     public IEnumerator CallOnboarding(int mode)
     {
         if (SoundManager.Instance.SoundPlaying()) yield break;
@@ -72,15 +72,13 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             yield break;
         }
 
-
-
         SoundManager.Instance.StopAllAudio();
         TutorialPlaying = true;
 
         switch (mode)
         {
             case 0: // STARTING TUTORIAL
-                Instantiate(_atriumPrefab, _spawnpoint.position, _spawnpoint.rotation);
+                Instantiate(_atriumPrefab, _customerSpawnpoint.position, _customerSpawnpoint.rotation);
                 SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(20f);
                 _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight(); 
@@ -121,7 +119,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 6: // SECOND CUSTOMER TUTORIAL
                 SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(12f);
-                Instantiate(_tunaCustomerPrefab, _spawnpoint.position, _spawnpoint.rotation);
+                Instantiate(_tunaCustomerPrefab, _customerSpawnpoint.position, _customerSpawnpoint.rotation);
                 break;
 
             case 7: // CLEANING TUTORIAL
@@ -143,9 +141,14 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         TutorialPlaying = false;
     }
 
-#region Helpers
+    #region Helpers
 
-    public void Disable() => gameObject.SetActive(false);
+    public void Disable()
+    { 
+        gameObject.SetActive(false);
+        OnTutorialEnd?.Invoke();
+    }
+
     public void TriggerStinky()
     {
         // makes the sponge more visible
