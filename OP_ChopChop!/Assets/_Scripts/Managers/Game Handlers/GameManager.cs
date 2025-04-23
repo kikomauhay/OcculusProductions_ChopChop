@@ -82,17 +82,13 @@ public class GameManager : Singleton<GameManager>
 
     void RemoveLogo(InputAction.CallbackContext context)
     {
+        StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
         SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
 
         // unpause game, remove logo, and start onboarding
         ChangeShift(GameShift.TRAINING);
         Continue.action.Disable();
         _logo.SetActive(false);
-        
-        // used for testing so that you won't hear the voice lines in MGS
-        // if (CurrentShift == GameShift.PRE_SERVICE) return;
-
-        StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
     }
 
     IEnumerator ShiftCountdown(float timer, GameShift shift)
