@@ -1,5 +1,6 @@
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class Trash : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class Trash : MonoBehaviour
         GameObject obj = other.gameObject;
 
         if (obj.GetComponent<Trashable>() == null) return;
+
+        if (obj.GetComponent<Sponge>() != null)
+        {
+            obj.GetComponent<Sponge>().ResetPosition();
+            return;
+        }
         
         switch(obj.GetComponent<Trashable>().TrashTypes)
         {

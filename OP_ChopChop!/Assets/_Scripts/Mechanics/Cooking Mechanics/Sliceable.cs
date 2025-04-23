@@ -40,7 +40,6 @@ public class Sliceable : MonoBehaviour
             {
                 Sliced();
                 other.gameObject.GetComponent<Knife>().IncrementUseCounter();
-                Board.Instance.IncrementUseCounter();
                 return;
             }
 

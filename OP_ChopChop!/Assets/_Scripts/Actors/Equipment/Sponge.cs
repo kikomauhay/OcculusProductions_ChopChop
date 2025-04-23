@@ -18,7 +18,8 @@ public class Sponge : MonoBehaviour
     [SerializeField] private Material _wetMat, _cleanMat, _dirtyMat;
 
     private MeshRenderer _rend;
-    private const float WET_DURATION = 10f; 
+    private const float WET_DURATION = 10f;
+    private Vector3 _startPosition;
     
 #endregion 
 
@@ -35,6 +36,7 @@ public class Sponge : MonoBehaviour
 
         _rend = GetComponent<MeshRenderer>();
         _rend.material = _isClean ? _cleanMat : _dirtyMat;
+        _startPosition = transform.position;
     }
     
     IEnumerator DrySponge()
@@ -72,5 +74,7 @@ public class Sponge : MonoBehaviour
         StartCoroutine(DrySponge());
     }
 
-#endregion
+    public void ResetPosition() => transform.position = _startPosition;
+
+    #endregion
 }
