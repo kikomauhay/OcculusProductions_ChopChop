@@ -1,21 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class HandManager : MonoBehaviour
+public class HandManager : Singleton<HandManager>
 {
+#region Members
     [SerializeField] Collider[] _handWashColliders;
+    [SerializeField] HandWashing[] _handWashingScripts;
 
-    private int _handUsage;
+    public int _handUsage { get; set; }
+    #endregion
 
-    private void Awake()
+#region Unity
+
+    protected override void Awake() => base.Awake();
+    protected override void OnApplicationQuit() => base.OnApplicationQuit();
+    private void Start()
     {
-        _handUsage = 30;
-
-        foreach (Collider collider in _handWashColliders)
+        _handWashColliders = new Collider[_handWashingScripts.Length];
+        for (int i = 0; i < _handWashingScripts.Length; i++)
         {
-            collider.enabled = false;
+            _handWashColliders[i] = _handWashingScripts[i].HandWashCollider;
         }
+        _handUsage = 30;
     }
 
     private void FixedUpdate()
@@ -24,6 +32,7 @@ public class HandManager : MonoBehaviour
         if(Input.GetKeyUp(KeyCode.S))
         {
             DecrementUsage();
+            Debug.LogWarning(_handUsage);
         }
 
         if (_handUsage < 15)
@@ -34,11 +43,12 @@ public class HandManager : MonoBehaviour
                 collider.gameObject.GetComponent<HandWashing>().WarningIndicator();
             }
         }
-        else if(_handUsage <= 0)
+        if(_handUsage <= 0)
         {
             foreach(Collider collider in _handWashColliders)
             {
                 collider.gameObject.GetComponent<HandWashing>().Dirtify();
+                collider.gameObject.GetComponent<HandWashing>().PlayVFX();
             }
         }
         else
@@ -49,6 +59,8 @@ public class HandManager : MonoBehaviour
             }
         }
     }
+
+#endregion
 
 #region public functions
 

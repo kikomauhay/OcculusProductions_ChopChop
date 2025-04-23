@@ -93,7 +93,7 @@ public class GameManager : Singleton<GameManager>
         _logo.SetActive(false);
         
         // used for testing so that you won't hear the voice lines in MGS
-        if (CurrentShift == GameShift.PRE_SERVICE) return;
+        //if (CurrentShift == GameShift.PRE_SERVICE) return;
 
         StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
     }
