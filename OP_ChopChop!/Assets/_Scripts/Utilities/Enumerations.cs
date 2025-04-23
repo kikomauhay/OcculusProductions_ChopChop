@@ -58,7 +58,7 @@ public class Enumerations : MonoBehaviour {}
         UNMOLDED,
         GOOD,
         PERFECT,
-    BAD
+        BAD
 }
 
 #endregion
