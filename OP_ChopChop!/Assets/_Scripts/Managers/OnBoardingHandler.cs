@@ -24,7 +24,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private GameObject _moldingPanel;
 
     [Space(10f), SerializeField] private Transform _customerSpawnpoint;
-    [Space(10f), SerializeField] private Collider _dirtyCollider;
+
+    [Space(10f)]
+    [SerializeField] private Collider _dirtyCollider;
+    [SerializeField] private Collider _servingCollision;
 
 #endregion
 

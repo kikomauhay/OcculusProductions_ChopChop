@@ -40,23 +40,22 @@ public abstract class Equipment : MonoBehaviour
     }
     protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
-        if (other.gameObject.GetComponent<Sponge>() != null) 
-        {
-            Sponge sponge = other.gameObject.GetComponent<Sponge>();
-            
-            if (sponge.IsClean) 
-            {
-                DoCleaning();
-                sponge.IncrementUseCounter();
-                return;
-            }   
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
 
-            // sponge contaminates the equipment
+        if (sponge == null) return;
+
+        if (sponge.IsClean)
+        {
+            DoCleaning();
+            sponge.IncrementUseCounter();
+        }
+        else // sponge contaminates the equipment
+        {
             SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
             Contaminate();
         }
     }
-    protected void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
         if (other.gameObject.GetComponent<Sponge>() == null) return;
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class Board : Equipment {
-
+public class Board : Equipment 
+{
     public static Board Instance { get; private set; }
 
     protected override void Start() 
@@ -9,8 +9,16 @@ public class Board : Equipment {
         base.Start();
 
         Instance = this;
-
         name = "Chopping Board";
-        //_maxUsageCounter = 40; //original value 10;
+    }
+
+    protected override void OnTriggerExit(Collider other)
+    {
+        base.OnTriggerExit(other);
+
+        if (!IsClean) return;
+
+        if (other.gameObject.GetComponent<Ingredient>() != null)
+            IncrementUseCounter();
     }
 }
