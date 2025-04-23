@@ -97,6 +97,5 @@ public class SoundManager : Singleton<SoundManager>
     public bool MusicPlaying() => MusicSource.isPlaying;
     public bool AudioPlaying() => SoundPlaying() && MusicPlaying();
     
-    
 #endregion
 }

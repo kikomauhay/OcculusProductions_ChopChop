@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
-#region Members
+    #region Members
+
+    public bool TutorialPlaying { get; private set; } = false;
 
     [Header("Objects"), Tooltip("This is sequentually organized.")]
     [SerializeField] private GameObject _faucetKnob; 
@@ -64,7 +66,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (SoundManager.Instance.SoundPlaying()) yield break;
 
+        if (TutorialPlaying)
+        {
+            Debug.LogError("Tutorial is alraedy playing!");
+            yield break;
+        }
+
+
+
         SoundManager.Instance.StopAllAudio();
+        TutorialPlaying = true;
 
         switch (mode)
         {
@@ -84,7 +95,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 2: // FREEZER TUTORIAL
                 SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(3f);
-                _freezer.GetComponent<OutlineMaterial>().EnableHighlight();
+                _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
                 break;
 
             case 3: // CHOPPING TUTORIAL
@@ -97,7 +108,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 4: // MOLDING TUTORIAL
                 SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(5f);
-                _riceCooker.GetComponent<OutlineMaterial>().EnableHighlight();
+                _riceCooker.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
                 EnableMoldingPanel();
                 break;
 
@@ -127,7 +138,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                 break;
 
             default: break;
-        }   
+        }
+
+        TutorialPlaying = false;
     }
 
 #region Helpers
