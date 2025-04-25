@@ -49,7 +49,9 @@ public class Water : MonoBehaviour
         if (_isTutorial)
         {
             transform.parent.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
+            Debug.Log("ONBOARDING 1 ABOUT TO PLAY");
             OnBoardingHandler.Instance.CallOnboarding(1);
+            Debug.Log("ONBOARDING 1 PLAYING");
         }
     }
 

@@ -289,7 +289,7 @@ PrefabInstance:
     - target: {fileID: 3049301085533515897, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7, type: 3}
@@ -4604,7 +4604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a69274aaa8aa143838a4dd1216c38e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _faucetKnob: {fileID: 0}
+  _faucetKnob: {fileID: 1946015438}
   _orderScreen: {fileID: 1837609474}
   _freezer: {fileID: 183183791709213964}
   _knife: {fileID: 967904968}
@@ -6291,6 +6291,7 @@ GameObject:
   - component: {fileID: 1946015442}
   - component: {fileID: 1946015441}
   - component: {fileID: 1946015440}
+  - component: {fileID: 1946015445}
   m_Layer: 0
   m_Name: faucet
   m_TagString: Untagged
@@ -6495,6 +6496,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1946015438}
   m_Mesh: {fileID: -8361362048749171208, guid: 7065147bd67007b4a8b82e15f02361d3, type: 3}
+--- !u!114 &1946015445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946015438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ee06c9707717d4b8b65aacf9694a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineMat: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
 --- !u!1 &1967535848
 GameObject:
   m_ObjectHideFlags: 0

@@ -2650,8 +2650,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96b10a56366f40e45a1a754bbffc61cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HandWashCollider: {fileID: 391014581179187540}
   _isDirty: 0
+  HandWashCollider: {fileID: 391014581179187540}
   _handMaterial: {fileID: 2100000, guid: 3637b758ff163493f8bb8b6d7e96d7ae, type: 2}
   _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
   _warningOutlineTexture: {fileID: 2100000, guid: 6aca4faf3d6202f43916a5b4db927a14,
@@ -3352,8 +3352,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96b10a56366f40e45a1a754bbffc61cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HandWashCollider: {fileID: 391014581656222647}
   _isDirty: 0
+  HandWashCollider: {fileID: 391014581656222647}
   _handMaterial: {fileID: 2100000, guid: 3637b758ff163493f8bb8b6d7e96d7ae, type: 2}
   _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
   _warningOutlineTexture: {fileID: 2100000, guid: 6aca4faf3d6202f43916a5b4db927a14,
@@ -3410,8 +3410,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_System: {fileID: 391014582476440993}
-  m_MoveSpeed: 0
-  m_EnableStrafe: 0
+  m_MoveSpeed: 1
+  m_EnableStrafe: 1
   m_EnableFly: 0
   m_UseGravity: 0
   m_GravityApplicationMode: 1
@@ -3549,7 +3549,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 391014582476441003}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 919e39492806b334982b6b84c90dd927, type: 3}
   m_Name: 
