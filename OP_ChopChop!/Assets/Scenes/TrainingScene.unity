@@ -4704,7 +4704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a69274aaa8aa143838a4dd1216c38e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _faucetKnob: {fileID: 1435861654}
+  _faucetKnob: {fileID: 1946015438}
   _orderScreen: {fileID: 1837609474}
   _freezer: {fileID: 183183791709213964}
   _knife: {fileID: 967904968}
@@ -6596,13 +6596,14 @@ GameObject:
   - component: {fileID: 1946015443}
   - component: {fileID: 1946015442}
   - component: {fileID: 1946015441}
+  - component: {fileID: 1946015445}
   - component: {fileID: 1946015440}
   m_Layer: 0
   m_Name: faucet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &1946015439
 Transform:
@@ -6801,6 +6802,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1946015438}
   m_Mesh: {fileID: -8361362048749171208, guid: 7065147bd67007b4a8b82e15f02361d3, type: 3}
+--- !u!114 &1946015445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946015438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ee06c9707717d4b8b65aacf9694a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineMat: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
 --- !u!1 &1967535848
 GameObject:
   m_ObjectHideFlags: 0

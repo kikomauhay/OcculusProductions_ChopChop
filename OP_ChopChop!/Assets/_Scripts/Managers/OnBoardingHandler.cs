@@ -97,10 +97,11 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                 Instantiate(_atriumPrefab, _customerSpawnpoint.position, _customerSpawnpoint.rotation);
                 SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(20f);
-                _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight(); 
+                _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
                 break;
-            
+
             case 1: // INGREDIENT ORDERING TUTORIAL
+                Debug.Log("Onb 02 playing");
                 SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(10f);
                 _orderScreen.GetComponent<OutlineMaterial>().EnableHighlight(); 
