@@ -108,39 +108,8 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
-        Test();
-
-        ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
-    }
-
-    private void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(1));
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(2));
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(3));
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(4));
-
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(5));
-
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(6));
-
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(7));
-
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(8));
+        if (CurrentShift != GameShift.Training)
+            ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
     }
 
 #endregion

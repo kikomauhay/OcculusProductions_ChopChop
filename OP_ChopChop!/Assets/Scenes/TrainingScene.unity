@@ -300,7 +300,7 @@ PrefabInstance:
     - target: {fileID: 3049301085533515897, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7, type: 3}
@@ -328,6 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b3a102c60772f84dbe9918d6cf0cb12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 1
 --- !u!1 &21971732
 GameObject:
   m_ObjectHideFlags: 0
@@ -5197,7 +5198,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _water: {fileID: 3049301085533515897, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7, type: 3}
-  _isTutorial: 1
 --- !u!1001 &1454716486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5937,7 +5937,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725724460}
   m_LocalRotation: {x: -0, y: 0.8603989, z: -0, w: 0.5096212}
-  m_LocalPosition: {x: -1.317, y: 0.9, z: 1.793}
+  m_LocalPosition: {x: -1.317, y: 1.1, z: 1.793}
   m_LocalScale: {x: 0.3344, y: 0.19833, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6746,7 +6746,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _water: {fileID: 17051267}
-  _isTutorial: 1
 --- !u!54 &1946015441
 Rigidbody:
   m_ObjectHideFlags: 0
