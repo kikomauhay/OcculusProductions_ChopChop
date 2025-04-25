@@ -538,6 +538,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RunningWater
       objectReference: {fileID: 0}
+    - target: {fileID: 3049301085533515897, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7, type: 3}
 --- !u!1 &128812006
@@ -629,6 +634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b3a102c60772f84dbe9918d6cf0cb12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
 --- !u!1 &223499113
 GameObject:
   m_ObjectHideFlags: 0
@@ -3541,7 +3547,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _water: {fileID: 174258265}
-  _isTutorial: 0
 --- !u!1 &1263188996
 GameObject:
   m_ObjectHideFlags: 0

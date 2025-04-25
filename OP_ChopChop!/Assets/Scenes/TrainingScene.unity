@@ -219,6 +219,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 940820608179558381, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7,
         type: 3}
+      propertyPath: m_Height
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 940820608179558381, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7,
+        type: 3}
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
