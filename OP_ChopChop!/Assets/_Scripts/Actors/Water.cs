@@ -14,16 +14,17 @@ public class Water : MonoBehaviour
             
         if (other.gameObject.GetComponent<HandWashing>() != null)
         {
-            HandWashing handWash = other.gameObject.GetComponent<HandWashing>();
-
-            if (!handWash.IsWet)
-                handWash.ToggleWet();
-
             if (_isTutorial)
             {
                 transform.parent.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
                 OnBoardingHandler.Instance.CallOnboarding(1);
+                return;
             }
+            
+            HandWashing handWash = other.gameObject.GetComponent<HandWashing>();
+
+            if (!handWash.IsWet)
+                handWash.ToggleWet();
         }
     }
 }
