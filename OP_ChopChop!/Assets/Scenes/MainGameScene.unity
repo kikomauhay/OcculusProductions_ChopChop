@@ -458,6 +458,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1661514610}
     m_Modifications:
+    - target: {fileID: 17051268, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7, type: 3}
+      propertyPath: _cooldownInterval
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 940820608179558381, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 940820608179558381, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7,
         type: 3}
       propertyPath: m_IsTrigger
@@ -541,7 +550,7 @@ PrefabInstance:
     - target: {fileID: 3049301085533515897, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5be0d9ebfc0bb9e489d55dd468a8f3d7, type: 3}

@@ -1,6 +1,7 @@
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections;
 using UnityEngine;
+
 public class ToggleFaucet : XRBaseInteractable
 {
     [SerializeField] private GameObject _water;
@@ -22,9 +23,8 @@ public class ToggleFaucet : XRBaseInteractable
     private void Start()
     {
         if (interactionManager == null) 
-        {
             interactionManager = FindObjectOfType<XRInteractionManager>();
-        }
+
         _water.gameObject.SetActive(false);
         _enabled = false;
     }
