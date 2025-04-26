@@ -96,6 +96,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 0: // STARTING TUTORIAL
                 Instantiate(_atriumPrefab, _customerSpawnpoint.position, _customerSpawnpoint.rotation);
                 SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
+                Debug.Log("Onb 01 playing");
                 yield return new WaitForSeconds(20f);
                 _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
                 break;
