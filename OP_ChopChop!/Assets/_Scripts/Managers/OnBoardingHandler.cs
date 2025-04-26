@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
@@ -29,9 +30,15 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private Collider _dirtyCollider;
     [SerializeField] private Collider _servingCollision;
 
-#endregion
+    [Header("InputButtonRef")]
+    [SerializeField] public InputActionReference Continue;
 
-#region Unity
+    [Header("Special Stuff")]
+    [SerializeField] public bool isPlayeDoneWashing = false;
+
+    #endregion
+
+    #region Unity
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
@@ -47,6 +54,19 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         if (Input.GetKeyDown(KeyCode.Alpha6)) StartCoroutine(CallOnboarding(6));
         if (Input.GetKeyDown(KeyCode.Alpha7)) StartCoroutine(CallOnboarding(7));
         if (Input.GetKeyDown(KeyCode.Alpha8)) StartCoroutine(CallOnboarding(8));
+
+        if(isPlayeDoneWashing)
+        {
+            Continue.action.Enable();
+            Continue.action.performed += ContinueCallOnboarding1;
+        }
+
+    }
+
+    public void ContinueCallOnboarding1(InputAction.CallbackContext context)
+    {
+        StartCoroutine(CallOnboarding(1));
+        Continue.action.Disable();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -99,6 +119,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                 Debug.Log("Onb 01 playing");
                 yield return new WaitForSeconds(20f);
                 _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
+                Continue.action.Enable();
                 break;
 
             case 1: // INGREDIENT ORDERING TUTORIAL
