@@ -2,12 +2,6 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-/// <summary> -WHAT DOES THIS SCRIPT DO-
-/// 
-/// The core component for the customer 
-///  
-/// </summary>
-
 [RequireComponent(typeof(CustomerAppearance), typeof(CustomerActions))]
 public class CustomerOrder : MonoBehaviour
 {
@@ -18,11 +12,9 @@ public class CustomerOrder : MonoBehaviour
     public float PatienceRate => _patienceDecreaseRate;
     public bool IsLastCustomer { get; set; } = false;
 
-    #endregion
+#endregion
 
-    #region Members
-
-    public System.Action OnTrainingEnded;
+#region Members
 
     [Header("Dish UI")]
     [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
@@ -40,17 +32,14 @@ public class CustomerOrder : MonoBehaviour
     [Header("Onboarding")] 
     [SerializeField] private bool _isTutorial;
     [SerializeField] private bool _isTunaCustomer;
-
-#region Not Serialized
-    
+   
     private CustomerAppearance _appearance;
     private GameObject _customerOrderUI;
     private float _customerScore; // starts at 100 and decreases over time
 
 #endregion
-#endregion
 
-    void Start()
+    private void Start()
     {
         GameManager.Instance.OnEndService += DestroyOrderUI;
         _appearance = GetComponent<CustomerAppearance>();
@@ -81,7 +70,7 @@ public class CustomerOrder : MonoBehaviour
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
     }
-    void OnDestroy()
+    private void OnDestroy()
     {
         GameManager.Instance.OnEndService -= DestroyOrderUI;
 
@@ -106,7 +95,7 @@ public class CustomerOrder : MonoBehaviour
 
     private void Cleanup() => Destroy(gameObject);
 
-    #region Spawning_Helpers
+#region Spawning_Helpers
 
     void CreateCustomerUI()
     {

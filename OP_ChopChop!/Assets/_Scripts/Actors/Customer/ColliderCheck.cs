@@ -1,13 +1,14 @@
+using System;
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class ColliderCheck : MonoBehaviour
 {
     public CustomerOrder CustomerOrder { get; set; }
-
     [SerializeField] private bool _isTutorial;
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (CustomerOrder == null) return;
 
@@ -45,9 +46,20 @@ public class ColliderCheck : MonoBehaviour
         }
     }
 
+#region Enumerators
+
+    private IEnumerator DisableCollider()
+    {
+        GetComponent<Collider>().enabled = false;
+        yield return new WaitForSeconds(3f);
+        GetComponent<Collider>().enabled = true;
+    }
+
+#endregion
+
 #region Helpers
 
-    void CheckDish(Dish d)
+    private void CheckDish(Dish d)
     {
         if (d.IsContaminated || d.IsExpired) // ORDER IS EXPIRED OR CONTAMINATED
         {
@@ -66,12 +78,8 @@ public class ColliderCheck : MonoBehaviour
             StartCoroutine(CustomerOrder.AngryReaction());
         }
     }
-    IEnumerator DisableCollider()
-    {
-        GetComponent<Collider>().enabled = false;
-        yield return new WaitForSeconds(3f);
-        GetComponent<Collider>().enabled = true;
-    }
+
+    public void DisableTutorial() => _isTutorial = false;
 
 #endregion
 }

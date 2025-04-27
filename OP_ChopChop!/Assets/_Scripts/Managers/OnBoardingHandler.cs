@@ -100,11 +100,14 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public IEnumerator CallOnboarding(int mode)
     {
-        if (SoundManager.Instance.SoundPlaying()) yield break;
-
+        if (SoundManager.Instance.SoundPlaying()) 
+        {
+            Debug.LogError("A sound is alraedy playing!"); 
+            yield break;
+        }
         if (TutorialPlaying)
         {
-            Debug.LogError("Tutorial is alraedy playing!");
+            Debug.LogError("Tutorial is already playing!");
             yield break;
         }
 
@@ -114,7 +117,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         switch (mode)
         {
             case 0: // STARTING TUTORIAL
-                Instantiate(_atriumPrefab, _customerSpawnpoint.position, _customerSpawnpoint.rotation);
+                SpawnManager.Instance.SpawnTutorialCustomer(true);
                 SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
                 Debug.Log("Onb 01 playing");
                 yield return new WaitForSeconds(20f);
@@ -139,7 +142,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                 SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(5f);
                 _knife.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
-                EnableSlicingPanel();
+                EnableSlicingPanel();   
                 break;
 
             case 4: // MOLDING TUTORIAL
@@ -174,7 +177,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                 _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
                 break;
 
-            default: break;
+            default: yield break;
         }
 
         TutorialPlaying = false;

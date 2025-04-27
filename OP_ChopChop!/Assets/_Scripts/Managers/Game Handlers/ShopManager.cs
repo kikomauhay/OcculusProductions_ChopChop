@@ -24,6 +24,7 @@ public class ShopManager : StaticInstance<ShopManager>
 
     [Header("Onboarding")]
     [SerializeField] private bool _isTutorial;  
+    
     private bool _tutorialPlayed;
     private List<GameObject> _orderBoxes;
 
