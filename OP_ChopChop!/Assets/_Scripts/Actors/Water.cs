@@ -6,10 +6,11 @@ public class Water : MonoBehaviour
  
     [SerializeField] private bool _isTutorial;
     [SerializeField] private float _cooldownTimer, _cooldownInterval;
+    [SerializeField] private bool _hasExitedAndPlayed;
 
 #endregion
 
-#region Unity
+    #region Unity
 
     private void OnEnable() => SoundManager.Instance.PlaySound("tap water", SoundGroup.APPLIANCES);
     private void OnDisable() => SoundManager.Instance.SoundSource.Stop();
@@ -44,14 +45,14 @@ public class Water : MonoBehaviour
     {
         if (other.gameObject.GetComponent<HandWashing>() == null) return;
 
-        if (_isTutorial)
+        if (_isTutorial && !_hasExitedAndPlayed)
         {
             transform.parent.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
             Debug.Log("ONBOARDING 1 ABOUT TO PLAY");
-            OnBoardingHandler.Instance.DoneWashing = true;
-
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding02());
+            //OnBoardingHandler.Instance.DoneWashing = true;
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding02()); //this will certainly cause a bug where we off water, and no sound playing
             Debug.Log("ONBOARDING 1 PLAYING");
+            _hasExitedAndPlayed = true;
         }
     }
 

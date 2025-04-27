@@ -41,7 +41,7 @@ public class ColliderCheck : MonoBehaviour
 
         if (_isTutorial)
         {
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(7));
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
             ShopManager.Instance.ClearList();
         }
     }

@@ -79,7 +79,7 @@ public class CustomerOrder : MonoBehaviour
 
         if (_isTunaCustomer)
         {
-            OnBoardingHandler.Instance.CallOnboarding(8);
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
             ShopManager.Instance.ClearList();
             return;
         }

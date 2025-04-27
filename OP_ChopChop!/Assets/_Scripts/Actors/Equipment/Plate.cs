@@ -51,7 +51,7 @@ public class Plate : Equipment
             if (ing.IngredientType != IngredientType.SALMON) return;
 
             GetComponent<OutlineMaterial>().DisableHighlight();
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(6));
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
         }
     }
 

@@ -26,9 +26,10 @@ public class Freezer : MonoBehaviour
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                         "door opened 01" : "door opened 02",
                                         SoundGroup.APPLIANCES);
-
+        /*
         if (_isTutorial)
             GetComponent<OutlineMaterial>().DisableHighlight();
+        */
     }
 
     private void OnTriggerExit(Collider other)
@@ -46,6 +47,9 @@ public class Freezer : MonoBehaviour
                                         SoundGroup.APPLIANCES);
 
         if (_isTutorial)
+        {
+            //GetComponent<OutlineMaterial>().DisableHighlight();
             StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
+        }     
     }
 }

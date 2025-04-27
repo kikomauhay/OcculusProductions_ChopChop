@@ -76,7 +76,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 #region Onboarding
 
-    public IEnumerator Onboarding01()
+    public IEnumerator Onboarding01() // STARTING TUTORIAL
     {
         SpawnManager.Instance.SpawnTutorialCustomer(true);
         SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
@@ -85,53 +85,54 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
         Continue.action.Enable();
     }
-    public IEnumerator Onboarding02()
+    public IEnumerator Onboarding02() // INGREDIENT ORDERING TUTORIAL
     {
-        Debug.Log("Onb 02 playing");
         SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
         _orderScreen.GetComponent<OutlineMaterial>().EnableHighlight(); 
     }
-    public IEnumerator Onboarding03()
+    public IEnumerator Onboarding03() // FREEZER TUTORIAL
     {
         SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(3f);
-        Debug.Log("Onb 03 FREEZER OUTLINE ON");
+
         _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
     }
-    public IEnumerator Onboarding04()
+    public IEnumerator Onboarding04() // CHOPPING TUTORIAL       //WE ARE HEREEEE IN TERMS OF TESTING
     {
+        _freezer.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
         SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(5f);
         _knife.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
-        EnableSlicingPanel();
+        StartCoroutine(EnableSlicingPanel());
     }
-    public IEnumerator Onboarding05()
+    public IEnumerator Onboarding05() // MOLDING TUTORIAL             
     {
+        _knife.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
         SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(5f);
         _riceCooker.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
-        EnableMoldingPanel();
+        StartCoroutine(EnableMoldingPanel());
     }
-    public IEnumerator Onboarding06()
+    public IEnumerator Onboarding06() // FOOD COMBINATION TUTORIAL
     {
         SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
         _plate.GetComponent<OutlineMaterial>().EnableHighlight();
     }
-    public IEnumerator Onboarding07()
+    public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL
     {
         SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(12f);
         SpawnManager.Instance.SpawnTutorialCustomer(false);
     }
-    public IEnumerator Onboarding08()
+    public IEnumerator Onboarding08() // CLEANING TUTORIAL
     {
         SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
         TriggerStinky();
     }
-    public IEnumerator Onboarding09()
+    public IEnumerator Onboarding09() // POST-SERVICE TUTORIAL
     {
         SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(8f);
@@ -139,7 +140,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
 
 #endregion
-
+    //Code below not working as intended
     public IEnumerator CallOnboarding(int mode)
     {
         if (SoundManager.Instance.SoundPlaying()) 
@@ -226,7 +227,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         TutorialPlaying = false;
     }
-
+    //Code above not working as intended
 #region Helpers
 
     public void Disable()
@@ -266,21 +267,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     private IEnumerator EnableSlicingPanel()
     {
-        while (true)
-        {
-            _slicingPanel.SetActive(true);
-            yield return new WaitForSeconds(4f);
-            _slicingPanel.SetActive(false);
-        }
+         _slicingPanel.SetActive(true);
+         yield return new WaitForSeconds(10f);
+         _slicingPanel.SetActive(false);
     }
     private IEnumerator EnableMoldingPanel()
     {
-        while (true)
-        {
-            _moldingPanel.SetActive(true);
-            yield return new WaitForSeconds(4f);
-            _moldingPanel.SetActive(false);
-        }
+        
+         _moldingPanel.SetActive(true);
+         yield return new WaitForSeconds(10f);
+         _moldingPanel.SetActive(false);
     }
 
 #endregion

@@ -49,7 +49,7 @@ public class RiceSpawn : XRBaseInteractable
         if (_isTutorial)
         {
             GetComponentInParent<OutlineMaterial>().DisableHighlight();
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(5));
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding06());
         }
     }
 
