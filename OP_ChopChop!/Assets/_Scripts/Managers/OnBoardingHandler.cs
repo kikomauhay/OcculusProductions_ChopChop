@@ -67,6 +67,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         StartCoroutine(CallOnboarding(1));
         Continue.action.Disable();
+        Continue.action.performed -= ContinueCallOnboarding1;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -98,6 +99,58 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     
 #endregion
 
+    public IEnumerator CallOnboarding3()
+    {
+        SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(3f);
+        Debug.Log("Onb 03 FREEZER OUTLINE ON");
+        _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
+    }
+
+    public IEnumerator CallOnboarding4()
+    {
+        SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(5f);
+        _knife.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
+        EnableSlicingPanel();
+    }
+
+    public IEnumerator CallOnboarding5()
+    {
+        SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(5f);
+        _riceCooker.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
+        EnableMoldingPanel();
+    }
+
+    public IEnumerator CallOnboarding6()
+    {
+        SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(10f);
+        _plate.GetComponent<OutlineMaterial>().EnableHighlight();
+    }
+
+    public IEnumerator CallOnboarding7()
+    {
+        SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(12f);
+        Instantiate(_tunaCustomerPrefab, _customerSpawnpoint.position, _customerSpawnpoint.rotation);
+    }
+
+    public IEnumerator CallOnboarding8()
+    {
+        SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(10f);
+        TriggerStinky();
+    }
+
+    public IEnumerator CallOnboarding9()
+    {
+        SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(8f);
+        _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
+    }
+
     public IEnumerator CallOnboarding(int mode)
     {
         if (SoundManager.Instance.SoundPlaying()) 
@@ -119,7 +172,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 0: // STARTING TUTORIAL
                 SpawnManager.Instance.SpawnTutorialCustomer(true);
                 SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
-                Debug.Log("Onb 01 playing");
+               
                 yield return new WaitForSeconds(20f);
                 _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
                 Continue.action.Enable();
@@ -133,8 +186,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                 break;
 
             case 2: // FREEZER TUTORIAL
+                Debug.Log("Onb 03 playing");
                 SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(3f);
+                Debug.Log("Onb 03 FREEZER OUTLINE ON");
                 _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
                 break;
 
