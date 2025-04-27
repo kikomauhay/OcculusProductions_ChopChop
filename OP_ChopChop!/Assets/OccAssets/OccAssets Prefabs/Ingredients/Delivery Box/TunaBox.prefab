@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2276103895752884867, guid: 794002a099b423648a04d8a744d06e4a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7318629720344246728, guid: 794002a099b423648a04d8a744d06e4a,
         type: 3}
       propertyPath: m_RootOrder
@@ -78,10 +83,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8873129294027024833, guid: ba797919c82adff4496e76c87131c561,
         type: 3}
+    - target: {fileID: 7987894487438834290, guid: 794002a099b423648a04d8a744d06e4a,
+        type: 3}
+      propertyPath: _fishPrefab
+      value: 
+      objectReference: {fileID: 8873129294027024833, guid: ba797919c82adff4496e76c87131c561,
+        type: 3}
     - target: {fileID: 7988029323473609586, guid: 794002a099b423648a04d8a744d06e4a,
         type: 3}
       propertyPath: m_Name
       value: TunaBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 7988029323707614436, guid: 794002a099b423648a04d8a744d06e4a,
+        type: 3}
+      propertyPath: m_Name
+      value: Order Box
       objectReference: {fileID: 0}
     - target: {fileID: 8055314340852712605, guid: 794002a099b423648a04d8a744d06e4a,
         type: 3}

@@ -80,7 +80,6 @@ public class GameManager : Singleton<GameManager>
 
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
-        
     }
 
     public void RemoveLogo(InputAction.CallbackContext context)

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class ShopManager : StaticInstance<ShopManager> 
 {
@@ -15,46 +16,48 @@ public class ShopManager : StaticInstance<ShopManager>
     [SerializeField] private int _salmonPrice, _tunaPrice;
 
     [Header("Ingredient UI")]
-    [SerializeField] private TextMeshProUGUI _txtRicePrice;
-    [SerializeField] private TextMeshProUGUI _txtSalmonPrice, _txtTunaPrice;
-
     [SerializeField] private TextMeshProUGUI _txtPlayerMoney;
-
+    [SerializeField] private TextMeshProUGUI _txtRicePrice, _txtSalmonPrice, _txtTunaPrice;
 
     [Header("Button")]
     [SerializeField] private Button[] _interactableButtons;
 
-    [Header("OnBoarding")]
-    [SerializeField] private bool _isTutorial;
-
+    [Header("Onboarding")]
+    [SerializeField] private bool _isTutorial;  
     private bool _tutorialPlayed;
-
+    private List<GameObject> _orderBoxes;
 
 #endregion
 
-#region Unity_Methods
+#region Unity
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    void Start()
+    private void Start()
     {
-        // Ingredient prices
+        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+        _tutorialPlayed = false;
+        _orderBoxes = new List<GameObject>();
+
+        // initialize ingredient prices in UI
         _txtSalmonPrice.text = _salmonPrice.ToString();
         _txtTunaPrice.text = _tunaPrice.ToString();
         _txtRicePrice.text = _ricePrice.ToString();
+        
+        Debug.Log($"Is Tutorial: {_isTutorial}");
+    }
 
-        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
-        _tutorialPlayed = false;
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            BuySalmon();
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+            BuyTuna();
     }
 
 #endregion
 
-#region Debugging code for button
-
-
-    
-#endregion
-    
 #region Buying
 
     public void BuySalmon()
@@ -67,7 +70,9 @@ public class ShopManager : StaticInstance<ShopManager>
 
             // waiting time for the salmon to spawn
             StartCoroutine(DeliveryWaitTime());
-            Instantiate(_salmonPrefab, transform.position, transform.rotation);
+            GameObject box = Instantiate(_salmonPrefab, transform.position, transform.rotation);
+            box.GetComponent<OrderBox>().IsTutorial = true; 
+            _orderBoxes.Add(box);            
 
             // removes the highlight and triggers the next tutorial  
             if (!_tutorialPlayed)
@@ -76,7 +81,6 @@ public class ShopManager : StaticInstance<ShopManager>
                 StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(2));
                 _tutorialPlayed = true;
             }
-
             return;
         }       
 
@@ -93,9 +97,9 @@ public class ShopManager : StaticInstance<ShopManager>
             // waiting time before the salmon spawns
             StartCoroutine(DeliveryWaitTime());
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
-            GameObject salmon = SpawnManager.Instance.SpawnObject(_salmonPrefab,
-                                                                  _spawnpoint.transform,
-                                                                  SpawnObjectType.INGREDIENT);
+            SpawnManager.Instance.SpawnObject(_salmonPrefab,
+                                              _spawnpoint.transform,                    
+                                              SpawnObjectType.INGREDIENT);
         }
     }
     public void BuyTuna()
@@ -108,9 +112,11 @@ public class ShopManager : StaticInstance<ShopManager>
 
             // waiting time for the tuna to spawn
             StartCoroutine(DeliveryWaitTime());
-            Instantiate(_tunaPrefab, transform.position, transform.rotation);
+            GameObject box = Instantiate(_tunaPrefab, transform.position, transform.rotation);
+            box.GetComponent<OrderBox>().IsTutorial = true; 
+            _orderBoxes.Add(box);
             return;
-        }  
+        }
 
         if (GameManager.Instance.CurrentPlayerMoney > 0)
         {
@@ -125,9 +131,9 @@ public class ShopManager : StaticInstance<ShopManager>
             // waiting time before the tuna spawns
             StartCoroutine(DeliveryWaitTime());
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
-            GameObject tuna = SpawnManager.Instance.SpawnObject(_tunaPrefab,
-                                                                _spawnpoint.transform,
-                                                                SpawnObjectType.INGREDIENT);
+            SpawnManager.Instance.SpawnObject(_tunaPrefab,
+                                              _spawnpoint.transform,
+                                              SpawnObjectType.INGREDIENT);
         }
     }
     public void BuyRice()
@@ -153,6 +159,16 @@ public class ShopManager : StaticInstance<ShopManager>
 
             // insert code below to reset the Rice at the Rice Cooker
         }
+    }
+    
+    public void ClearList()
+    {
+        if (_orderBoxes.Count < 1) return;
+
+        foreach (GameObject box in _orderBoxes)
+            Destroy(box);
+
+        _orderBoxes.Clear();        
     }
 
 #endregion

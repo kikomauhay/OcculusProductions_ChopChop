@@ -39,7 +39,10 @@ public class ColliderCheck : MonoBehaviour
         plate.TogglePlated();
 
         if (_isTutorial)
+        {
             StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(7));
+            ShopManager.Instance.ClearList();
+        }
     }
 
 #region Helpers
