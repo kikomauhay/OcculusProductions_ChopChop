@@ -40,10 +40,15 @@ public class Freezer : MonoBehaviour
         _ingredients.Remove(ing);
 
         if (_isTutorial)
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(3));
+        {
+            GetComponent<OutlineMaterial>().DisableHighlight();
+            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding4());
+        }
+            
+            //StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(3));
 
-        // removes the ingredient to the freezer & changes its decay rate
-        ing.Unstored();
+            // removes the ingredient to the freezer & changes its decay rate
+            ing.Unstored();
 
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                         "door closed 01" : "door closed 02",

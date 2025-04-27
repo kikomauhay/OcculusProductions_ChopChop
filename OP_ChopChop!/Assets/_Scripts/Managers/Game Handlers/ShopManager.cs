@@ -73,11 +73,13 @@ public class ShopManager : StaticInstance<ShopManager>
             GameObject box = Instantiate(_salmonPrefab, transform.position, transform.rotation);
             _orderBoxes.Add(box);            
 
+            
             // removes the highlight and triggers the next tutorial  
             if (!_tutorialPlayed)
-            {          
+            {
                 GetComponent<OutlineMaterial>().DisableHighlight();
-                StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(2));
+                StartCoroutine(OnBoardingHandler.Instance.CallOnboarding3());
+                Debug.Log("SHOP UI CALL ONB2 PLAYING");
                 _tutorialPlayed = true;
             }
             return;
