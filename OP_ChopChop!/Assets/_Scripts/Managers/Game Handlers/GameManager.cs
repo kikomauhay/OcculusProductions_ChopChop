@@ -205,9 +205,9 @@ public class GameManager : Singleton<GameManager>
 
         switch (chosenShift)
         {
-            case GameShift.Training:     OnTraining?.Invoke(); break;
+            case GameShift.Training:    OnTraining?.Invoke(); break;
             case GameShift.PreService:  DoPreService();       break;
-            case GameShift.Service:      DoService();          break;
+            case GameShift.Service:     DoService();          break;
             case GameShift.PostService: DoPostService();      break;
 
             default:

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Unity.Collections;
 
 /// </summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -43,21 +44,20 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    
     private void Start() // BIND TO EVENTS
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
-        OnBoardingHandler.Instance.OnTutorialEnd += ClearCustomerSeats;
 
         _spawnedCustomers = 0;    
         _spawnCountdown = 2f;
         _spawnInterval = 10f;
 
         if (_isTutorial)    
-            transform.position = new Vector3(0.05f, 0f, 0f);
+            transform.position = new Vector3(0.09f, 0f, 0f);
 
         Debug.Log($"Is Tutorial: {_isTutorial}");
+        StartCoroutine(DelayedEventBinding());
     }
     private void OnDestroy() // UNBIND FROM EVENTS
     {
@@ -84,6 +84,11 @@ public class SpawnManager : StaticInstance<SpawnManager>
             yield return new WaitForSeconds(_spawnInterval);  
             SpawnCustomer(GiveAvaiableSeat());
         }
+    }
+    private IEnumerator DelayedEventBinding()
+    {
+        yield return new WaitForSeconds(2f);
+        OnBoardingHandler.Instance.OnTutorialEnd += ClearCustomerSeats;
     }
     
 #endregion
@@ -199,8 +204,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
             if (seat.IsEmpty)
                 return i;
             
-            else 
-                continue;
+            else continue;
         }
         return -1; // all seats are empty
     }
