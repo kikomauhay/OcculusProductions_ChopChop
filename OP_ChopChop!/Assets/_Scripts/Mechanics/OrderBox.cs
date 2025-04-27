@@ -3,16 +3,18 @@ using UnityEngine;
 
 public class OrderBox : MonoBehaviour
 {
-    public bool IsTutorial { get; set; }
+    [SerializeField] private bool _isTutorial;
     [SerializeField] private GameObject _fishPrefab, _smokePrefab;
 
+    private void Start() => Debug.Log($"Is Tutorial: {_isTutorial}");
+    
     public void OpenBox(SelectEnterEventArgs args)
     {
         if (_fishPrefab != null)
         {
             Destroy(transform.parent.gameObject);
             
-            if (IsTutorial)
+            if (_isTutorial)
             {
                 Instantiate(_fishPrefab, transform.position, transform.rotation);
                 GameObject smoke = Instantiate(_smokePrefab, 

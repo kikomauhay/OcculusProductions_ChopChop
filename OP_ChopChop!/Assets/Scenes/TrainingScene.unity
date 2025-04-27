@@ -6064,6 +6064,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8791498176419619017, guid: 7a609331d762229458520779795f465a,
         type: 3}
+      propertyPath: _tunaPrefab
+      value: 
+      objectReference: {fileID: 5049336539331271684, guid: d3daa1a3faed5ca419d296b46dacc716,
+        type: 3}
+    - target: {fileID: 8791498176419619017, guid: 7a609331d762229458520779795f465a,
+        type: 3}
+      propertyPath: _salmonPrefab
+      value: 
+      objectReference: {fileID: 7988029323473609586, guid: d7a5d1c816fafb14a98b77dc9031fa55,
+        type: 3}
+    - target: {fileID: 8791498176419619017, guid: 7a609331d762229458520779795f465a,
+        type: 3}
       propertyPath: _interactableButtons.Array.size
       value: 3
       objectReference: {fileID: 0}

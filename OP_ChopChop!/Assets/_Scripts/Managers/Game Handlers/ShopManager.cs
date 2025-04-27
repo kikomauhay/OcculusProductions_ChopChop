@@ -71,7 +71,6 @@ public class ShopManager : StaticInstance<ShopManager>
             // waiting time for the salmon to spawn
             StartCoroutine(DeliveryWaitTime());
             GameObject box = Instantiate(_salmonPrefab, transform.position, transform.rotation);
-            box.GetComponent<OrderBox>().IsTutorial = true; 
             _orderBoxes.Add(box);            
 
             // removes the highlight and triggers the next tutorial  
@@ -113,7 +112,6 @@ public class ShopManager : StaticInstance<ShopManager>
             // waiting time for the tuna to spawn
             StartCoroutine(DeliveryWaitTime());
             GameObject box = Instantiate(_tunaPrefab, transform.position, transform.rotation);
-            box.GetComponent<OrderBox>().IsTutorial = true; 
             _orderBoxes.Add(box);
             return;
         }
