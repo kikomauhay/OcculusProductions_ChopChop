@@ -53,6 +53,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject _logo;
     [Space(10f), SerializeField] private bool _isDebugging;
 
+    [SerializeField] private bool _isLogoRemoved = false;
+
 #endregion
 
 #region Unity
@@ -78,9 +80,10 @@ public class GameManager : Singleton<GameManager>
 
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
+        
     }
 
-    void RemoveLogo(InputAction.CallbackContext context)
+    public void RemoveLogo(InputAction.CallbackContext context)
     {
         StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
         SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
@@ -88,7 +91,14 @@ public class GameManager : Singleton<GameManager>
         // unpause game, remove logo, and start onboarding
         ChangeShift(GameShift.Training);
         Continue.action.Disable();
+        _isLogoRemoved = true;
         _logo.SetActive(false);
+
+        if (_isLogoRemoved)
+        {
+            Debug.Log("LOGO REMOVED");
+            Continue.action.performed -= RemoveLogo;
+        }
     }
 
     IEnumerator ShiftCountdown(float timer, GameShift shift)
