@@ -44,10 +44,11 @@ public class SpawnManager : StaticInstance<SpawnManager>
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     
-    void Start() // BIND TO EVENTS
+    private void Start() // BIND TO EVENTS
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
+        OnBoardingHandler.Instance.OnTutorialEnd += ClearCustomerSeats;
 
         _spawnedCustomers = 0;    
         _spawnCountdown = 2f;
@@ -58,13 +59,14 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         Debug.Log($"Is Tutorial: {_isTutorial}");
     }
-    void OnDestroy() // UNBIND FROM EVENTS
+    private void OnDestroy() // UNBIND FROM EVENTS
     {
         GameManager.Instance.OnStartService -= StartCustomerSpawning;
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
+        OnBoardingHandler.Instance.OnTutorialEnd -= ClearCustomerSeats;
     } 
     
-    IEnumerator CreateCustomer()
+    private IEnumerator CreateCustomer()
     {
         // prevents from adding too many customers
         if (_spawnedCustomers < GameManager.Instance.MaxCustomerCount) 
@@ -140,7 +142,6 @@ public class SpawnManager : StaticInstance<SpawnManager>
         if (_spawnedCustomers == GameManager.Instance.MaxCustomerCount)
             customer.GetComponent<CustomerOrder>().IsLastCustomer = true;
     } 
-
     public void SpawnTutorialCustomer(bool isAtrium)
     {
         if (!_isTutorial) 
@@ -219,18 +220,23 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         StartCoroutine(CreateCustomer());
     }
-    void ClearCustomerSeats()
+    private void ClearCustomerSeats()
     {
-        foreach (GameObject obj in _seatedCustomers)
-            Destroy(obj);
+        if (_customerSeats.Length > 1)
+            foreach (CustomerSeat seat in _customerSeats)
+                seat.IsEmpty = true;        
 
-        _seatedCustomers.Clear();
+        if (_colliderChecks.Length > 1)
+            foreach (ColliderCheck col in _colliderChecks)
+                col.CustomerOrder = null;
 
-        foreach (CustomerSeat seat in _customerSeats)
-            seat.IsEmpty = true;        
+        if (_seatedCustomers.Count > 1)
+        {
+            foreach (GameObject obj in _seatedCustomers)
+                Destroy(obj);
 
-        foreach (ColliderCheck col in _colliderChecks)
-            col.CustomerOrder = null;
+            _seatedCustomers.Clear();
+        }
 
         StopAllCoroutines(); 
     }

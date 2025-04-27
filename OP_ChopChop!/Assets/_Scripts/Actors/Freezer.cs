@@ -37,21 +37,15 @@ public class Freezer : MonoBehaviour
 
         if (ing == null) return;
 
+        // removes the ingredient to the freezer & changes its decay rate
         _ingredients.Remove(ing);
-
-        if (_isTutorial)
-        {
-            GetComponent<OutlineMaterial>().DisableHighlight();
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding4());
-        }
-            
-            //StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(3));
-
-            // removes the ingredient to the freezer & changes its decay rate
-            ing.Unstored();
-
+        ing.Unstored();
+        
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                         "door closed 01" : "door closed 02",
                                         SoundGroup.APPLIANCES);
+
+        if (_isTutorial)
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
     }
 }

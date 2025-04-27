@@ -1,6 +1,6 @@
+using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
@@ -15,10 +15,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private GameObject _orderScreen, _freezer, _knife;
     [SerializeField] private GameObject _riceCooker, _plate, _sponge, _menuScreen;
     [SerializeField] private GameObject _stinkyVFX;
-    
-    [Header("Customers")]
-    [SerializeField] private GameObject _atriumPrefab;
-    [SerializeField] private GameObject _tunaCustomerPrefab;
 
     [Header("Panels")]
     [SerializeField] private GameObject _slicingPanel;
@@ -30,20 +26,19 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private Collider _dirtyCollider;
     [SerializeField] private Collider _servingCollision;
 
-    [Header("InputButtonRef")]
+    [Header("Input Button Ref")]
     [SerializeField] public InputActionReference Continue;
 
-    [Header("Special Stuff")]
-    [SerializeField] public bool isPlayeDoneWashing = false;
+    [Header("Debugging")]
+    [SerializeField] public bool DoneWashing = false;
 
-    #endregion
+#endregion
 
-    #region Unity
+#region Unity
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha0)) StartCoroutine(CallOnboarding(0));
         if (Input.GetKeyDown(KeyCode.Alpha1)) StartCoroutine(CallOnboarding(1));
@@ -55,21 +50,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         if (Input.GetKeyDown(KeyCode.Alpha7)) StartCoroutine(CallOnboarding(7));
         if (Input.GetKeyDown(KeyCode.Alpha8)) StartCoroutine(CallOnboarding(8));
 
-        if(isPlayeDoneWashing)
+        if (DoneWashing)
         {
             Continue.action.Enable();
             Continue.action.performed += ContinueCallOnboarding1;
         }
-
     }
-
-    public void ContinueCallOnboarding1(InputAction.CallbackContext context)
-    {
-        StartCoroutine(CallOnboarding(1));
-        Continue.action.Disable();
-        Continue.action.performed -= ContinueCallOnboarding1;
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
@@ -78,78 +64,81 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             StartCoroutine(DoCleaning());
     }
 
-    private IEnumerator EnableSlicingPanel()
-    {
-        while (true)
-        {
-            _slicingPanel.SetActive(true);
-            yield return new WaitForSeconds(4f);
-            _slicingPanel.SetActive(false);
-        }
-    }
-    private IEnumerator EnableMoldingPanel()
-    {
-        while (true)
-        {
-            _moldingPanel.SetActive(true);
-            yield return new WaitForSeconds(4f);
-            _moldingPanel.SetActive(false);
-        }
-    }
-    
 #endregion
 
-    public IEnumerator CallOnboarding3()
+    public void ContinueCallOnboarding1(InputAction.CallbackContext context) 
+    {
+        StartCoroutine(CallOnboarding(1));
+        Continue.action.Disable();
+        Continue.action.performed -= ContinueCallOnboarding1;
+    }
+    
+
+#region Onboarding
+
+    public IEnumerator Onboarding01()
+    {
+        SpawnManager.Instance.SpawnTutorialCustomer(true);
+        SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(20f);
+    
+        _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
+        Continue.action.Enable();
+    }
+    public IEnumerator Onboarding02()
+    {
+        Debug.Log("Onb 02 playing");
+        SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
+        yield return new WaitForSeconds(10f);
+        _orderScreen.GetComponent<OutlineMaterial>().EnableHighlight(); 
+    }
+    public IEnumerator Onboarding03()
     {
         SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(3f);
         Debug.Log("Onb 03 FREEZER OUTLINE ON");
         _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
     }
-
-    public IEnumerator CallOnboarding4()
+    public IEnumerator Onboarding04()
     {
         SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(5f);
         _knife.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
         EnableSlicingPanel();
     }
-
-    public IEnumerator CallOnboarding5()
+    public IEnumerator Onboarding05()
     {
         SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(5f);
         _riceCooker.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
         EnableMoldingPanel();
     }
-
-    public IEnumerator CallOnboarding6()
+    public IEnumerator Onboarding06()
     {
         SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
         _plate.GetComponent<OutlineMaterial>().EnableHighlight();
     }
-
-    public IEnumerator CallOnboarding7()
+    public IEnumerator Onboarding07()
     {
         SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(12f);
-        Instantiate(_tunaCustomerPrefab, _customerSpawnpoint.position, _customerSpawnpoint.rotation);
+        SpawnManager.Instance.SpawnTutorialCustomer(false);
     }
-
-    public IEnumerator CallOnboarding8()
+    public IEnumerator Onboarding08()
     {
         SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
         TriggerStinky();
     }
-
-    public IEnumerator CallOnboarding9()
+    public IEnumerator Onboarding09()
     {
         SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(8f);
         _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
     }
+
+#endregion
 
     public IEnumerator CallOnboarding(int mode)
     {
@@ -216,7 +205,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 6: // SECOND CUSTOMER TUTORIAL
                 SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(12f);
-                Instantiate(_tunaCustomerPrefab, _customerSpawnpoint.position, _customerSpawnpoint.rotation);
+                SpawnManager.Instance.SpawnTutorialCustomer(false);
                 break;
 
             case 7: // CLEANING TUTORIAL
@@ -238,7 +227,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         TutorialPlaying = false;
     }
 
-    #region Helpers
+#region Helpers
 
     public void Disable()
     { 
@@ -253,19 +242,46 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         
         // enbles the cleaning logic
         _dirtyCollider.enabled = true;
-        _stinkyVFX = Instantiate(_stinkyVFX, 
-                                 _dirtyCollider.transform.position, 
-                                 _dirtyCollider.transform.rotation);
+        StartCoroutine(SpawnStinky());        
     }
 
 #endregion    
 
+#region Enumerators
+
+    private IEnumerator SpawnStinky()
+    {
+        while (_dirtyCollider.enabled)
+        {
+            SpawnManager.Instance.SpawnVFX(VFXType.STINKY, _dirtyCollider.transform, 3f);
+            yield return new WaitForSeconds(2f);
+        }
+    }
     private IEnumerator DoCleaning()
     {
         yield return new WaitForSeconds(2f);
 
-        Destroy(_stinkyVFX);
-        _dirtyCollider.enabled = true;
-        CallOnboarding(8);
+        _dirtyCollider.enabled = false;
+        StartCoroutine(Onboarding08());
     }
+    private IEnumerator EnableSlicingPanel()
+    {
+        while (true)
+        {
+            _slicingPanel.SetActive(true);
+            yield return new WaitForSeconds(4f);
+            _slicingPanel.SetActive(false);
+        }
+    }
+    private IEnumerator EnableMoldingPanel()
+    {
+        while (true)
+        {
+            _moldingPanel.SetActive(true);
+            yield return new WaitForSeconds(4f);
+            _moldingPanel.SetActive(false);
+        }
+    }
+
+#endregion
 }

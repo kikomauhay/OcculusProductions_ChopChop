@@ -36,26 +36,21 @@ public class ShopManager : StaticInstance<ShopManager>
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     private void Start()
     {
+        OnBoardingHandler.Instance.OnTutorialEnd += ClearList;
+
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
         _tutorialPlayed = false;
         _orderBoxes = new List<GameObject>();
 
         // initialize ingredient prices in UI
+        UpatePlayerMoneyUI();
         _txtSalmonPrice.text = _salmonPrice.ToString();
         _txtTunaPrice.text = _tunaPrice.ToString();
         _txtRicePrice.text = _ricePrice.ToString();
         
         Debug.Log($"Is Tutorial: {_isTutorial}");
     }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            BuySalmon();
-
-        if (Input.GetKeyDown(KeyCode.Backspace))
-            BuyTuna();
-    }
+    private void OnDestroy() => OnBoardingHandler.Instance.OnTutorialEnd -= ClearList;
 
 #endregion
 
@@ -71,16 +66,17 @@ public class ShopManager : StaticInstance<ShopManager>
 
             // waiting time for the salmon to spawn
             StartCoroutine(DeliveryWaitTime());
-            GameObject box = Instantiate(_salmonPrefab, transform.position, transform.rotation);
-            _orderBoxes.Add(box);            
-
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
+            _orderBoxes.Add(SpawnManager.Instance.SpawnObject(_salmonPrefab, 
+                                                              _spawnpoint, 
+                                                              SpawnObjectType.INGREDIENT));            
             
             // removes the highlight and triggers the next tutorial  
             if (!_tutorialPlayed)
             {
                 GetComponent<OutlineMaterial>().DisableHighlight();
-                StartCoroutine(OnBoardingHandler.Instance.CallOnboarding3());
-                Debug.Log("SHOP UI CALL ONB2 PLAYING");
+                StartCoroutine(OnBoardingHandler.Instance.Onboarding03());
+                Debug.Log("ONB 03 PLAYING");
                 _tutorialPlayed = true;
             }
             return;
@@ -94,7 +90,7 @@ public class ShopManager : StaticInstance<ShopManager>
             
             // deduction of money
             GameManager.Instance.DeductMoney(_salmonPrice);
-            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+            UpatePlayerMoneyUI();
             
             // waiting time before the salmon spawns
             StartCoroutine(DeliveryWaitTime());
@@ -114,8 +110,10 @@ public class ShopManager : StaticInstance<ShopManager>
 
             // waiting time for the tuna to spawn
             StartCoroutine(DeliveryWaitTime());
-            GameObject box = Instantiate(_tunaPrefab, transform.position, transform.rotation);
-            _orderBoxes.Add(box);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
+            _orderBoxes.Add(SpawnManager.Instance.SpawnObject(_tunaPrefab, 
+                                                              _spawnpoint, 
+                                                              SpawnObjectType.INGREDIENT));     
             return;
         }
 
@@ -127,7 +125,7 @@ public class ShopManager : StaticInstance<ShopManager>
            
             // deduction of money
             GameManager.Instance.DeductMoney(_tunaPrice);
-            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();            
+            UpatePlayerMoneyUI();           
             
             // waiting time before the tuna spawns
             StartCoroutine(DeliveryWaitTime());
@@ -153,7 +151,7 @@ public class ShopManager : StaticInstance<ShopManager>
             
             // deduction of money
             GameManager.Instance.DeductMoney(_ricePrice);
-            _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
+            UpatePlayerMoneyUI();
 
             // waiting time before the rice spawns
             StartCoroutine(DeliveryWaitTime());
@@ -161,7 +159,11 @@ public class ShopManager : StaticInstance<ShopManager>
             // insert code below to reset the Rice at the Rice Cooker
         }
     }
+
+#endregion
     
+#region Helpers
+
     public void ClearList()
     {
         if (_orderBoxes.Count < 1) return;
@@ -171,6 +173,9 @@ public class ShopManager : StaticInstance<ShopManager>
 
         _orderBoxes.Clear();        
     }
+
+    private void UpatePlayerMoneyUI() => 
+        _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
 
 #endregion
 

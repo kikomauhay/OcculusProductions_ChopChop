@@ -807,8 +807,19 @@ PrefabInstance:
       propertyPath: _spawnCountdown
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7564253948250721294, guid: 6d8e178db82292546afbe87fe1212197,
+        type: 3}
+      propertyPath: _tutorialCollider
+      value: 
+      objectReference: {fileID: 997598362}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d8e178db82292546afbe87fe1212197, type: 3}
+--- !u!65 &997598362 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 1597545421573541970, guid: 6d8e178db82292546afbe87fe1212197,
+    type: 3}
+  m_PrefabInstance: {fileID: 997598361}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1277905621 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1138800542123962655, guid: ab95a20a6b1df2648b5aaa58e1058807,

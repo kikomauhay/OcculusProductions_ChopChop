@@ -76,28 +76,15 @@ public class GameManager : Singleton<GameManager>
         Difficulty = GameDifficulty.EASY;
 
         // these should be empty when testing is done
-        _customerSRScores = new List<float>() { 100f, 90f, 80f, 80f };
+        _customerSRScores = new List<float>(); // { 100f, 90f, 80f, 80f };
 
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
     }
-
-    public void RemoveLogo(InputAction.CallbackContext context)
+    private void Update()
     {
-        StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(0));
-        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
-
-        // unpause game, remove logo, and start onboarding
-        ChangeShift(GameShift.Training);
-        Continue.action.Disable();
-        _isLogoRemoved = true;
-        _logo.SetActive(false);
-
-        if (_isLogoRemoved)
-        {
-            Debug.Log("LOGO REMOVED");
-            Continue.action.performed -= RemoveLogo;
-        }
+        if (CurrentShift == GameShift.Service)
+            ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
     }
 
     IEnumerator ShiftCountdown(float timer, GameShift shift)
@@ -115,15 +102,27 @@ public class GameManager : Singleton<GameManager>
         ChangeShift(shift);
     }
 
-    private void Update()
-    {
-        if (CurrentShift != GameShift.Training)
-            ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
-    }
-
 #endregion
 
 #region Public
+
+    public void RemoveLogo(InputAction.CallbackContext context)
+    {
+        StartCoroutine(OnBoardingHandler.Instance.Onboarding01());
+        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+
+        // unpause game, remove logo, and start onboarding
+        ChangeShift(GameShift.Training);
+        Continue.action.Disable();
+        _isLogoRemoved = true;
+        _logo.SetActive(false);
+
+        if (_isLogoRemoved)
+        {
+            Debug.Log("LOGO REMOVED");
+            Continue.action.performed -= RemoveLogo;
+        }
+    }
 
     // GAME PAUSING
     public void TogglePause()
