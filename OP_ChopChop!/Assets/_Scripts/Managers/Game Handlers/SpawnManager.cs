@@ -58,6 +58,15 @@ public class SpawnManager : StaticInstance<SpawnManager>
         Debug.Log($"Is Tutorial: {_isTutorial}");
         StartCoroutine(DelayedEventBinding());
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+            SpawnTutorialCustomer(true);
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            SpawnTutorialCustomer(false);
+    }
     private void OnDestroy() // UNBIND FROM EVENTS
     {
         GameManager.Instance.OnStartService -= StartCustomerSpawning;

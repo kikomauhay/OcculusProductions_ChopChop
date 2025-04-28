@@ -63,7 +63,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
 
         if (sponge != null) 
+        {
             StartCoroutine(DoCleaning());
+
+        }
     }
 
 #endregion
@@ -80,7 +83,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public IEnumerator Onboarding01() // STARTING TUTORIAL
     {
-        SpawnManager.Instance.SpawnTutorialCustomer(true);
+        // SpawnManager.Instance.SpawnTutorialCustomer(true);
         SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(20f);
     

@@ -61,7 +61,7 @@ public class CustomerOrder : MonoBehaviour
         {
             _patienceDecreaseRate = 0f;
             CustomerDishType = _isTunaCustomer ? 
-                               DishType.NIGIRI_TUNA : 
+                               DishType.SASHIMI_TUNA : 
                                DishType.NIGIRI_SALMON;
 
             OnBoardingHandler.Instance.OnTutorialEnd += Cleanup;
@@ -70,8 +70,8 @@ public class CustomerOrder : MonoBehaviour
         {
             _patienceDecreaseRate = 1.65f; // referenced from the document
             CustomerDishType = (DishType)Random.Range(0, _dishOrdersUI.Length);
-        }        
-        
+        }
+
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
     }
@@ -107,9 +107,11 @@ public class CustomerOrder : MonoBehaviour
 
     void CreateCustomerUI()
     {
-        _customerOrderUI = Instantiate(_dishOrdersUI[(int)CustomerDishType], // aligns customer UI & customer order
+        // aligns customer UI & customer order
+        _customerOrderUI = Instantiate(_dishOrdersUI[_isTutorial ? 0 : (int)CustomerDishType], 
                                        _orderUITransform.position,
-                                       _orderUITransform.rotation);
+                                       _orderUITransform.rotation,
+                                       transform);
     }
     void MakeSeatEmpty() // clears the seat of any customer references 
     {

@@ -937,6 +937,12 @@ PrefabInstance:
       propertyPath: _tutorialCollider
       value: 
       objectReference: {fileID: 997598362}
+    - target: {fileID: 7564253948250721294, guid: 6d8e178db82292546afbe87fe1212197,
+        type: 3}
+      propertyPath: _tunaCustomerPrefab
+      value: 
+      objectReference: {fileID: 8242136411445390340, guid: 77cb713f0f28b184fb873b6727f9d91e,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d8e178db82292546afbe87fe1212197, type: 3}
 --- !u!65 &997598362 stripped
