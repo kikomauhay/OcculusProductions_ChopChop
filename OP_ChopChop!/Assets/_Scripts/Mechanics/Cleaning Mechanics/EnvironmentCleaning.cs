@@ -5,9 +5,8 @@ public class EnvironmentCleaning : MonoBehaviour
 {
 #region Members 
 
-    [SerializeField] private bool _isTutorial;
-    [SerializeField] private GameObject _stinkyVFX, _bubbleVFX;
-    private Collider _col;
+    [SerializeField] private bool _isTutorial;  
+    [SerializeField] private Collider _col;
 
 #endregion
 
@@ -15,15 +14,7 @@ public class EnvironmentCleaning : MonoBehaviour
 
     private void OnEnable() => StartCoroutine(SpawnStinkyVFX());
     private void OnDisable() => StopCoroutine(SpawnStinkyVFX());
-
-    private void Awake()
-    {
-        _col = GetComponent<Collider>();
-        
-        if (_isTutorial)
-            _col.enabled = false;    
-    }
-
+    
     private void OnTriggerEnter(Collider other)
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
@@ -44,6 +35,10 @@ public class EnvironmentCleaning : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+#endregion
+
+#region Enumerators
+
     private IEnumerator SpawnStinkyVFX()
     {
         if (_isTutorial) yield break;
@@ -62,6 +57,8 @@ public class EnvironmentCleaning : MonoBehaviour
 
 #endregion 
 
+#region Helpers
+
     private Vector3 RandomColliderPoint(Collider col)
     {
         if (col == null) return transform.position;
@@ -72,4 +69,6 @@ public class EnvironmentCleaning : MonoBehaviour
                            bounds.center.y,
                            Random.Range(bounds.min.z, bounds.max.z));
     }
+
+#endregion 
 }

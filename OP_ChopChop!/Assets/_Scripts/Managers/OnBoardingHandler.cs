@@ -211,8 +211,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 7: // CLEANING TUTORIAL
                 SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
                 yield return new WaitForSeconds(10f);
-                
-                TriggerStinky();
                 break;
 
             case 8: // POST-SERVICE TUTORIAL
