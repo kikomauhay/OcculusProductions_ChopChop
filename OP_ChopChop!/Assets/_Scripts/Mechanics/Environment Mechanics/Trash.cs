@@ -1,12 +1,9 @@
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
-using Unity.VisualScripting;
 
 public class Trash : MonoBehaviour
 {
-    IXRSelectInteractor _mainInteractor;
-
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         GameObject obj = other.gameObject;
 
@@ -38,19 +35,19 @@ public class Trash : MonoBehaviour
 
 #region Functions
 
-    void DestroyIngredient(Ingredient ing)
+    private void DestroyIngredient(Ingredient ing)
     {
         Destroy(ing.gameObject);
         ing.Trashed();
     }
 
-    void DestroyFood(Food food)
+    private void DestroyFood(Food food)
     {
         Destroy(food.gameObject);
         SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
     }
 
-    void DoEquipmentLogic(Equipment eq)
+    private void DoEquipmentLogic(Equipment eq)
     {
         eq.HitTheFloor();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;

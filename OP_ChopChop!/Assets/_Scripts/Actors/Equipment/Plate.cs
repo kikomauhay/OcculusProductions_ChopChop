@@ -10,7 +10,6 @@ public class Plate : Equipment
 
     [Tooltip("The Box Collider Component")] 
     [SerializeField] private Collider _boxTrigger;
-
     [SerializeField] private bool _isTutorial;
 
 #endregion
@@ -37,7 +36,6 @@ public class Plate : Equipment
 
         Debug.Log($"Is clean: {IsClean}");
     }
-
     protected override void OnTriggerEnter(Collider other) 
     {
         base.OnTriggerEnter(other);
@@ -54,7 +52,6 @@ public class Plate : Equipment
             StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
         }
     }
-
     protected override void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);

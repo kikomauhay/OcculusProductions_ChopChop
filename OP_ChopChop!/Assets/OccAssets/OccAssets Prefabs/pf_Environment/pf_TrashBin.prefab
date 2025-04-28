@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1256221063509904259}
   - component: {fileID: 1256221063509904258}
   - component: {fileID: 1256221063509904285}
+  - component: {fileID: 4063287753908805041}
   m_Layer: 0
   m_Name: pf_TrashBin
   m_TagString: Untagged
@@ -98,3 +99,15 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6227966251424968200, guid: 616aed768b96c644aaeeda08955cddc8, type: 3}
+--- !u!114 &4063287753908805041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256221063509904287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3ba911d3d6aeec438836ff3e7e737d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

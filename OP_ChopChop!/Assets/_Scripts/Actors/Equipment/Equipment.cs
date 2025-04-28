@@ -133,7 +133,7 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter++;
 
-        Debug.Log($"{name} use counter: {_usageCounter}/{_maxUsageCounter}");
+        // Debug.Log($"{name} use counter: {_usageCounter}/{_maxUsageCounter}");
 
         if (_usageCounter >= _maxUsageCounter)
             Contaminate();

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
@@ -30,6 +31,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] public InputActionReference Continue;
 
     [Header("Debugging")]
+    [SerializeField] private List<GameObject> _plates;
     [SerializeField] public bool DoneWashing = false;
 
 #endregion
@@ -97,7 +99,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         yield return new WaitForSeconds(3f);
 
         _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
-    }
+    }   
     public IEnumerator Onboarding04() // CHOPPING TUTORIAL       //WE ARE HEREEEE IN TERMS OF TESTING
     {
         _freezer.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
@@ -140,6 +142,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
 
 #endregion
+
     //Code below not working as intended
     public IEnumerator CallOnboarding(int mode)
     {
@@ -228,11 +231,21 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         TutorialPlaying = false;
     }
     //Code above not working as intended
+
 #region Helpers
 
     public void Disable()
     { 
         gameObject.SetActive(false);
+        
+        if (_plates.Count > 0)
+        {
+            foreach (GameObject p in _plates)
+                Destroy(p);
+
+            _plates.Clear();
+        }
+
         OnTutorialEnd?.Invoke();
     }
 

@@ -41,7 +41,9 @@ public class CustomerOrder : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.OnEndService += DestroyOrderUI;
+        if (!_isTutorial)
+            GameManager.Instance.OnEndService += DestroyOrderUI;
+        
         _appearance = GetComponent<CustomerAppearance>();
 
         switch (GameManager.Instance.Difficulty) // will decrease overtime
@@ -72,10 +74,12 @@ public class CustomerOrder : MonoBehaviour
     }
     private void OnDestroy()
     {
-        GameManager.Instance.OnEndService -= DestroyOrderUI;
-
         if (_isTutorial)
+        {
             OnBoardingHandler.Instance.OnTutorialEnd -= Cleanup;
+            Destroy(_customerOrderUI);
+        }
+        else GameManager.Instance.OnEndService -= DestroyOrderUI; 
 
         if (_isTunaCustomer)
         {
