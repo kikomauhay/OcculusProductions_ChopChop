@@ -40,20 +40,6 @@ public class Water : MonoBehaviour
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 2f);
             _cooldownTimer = _cooldownInterval;
         }
-    }    
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.GetComponent<HandWashing>() == null) return;
-
-        if (_isTutorial && !_hasExitedAndPlayed)
-        {
-            transform.parent.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
-            Debug.Log("ONBOARDING 1 ABOUT TO PLAY");
-            //OnBoardingHandler.Instance.DoneWashing = true;
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding02()); //this will certainly cause a bug where we off water, and no sound playing
-            Debug.Log("ONBOARDING 1 PLAYING");
-            _hasExitedAndPlayed = true;
-        }
     }
 
 #endregion

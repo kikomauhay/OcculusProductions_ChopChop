@@ -5,8 +5,10 @@ using UnityEngine;
 public class ToggleFaucet : XRBaseInteractable
 {
     [SerializeField] private GameObject _water;
+    [SerializeField] private bool _isTutorial;
 
-    private bool _enabled = false;
+    private int _toggleCount = 0;
+    private bool _tutorialDone, _enabled = false;
 
     protected override void OnEnable()
     {
@@ -31,13 +33,28 @@ public class ToggleFaucet : XRBaseInteractable
 
     void FaucetSwitch(SelectEnterEventArgs args)
     {
-        if (_water == null || _enabled) return;
+        if (_water == null) return;
+        
+        if (_enabled) return;
         
         _enabled = true;
         _water.SetActive(!_water.activeSelf);
         SoundManager.Instance.PlaySound("toggle faucet", SoundGroup.APPLIANCES);
         StartCoroutine(Cooldown());
         base.OnSelectEntered(args);
+
+        if (_tutorialDone) return;
+
+        if (_isTutorial)
+        {
+            _toggleCount++;
+            
+            if (_toggleCount == 2)
+            {
+                _tutorialDone = true;
+                StartCoroutine(OnBoardingHandler.Instance.Onboarding02());
+            }
+        }
     }
 
     IEnumerator Cooldown()
