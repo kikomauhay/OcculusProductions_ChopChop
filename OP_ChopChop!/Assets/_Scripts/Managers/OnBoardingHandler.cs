@@ -20,6 +20,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [Header("Panels")]
     [SerializeField] private GameObject _slicingPanel;
     [SerializeField] private GameObject _moldingPanel;
+    [SerializeField] private GameObject _friendlyTipPanel;
 
     [Space(10f), SerializeField] private Transform _customerSpawnpoint;
 
@@ -73,7 +74,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public IEnumerator Onboarding01() // STARTING TUTORIAL
     {
-        // SpawnManager.Instance.SpawnTutorialCustomer(true);
+        SpawnManager.Instance.SpawnTutorialCustomer(true);
         SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(20f);
     
@@ -135,6 +136,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
         yield return new WaitForSeconds(8f);
         _menuScreen.GetComponent<OutlineMaterial>().DisableHighlight();
+        StartCoroutine(EnableFriendlyTipPanel());
     }
 
 #endregion
@@ -259,6 +261,13 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
          _moldingPanel.SetActive(true);
          yield return new WaitForSeconds(10f);
          _moldingPanel.SetActive(false);
+    }
+
+    private IEnumerator EnableFriendlyTipPanel()
+    {
+        _friendlyTipPanel.SetActive(true);
+        yield return new WaitForSeconds(10f);
+        _friendlyTipPanel.SetActive(false);
     }
 
 #endregion

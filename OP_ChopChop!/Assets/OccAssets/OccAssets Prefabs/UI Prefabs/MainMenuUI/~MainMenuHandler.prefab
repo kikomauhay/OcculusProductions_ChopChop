@@ -471,6 +471,7 @@ MonoBehaviour:
   _liveWallpaper: {fileID: 7175819962581353293}
   _currentPhaseTxt: {fileID: 940385751618728534}
   masterSlider: {fileID: 1633250643731563038}
+  _isTutorial: 0
 --- !u!1 &2314840663281236306
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,7 +930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9036619257818058418
 RectTransform:
   m_ObjectHideFlags: 0
