@@ -36,22 +36,7 @@ public class Plate : Equipment
 
         Debug.Log($"Is clean: {IsClean}");
     }
-    protected override void OnTriggerEnter(Collider other) 
-    {
-        base.OnTriggerEnter(other);
-
-        if (!_isTutorial) return;
-        
-        Ingredient ing = other.gameObject.GetComponent<Ingredient>(); 
-
-        if (ing != null)
-        {
-            if (ing.IngredientType != IngredientType.SALMON) return;
-
-            GetComponent<OutlineMaterial>().DisableHighlight();
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
-        }
-    }
+  
     protected override void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);

@@ -89,6 +89,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     public IEnumerator Onboarding02() // INGREDIENT ORDERING TUTORIAL
     {
+        _faucetKnob.GetComponent<OutlineMaterial>().DisableHighlight();
         SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
         _orderScreen.GetComponent<OutlineMaterial>().EnableHighlight(); 
@@ -100,7 +101,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
     }   
-    public IEnumerator Onboarding04() // CHOPPING TUTORIAL       //WE ARE HEREEEE IN TERMS OF TESTING
+    public IEnumerator Onboarding04() // CHOPPING TUTORIAL       
     {
         _freezer.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
         SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
@@ -116,19 +117,20 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _riceCooker.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
         StartCoroutine(EnableMoldingPanel());
     }
-    public IEnumerator Onboarding06() // FOOD COMBINATION TUTORIAL
+    public IEnumerator Onboarding06() // FOOD COMBINATION TUTORIAL    //WE ARE HEREEEE IN TERMS OF TESTING
     {
         SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
         _plate.GetComponent<OutlineMaterial>().EnableHighlight();
     }
-    public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL
+    public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL      //!!!!! NOT TRIGGERING!!!!!!
     {
+        _plate.GetComponent<OutlineMaterial>().DisableHighlight();
         SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(12f);
         SpawnManager.Instance.SpawnTutorialCustomer(false);
     }
-    public IEnumerator Onboarding08() // CLEANING TUTORIAL
+    public IEnumerator Onboarding08() // CLEANING TUTORIAL     //THIS RUNS AFTER 06
     {
         SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
@@ -137,8 +139,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     public IEnumerator Onboarding09() // POST-SERVICE TUTORIAL
     {
         SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
-        yield return new WaitForSeconds(8f);
         _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
+        yield return new WaitForSeconds(8f);
+        _menuScreen.GetComponent<OutlineMaterial>().DisableHighlight();
     }
 
 #endregion
