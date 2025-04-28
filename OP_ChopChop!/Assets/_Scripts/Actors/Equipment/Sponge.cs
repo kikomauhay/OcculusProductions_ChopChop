@@ -55,18 +55,6 @@ public class Sponge : MonoBehaviour
 
 #region Public
 
-    public void IncrementUseCounter()
-    {
-        _usageCounter++;
-
-        if (_usageCounter >= _maxUsageCounter)
-        {
-            // makes the sponge dirty
-            _usageCounter = _maxUsageCounter;
-            _rend.material = _dirtyMat;
-            _isClean = false;
-        }
-    }
     public void SetWet() 
     {
         _isWet = true;
@@ -76,5 +64,5 @@ public class Sponge : MonoBehaviour
 
     public void ResetPosition() => transform.position = _startPosition;
 
-    #endregion
+#endregion
 }
