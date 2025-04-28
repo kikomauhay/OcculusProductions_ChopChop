@@ -15,17 +15,13 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private GameObject _faucetKnob; 
     [SerializeField] private GameObject _orderScreen, _freezer, _knife;
     [SerializeField] private GameObject _riceCooker, _plate, _sponge, _menuScreen;
-    [SerializeField] private GameObject _stinkyVFX;
+    [SerializeField] private GameObject _dirtyArea;
 
     [Header("Panels")]
     [SerializeField] private GameObject _slicingPanel;
     [SerializeField] private GameObject _moldingPanel;
 
     [Space(10f), SerializeField] private Transform _customerSpawnpoint;
-
-    [Space(10f)]
-    [SerializeField] private Collider _dirtyCollider;
-    [SerializeField] private Collider _servingCollision;
 
     [Header("Input Button Ref")]
     [SerializeField] public InputActionReference Continue;
@@ -38,8 +34,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 #region Unity
 
-    protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
+    protected override void Awake() 
+    {
+        base.Awake();
+        _dirtyArea.SetActive(false);
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha0)) StartCoroutine(CallOnboarding(0));
@@ -56,16 +56,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         {
             Continue.action.Enable();
             Continue.action.performed += ContinueCallOnboarding1;
-        }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        Sponge sponge = other.gameObject.GetComponent<Sponge>();
-
-        if (sponge != null) 
-        {
-            StartCoroutine(DoCleaning());
-
         }
     }
 
@@ -137,7 +127,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
-        TriggerStinky();
+        _dirtyArea.SetActive(true);
     }
     public IEnumerator Onboarding09() // POST-SERVICE TUTORIAL
     {
@@ -255,35 +245,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         OnTutorialEnd?.Invoke();
     }
 
-    public void TriggerStinky()
-    {
-        // makes the sponge more visible
-        _sponge.GetComponent<OutlineMaterial>().EnableHighlight();
-        
-        // enbles the cleaning logic
-        _dirtyCollider.enabled = true;
-        StartCoroutine(SpawnStinky());        
-    }
-
 #endregion    
 
 #region Enumerators
 
-    private IEnumerator SpawnStinky()
-    {
-        while (_dirtyCollider.enabled)
-        {
-            SpawnManager.Instance.SpawnVFX(VFXType.STINKY, _dirtyCollider.transform, 3f);
-            yield return new WaitForSeconds(2f);
-        }
-    }
-    private IEnumerator DoCleaning()
-    {
-        yield return new WaitForSeconds(2f);
-
-        _dirtyCollider.enabled = false;
-        StartCoroutine(Onboarding08());
-    }
     private IEnumerator EnableSlicingPanel()
     {
          _slicingPanel.SetActive(true);
