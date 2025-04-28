@@ -12,6 +12,9 @@ public class CustomerOrder : MonoBehaviour
     public float PatienceRate => _patienceDecreaseRate;
     public bool IsLastCustomer { get; set; } = false;
 
+    public bool IsTutorial => _isTutorial; 
+    public bool IsTunaCustomer => _isTunaCustomer;
+
 #endregion
 
 #region Members

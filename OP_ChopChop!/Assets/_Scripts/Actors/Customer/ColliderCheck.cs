@@ -37,11 +37,18 @@ public class ColliderCheck : MonoBehaviour
         plate.IncrementUseCounter();
         plate.TogglePlated();
 
-        if (_isTutorial)
+        if (!_isTutorial) return;
+        
+        // Tuna Customer being served
+        if (CustomerOrder.IsTunaCustomer)
         {
             StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
             ShopManager.Instance.ClearList();
         }
+
+        // Atrium being served
+        else if (CustomerOrder.IsTutorial) 
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
     }
 
 #region Enumerators
