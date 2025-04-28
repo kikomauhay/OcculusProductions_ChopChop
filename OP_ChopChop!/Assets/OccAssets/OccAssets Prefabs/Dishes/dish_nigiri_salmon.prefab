@@ -295,7 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73bc3b0813aa4dc49bba7a5a37f9bf1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _decayTimer: 10
+  _decayTimer: 60
   _expiredMat: {fileID: 2100000, guid: f54a32c163c4a894383b178de370a775, type: 2}
   _contaminatedMat: {fileID: 2100000, guid: a4c6b3c27c6498f47bf4295749f2aa0e, type: 2}
 --- !u!1 &7531625885797523667
@@ -614,3 +614,4 @@ MonoBehaviour:
   _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
   _maxUsageCounter: 0
   _boxTrigger: {fileID: 1901435816059076958}
+  _isTutorial: 0

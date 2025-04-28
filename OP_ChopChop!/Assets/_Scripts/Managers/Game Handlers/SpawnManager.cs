@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using Unity.Collections;
 
 /// </summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -215,13 +214,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
     public void StartCustomerSpawning() 
     {
-        if (_isTutorial)
-        {
-            _isTutorial = false;
-            transform.position = Vector3.zero;
-            _tutorialCollider.GetComponent<ColliderCheck>().DisableTutorial();
-        }   
-
+        transform.position = Vector3.zero;
         StartCoroutine(CreateCustomer());
     }
     private void ClearCustomerSeats()
@@ -241,9 +234,14 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
             _seatedCustomers.Clear();
         }
-
         StopAllCoroutines(); 
     }
     
 #endregion
+
+    public void DisableTutorial()
+    {
+        _isTutorial = false;
+        _tutorialCollider.GetComponent<ColliderCheck>().DisableTutorial();
+    }
 }

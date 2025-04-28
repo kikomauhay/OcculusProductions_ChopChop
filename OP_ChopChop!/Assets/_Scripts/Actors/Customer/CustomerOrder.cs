@@ -84,6 +84,7 @@ public class CustomerOrder : MonoBehaviour
         if (_isTunaCustomer)
         {
             StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
+            SpawnManager.Instance.DisableTutorial();
             ShopManager.Instance.ClearList();
             return;
         }

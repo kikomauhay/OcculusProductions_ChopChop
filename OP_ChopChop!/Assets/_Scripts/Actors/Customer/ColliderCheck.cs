@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class ColliderCheck : MonoBehaviour
@@ -41,7 +39,7 @@ public class ColliderCheck : MonoBehaviour
 
         if (_isTutorial)
         {
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
             ShopManager.Instance.ClearList();
         }
     }
@@ -78,7 +76,6 @@ public class ColliderCheck : MonoBehaviour
             StartCoroutine(CustomerOrder.AngryReaction());
         }
     }
-
     public void DisableTutorial() => _isTutorial = false;
 
 #endregion
