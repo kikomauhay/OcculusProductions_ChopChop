@@ -89,10 +89,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8873129294027024833, guid: ba797919c82adff4496e76c87131c561,
         type: 3}
+    - target: {fileID: 7987894487438834290, guid: 794002a099b423648a04d8a744d06e4a,
+        type: 3}
+      propertyPath: _isTutorial
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7988029323473609586, guid: 794002a099b423648a04d8a744d06e4a,
         type: 3}
       propertyPath: m_Name
-      value: TunaBox
+      value: onb_TunaBox
       objectReference: {fileID: 0}
     - target: {fileID: 7988029323707614436, guid: 794002a099b423648a04d8a744d06e4a,
         type: 3}

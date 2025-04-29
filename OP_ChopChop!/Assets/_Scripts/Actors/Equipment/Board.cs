@@ -11,14 +11,4 @@ public class Board : Equipment
         Instance = this;
         name = "Chopping Board";
     }
-
-    protected override void OnTriggerExit(Collider other)
-    {
-        base.OnTriggerExit(other);
-
-        if (!IsClean) return;
-
-        if (other.gameObject.GetComponent<Ingredient>() != null)
-            IncrementUseCounter();
-    }
 }

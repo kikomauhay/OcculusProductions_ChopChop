@@ -10,7 +10,6 @@ public class Plate : Equipment
 
     [Tooltip("The Box Collider Component")] 
     [SerializeField] private Collider _boxTrigger;
-
     [SerializeField] private bool _isTutorial;
 
 #endregion
@@ -37,24 +36,7 @@ public class Plate : Equipment
 
         Debug.Log($"Is clean: {IsClean}");
     }
-
-    protected override void OnTriggerEnter(Collider other) 
-    {
-        base.OnTriggerEnter(other);
-
-        if (!_isTutorial) return;
-        
-        Ingredient ing = other.gameObject.GetComponent<Ingredient>(); 
-
-        if (ing != null)
-        {
-            if (ing.IngredientType != IngredientType.SALMON) return;
-
-            GetComponent<OutlineMaterial>().DisableHighlight();
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(6));
-        }
-    }
-
+  
     protected override void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);

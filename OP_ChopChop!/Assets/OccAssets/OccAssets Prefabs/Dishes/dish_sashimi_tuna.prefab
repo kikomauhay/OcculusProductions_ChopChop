@@ -304,7 +304,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1861964344028708185}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
   m_Name: 
@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c90a50507ff6a804c97d109098579ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _decayTimer: 10
+  _decayTimer: 30
   _expiredMat: {fileID: 2100000, guid: c3dc2a6db70b7774ca55cb01f97ac5cc, type: 2}
   _contaminatedMat: {fileID: 2100000, guid: 6da453871b5fe984ca0991be0e1a0b87, type: 2}
 --- !u!1 &5618999308171318900
@@ -670,6 +670,7 @@ MonoBehaviour:
   _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
   _maxUsageCounter: 0
   _boxTrigger: {fileID: 5618999308171318888}
+  _isTutorial: 0
 --- !u!114 &5618999308171318903
 MonoBehaviour:
   m_ObjectHideFlags: 0

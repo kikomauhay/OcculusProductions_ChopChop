@@ -42,18 +42,8 @@ public abstract class Equipment : MonoBehaviour
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
 
-        if (sponge == null) return;
-
-        if (sponge.IsClean)
-        {
+        if (sponge != null) 
             DoCleaning();
-            sponge.IncrementUseCounter();
-        }
-        else // sponge contaminates the equipment
-        {
-            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
-            Contaminate();
-        }
     }
     protected virtual void OnTriggerExit(Collider other)
     {
@@ -133,7 +123,7 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter++;
 
-        Debug.Log($"{name} use counter: {_usageCounter}/{_maxUsageCounter}");
+        // Debug.Log($"{name} use counter: {_usageCounter}/{_maxUsageCounter}");
 
         if (_usageCounter >= _maxUsageCounter)
             Contaminate();

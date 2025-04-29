@@ -2,20 +2,17 @@ using UnityEngine;
 
 public class Knife : Equipment
 {
-
     [SerializeField] private bool _isTutorial;
-
-    protected override void Start() 
-    {
-        base.Start();
-        name = "Knife";
-    }
+    private bool _tutorialPlayed;
 
     public void CallNextTutorial()
     {
-        if (!_isTutorial) return;
+        if (_tutorialPlayed) return;
 
-        GetComponentInChildren<OutlineMaterial>().DisableHighlight();
-        StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(4));
+        if (_isTutorial)
+        {
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding05());
+            _tutorialPlayed = true;
+        }         
     }
 }

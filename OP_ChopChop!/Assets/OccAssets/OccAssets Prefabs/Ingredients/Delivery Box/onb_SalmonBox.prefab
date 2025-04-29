@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 8681882354388197724}
   - component: {fileID: 2276103895752884867}
   m_Layer: 0
-  m_Name: SalmonBox
+  m_Name: onb_SalmonBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -553,6 +553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb69240b79d3744696cb3205782cba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 1
   _fishPrefab: {fileID: 9223341567872474545, guid: f187849ca6808774d8c947b5df962e25,
     type: 3}
   _smokePrefab: {fileID: 7776776499507976363, guid: 0e1dbc6ca33bbb8459e962129922155d,

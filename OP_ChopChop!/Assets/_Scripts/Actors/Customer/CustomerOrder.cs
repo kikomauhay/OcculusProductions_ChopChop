@@ -2,12 +2,6 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-/// <summary> -WHAT DOES THIS SCRIPT DO-
-/// 
-/// The core component for the customer 
-///  
-/// </summary>
-
 [RequireComponent(typeof(CustomerAppearance), typeof(CustomerActions))]
 public class CustomerOrder : MonoBehaviour
 {
@@ -18,11 +12,12 @@ public class CustomerOrder : MonoBehaviour
     public float PatienceRate => _patienceDecreaseRate;
     public bool IsLastCustomer { get; set; } = false;
 
-    #endregion
+    public bool IsTutorial => _isTutorial; 
+    public bool IsTunaCustomer => _isTunaCustomer;
 
-    #region Members
+#endregion
 
-    public System.Action OnTrainingEnded;
+#region Members
 
     [Header("Dish UI")]
     [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
@@ -40,19 +35,18 @@ public class CustomerOrder : MonoBehaviour
     [Header("Onboarding")] 
     [SerializeField] private bool _isTutorial;
     [SerializeField] private bool _isTunaCustomer;
-
-#region Not Serialized
-    
+   
     private CustomerAppearance _appearance;
     private GameObject _customerOrderUI;
     private float _customerScore; // starts at 100 and decreases over time
 
 #endregion
-#endregion
 
-    void Start()
+    private void Start()
     {
-        GameManager.Instance.OnEndService += DestroyOrderUI;
+        if (!_isTutorial)
+            GameManager.Instance.OnEndService += DestroyOrderUI;
+        
         _appearance = GetComponent<CustomerAppearance>();
 
         switch (GameManager.Instance.Difficulty) // will decrease overtime
@@ -67,7 +61,7 @@ public class CustomerOrder : MonoBehaviour
         {
             _patienceDecreaseRate = 0f;
             CustomerDishType = _isTunaCustomer ? 
-                               DishType.NIGIRI_TUNA : 
+                               DishType.SASHIMI_TUNA : 
                                DishType.NIGIRI_SALMON;
 
             OnBoardingHandler.Instance.OnTutorialEnd += Cleanup;
@@ -76,21 +70,25 @@ public class CustomerOrder : MonoBehaviour
         {
             _patienceDecreaseRate = 1.65f; // referenced from the document
             CustomerDishType = (DishType)Random.Range(0, _dishOrdersUI.Length);
-        }        
-        
+        }
+
         CreateCustomerUI();
         StartCoroutine(PatienceCountdown());
     }
-    void OnDestroy()
+    private void OnDestroy()
     {
-        GameManager.Instance.OnEndService -= DestroyOrderUI;
-
         if (_isTutorial)
+        {
             OnBoardingHandler.Instance.OnTutorialEnd -= Cleanup;
+            Destroy(_customerOrderUI);
+        }
+        else GameManager.Instance.OnEndService -= DestroyOrderUI; 
 
         if (_isTunaCustomer)
         {
-            OnBoardingHandler.Instance.CallOnboarding(8);
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
+            SpawnManager.Instance.DisableTutorial();
+            ShopManager.Instance.ClearList();
             return;
         }
 
@@ -105,13 +103,15 @@ public class CustomerOrder : MonoBehaviour
 
     private void Cleanup() => Destroy(gameObject);
 
-    #region Spawning_Helpers
+#region Spawning_Helpers
 
     void CreateCustomerUI()
     {
-        _customerOrderUI = Instantiate(_dishOrdersUI[(int)CustomerDishType], // aligns customer UI & customer order
+        // aligns customer UI & customer order
+        _customerOrderUI = Instantiate(_dishOrdersUI[_isTutorial ? 0 : (int)CustomerDishType], 
                                        _orderUITransform.position,
-                                       _orderUITransform.rotation);
+                                       _orderUITransform.rotation,
+                                       transform);
     }
     void MakeSeatEmpty() // clears the seat of any customer references 
     {

@@ -4,16 +4,23 @@ using System;
 public class RiceIngredient : Ingredient
 {
     [Header("Finished Dishes"), Tooltip("0 = salmon nigiri, 1 = tuna nigiri, 2 = salmon sashimi, 3 = tuna sashimi")]
-    [SerializeField] GameObject[] _foodPrefabs; 
+    [SerializeField] private GameObject[] _foodPrefabs; 
 
     [Header("Molding Attributes")]
-    [SerializeField] MoldType _moldType;
+    [SerializeField] private MoldType _moldType;
     public Action<int> OnRiceMolded; // check with Moldable.cs
+    private static bool TutorialDone { get; set; } 
 
     protected override void Start() 
     {
         base.Start();
         OnRiceMolded += ChangeRiceMold;
+
+        if (!TutorialDone && _moldType == MoldType.PERFECT)
+        {
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding06());
+            TutorialDone = true;
+        }
     }
     protected override void OnDestroy()
     {

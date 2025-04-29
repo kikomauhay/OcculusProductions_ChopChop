@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 [RequireComponent(typeof(Trashable))]
@@ -18,14 +19,14 @@ public class Sponge : MonoBehaviour
     [SerializeField] private Material _wetMat, _cleanMat, _dirtyMat;
 
     private MeshRenderer _rend;
-    private const float WET_DURATION = 10f;
     private Vector3 _startPosition;
+    private const float WET_DURATION = 10f;
     
 #endregion 
 
-#region Unity_Methods
+#region Unity
 
-    void Start()
+    private void Start()
     {
         name = "Sponge";
         _isWet = false;
@@ -39,7 +40,7 @@ public class Sponge : MonoBehaviour
         _startPosition = transform.position;
     }
     
-    IEnumerator DrySponge()
+    private IEnumerator DrySponge()
     {
         SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, WET_DURATION);
         yield return new WaitForSeconds(WET_DURATION);
@@ -47,7 +48,6 @@ public class Sponge : MonoBehaviour
         // makes the sponge clean
         _rend.material = _cleanMat;
         _isWet = false;
-        _isClean = true;
         _usageCounter = 0;
     }
 
@@ -55,18 +55,6 @@ public class Sponge : MonoBehaviour
 
 #region Public
 
-    public void IncrementUseCounter()
-    {
-        _usageCounter++;
-
-        if (_usageCounter >= _maxUsageCounter)
-        {
-            // makes the sponge dirty
-            _usageCounter = _maxUsageCounter;
-            _rend.material = _dirtyMat;
-            _isClean = false;
-        }
-    }
     public void SetWet() 
     {
         _isWet = true;
@@ -76,5 +64,5 @@ public class Sponge : MonoBehaviour
 
     public void ResetPosition() => transform.position = _startPosition;
 
-    #endregion
+#endregion
 }

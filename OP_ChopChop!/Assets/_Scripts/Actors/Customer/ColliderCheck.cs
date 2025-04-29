@@ -4,10 +4,9 @@ using UnityEngine;
 public class ColliderCheck : MonoBehaviour
 {
     public CustomerOrder CustomerOrder { get; set; }
-
     [SerializeField] private bool _isTutorial;
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (CustomerOrder == null) return;
 
@@ -38,13 +37,34 @@ public class ColliderCheck : MonoBehaviour
         plate.IncrementUseCounter();
         plate.TogglePlated();
 
-        if (_isTutorial)
-            StartCoroutine(OnBoardingHandler.Instance.CallOnboarding(7));
+        if (!_isTutorial) return;
+        
+        // Tuna Customer being served
+        if (CustomerOrder.IsTunaCustomer)
+        {
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
+            ShopManager.Instance.ClearList();
+        }
+
+        // Atrium being served
+        else if (CustomerOrder.IsTutorial) 
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
     }
+
+#region Enumerators
+
+    private IEnumerator DisableCollider()
+    {
+        GetComponent<Collider>().enabled = false;
+        yield return new WaitForSeconds(3f);
+        GetComponent<Collider>().enabled = true;
+    }
+
+#endregion
 
 #region Helpers
 
-    void CheckDish(Dish d)
+    private void CheckDish(Dish d)
     {
         if (d.IsContaminated || d.IsExpired) // ORDER IS EXPIRED OR CONTAMINATED
         {
@@ -63,12 +83,7 @@ public class ColliderCheck : MonoBehaviour
             StartCoroutine(CustomerOrder.AngryReaction());
         }
     }
-    IEnumerator DisableCollider()
-    {
-        GetComponent<Collider>().enabled = false;
-        yield return new WaitForSeconds(3f);
-        GetComponent<Collider>().enabled = true;
-    }
+    public void DisableTutorial() => _isTutorial = false;
 
 #endregion
 }

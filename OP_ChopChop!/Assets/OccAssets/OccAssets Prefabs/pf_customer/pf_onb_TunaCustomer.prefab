@@ -556,12 +556,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dishOrdersUI:
-  - {fileID: 8772591349585043657, guid: c398622182ea08e4e91a47b5a2c9e992, type: 3}
+  - {fileID: 3798674209957098441, guid: f6e91241ede71a54ea1340f8577d3dd6, type: 3}
   _orderUITransform: {fileID: 1410965453023544373}
   _minCash: 200
   _maxCash: 250
   _txtMoneyReward: {fileID: 8319630481065733669}
-  _patienceDecreaseRate: 0.01
+  _patienceDecreaseRate: 0
   _reactionTimer: 2
   _isTutorial: 1
   _isTunaCustomer: 1

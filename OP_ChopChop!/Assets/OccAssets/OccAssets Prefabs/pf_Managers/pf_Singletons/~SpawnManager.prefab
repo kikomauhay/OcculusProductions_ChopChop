@@ -59,7 +59,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1597545420731760882}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.3}
+  m_LocalPosition: {x: 0, y: -0.11, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -560,16 +560,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a39347eff813da4699f3019d17eb2d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isTutorial: 0
+  _tutorialCollider: {fileID: 0}
   _vfxPrefabs:
   - {fileID: 7776776499507976363, guid: 0e1dbc6ca33bbb8459e962129922155d, type: 3}
   - {fileID: 4467525188659021933, guid: 2a16f8b1d12770346a2562f7071ea701, type: 3}
   - {fileID: 1981580915582403093, guid: 247f3a9b29b2e7a43960b4b13aa0aa3f, type: 3}
   - {fileID: 7213758601407137198, guid: 17ae512bf627727499a5abe0553f38bb, type: 3}
-  _customerPrefab: {fileID: 8242136411445390340, guid: 6abd3fb3e935698469b673cfaa3eaab2,
-    type: 3}
   _salmonSashiPrefab: {fileID: 8589455853079741865, guid: babd4f77cefd2be4794cf66bf84f318a,
     type: 3}
   _tunaSashimiPrefab: {fileID: 5618999308171318900, guid: 6f234b21a3eb86347a34b9bcf0cdb5b3,
+    type: 3}
+  _customerPrefab: {fileID: 8242136411445390340, guid: 6abd3fb3e935698469b673cfaa3eaab2,
+    type: 3}
+  _atriumPrefab: {fileID: 8242136411445390340, guid: 311e9262775fdde4b83e8f735a725ab2,
+    type: 3}
+  _tunaCustomerPrefab: {fileID: 8242136411445390340, guid: a58ee6a7ead43a34eb958c03d14c4b10,
     type: 3}
   _bins:
   - {fileID: 7564253948246715539}
@@ -587,8 +593,8 @@ MonoBehaviour:
   - {fileID: 1597545420845833051}
   - {fileID: 1597545422520328625}
   - {fileID: 1597545421204645413}
-  _initialCustomerSpawnTime: 1
-  _customerSpawnInterval: 5
+  _spawnCountdown: 2
+  _spawnInterval: 10
 --- !u!1 &7564253948344922535
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,5 +13,6 @@ public class ChefHat : PersistentSingleton<ChefHat> {
         yield return null;
 
         GameManager.Instance.ChangeShift(GameShift.PreService);
+        ShopManager.Instance.ClearList();
     }
 }
