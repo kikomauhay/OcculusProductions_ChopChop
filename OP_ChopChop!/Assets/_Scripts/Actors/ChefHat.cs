@@ -2,6 +2,8 @@ using System.Collections;
 
 public class ChefHat : PersistentSingleton<ChefHat> {
 
+    public System.Action OnHatWorn;
+
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit(); 
 
@@ -14,5 +16,6 @@ public class ChefHat : PersistentSingleton<ChefHat> {
 
         GameManager.Instance.ChangeShift(GameShift.PreService);
         ShopManager.Instance.ClearList();
+        OnHatWorn?.Invoke();
     }
 }
