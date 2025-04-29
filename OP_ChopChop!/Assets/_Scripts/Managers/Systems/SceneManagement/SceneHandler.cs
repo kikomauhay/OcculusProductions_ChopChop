@@ -8,7 +8,6 @@ public class SceneHandler : Singleton<SceneHandler>
 
     public bool IsFading { get; private set; }
     public bool CanPause { get; private set; }
-    
 
 #endregion
 
@@ -24,7 +23,7 @@ public class SceneHandler : Singleton<SceneHandler>
     protected override void Awake() => base.Awake();    
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     
-    void Start() 
+    private void Start() 
     {
         CanPause = true;
         IsFading = false;
@@ -47,13 +46,11 @@ public class SceneHandler : Singleton<SceneHandler>
         if (sceneName == "MainGameScene") 
         {
             SceneManager.UnloadSceneAsync("TrainingScene");
-            // yield return null;          
             SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
         }
         else if (sceneName == "TrainingScene")
         {
             SceneManager.UnloadSceneAsync("MainGameScene");
-            // yield return null;
             SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
         }
         else

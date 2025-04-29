@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
 using System;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -54,6 +56,7 @@ public class GameManager : Singleton<GameManager>
     [Space(10f), SerializeField] private bool _isDebugging;
 
     [SerializeField] private bool _isLogoRemoved = false;
+    [SerializeField] private bool _isTutorial;
 
 #endregion
 
@@ -73,13 +76,20 @@ public class GameManager : Singleton<GameManager>
         MaxCustomerCount = 3;
         IsPaused = false;
         IsGameOver = false;
+        
         Difficulty = GameDifficulty.EASY;
 
         // these should be empty when testing is done
         _customerSRScores = new List<float>(); // { 100f, 90f, 80f, 80f };
 
+        // event binding to the input button 
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
+        
+        if (!_isTutorial) return;
+
+        // event binding Onboardinghandler 
+        StartCoroutine(DelayedEventBinding());
     }
     private void Update()
     {
@@ -87,7 +97,7 @@ public class GameManager : Singleton<GameManager>
             ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
     }
 
-    IEnumerator ShiftCountdown(float timer, GameShift shift)
+    private IEnumerator ShiftCountdown(float timer, GameShift shift)
     {
         if (timer < 1) yield break;
 
@@ -100,6 +110,12 @@ public class GameManager : Singleton<GameManager>
 
         SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
         ChangeShift(shift);
+    }
+
+    private IEnumerator DelayedEventBinding()
+    {
+        yield return new WaitForSeconds(2f);
+        OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;
     }
 
 #endregion
@@ -217,7 +233,7 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
     }
 
-    void DoPreService() // change to 1 min when done testing
+    private void DoPreService() // change to 1 min when done testing
     {
         ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
 
@@ -228,7 +244,7 @@ public class GameManager : Singleton<GameManager>
 
         // ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
     }     
-    void DoService()
+    private void DoService()
     {
         ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
 
@@ -243,7 +259,7 @@ public class GameManager : Singleton<GameManager>
 
         // ClockScript.Instance.UpdateTimeRemaining(_testTimer);
     }
-    void DoPostService() // rating calculations
+    private void DoPostService() // rating calculations
     {
         OnEndService?.Invoke(); 
         TurnOnEndOfDayReceipt();
@@ -253,7 +269,13 @@ public class GameManager : Singleton<GameManager>
 
 #region EOD_Rating
 
-    void TurnOnEndOfDayReceipt()
+    public void ShowEOD() 
+    {
+        if (_isTutorial)
+            TurnOnEndOfDayReceipt();
+    }
+
+    private void TurnOnEndOfDayReceipt()
     {
         // enables the EOD receipt
         MainMenuHandler.Instance.ToggleEODPanel();
@@ -270,25 +292,44 @@ public class GameManager : Singleton<GameManager>
         DoPostServiceRating();
         
         // add the customers served in the EOD receipt
-        CustomersServed = _endOfDayReceipt.totalcustomerServed;
+        CustomersServed = _isTutorial ? 2 : _endOfDayReceipt.CustomersServed;
         _endOfDayReceipt.GiveTotalCustomerServed();
     }
-    void DoCustomerRating()
+
+    private void DoCustomerRating()
     {
+        if (_isTutorial) 
+        {
+            _endOfDayReceipt.GiveCustomerRating(0); // automatically gets a perfect score
+            return;
+        }
+
         float customerScore = IsGameOver ? 0f : GetAverageOf(_customerSRScores);
         int indexCustomerRating = _endOfDayReceipt.ReturnScoretoIndexRating(customerScore);
         
         _endOfDayReceipt.GiveCustomerRating(indexCustomerRating);
     }
-    void DoKitchenRating() 
+    private void DoKitchenRating() 
     {   
+        if (_isTutorial) 
+        {
+            _endOfDayReceipt.GiveKitchenRating(0); // automatically gets a perfect score
+            return;
+        }
+
         int indexKitchenRating = IsGameOver ? 4 :
             _endOfDayReceipt.ReturnScoretoIndexRating(KitchenCleaningManager.Instance.KitchenScore);
     
         _endOfDayReceipt.GiveKitchenRating(indexKitchenRating);
     }
-    void DoPostServiceRating() // FINAL SCORE 
+    private void DoPostServiceRating() // FINAL SCORE 
     {
+        if (_isTutorial) 
+        {
+            _endOfDayReceipt.GiveRestaurantRating(0); // automatically gets a perfect score
+            return;
+        }
+
         _finalScore = IsGameOver ? 4 : (KitchenCleaningManager.Instance.KitchenScore + 
                                         GetAverageOf(_customerSRScores)) / 2f;   
         
@@ -343,6 +384,18 @@ public class GameManager : Singleton<GameManager>
             n += list[i];
 
         return n / list.Count;
+    }
+
+    private void DisableTutorial()
+    {
+        if (!_isTutorial)
+        {
+            Debug.LogError($"{gameObject.name} is already not a tutuorial!");
+            return;
+        }
+
+        _isTutorial = false;
+        OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
     }
 
 #endregion
