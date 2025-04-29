@@ -45,13 +45,15 @@ public class EnvironmentCleaning : MonoBehaviour
 
         while (gameObject.activeSelf)
         {
+            // spawns an empty game obj at a random point in the collider
             Vector3 randPoint = RandomColliderPoint(_col);
             GameObject tempGameObj = new GameObject("TempSpawnPoint");
             tempGameObj.transform.position = randPoint;
-
             yield return new WaitForSeconds(5f);
+
+            // spawns the VFX in the new game obj's position
             SpawnManager.Instance.SpawnVFX(VFXType.STINKY, tempGameObj.transform, 5f);
-            Destroy(tempGameObj, 0.1F);
+            Destroy(tempGameObj, 0.1f);
         }
     }
 

@@ -3,9 +3,16 @@ using UnityEngine;
 
 public class Freezer : MonoBehaviour
 {
+#region Members
 
     [SerializeField] private bool _isTutorial;
     [SerializeField] private List<Ingredient> _ingredients;
+
+    private bool _tutorialPlayed = false;
+
+#endregion
+
+#region Methods
 
     private void OnTriggerEnter(Collider other)
     {
@@ -31,7 +38,6 @@ public class Freezer : MonoBehaviour
             GetComponent<OutlineMaterial>().DisableHighlight();
         */
     }
-
     private void OnTriggerExit(Collider other)
     {
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
@@ -46,10 +52,15 @@ public class Freezer : MonoBehaviour
                                         "door closed 01" : "door closed 02",
                                         SoundGroup.APPLIANCES);
 
-        if (_isTutorial)
+        if (!_isTutorial) return;
+
+        if (!_tutorialPlayed)
         {
-            //GetComponent<OutlineMaterial>().DisableHighlight();
+            GetComponent<OutlineMaterial>().DisableHighlight();
             StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
+            _tutorialPlayed = true;
         }     
     }
+
+#endregion
 }
