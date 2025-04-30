@@ -84,12 +84,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(5f);
 
-        _riceCooker.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
         StartCoroutine(EnableMoldingPanel());
     }
     public IEnumerator Onboarding06() // FOOD COMBINATION TUTORIAL    //WE ARE HEREEEE IN TERMS OF TESTING
     {
-        _riceCooker.GetComponent<OutlineMaterial>().EnableHighlight();
         SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
         yield return new WaitForSeconds(10f);
     }
@@ -115,7 +113,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
         GameManager.Instance.EnableEOD();
         _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(1f);
 
         _menuScreen.GetComponent<OutlineMaterial>().DisableHighlight();
         StartCoroutine(EnableFriendlyTipPanel());
