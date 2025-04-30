@@ -9,6 +9,7 @@ public class RestaurantReceipt : MonoBehaviour
     [SerializeField] private GameObject[] restaurantRatings;
 
     [SerializeField] private TextMeshProUGUI totalCustomerServedTxt;
+    public int totalcustomerServed;
 
     //index is set according to order of rating which is S to F.
     //0 = S....4 = F.

@@ -113,7 +113,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
         GameManager.Instance.EnableEOD();
         _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(8f);
 
         _menuScreen.GetComponent<OutlineMaterial>().DisableHighlight();
         StartCoroutine(EnableFriendlyTipPanel());
