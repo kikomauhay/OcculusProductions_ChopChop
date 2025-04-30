@@ -35,10 +35,11 @@ public class Enumerations : MonoBehaviour {}
 
     public enum DishType 
     { 
-        NIGIRI_SALMON, 
-        NIGIRI_TUNA, 
-        SASHIMI_SALMON, 
-        SASHIMI_TUNA 
+        DEFAULT       = -1,
+        NIGIRI_SALMON  = 0, 
+        NIGIRI_TUNA    = 1, 
+        SASHIMI_SALMON = 2, 
+        SASHIMI_TUNA   = 3 
     }
     public enum IngredientType // IN A CERTAIN ORDER (DON'T RE-ORDER)
     {    

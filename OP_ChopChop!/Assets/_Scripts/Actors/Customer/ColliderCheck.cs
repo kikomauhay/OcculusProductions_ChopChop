@@ -84,18 +84,6 @@ public class ColliderCheck : MonoBehaviour
             StartCoroutine(CustomerOrder.AngryReaction());
         }
     }
-
-    private void CheckPlatter(NEW_Dish platter)
-    {
-        if (platter.Type != CustomerOrder.CustomerDishType)
-        {
-            Debug.LogError("Wrong dish served!");
-            return;
-        }
-
-        // 
-        platter.DisableFoodItems();
-    }
     public void DisableTutorial() => _isTutorial = false;
 
 #endregion

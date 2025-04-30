@@ -1524,7 +1524,6 @@ GameObject:
   - component: {fileID: 8263769188448552543}
   - component: {fileID: 8317945800656708019}
   - component: {fileID: 5111822457049245164}
-  - component: {fileID: 2517857159861008369}
   - component: {fileID: 8317945800656708020}
   m_Layer: 0
   m_Name: NEW_Plate
@@ -1719,19 +1718,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 808474172911093344, guid: 7bee718b4604e3f42b4909858369a2c7, type: 3}
---- !u!114 &2517857159861008369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 110817271091904574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _trashType: 0
 --- !u!4 &2721468788413896762
 Transform:
   m_ObjectHideFlags: 0
@@ -2357,20 +2343,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 110817271091904574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d58841ab13b657840939f013c7951089, type: 3}
+  m_Script: {fileID: 11500000, guid: eca5e404e98867c409b5e81671b8d53a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isClean: 1
-  _outlineTexture: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
-  _cleanMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
-  _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
-  _maxUsageCounter: 1
   _foodItems:
   - {fileID: 6331956361300784160}
   - {fileID: 189132786484630102}
   - {fileID: 7527717644747119556}
   - {fileID: 7819711187046502278}
-  _platterServed: -1
+  _dishType: 0
+  _dishScore: 0
   _isPlated: 0
-  _dishScore: 100
   _debugging: 1
