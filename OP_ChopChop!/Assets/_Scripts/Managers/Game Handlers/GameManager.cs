@@ -54,6 +54,7 @@ public class GameManager : Singleton<GameManager>
     [Space(10f), SerializeField] private bool _isDebugging;
 
     [SerializeField] private bool _isLogoRemoved = false;
+    [SerializeField] private bool _isTutorial;
 
 #endregion
 
@@ -100,6 +101,12 @@ public class GameManager : Singleton<GameManager>
 
         SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
         ChangeShift(shift);
+    }
+
+    IEnumerator DelayedEventBind()
+    {
+        yield return new WaitForSeconds(1f);
+        OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;
     }
 
 #endregion
@@ -253,6 +260,12 @@ public class GameManager : Singleton<GameManager>
 
 #region EOD_Rating
 
+    public void EnableEOD()
+    {
+        if (_isTutorial)
+            TurnOnEndOfDayReceipt();
+    }
+
     void TurnOnEndOfDayReceipt()
     {
         // enables the EOD receipt
@@ -270,11 +283,17 @@ public class GameManager : Singleton<GameManager>
         DoPostServiceRating();
         
         // add the customers served in the EOD receipt
-        CustomersServed = _endOfDayReceipt.totalcustomerServed;
+        CustomersServed = _isTutorial ? 2 : _endOfDayReceipt.totalcustomerServed;
         _endOfDayReceipt.GiveTotalCustomerServed();
     }
     void DoCustomerRating()
     {
+        if (_isTutorial) 
+        {
+            _endOfDayReceipt.GiveCustomerRating(0); // automatically gets a perfect score
+            return;
+        }
+
         float customerScore = IsGameOver ? 0f : GetAverageOf(_customerSRScores);
         int indexCustomerRating = _endOfDayReceipt.ReturnScoretoIndexRating(customerScore);
         
@@ -282,6 +301,12 @@ public class GameManager : Singleton<GameManager>
     }
     void DoKitchenRating() 
     {   
+        if (_isTutorial) 
+        {
+            _endOfDayReceipt.GiveKitchenRating(0); // automatically gets a perfect score
+            return;
+        }
+
         int indexKitchenRating = IsGameOver ? 4 :
             _endOfDayReceipt.ReturnScoretoIndexRating(KitchenCleaningManager.Instance.KitchenScore);
     
@@ -289,6 +314,12 @@ public class GameManager : Singleton<GameManager>
     }
     void DoPostServiceRating() // FINAL SCORE 
     {
+        if (_isTutorial) 
+        {
+            _endOfDayReceipt.GiveRestaurantRating(0); // automatically gets a perfect score
+            return;
+        }
+
         _finalScore = IsGameOver ? 4 : (KitchenCleaningManager.Instance.KitchenScore + 
                                         GetAverageOf(_customerSRScores)) / 2f;   
         
@@ -344,6 +375,18 @@ public class GameManager : Singleton<GameManager>
 
         return n / list.Count;
     }
+    private void DisableTutorial()
+    {
+        if (!_isTutorial)
+        {
+            Debug.LogError($"{gameObject.name} is already not a tutorial!");
+            return;
+        }
+
+        _isTutorial = false;
+        OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
+    }
+     
 
 #endregion
 }

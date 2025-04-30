@@ -12,7 +12,11 @@ public class EnvironmentCleaning : MonoBehaviour
 
 #region Unity
 
-    private void OnEnable() => StartCoroutine(SpawnStinkyVFX());
+    private void OnEnable() 
+    {
+        StartCoroutine(SpawnStinkyVFX());
+        _col.enabled = true;
+    }
     private void OnDisable() => StopCoroutine(SpawnStinkyVFX());
     
     private void OnTriggerEnter(Collider other)
@@ -41,8 +45,7 @@ public class EnvironmentCleaning : MonoBehaviour
 
     private IEnumerator SpawnStinkyVFX()
     {
-        if (_isTutorial) yield break;
-
+        // loops while it's still enabled
         while (gameObject.activeSelf)
         {
             // spawns an empty game obj at a random point in the collider

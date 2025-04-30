@@ -64,7 +64,11 @@ public abstract class Equipment : MonoBehaviour
             Equipment eq = other.gameObject.GetComponent<Equipment>();
             
             if (!IsClean && eq.IsClean) 
-                eq.Contaminate();
+            {
+                // board won't get dirty in any way
+                if (GetComponent<Board>() != null)
+                    eq.Contaminate();
+            }
             
             if (IsClean && !eq.IsClean) 
                 Contaminate();

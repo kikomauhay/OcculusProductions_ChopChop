@@ -2240,7 +2240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &555644963
 Transform:
   m_ObjectHideFlags: 0
@@ -4567,7 +4567,7 @@ MonoBehaviour:
   _plate: {fileID: 1776188697}
   _sponge: {fileID: 2119257856}
   _menuScreen: {fileID: 1454716488}
-  _dirtyCollider: {fileID: 0}
+  _dirtyCollider: {fileID: 555644962}
   _friendlyTipPanel: {fileID: 51006348}
   _slicingPanel: {fileID: 1945953467}
   _moldingPanel: {fileID: 260066481}
