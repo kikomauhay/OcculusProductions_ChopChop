@@ -47,10 +47,7 @@ public class RiceSpawn : XRBaseInteractable
         StartCoroutine(ResetRiceSpawned());
         
         if (_isTutorial)
-        {
-            GetComponentInParent<OutlineMaterial>().DisableHighlight();
             StartCoroutine(OnBoardingHandler.Instance.Onboarding06());
-        }
     }
 
     private IEnumerator ResetRiceSpawned()

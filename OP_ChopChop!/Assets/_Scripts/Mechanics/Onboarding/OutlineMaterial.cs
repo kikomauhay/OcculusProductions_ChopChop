@@ -1,5 +1,7 @@
 using UnityEngine;
 
+// FIX ONBOARDING 
+
 public class OutlineMaterial : MonoBehaviour
 {
     [SerializeField] private Material _outlineMat;
