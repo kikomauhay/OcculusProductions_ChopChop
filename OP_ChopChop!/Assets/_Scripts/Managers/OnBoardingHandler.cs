@@ -36,8 +36,8 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     protected override void Awake() 
     {
         base.Awake();
-        _dirtyCollider.SetActive(true); 
-        Debug.Log("Dirty collider enabled!");
+        _dirtyCollider.SetActive(false); 
+        // Debug.Log("Dirty collider enabled!");
     }
 
 #endregion   
@@ -113,6 +113,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         // sponge.DisableHighlight is binded to an event when it's grabbed 
 
         SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
+        GameManager.Instance.EnableEOD();
         _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
         yield return new WaitForSeconds(8f);
 
