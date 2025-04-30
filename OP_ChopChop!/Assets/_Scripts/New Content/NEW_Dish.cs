@@ -21,17 +21,19 @@ public class NEW_Dish : MonoBehaviour
 
 #region Private
 
-    [Header("Food Components"), Tooltip("0 = N. Salmon, 1 = N. Tuna, 2 = S. Salmon, 3 = S. Tuna")]
-    [SerializeField, Space(5f)] private GameObject[] _foodItems;
-    
-    [Header("Dish Attributes")]
-    [SerializeField, Space(5f)] private DishType _dishType;
-    [SerializeField] private DishState _dishState;
-    [SerializeField, Range(0f, 100f)] private float _dishScore;
-    [SerializeField] private bool _isPlated;
-    
     [Header("Debug Mode")]
     [SerializeField] private bool _debugging;
+
+    [Header("Food Components"), Space(5f)]
+    [Tooltip("0 = N. Salmon, 1 = N. Tuna, 2 = S. Salmon, 3 = S. Tuna")]
+    [SerializeField] private GameObject[] _foodItems;
+    [SerializeField] private FoodLooks _foodLooks;
+    
+    [Header("Dish Attributes"), Space(5f)]
+    [SerializeField, Range(0f, 100f)] private float _dishScore;
+    [SerializeField] private DishType _dishType;
+    [SerializeField] private DishState _dishState;
+    [SerializeField] private bool _isPlated;
 
     private Collider _collider;
     private const float DECAY_TIME = 30f;
@@ -53,6 +55,25 @@ public class NEW_Dish : MonoBehaviour
         _isPlated = false;
         
         DisableFoodItems();
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        Ingredient ing = other.gameObject.GetComponent<Ingredient>();
+        Food food = other.gameObject.GetComponent<Food>();
+
+        // case for sashimis
+        if (ing != null)
+        {
+            DoIngredientCollision(ing);
+            return;
+        }
+
+        // case for nigiris
+        if (food != null)
+        {
+            DoFoodCollision(food);
+            return;
+        }
     }
 
 #region Testing
@@ -118,11 +139,27 @@ public class NEW_Dish : MonoBehaviour
         StartCoroutine(Expire());
     }
 
-    public void Contaminate() 
+    public void SetState(DishState chosenState)
     {
-        _dishState = DishState.MOLDY;
+        if (_dishState == chosenState)
+            throw new ArgumentException("You cannot set the same state again!");
 
-        // change to moldy material
+        _dishState = chosenState;
+
+        switch (chosenState)
+        {
+            case DishState.CLEAN:
+                
+            break;
+
+            case DishState.ROTTEN:
+            break;
+
+            case DishState.MOLDY: 
+            
+            break;
+        } 
+        
     }
 
 #endregion
@@ -145,13 +182,48 @@ public class NEW_Dish : MonoBehaviour
         _collider.enabled = true;
     }
 
-#endregion
-}
+    // ON TRIGGER ENTER
+    private void DoFoodCollision(Food food)
+    {
+        if (food.IsContaminated || food.IsExpired)
+        {
+            Debug.LogError($"{food.gameObject.name} is dirty!");
+            // set contaminated
+            return;
+        }
+    }
 
+    private void DoIngredientCollision(Ingredient ing)
+    {
+
+    }
+
+#endregion
+}   
 
 public enum DishState
 {
     CLEAN  = 0, 
     ROTTEN = 1, 
     MOLDY  = 2
+}
+
+[Serializable]
+public struct FoodLooks
+{
+#region Properties
+
+    public readonly Material CleanMat => _materials[0];
+    public readonly Material RottenMat => _materials[1];
+    public readonly Material MoldyMat => _materials[2];
+
+#endregion
+
+#region Private
+
+    [Tooltip("0 = clean, 1 = rotten, 2 = moldy")]
+    [SerializeField] private Material[] _materials;
+    [SerializeField] private Material _outlineMat;
+
+#endregion
 }

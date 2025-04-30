@@ -26,6 +26,7 @@ public abstract class Equipment : MonoBehaviour
     {
         GameManager.Instance.OnStartService += ResetPosition;
         
+        _isClean = true;
         _coroutineRunning = false;
         _startPosition = transform.position;
 
