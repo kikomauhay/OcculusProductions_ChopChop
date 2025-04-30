@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Unity.Mathematics;
 
 public class RestaurantReceipt : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class RestaurantReceipt : MonoBehaviour
         totalCustomerServedTxt.text = totalcustomerServed.ToString();
     
     public void GiveCustomerRating(int index) =>
-        customerRatings[index].gameObject.SetActive(true);
+        customerRatings[index].gameObject.SetActive(true);  
 
     public void GiveKitchenRating(int index) => 
         kicthenRatings[index].gameObject.SetActive(true);
