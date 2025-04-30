@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Equipment : MonoBehaviour 
 {
     public bool IsClean => _isClean;
+    public Material DirtyMaterial => _dirtyMat;
 
 #region Members
 
@@ -33,7 +34,7 @@ public abstract class Equipment : MonoBehaviour
         _rend = GetComponent<Renderer>();
         _rend.material = _cleanMat;
     }
-    protected void OnDestroy() 
+    protected virtual void OnDestroy() 
     {
         ResetPosition();
         GameManager.Instance.OnStartService -= ResetPosition;

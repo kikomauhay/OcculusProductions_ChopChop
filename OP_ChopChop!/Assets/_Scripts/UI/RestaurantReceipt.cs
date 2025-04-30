@@ -3,12 +3,12 @@ using TMPro;
 
 public class RestaurantReceipt : MonoBehaviour
 {
+    public int CustomersServed { get; set; }
     [SerializeField] private GameObject[] customerRatings;
     [SerializeField] private GameObject[] kicthenRatings;
     [SerializeField] private GameObject[] restaurantRatings;
-   
-    [SerializeField] TextMeshProUGUI totalCustomerServedTxt;
-    public int totalcustomerServed;
+
+    [SerializeField] private TextMeshProUGUI totalCustomerServedTxt;
 
     //index is set according to order of rating which is S to F.
     //0 = S....4 = F.
@@ -16,7 +16,7 @@ public class RestaurantReceipt : MonoBehaviour
 #region Ratings
 
     public void GiveTotalCustomerServed() => //Gives the text for the total customer Served;
-        totalCustomerServedTxt.text = totalcustomerServed.ToString();
+        totalCustomerServedTxt.text = CustomersServed.ToString();
     
     public void GiveCustomerRating(int index) =>
         customerRatings[index].gameObject.SetActive(true);
