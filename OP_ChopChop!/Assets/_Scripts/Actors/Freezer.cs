@@ -56,7 +56,6 @@ public class Freezer : MonoBehaviour
 
         if (!_tutorialPlayed)
         {
-            GetComponent<OutlineMaterial>().DisableHighlight();
             StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
             _tutorialPlayed = true;
         }     

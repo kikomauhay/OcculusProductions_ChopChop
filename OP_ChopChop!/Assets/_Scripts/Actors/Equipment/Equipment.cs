@@ -57,8 +57,11 @@ public abstract class Equipment : MonoBehaviour
         }
     }
     
+    // cross-contamination logic
     protected virtual void OnCollisionEnter(Collision other)
     {
+        if (GetComponent<Board>() != null) return;
+
         // equipment + another equipment
         if (other.gameObject.GetComponent<Equipment>() != null)
         {
@@ -67,8 +70,8 @@ public abstract class Equipment : MonoBehaviour
             if (!IsClean && eq.IsClean) 
                 eq.Contaminate();
             
-            if (IsClean && !eq.IsClean) 
-                Contaminate();
+            else if (IsClean && !eq.IsClean) 
+                Contaminate();            
         }
 
         // equipment + ingredient

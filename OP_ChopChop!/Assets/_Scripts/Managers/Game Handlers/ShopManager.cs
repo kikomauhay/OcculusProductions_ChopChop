@@ -74,7 +74,6 @@ public class ShopManager : StaticInstance<ShopManager>
             // removes the highlight and triggers the next tutorial  
             if (!_tutorialPlayed)
             {
-                GetComponent<OutlineMaterial>().DisableHighlight();
                 StartCoroutine(OnBoardingHandler.Instance.Onboarding03());
                 Debug.Log("ONB 03 PLAYING");
                 _tutorialPlayed = true;

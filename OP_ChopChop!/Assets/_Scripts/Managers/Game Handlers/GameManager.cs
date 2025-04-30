@@ -3,8 +3,6 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
 using System;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -76,20 +74,13 @@ public class GameManager : Singleton<GameManager>
         MaxCustomerCount = 3;
         IsPaused = false;
         IsGameOver = false;
-        
         Difficulty = GameDifficulty.EASY;
 
         // these should be empty when testing is done
         _customerSRScores = new List<float>(); // { 100f, 90f, 80f, 80f };
 
-        // event binding to the input button 
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
-        
-        if (!_isTutorial) return;
-
-        // event binding Onboardinghandler 
-        StartCoroutine(DelayedEventBinding());
     }
     private void Update()
     {
@@ -97,7 +88,7 @@ public class GameManager : Singleton<GameManager>
             ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
     }
 
-    private IEnumerator ShiftCountdown(float timer, GameShift shift)
+    IEnumerator ShiftCountdown(float timer, GameShift shift)
     {
         if (timer < 1) yield break;
 
@@ -112,9 +103,9 @@ public class GameManager : Singleton<GameManager>
         ChangeShift(shift);
     }
 
-    private IEnumerator DelayedEventBinding()
+    IEnumerator DelayedEventBind()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;
     }
 
@@ -233,7 +224,7 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
     }
 
-    private void DoPreService() // change to 1 min when done testing
+    void DoPreService() // change to 1 min when done testing
     {
         ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
 
@@ -244,7 +235,7 @@ public class GameManager : Singleton<GameManager>
 
         // ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
     }     
-    private void DoService()
+    void DoService()
     {
         ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
 
@@ -259,7 +250,7 @@ public class GameManager : Singleton<GameManager>
 
         // ClockScript.Instance.UpdateTimeRemaining(_testTimer);
     }
-    private void DoPostService() // rating calculations
+    void DoPostService() // rating calculations
     {
         OnEndService?.Invoke(); 
         TurnOnEndOfDayReceipt();
@@ -269,13 +260,13 @@ public class GameManager : Singleton<GameManager>
 
 #region EOD_Rating
 
-    public void ShowEOD() 
+    public void EnableEOD()
     {
         if (_isTutorial)
             TurnOnEndOfDayReceipt();
     }
 
-    private void TurnOnEndOfDayReceipt()
+    void TurnOnEndOfDayReceipt()
     {
         // enables the EOD receipt
         MainMenuHandler.Instance.ToggleEODPanel();
@@ -292,11 +283,10 @@ public class GameManager : Singleton<GameManager>
         DoPostServiceRating();
         
         // add the customers served in the EOD receipt
-        CustomersServed = _isTutorial ? 2 : _endOfDayReceipt.CustomersServed;
+        CustomersServed = _isTutorial ? 2 : _endOfDayReceipt.totalcustomerServed;
         _endOfDayReceipt.GiveTotalCustomerServed();
     }
-
-    private void DoCustomerRating()
+    void DoCustomerRating()
     {
         if (_isTutorial) 
         {
@@ -309,7 +299,7 @@ public class GameManager : Singleton<GameManager>
         
         _endOfDayReceipt.GiveCustomerRating(indexCustomerRating);
     }
-    private void DoKitchenRating() 
+    void DoKitchenRating() 
     {   
         if (_isTutorial) 
         {
@@ -322,7 +312,7 @@ public class GameManager : Singleton<GameManager>
     
         _endOfDayReceipt.GiveKitchenRating(indexKitchenRating);
     }
-    private void DoPostServiceRating() // FINAL SCORE 
+    void DoPostServiceRating() // FINAL SCORE 
     {
         if (_isTutorial) 
         {
@@ -385,18 +375,18 @@ public class GameManager : Singleton<GameManager>
 
         return n / list.Count;
     }
-
     private void DisableTutorial()
     {
         if (!_isTutorial)
         {
-            Debug.LogError($"{gameObject.name} is already not a tutuorial!");
+            Debug.LogError($"{gameObject.name} is already not a tutorial!");
             return;
         }
 
         _isTutorial = false;
         OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
     }
+     
 
 #endregion
 }
