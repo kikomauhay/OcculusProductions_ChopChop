@@ -13,7 +13,6 @@ public class NEW_Plate : Equipment
 {
 #region Properties
 
-    public bool IsPlated { get; private set; }
 
 #endregion
 

@@ -5,6 +5,8 @@ using System;
 /// <summary>
 /// 
 /// - Acts as the reworked version of Plate.cs
+/// - This script enables/disables the food present in the plate
+/// - 
 /// 
 /// </summary>
 
@@ -21,21 +23,24 @@ public class NEW_Dish : MonoBehaviour
 
 #region Private
 
-    [Header("Debug Mode")]
-    [SerializeField] private bool _debugging;
-
-    [Header("Food Components"), Space(5f)]
-    [Tooltip("0 = N. Salmon, 1 = N. Tuna, 2 = S. Salmon, 3 = S. Tuna")]
+    [Header("Food Components"), Tooltip("0 = N. Salmon, 1 = N. Tuna, 2 = S. Salmon, 3 = S. Tuna")]
     [SerializeField] private GameObject[] _foodItems;
-    [SerializeField] private FoodLooks _foodLooks;
+    [SerializeField] private NEW_Platter[] _platters;
     
-    [Header("Dish Attributes"), Space(5f)]
+    [Header("Dish Attributes")]
     [SerializeField, Range(0f, 100f)] private float _dishScore;
     [SerializeField] private DishType _dishType;
     [SerializeField] private DishState _dishState;
     [SerializeField] private bool _isPlated;
 
+    [Header("Onboarding")]
+    [SerializeField] private Material _highlightOSM;
+
+    [Header("Debugging")]
+    [SerializeField] private bool _isDevloperMode;
+
     private Collider _collider;
+    private Renderer _rend;
     private const float DECAY_TIME = 30f;
 
 #endregion
@@ -45,6 +50,12 @@ public class NEW_Dish : MonoBehaviour
     private void Awake()
     {
         _collider = GetComponent<Collider>();
+
+        if (_foodItems.Length < 4)
+            Debug.LogWarning($"Missing elements in {_foodItems}");
+
+        if (_platters.Length < 4)
+            Debug.LogWarning($"Missing elements in {_platters}");
     }
     private void Start() 
     {
@@ -63,17 +74,11 @@ public class NEW_Dish : MonoBehaviour
 
         // case for sashimis
         if (ing != null)
-        {
             DoIngredientCollision(ing);
-            return;
-        }
 
         // case for nigiris
         if (food != null)
-        {
             DoFoodCollision(food);
-            return;
-        }
     }
 
 #region Testing
@@ -84,7 +89,11 @@ public class NEW_Dish : MonoBehaviour
     }
     void test()
     {
-        if (!_debugging) return;
+        if (!_isDevloperMode) 
+        {
+            Debug.LogError("Not in developer mode!");            
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
             SetPlatter(DishType.NIGIRI_SALMON);
@@ -123,10 +132,15 @@ public class NEW_Dish : MonoBehaviour
     public void SetPlatter(DishType dishInput)
     {
         if (_isPlated)
-            throw new ArgumentException("Dish is already plated!", nameof(_isPlated));
-        
+        {
+            Debug.LogError("Dish is already plated!");
+            return;
+        }
         if (dishInput == DishType.DEFAULT)
-            throw new ArgumentException("Default mode chosen!", nameof(dishInput));
+        {
+            Debug.LogError("Default mode chosen!");
+            return;
+        }
 
         // sets the dish 
         _dishType = dishInput;
@@ -138,11 +152,18 @@ public class NEW_Dish : MonoBehaviour
 
         StartCoroutine(Expire());
     }
-
     public void SetState(DishState chosenState)
     {
+        if (_dishState != DishState.CLEAN)    
+        {
+            Debug.LogError("Dish is already bad!");
+            return;
+        }
         if (_dishState == chosenState)
-            throw new ArgumentException("You cannot set the same state again!");
+        {
+            Debug.LogError("You cannot set the same state again!");
+            return;
+        }
 
         _dishState = chosenState;
 
@@ -168,10 +189,11 @@ public class NEW_Dish : MonoBehaviour
 
     private void DisableFoodItems()
     {
-        // disables all food in the array
-        if (_foodItems.Length > 0)
-            foreach (GameObject item in _foodItems)
-                item.SetActive(false); 
+        for (int i = 0; i < _foodItems.Length; i++)
+        {
+            _foodItems[i].SetActive(false);
+            _platters[i].ResetMaterial();
+        }            
     }
     private void ResetDish()
     {
@@ -180,50 +202,65 @@ public class NEW_Dish : MonoBehaviour
         _dishScore = 0f;
         _isPlated = false;
         _collider.enabled = true;
+
+        Debug.LogWarning($"{gameObject.name} is an empty plate again!");
+    }
+    private void ChangeMaterial()
+    {
+          
+
     }
 
-    // ON TRIGGER ENTER
+#region Collision
     private void DoFoodCollision(Food food)
     {
         if (food.IsContaminated || food.IsExpired)
         {
-            Debug.LogError($"{food.gameObject.name} is dirty!");
+            Debug.LogError($"{food.gameObject.name} is already dirty!");
             // set contaminated
             return;
         }
     }
-
     private void DoIngredientCollision(Ingredient ing)
     {
 
     }
 
 #endregion
+#endregion
 }   
 
-public enum DishState
-{
-    CLEAN  = 0, 
-    ROTTEN = 1, 
-    MOLDY  = 2
-}
+#region Structs
 
 [Serializable]
-public struct FoodLooks
+public struct FoodMaterials
 {
-#region Properties
-
     public readonly Material CleanMat => _materials[0];
     public readonly Material RottenMat => _materials[1];
     public readonly Material MoldyMat => _materials[2];
 
-#endregion
-
-#region Private
-
     [Tooltip("0 = clean, 1 = rotten, 2 = moldy")]
     [SerializeField] private Material[] _materials;
-    [SerializeField] private Material _outlineMat;
+}
 
 #endregion
-}
+
+#region Enums
+
+    public enum DishState
+    {
+        CLEAN  = 0, 
+        ROTTEN = 1, 
+        MOLDY  = 2
+    }
+    public enum DishType 
+    { 
+        DEFAULT       = -1,
+        NIGIRI_SALMON  = 0, 
+        NIGIRI_TUNA    = 1, 
+        SASHIMI_SALMON = 2, 
+        SASHIMI_TUNA   = 3 
+    }
+
+#endregion
+

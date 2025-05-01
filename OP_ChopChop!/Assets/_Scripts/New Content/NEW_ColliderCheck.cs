@@ -1,7 +1,6 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// 
@@ -34,31 +33,23 @@ public class NEW_ColliderCheck : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        if (Order == null)
-            throw new ArgumentNullException("Order is null", nameof(Order));
-
+        if (Order == null) return;
+    
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
         NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
 
         // player serves AN INGREDIENT
         if (ing != null)
-        {
             DoIngredientCollision();
-            StartCoroutine(DisableCollider());
-            return;
-        }
-        
+
         // player serves A DISH
-        if (dish != null) 
-        {
-            DoDishCollision();
-            StartCoroutine(DisableCollider());
-        }
+        if (dish != null)
+            DoDishCollision(dish);
 
-
+        StartCoroutine(DisableCollider());
     }
 
-#region Enumerators
+    #region Enumerators
 
     private IEnumerator DisableCollider()
     {
@@ -66,6 +57,7 @@ public class NEW_ColliderCheck : MonoBehaviour
         yield return new WaitForSeconds(3f);
         _collider.enabled = true;
     }
+
 #endregion
 
 #endregion
@@ -73,7 +65,10 @@ public class NEW_ColliderCheck : MonoBehaviour
 #region Helpers
 
     private void DoIngredientCollision() {}
-    private void DoDishCollision() {}
+    private void DoDishCollision(NEW_Dish dish) 
+    {
+        
+    }
 
 #endregion
 

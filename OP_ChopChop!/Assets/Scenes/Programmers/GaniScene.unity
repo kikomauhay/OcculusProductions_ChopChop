@@ -1544,6 +1544,7 @@ GameObject:
   - component: {fileID: 8004633101209231422}
   - component: {fileID: 2199000341801074388}
   - component: {fileID: 6294458084713130510}
+  - component: {fileID: 8004633101209231423}
   m_Layer: 0
   m_Name: NIGIRI Tuna
   m_TagString: Untagged
@@ -2061,6 +2062,7 @@ GameObject:
   - component: {fileID: 1018422577035628340}
   - component: {fileID: 6224754461693226895}
   - component: {fileID: 6234000551564878035}
+  - component: {fileID: 6331956361300784161}
   m_Layer: 0
   m_Name: NIGIRI Salmon
   m_TagString: Untagged
@@ -2068,6 +2070,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &6331956361300784161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6331956361300784160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65623c3e67eb7264da041add42b9887d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _materials:
+  - {fileID: 2100000, guid: f0d9ab4df796de44c8819560c1238d76, type: 2}
+  - {fileID: 2100000, guid: f54a32c163c4a894383b178de370a775, type: 2}
+  - {fileID: 2100000, guid: a4c6b3c27c6498f47bf4295749f2aa0e, type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
 --- !u!23 &6679678185334214574
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2151,13 +2170,31 @@ GameObject:
   - component: {fileID: 5389980629574148402}
   - component: {fileID: 6679678185334214574}
   - component: {fileID: 6735011597030747322}
+  - component: {fileID: 7527717644747119557}
   m_Layer: 0
   m_Name: SASHIMI Salmon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
+--- !u!114 &7527717644747119557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7527717644747119556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65623c3e67eb7264da041add42b9887d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _materials:
+  - {fileID: 2100000, guid: 03f2e0642f0031940af03fcb96fa9625, type: 2}
+  - {fileID: 2100000, guid: 6da453871b5fe984ca0991be0e1a0b87, type: 2}
+  - {fileID: 2100000, guid: c3dc2a6db70b7774ca55cb01f97ac5cc, type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
 --- !u!1001 &7564253949097565752
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2290,6 +2327,7 @@ GameObject:
   - component: {fileID: 4207855326109055360}
   - component: {fileID: 842251794862853265}
   - component: {fileID: 3869858648674685644}
+  - component: {fileID: 7819711187046502279}
   m_Layer: 0
   m_Name: SASHIMI Tuna
   m_TagString: Untagged
@@ -2297,6 +2335,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &7819711187046502279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7819711187046502278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65623c3e67eb7264da041add42b9887d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _materials:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
 --- !u!33 &8004633101209231422
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2305,6 +2360,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 189132786484630102}
   m_Mesh: {fileID: -5448195342292810884, guid: 28ef139772d43154d8ed8d40d1e09656, type: 3}
+--- !u!114 &8004633101209231423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189132786484630102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65623c3e67eb7264da041add42b9887d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _materials:
+  - {fileID: 2100000, guid: 4c8ae6b8d6c705e4a8d61d6b1c99c001, type: 2}
+  - {fileID: 2100000, guid: cfa83527698872843b85bac2837cc3a3, type: 2}
+  - {fileID: 2100000, guid: 02fcd8e70a533aa41a75535e2cb2e058, type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
 --- !u!54 &8263769188448552543
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2351,7 +2423,10 @@ MonoBehaviour:
   - {fileID: 189132786484630102}
   - {fileID: 7527717644747119556}
   - {fileID: 7819711187046502278}
-  _dishType: 0
-  _dishScore: 0
+  _platters: []
+  _dishScore: 100
+  _dishType: -1
+  _dishState: 0
   _isPlated: 0
-  _debugging: 1
+  _highlightOSM: {fileID: 0}
+  _isDevloperMode: 0
