@@ -49,7 +49,7 @@ public class Trash : MonoBehaviour
 
     private void DoEquipmentLogic(Equipment eq)
     {
-        eq.HitTheFloor();
+        eq.HitTheGround();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 

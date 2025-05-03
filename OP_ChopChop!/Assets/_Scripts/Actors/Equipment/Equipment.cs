@@ -20,7 +20,7 @@ public abstract class Equipment : MonoBehaviour
 
 #endregion
 
-#region Unity_Methods
+#region Unity
 
     protected virtual void Start() 
     {
@@ -32,7 +32,10 @@ public abstract class Equipment : MonoBehaviour
 
         _usageCounter = 0;
         _rend = GetComponent<Renderer>();
-        _rend.material = _cleanMat;
+        _rend.materials = new Material[] { _cleanMat };
+
+        if (_maxUsageCounter == 0)
+            Debug.LogError($"Max use for {gameObject.name} is 0");
     }
     protected void OnDestroy() 
     {
@@ -52,13 +55,11 @@ public abstract class Equipment : MonoBehaviour
 
         if (_coroutineRunning)
         {
-            StopCoroutine(CleanEquipment());
+            StopCoroutine(Clean());
             _coroutineRunning = false;
         }
     }
-    
-    // cross-contamination logic
-    protected virtual void OnCollisionEnter(Collision other)
+    protected virtual void OnCollisionEnter(Collision other) // CROSS-CONTAMINATION LOGIC
     {
         if (GetComponent<Board>() != null) return;
 
@@ -117,10 +118,9 @@ public abstract class Equipment : MonoBehaviour
 
 #region Public
 
-    public virtual void HitTheFloor()
+    public virtual void HitTheGround()
     {
-        _usageCounter = _maxUsageCounter;
-        IncrementUseCounter();
+        Contaminate();
         ResetPosition();
     }
     public void IncrementUseCounter()
@@ -141,35 +141,34 @@ public abstract class Equipment : MonoBehaviour
 
 #endregion
 
+#region Protected
+
     protected void ResetPosition() 
     {
         transform.position = _startPosition;
         transform.rotation = Quaternion.identity;
     }
-    
-#region Cleaning
-
-    protected virtual void DoCleaning()
-    {
-        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
-        
-        if (_coroutineRunning)
-            StopCoroutine(CleanEquipment());
-        
-        StartCoroutine(CleanEquipment());
-    }
-    protected IEnumerator CleanEquipment()
+    protected IEnumerator Clean()
     {
         _coroutineRunning = true;
         yield return new WaitForSeconds(2f);
-        GetCleaned();
+        SetClean();
     }
-    protected void GetCleaned()
+    protected void SetClean()
     {
         _usageCounter = 0;
         _isClean = true;
         _rend.materials = new Material[] { _cleanMat };
         _coroutineRunning = false;
+    }
+    protected virtual void DoCleaning()
+    {
+        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
+        
+        if (_coroutineRunning)
+            StopCoroutine(Clean());
+        
+        StartCoroutine(Clean());
     }
 
 #endregion

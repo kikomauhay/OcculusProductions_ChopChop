@@ -1,10 +1,13 @@
 using System.Collections;
 using UnityEngine;
-using System;
 
 /// <summary>
 /// 
 /// - Acts as the reworked version of ColliderCheck.cs
+/// 
+/// WHAT THIS SCRIPT SHOULD DO: 
+///     - Connects a Customer Oorder and the Dish being served
+///     - Disable the dish once it's served to the customer
 /// 
 /// </summary> 
 
@@ -49,7 +52,7 @@ public class NEW_ColliderCheck : MonoBehaviour
         StartCoroutine(DisableCollider());
     }
 
-    #region Enumerators
+#region Enumerators
 
     private IEnumerator DisableCollider()
     {

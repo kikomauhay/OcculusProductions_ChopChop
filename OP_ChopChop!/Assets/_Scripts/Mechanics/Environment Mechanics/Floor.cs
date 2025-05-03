@@ -48,7 +48,7 @@ public class Floor : MonoBehaviour
 
     void DoEquipmentLogic(Equipment eq)
     {
-        eq.HitTheFloor();
+        eq.HitTheGround();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 
         // additional logic for equipment child classes

@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 /// <summary>
 /// 
@@ -29,12 +27,12 @@ public class NEW_Platter : MonoBehaviour
     {
         _rend = GetComponent<Renderer>();
 
-        if (_materials.Length != 3)
+        if (_materials.Length < 3)
             Debug.LogWarning($"{_materials} has missing materials!");
 
         ResetMaterial();
 
-        Debug.Log($"Developer mode: {_isDevloperMode}");
+        Debug.Log($"{gameObject.name} developer mode: {_isDevloperMode}");
     }
 
 #region Testing

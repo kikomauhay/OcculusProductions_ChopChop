@@ -1,6 +1,5 @@
-using System.Collections;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using System;
 
 /// <summary>
 /// 
@@ -19,7 +18,7 @@ public class NEW_Plate : Equipment
 #region Private
 
     private NEW_Dish _dish;
-
+    
 #endregion
 
 #region Unity
@@ -28,24 +27,34 @@ public class NEW_Plate : Equipment
     {
         _dish = GetComponent<NEW_Dish>();
     }
-    protected override void Start()
+
+    protected override void OnTriggerEnter(Collider other)
     {
-        base.Start();
-        _maxUsageCounter = 1;
+        if (!_dish.IsPlated)
+        {
+            Debug.LogError($"Dish cleaning only happens when {gameObject.name} has no food!");
+            return;
+        }
+
+        base.OnTriggerEnter(other);
     }
 
 #endregion
 
 #region Public
 
-    public override void HitTheFloor()
+    public override void HitTheGround()
     {
-        base.HitTheFloor();
-        // contaminate the enabled child ingredient
-    }
-#endregion
+        base.HitTheGround();
 
-#region Helpers
+        if (_dish.IsPlated)
+            _dish.SetState(DishState.MOLDY);
+    }
+
+    #endregion
+
+#region Protected
+
 
 #endregion
 }
