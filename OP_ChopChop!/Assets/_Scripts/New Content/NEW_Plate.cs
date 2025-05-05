@@ -1,5 +1,5 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 
@@ -38,23 +38,29 @@ public class NEW_Plate : Equipment
 
         base.OnTriggerEnter(other);
     }
+    protected override void OnCollisionEnter(Collision other) 
+    {
+
+    }
 
 #endregion
 
-#region Public
+#region Override
 
     public override void HitTheGround()
     {
         base.HitTheGround();
 
         if (_dish.IsPlated)
-            _dish.SetState(DishState.MOLDY);
+            _dish.SetCondition(FoodCondition.MOLDY);
     }
+    public override void Trashed()
+    {
+        base.Trashed();
 
-    #endregion
-
-#region Protected
-
+        if (_dish.IsPlated)
+            _dish.DisableDish();        
+    }
 
 #endregion
 }

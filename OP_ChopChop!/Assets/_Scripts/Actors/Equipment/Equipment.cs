@@ -61,6 +61,7 @@ public abstract class Equipment : MonoBehaviour
     }
     protected virtual void OnCollisionEnter(Collision other) // CROSS-CONTAMINATION LOGIC
     {
+        /*
         if (GetComponent<Board>() != null) return;
 
         // equipment + another equipment
@@ -112,6 +113,7 @@ public abstract class Equipment : MonoBehaviour
             else if (IsClean && (!dish.IsExpired || !dish.IsContaminated))
                 Contaminate();
         }
+        */
     }
 
 #endregion
@@ -120,7 +122,7 @@ public abstract class Equipment : MonoBehaviour
 
     public virtual void HitTheGround()
     {
-        Contaminate();
+        SetDirty();
         ResetPosition();
     }
     public void IncrementUseCounter()
@@ -129,19 +131,27 @@ public abstract class Equipment : MonoBehaviour
 
         // Debug.Log($"{name} use counter: {_usageCounter}/{_maxUsageCounter}");
 
-        if (_usageCounter >= _maxUsageCounter)
-            Contaminate();
+        if (_usageCounter == _maxUsageCounter)
+        {
+            _isClean = false;
+            _rend.materials = new Material[] { _dirtyMat, _outlineTexture };
+        }
     }
-    public void Contaminate()
+    public void SetDirty()
     {
         _usageCounter = _maxUsageCounter;
         _isClean = false;
         _rend.materials = new Material[] { _dirtyMat, _outlineTexture };
     }
+    public virtual void Trashed()
+    {
+        SetDirty();
+        ResetPosition();
+    }
 
 #endregion
 
-#region Protected
+#region Helpers
 
     protected void ResetPosition() 
     {

@@ -7,7 +7,7 @@ public class CustomerOrder : MonoBehaviour
 {
 #region Readers
 
-    public DishType CustomerDishType { get; private set; } // what dish the customer wants to order   
+    public DishOrder CustomerDishType { get; private set; } // what dish the customer wants to order   
     public float CustomerSR { get; set; }                  // (FoodScore of dish + _patienceRate) / 2
     public float PatienceRate => _patienceDecreaseRate;
     public bool IsLastCustomer { get; set; } = false;
@@ -61,15 +61,15 @@ public class CustomerOrder : MonoBehaviour
         {
             _patienceDecreaseRate = 0f;
             CustomerDishType = _isTunaCustomer ? 
-                               DishType.SASHIMI_TUNA : 
-                               DishType.NIGIRI_SALMON;
+                               DishOrder.SASHIMI_TUNA : 
+                               DishOrder.NIGIRI_SALMON;
 
             OnBoardingHandler.Instance.OnTutorialEnd += Cleanup;
         }
         else 
         {
             _patienceDecreaseRate = 1.65f; // referenced from the document
-            CustomerDishType = (DishType)Random.Range(0, _dishOrdersUI.Length);
+            CustomerDishType = (DishOrder)Random.Range(0, _dishOrdersUI.Length);
         }
 
         CreateCustomerUI();

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1243059897119990552}
   - component: {fileID: 6385610643918321602}
   - component: {fileID: -2703607321885209641}
-  - component: {fileID: -715084860744313901}
   - component: {fileID: 7810161239153293874}
-  - component: {fileID: -3175632664969805650}
+  - component: {fileID: -715084860744313901}
+  - component: {fileID: 6195044814004547247}
   m_Layer: 0
   m_Name: food_nigiri_tuna
   m_TagString: Untagged
@@ -118,6 +118,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7810161239153293874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962565321575026586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 2
 --- !u!114 &-715084860744313901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,7 +296,7 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &7810161239153293874
+--- !u!114 &6195044814004547247
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -292,24 +305,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 962565321575026586}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Script: {fileID: 11500000, guid: a7deac2e85203e54184d73d0dc269e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trashType: 2
---- !u!114 &-3175632664969805650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 962565321575026586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 195203d2a7057b642ab9cf6b89d6701f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dishPrefab: {fileID: 7068943804873736624, guid: 82259b4e457a9c649ab0cb683f29eeca,
-    type: 3}
+  _foodCondition: 0
+  _orderType: 1
+  _foodScore: 100
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
   _rottenMat: {fileID: 2100000, guid: cfa83527698872843b85bac2837cc3a3, type: 2}
-  _contaminatedMat: {fileID: 2100000, guid: 02fcd8e70a533aa41a75535e2cb2e058, type: 2}
-  _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _moldyMat: {fileID: 2100000, guid: 02fcd8e70a533aa41a75535e2cb2e058, type: 2}

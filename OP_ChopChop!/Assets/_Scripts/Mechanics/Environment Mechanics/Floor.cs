@@ -15,7 +15,7 @@ public class Floor : MonoBehaviour
                 break;
 
             case TrashableType.FOOD:
-                obj.GetComponent<Food>().Contaminate();
+                obj.GetComponent<UPD_Food>().SetRotten();
                 SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
                 break;
 

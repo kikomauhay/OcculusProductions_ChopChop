@@ -97,8 +97,8 @@ public abstract class Ingredient : MonoBehaviour
             Dish dish = dishToSpawn.GetComponentInChildren<Dish>();
             dish.DishScore = FreshnessRate;
             dish.OrderDishType = _ingredientType == IngredientType.SALMON ? 
-                                 DishType.SASHIMI_SALMON :
-                                 DishType.SASHIMI_TUNA;
+                                 DishOrder.SASHIMI_SALMON :
+                                 DishOrder.SASHIMI_TUNA;
 
             Destroy(other.gameObject);
         }
@@ -106,6 +106,7 @@ public abstract class Ingredient : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision other)
     {
+        /*
         // ingredient + another ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
@@ -119,13 +120,13 @@ public abstract class Ingredient : MonoBehaviour
         }
 
         // ingredient + food
-        if (other.gameObject.GetComponent<Food>() != null)
+        if (other.gameObject.GetComponent<UPD_Food>() != null)
         {
-            Food food = other.gameObject.GetComponent<Food>();
+            UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
 
             // contamination logic
             if (!IsFresh && (food.IsContaminated || food.IsExpired))
-                food.Contaminate();
+                food.SetRotten();
 
             else if (IsFresh && (!food.IsExpired || !food.IsContaminated))
                 Contaminate();
@@ -143,6 +144,7 @@ public abstract class Ingredient : MonoBehaviour
             else if (IsFresh && (!dish.IsExpired || !dish.IsContaminated))
                 Contaminate();
         }
+        */
     }
 
 #endregion
