@@ -30,9 +30,9 @@ public class NEW_Plate : Equipment
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (!_dish.IsPlated)
+        if (_dish.IsPlated)
         {
-            Debug.LogError($"Dish cleaning only happens when {gameObject.name} has no food!");
+            Debug.LogError($"{gameObject.name} contains food!");
             return;
         }
 
@@ -40,7 +40,7 @@ public class NEW_Plate : Equipment
     }
     protected override void OnCollisionEnter(Collision other) 
     {
-
+        // cross-contamination logic
     }
 
 #endregion
@@ -52,7 +52,7 @@ public class NEW_Plate : Equipment
         base.HitTheGround();
 
         if (_dish.IsPlated)
-            _dish.SetCondition(FoodCondition.MOLDY);
+            _dish.SetFoodCondition(FoodCondition.MOLDY);
     }
     public override void Trashed()
     {
@@ -60,6 +60,11 @@ public class NEW_Plate : Equipment
 
         if (_dish.IsPlated)
             _dish.DisableDish();        
+    }
+    public void Served()
+    {
+        IncrementUseCounter();
+        _dish.DisableDish(); 
     }
 
 #endregion

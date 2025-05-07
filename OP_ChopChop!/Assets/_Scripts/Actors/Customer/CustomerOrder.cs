@@ -7,7 +7,7 @@ public class CustomerOrder : MonoBehaviour
 {
 #region Readers
 
-    public DishOrder CustomerDishType { get; private set; } // what dish the customer wants to order   
+    public DishPlatter WantedPlatter { get; private set; } // what dish the customer wants to order   
     public float CustomerSR { get; set; }                  // (FoodScore of dish + _patienceRate) / 2
     public float PatienceRate => _patienceDecreaseRate;
     public bool IsLastCustomer { get; set; } = false;
@@ -60,20 +60,20 @@ public class CustomerOrder : MonoBehaviour
         if (_isTutorial)
         {
             _patienceDecreaseRate = 0f;
-            CustomerDishType = _isTunaCustomer ? 
-                               DishOrder.SASHIMI_TUNA : 
-                               DishOrder.NIGIRI_SALMON;
+            WantedPlatter = _isTunaCustomer ? 
+                               DishPlatter.SASHIMI_TUNA : 
+                               DishPlatter.NIGIRI_SALMON;
 
             OnBoardingHandler.Instance.OnTutorialEnd += Cleanup;
         }
         else 
         {
             _patienceDecreaseRate = 1.65f; // referenced from the document
-            CustomerDishType = (DishOrder)Random.Range(0, _dishOrdersUI.Length);
+            WantedPlatter = (DishPlatter)Random.Range(0, _dishOrdersUI.Length);
         }
 
         CreateCustomerUI();
-        StartCoroutine(PatienceCountdown());
+        StartCoroutine(CO_PatienceCountdown());
     }
     private void OnDestroy()
     {
@@ -108,7 +108,7 @@ public class CustomerOrder : MonoBehaviour
     void CreateCustomerUI()
     {
         // aligns customer UI & customer order
-        _customerOrderUI = Instantiate(_dishOrdersUI[_isTutorial ? 0 : (int)CustomerDishType], 
+        _customerOrderUI = Instantiate(_dishOrdersUI[_isTutorial ? 0 : (int)WantedPlatter], 
                                        _orderUITransform.position,
                                        _orderUITransform.rotation,
                                        transform);
@@ -123,14 +123,14 @@ public class CustomerOrder : MonoBehaviour
         DestroyOrderUI();   
         Destroy(gameObject);
     }
-    public bool OrderIsSameAs(Dish dish) => dish?.OrderDishType == CustomerDishType;
-    void DestroyOrderUI() => Destroy(_customerOrderUI);
+    public bool OrderIsSameAs(Dish dish) => dish?.OrderDishType == WantedPlatter;
+    private void DestroyOrderUI() => Destroy(_customerOrderUI);
 
 #endregion
 
 #region Enumerators
 
-    IEnumerator PatienceCountdown()
+    private IEnumerator CO_PatienceCountdown()
     {
         // grace period before it actually starts counting down
         yield return new WaitForSeconds(2f); 
@@ -159,9 +159,9 @@ public class CustomerOrder : MonoBehaviour
         }
         
         // customer lost all patience
-        yield return StartCoroutine(CustomerLostPatience());
+        yield return StartCoroutine(CO_CustomerLostPatience());
     }
-    IEnumerator CustomerLostPatience() // customer wasn't served
+    private IEnumerator CO_CustomerLostPatience() // customer wasn't served
     {
         _appearance.SetAngryEmotion(2);
         SoundManager.Instance.PlaySound("cat angry", SoundGroup.CUSTOMER);
@@ -169,7 +169,7 @@ public class CustomerOrder : MonoBehaviour
 
         MakeSeatEmpty();
     }
-    public IEnumerator HappyReaction() // customer got the correct order
+    public IEnumerator CO_HappyReaction() // customer got the correct order
     {
         // inital reaction
         _appearance.SetFacialEmotion(FaceVariant.HAPPY);
@@ -182,7 +182,7 @@ public class CustomerOrder : MonoBehaviour
         GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
         MakeSeatEmpty();
     }
-    public IEnumerator AngryReaction() // customer got the wrong order
+    public IEnumerator CO_AngryReaction() // customer got the wrong order
     {
         // initial reaction
         _appearance.SetAngryEmotion(1);
@@ -194,7 +194,7 @@ public class CustomerOrder : MonoBehaviour
         GameManager.Instance.IncrementCustomersServed();
         MakeSeatEmpty();
     }
-    public IEnumerator ExpiredReaction() // customer got an expired order
+    public IEnumerator CO_DirtyReaction() // customer got an expired order
     {
         // inital reaction
         _appearance.SetFacialEmotion(FaceVariant.SUS);
@@ -204,7 +204,7 @@ public class CustomerOrder : MonoBehaviour
 
         // final actions
         GameManager.Instance.IncrementCustomersServed();
-        StartCoroutine(GameManager.Instance.CloseDownShop());
+        StartCoroutine(GameManager.Instance.CO_CloseDownShop());
     }       
 
 #endregion

@@ -20,57 +20,101 @@ public class NEW_ColliderCheck : MonoBehaviour
 
 #endregion
 
+    [SerializeField] private bool _isTutorial;
     private Collider _collider;
+
+    [Header("Debugging")]
+    [SerializeField] private bool _isDevloperMode;
 
 #region Unity
 
     private void Awake()
     {
         _collider = GetComponent<BoxCollider>();
+        Debug.Log($"{gameObject.name} developer mode: {_isDevloperMode}");
     }
     private void Start() 
     {
-        _collider.enabled = true;    
         _collider.isTrigger = true;
+        _collider.enabled = true;    
     }
-
     private void OnTriggerEnter(Collider other) 
     {
-        if (Order == null) return;
-    
+        NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
+        
+        if (Order == null) 
+        {
+            Debug.LogError("CustomerOrder is null!");
+            return;
+        }        
+        if (plate == null) return;
+
+        // initializes variables for easier referencing
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
         NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
 
-        // player serves AN INGREDIENT
+        // player has served an ingredient to the customer
         if (ing != null)
+        {
             DoIngredientCollision();
+            plate.Served();
+            return;
+        }
 
-        // player serves A DISH
-        if (dish != null)
+        // player has served a DISH to the customer
+        else if (dish != null)
+        {
             DoDishCollision(dish);
+            plate.Served();
+        }
 
-        StartCoroutine(DisableCollider());
+        StartCoroutine(CO_DisableCollider());
     }
-
-#region Enumerators
-
-    private IEnumerator DisableCollider()
-    {
-        _collider.enabled = false;
-        yield return new WaitForSeconds(3f);
-        _collider.enabled = true;
-    }
-
-#endregion
 
 #endregion
 
 #region Helpers
 
-    private void DoIngredientCollision() {}
+    private void DoIngredientCollision() 
+    {
+        Debug.LogError("Player has served an ingredient to the customer!");
+
+        Order.CustomerSR = 0f;
+
+        StartCoroutine(Random.value > 0.5f ? Order.CO_DirtyReaction() : 
+                                             Order.CO_AngryReaction());
+
+        StartCoroutine(GameManager.Instance.CO_GameOver());
+    }
     private void DoDishCollision(NEW_Dish dish) 
     {
-        
+        if (dish.FoodCondition != FoodCondition.CLEAN)
+        {
+            Order.CustomerSR = 0f;
+            Debug.LogError("Game Over!");
+            StartCoroutine(Order.CO_DirtyReaction());
+        }
+        else if (dish.DishPlatter == Order.WantedPlatter)
+        {
+            Order.CustomerSR = (dish.Score + Order.PatienceRate) / 2f;
+            StartCoroutine(Order.CO_HappyReaction());
+        }
+        else 
+        {
+            Order.CustomerSR = 0f;
+            StartCoroutine(Order.CO_AngryReaction());
+        }
+    }
+
+#endregion
+
+#region Enumerators
+
+    private IEnumerator CO_DisableCollider()
+    {
+        _collider.enabled = false;
+        yield return new WaitForSeconds(3f);
+        _collider.enabled = true;
     }
 
 #endregion

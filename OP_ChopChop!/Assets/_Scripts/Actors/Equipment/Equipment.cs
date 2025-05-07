@@ -120,34 +120,34 @@ public abstract class Equipment : MonoBehaviour
 
 #region Public
 
+#region Virtual
+
     public virtual void HitTheGround()
     {
         SetDirty();
         ResetPosition();
-    }
-    public void IncrementUseCounter()
-    {
-        _usageCounter++;
-
-        // Debug.Log($"{name} use counter: {_usageCounter}/{_maxUsageCounter}");
-
-        if (_usageCounter == _maxUsageCounter)
-        {
-            _isClean = false;
-            _rend.materials = new Material[] { _dirtyMat, _outlineTexture };
-        }
-    }
-    public void SetDirty()
-    {
-        _usageCounter = _maxUsageCounter;
-        _isClean = false;
-        _rend.materials = new Material[] { _dirtyMat, _outlineTexture };
     }
     public virtual void Trashed()
     {
         SetDirty();
         ResetPosition();
     }
+
+#endregion
+
+    public void IncrementUseCounter()
+    {
+        _usageCounter++;
+
+        if (_usageCounter == _maxUsageCounter) 
+            SetDirty();        
+    }
+    public void SetDirty()
+    {
+        _usageCounter = _maxUsageCounter;
+        _isClean = false;
+        _rend.materials = new Material[] { _dirtyMat, _outlineTexture };
+    }    
 
 #endregion
 

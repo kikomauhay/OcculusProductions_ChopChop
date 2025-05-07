@@ -2,6 +2,6 @@ using UnityEngine;
     
 public class Sushi : MonoBehaviour
 {
-    [SerializeField] DishOrder _dishType;
-    public DishOrder DishType => _dishType;
+    [SerializeField] DishPlatter _dishType;
+    public DishPlatter DishType => _dishType;
 }

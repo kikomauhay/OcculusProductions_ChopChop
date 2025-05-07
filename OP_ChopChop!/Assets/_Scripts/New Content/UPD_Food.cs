@@ -13,7 +13,7 @@ public class UPD_Food : MonoBehaviour
 
 #region Properties
     public FoodCondition Condition => _foodCondition;
-    public DishOrder OrderType => _orderType;
+    public DishPlatter OrderType => _orderType;
     public float Score => _foodScore;
 
 #endregion
@@ -22,7 +22,7 @@ public class UPD_Food : MonoBehaviour
 
     [Header("Food Attrbutes")]
     [SerializeField] private FoodCondition _foodCondition;
-    [SerializeField] private DishOrder _orderType;
+    [SerializeField] private DishPlatter _orderType;
     [SerializeField] private float _foodScore; 
 
     [Header("Food Materials")]
@@ -35,7 +35,7 @@ public class UPD_Food : MonoBehaviour
 
     private void Start()
     {
-        if (_orderType == DishOrder.EMPTY)
+        if (_orderType == DishPlatter.EMPTY)
             Debug.LogError("OrderType is set to empty!");
 
         _foodCondition = FoodCondition.CLEAN;

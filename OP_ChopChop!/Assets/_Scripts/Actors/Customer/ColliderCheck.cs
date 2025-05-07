@@ -15,7 +15,7 @@ public class ColliderCheck : MonoBehaviour
         {
             CustomerOrder.CustomerSR = 0f;
 
-            StartCoroutine(CustomerOrder.ExpiredReaction());
+            StartCoroutine(CustomerOrder.CO_DirtyReaction());
             
             Destroy(other.gameObject); // destroys the ingredient on collision
             StartCoroutine(DisableCollider());
@@ -70,17 +70,17 @@ public class ColliderCheck : MonoBehaviour
         {
             CustomerOrder.CustomerSR = 0f;
             Debug.LogError("Game Over!");
-            StartCoroutine(CustomerOrder.ExpiredReaction());
+            StartCoroutine(CustomerOrder.CO_DirtyReaction());
         }
         else if (CustomerOrder.OrderIsSameAs(d)) // CORRECT ORDER
         {    
             CustomerOrder.CustomerSR = (d.DishScore + CustomerOrder.PatienceRate) / 2f;
-            StartCoroutine(CustomerOrder.HappyReaction());
+            StartCoroutine(CustomerOrder.CO_HappyReaction());
         }
         else // WRONG ORDER
         {
             CustomerOrder.CustomerSR = 0f;
-            StartCoroutine(CustomerOrder.AngryReaction());
+            StartCoroutine(CustomerOrder.CO_AngryReaction());
         }
     }
     public void DisableTutorial() => _isTutorial = false;

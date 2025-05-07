@@ -16,7 +16,7 @@ public abstract class Dish : MonoBehaviour
     public float DishScore { get; set; }
     public bool IsContaminated { get; private set; } = false;
     public bool IsExpired { get; private set; } = false;
-    public DishOrder OrderDishType { get; set; }
+    public DishPlatter OrderDishType { get; set; }
     
 #endregion
 
