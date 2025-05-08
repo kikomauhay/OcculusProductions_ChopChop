@@ -22,7 +22,7 @@ public class Freezer : MonoBehaviour
 
         if (!ing.IsFresh)
         {
-            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("wrong");
             return;
         }
 
@@ -31,8 +31,8 @@ public class Freezer : MonoBehaviour
         _ingredients.Add(ing);
 
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                        "door opened 01" : "door opened 02",
-                                        SoundGroup.APPLIANCES);
+                                        "door opened 01" : 
+                                        "door opened 02");
         /*
         if (_isTutorial)
             GetComponent<OutlineMaterial>().DisableHighlight();
@@ -49,8 +49,8 @@ public class Freezer : MonoBehaviour
         ing.Unstored();
         
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                        "door closed 01" : "door closed 02",
-                                        SoundGroup.APPLIANCES);
+                                        "door closed 01" : 
+                                        "door closed 02");
 
         if (!_isTutorial) return;
 

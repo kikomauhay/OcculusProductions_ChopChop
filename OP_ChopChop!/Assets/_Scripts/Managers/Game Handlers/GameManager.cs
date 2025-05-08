@@ -109,7 +109,7 @@ public class GameManager : Singleton<GameManager>
     public void RemoveLogo(InputAction.CallbackContext context)
     {
         StartCoroutine(OnBoardingHandler.Instance.Onboarding01());
-        SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+        SoundManager.Instance.PlaySound("select");
 
         // unpause game, remove logo, and start onboarding
         ChangeShift(GameShift.Training);
@@ -151,7 +151,7 @@ public class GameManager : Singleton<GameManager>
         CurrentPlayerMoney += amt;
 
         CurrentPlayerMoney = Mathf.Clamp(CurrentPlayerMoney, 0f, MAX_MONEY);
-        SoundManager.Instance.PlaySound("earn money", SoundGroup.GAME);
+        SoundManager.Instance.PlaySound("earn money");
     }
     public void DeductMoney(float amt)
     {
@@ -186,7 +186,7 @@ public class GameManager : Singleton<GameManager>
                 Debug.LogError("Invalid state chosen!");
                 break;
         }
-        SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
+        SoundManager.Instance.PlaySound("change shift");
     } 
     public void EnableEOD()
     {
@@ -370,7 +370,7 @@ public class GameManager : Singleton<GameManager>
             ClockScript.Instance.UpdateTimeRemaining(timer);
         }
 
-        SoundManager.Instance.PlaySound("change shift", SoundGroup.GAME);
+        SoundManager.Instance.PlaySound("change shift");
         ChangeShift(shift);
     }
     IEnumerator CO_DelayedEventBind()
@@ -381,7 +381,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator CO_CloseDownShop()
     {
         IsGameOver = true;
-        SoundManager.Instance.PlaySound("game over 01", SoundGroup.GAME);
+        SoundManager.Instance.PlaySound("game over 01");
         yield return new WaitForSeconds(4f);
 
         StopAllCoroutines();
@@ -392,7 +392,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator CO_GameOver()
     {
         IsGameOver = true;
-        SoundManager.Instance.PlaySound("game over 02", SoundGroup.GAME);
+        SoundManager.Instance.PlaySound("game over 02");
         yield return new WaitForSeconds(2f);
 
         SceneHandler.Instance.LoadScene("TrainingScene");

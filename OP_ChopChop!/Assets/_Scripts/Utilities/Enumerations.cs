@@ -102,14 +102,5 @@ public class Enumerations : MonoBehaviour {}
         MAD,
         SUS
     }
-    public enum SoundGroup
-    { 
-        EQUIPMENT,
-        APPLIANCES,
-        FOOD,
-        GAME,
-        VFX,
-        CUSTOMER,
-        TUTORIAL
-    }
+    
 #endregion

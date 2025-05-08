@@ -12,8 +12,8 @@ public class Water : MonoBehaviour
 
 #region Unity
 
-    private void OnEnable() => SoundManager.Instance.PlaySound("tap water", SoundGroup.APPLIANCES);
-    private void OnDisable() => SoundManager.Instance.SoundSource.Stop();
+    private void OnEnable() => SoundManager.Instance.PlaySound("tap water");
+    private void OnDisable() => SoundManager.Instance.StopSound();
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Sponge>() != null)

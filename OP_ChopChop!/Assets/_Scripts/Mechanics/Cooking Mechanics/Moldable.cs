@@ -70,8 +70,7 @@ public class Moldable : MonoBehaviour
         XRGrabInteractable _grabInteractable = newRice.GetComponent<XRGrabInteractable>();
         SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
                                         "rice mold 01" : 
-                                        "rice mold 02",
-                                        SoundGroup.FOOD);
+                                        "rice mold 02");
         
         if(_grabInteractable)
         {
