@@ -7,25 +7,23 @@ public class CustomerActions : MonoBehaviour
 
     public int SeatIndex { get; set; }
                                                                   
-    public void TriggerEating() => SpawnManager.Instance.SpawnVFX(VFXType.RICE,
-                                                                  _mouthTransform,
-                                                                  3f);
+    public void TriggerEating() => 
+        SpawnManager.Instance.SpawnVFX(VFXType.RICE,
+                                       _mouthTransform, 3f);
 
 
     public IEnumerator RandomMeowing() 
     {
-        SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                       "cat enter 01" : 
-                                       "cat enter 02",
-                                        SoundGroup.CUSTOMER); 
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                        "cat enter 01" : 
+                                        "cat enter 02");
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(10f, 30f));
 
-            SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                       "cat enter 01" : 
-                                       "cat enter 02",
-                                        SoundGroup.CUSTOMER); 
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                            "cat enter 01" : 
+                                            "cat enter 02");
         }
     }
 }

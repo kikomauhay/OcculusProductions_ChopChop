@@ -90,7 +90,7 @@ public abstract class Ingredient : MonoBehaviour
 
             Destroy(gameObject);
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
-            SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+            SoundManager.Instance.PlaySound("poof");
 
             GameObject dishToSpawn = SpawnManager.Instance.SpawnSashimi(_ingredientType, transform);
 
@@ -188,7 +188,7 @@ public abstract class Ingredient : MonoBehaviour
         Material m = null;
         Material osm = null;
 
-        switch (this.IngredientState)
+        switch (IngredientState)
         {
             case IngredientState.CONTAMINATED:
                 m = _stateMaterials[1];
@@ -259,7 +259,7 @@ public abstract class Ingredient : MonoBehaviour
             {
                 FreshnessRate = 0f;
                 IngredientState = IngredientState.EXPIRED;
-                SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
+                SoundManager.Instance.PlaySound("fish dropped");
                 ChangeMaterial();
             }
         }

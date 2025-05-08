@@ -164,7 +164,7 @@ public class CustomerOrder : MonoBehaviour
     private IEnumerator CO_CustomerLostPatience() // customer wasn't served
     {
         _appearance.SetAngryEmotion(2);
-        SoundManager.Instance.PlaySound("cat angry", SoundGroup.CUSTOMER);
+        SoundManager.Instance.PlaySound("cat angry");
         yield return new WaitForSeconds(_reactionTimer);
 
         MakeSeatEmpty();
@@ -174,7 +174,7 @@ public class CustomerOrder : MonoBehaviour
         // inital reaction
         _appearance.SetFacialEmotion(FaceVariant.HAPPY);
         StartCoroutine(_appearance.DoChweing(_customerScore));
-        SoundManager.Instance.PlaySound("cat happy", SoundGroup.CUSTOMER);
+        SoundManager.Instance.PlaySound("cat happy");
         yield return new WaitForSeconds(_reactionTimer);
 
         // final actions
@@ -187,7 +187,7 @@ public class CustomerOrder : MonoBehaviour
         // initial reaction
         _appearance.SetAngryEmotion(1);
         _customerScore = 0f;
-        SoundManager.Instance.PlaySound("cat angry", SoundGroup.CUSTOMER);
+        SoundManager.Instance.PlaySound("cat angry");
         yield return new WaitForSeconds(_reactionTimer);
 
         // final actions
@@ -199,7 +199,7 @@ public class CustomerOrder : MonoBehaviour
         // inital reaction
         _appearance.SetFacialEmotion(FaceVariant.SUS);
         _customerScore = 0f;
-        SoundManager.Instance.PlaySound("cat yuck", SoundGroup.CUSTOMER);
+        SoundManager.Instance.PlaySound("cat yuck");
         yield return new WaitForSeconds(_reactionTimer);
 
         // final actions

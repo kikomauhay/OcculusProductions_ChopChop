@@ -44,11 +44,12 @@ public class RiceIngredient : Ingredient
                 Destroy(gameObject);
 
                 SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);   
-                SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+                SoundManager.Instance.PlaySound("poof");
 
-                GameObject foodToSpawn = SpawnManager.Instance.SpawnObject(ing.IngredientType == IngredientType.SALMON ?
-                                                                        _foodPrefabs[0] : _foodPrefabs[1],
-                                                                        transform, SpawnObjectType.FOOD);
+                GameObject foodToSpawn = 
+                    SpawnManager.Instance.SpawnObject(ing.IngredientType == IngredientType.SALMON ?
+                                                      _foodPrefabs[0] : _foodPrefabs[1],
+                                                    transform, SpawnObjectType.FOOD);
                 // sets up the food's score
                 // UPD_Food food = foodToSpawn.GetComponent<UPD_Food>();
                 // food.Type = ing.IngredientType == IngredientType.SALMON ? DishType.NIGIRI_SALMON : DishType.NIGIRI_TUNA;

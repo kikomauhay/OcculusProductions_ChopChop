@@ -16,15 +16,14 @@ public class Floor : MonoBehaviour
 
             case TrashableType.FOOD:
                 obj.GetComponent<UPD_Food>().SetRotten();
-                SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
+                SoundManager.Instance.PlaySound("fish dropped");
                 break;
 
             case TrashableType.DISH:
                 obj.GetComponent<Dish>().HitTheFloor();
                 SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
                                                 "plate placed 01" : 
-                                                "plate placed 02", 
-                                                SoundGroup.EQUIPMENT);
+                                                "plate placed 02");
                 break;
 
             case TrashableType.EQUIPMENT:
@@ -42,7 +41,7 @@ public class Floor : MonoBehaviour
         if (ing.IngredientType == IngredientType.SALMON ||
             ing.IngredientType == IngredientType.TUNA)
         {
-            SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
+            SoundManager.Instance.PlaySound("fish dropped");
         }
     }
 

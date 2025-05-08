@@ -41,9 +41,9 @@ public class Plate : Equipment
     protected override void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
-        SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                        "plate placed 01" : "plate placed 02",
-                                        SoundGroup.EQUIPMENT);
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                        "plate placed 01" : 
+                                        "plate placed 02");
     } 
 
 #endregion
@@ -51,23 +51,6 @@ public class Plate : Equipment
 #region Helpers
 
     public void TogglePlated() => IsPlated = !IsPlated;
-    
-
-    /*    
-    protected override void DoCleaning()
-    {
-        base.DoCleaning();
-
-        if (_boxTrigger == null) return;
-
-        if (!IsClean && !IsPlated)
-        
-            _boxTrigger.enabled = true;
-
-        else
-            _boxTrigger.enabled = false;
-    }
-    */
     private void SnapToCenter()
     {
         if (transform.childCount < 1)

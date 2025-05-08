@@ -38,13 +38,13 @@ public class Trash : MonoBehaviour
     {
         ing.Trashed();
         Destroy(ing.gameObject);
-        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
+        SoundManager.Instance.PlaySound("dispose food");
     }
 
     private void DestroyFood(UPD_Food food)
     {
         Destroy(food.gameObject);
-        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
+        SoundManager.Instance.PlaySound("dispose food");
     }
     private void DoEquipmentLogic(Equipment eq)
     {

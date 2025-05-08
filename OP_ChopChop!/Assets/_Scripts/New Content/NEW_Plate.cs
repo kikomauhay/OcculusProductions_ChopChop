@@ -70,16 +70,16 @@ public class NEW_Plate : Equipment
 
         SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
                                         "plate placed 01" : 
-                                        "plate placed 02",
-                                        SoundGroup.EQUIPMENT);
+                                        "plate placed 02");
         base.HitTheGround();
     }
     public override void Trashed()
     {
         if (_dish.HasFood)
         {
-            _dish.DisableDish();        
-            Debug.LogWarning("Food on the plate has been removed!");
+            _dish.DisableDish();
+            SoundManager.Instance.PlaySound("dispose food");
+            // Debug.LogWarning("Food on the plate has been removed!");
         }
         
         base.Trashed();

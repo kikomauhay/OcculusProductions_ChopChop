@@ -55,7 +55,7 @@ public class SceneHandler : Singleton<SceneHandler>
         }
         else
         {
-            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("wrong");
             Debug.LogError("Wrong scene named!");
         } 
 

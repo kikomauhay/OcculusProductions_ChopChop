@@ -38,8 +38,7 @@ public class Knife : Equipment
 
         SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
                                         "knife dropped 01" : 
-                                        "knife dropped 02",
-                                        SoundGroup.EQUIPMENT);
+                                        "knife dropped 02");
     }
 #endregion
 #region Helpers
