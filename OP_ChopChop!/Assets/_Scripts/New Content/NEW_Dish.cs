@@ -14,6 +14,7 @@ using System;
 /// 
 /// </summary>
 
+[RequireComponent(typeof(BoxCollider))]
 public class NEW_Dish : MonoBehaviour
 {
 #region Members
@@ -22,7 +23,7 @@ public class NEW_Dish : MonoBehaviour
 
     public FoodCondition FoodCondition => _foodCondition;
     public DishPlatter DishPlatter => _dishPlatter;
-    public bool IsPlated => _isPlated;
+    public bool HasFood => _hasFood;
     public float Score => _dishScore;
 
 #endregion 
@@ -35,7 +36,7 @@ public class NEW_Dish : MonoBehaviour
     [SerializeField, Range(0f, 100f)] private float _dishScore;
     [SerializeField] private FoodCondition _foodCondition;
     [SerializeField] private DishPlatter _dishPlatter;
-    [SerializeField] private bool _isPlated;
+    [SerializeField] private bool _hasFood;
 
     [Header("Onboarding")]
     [SerializeField] private Material _highlightOSM;
@@ -43,7 +44,7 @@ public class NEW_Dish : MonoBehaviour
     [Header("Debugging")]
     [SerializeField] private bool _isDevloperMode;
 
-    private Collider _collider;
+    private BoxCollider _collider;
     private NEW_Plate _plate;
     private const float DECAY_TIME = 30f;
 
@@ -57,13 +58,14 @@ public class NEW_Dish : MonoBehaviour
 
     private void Awake()
     {
-        _collider = GetComponent<Collider>();
+        _collider = GetComponent<BoxCollider>();
         _plate = GetComponent<NEW_Plate>();
 
         if (_foodItems.Length < 4)
             Debug.LogWarning($"Missing elements in {_foodItems}");
 
-        // Debug.Log($"{gameObject.name} developer mode: {_isDevloperMode}");
+        foreach (GameObject item in _foodItems)
+            item.SetActive(false);
     }
     private void Start() 
     {
@@ -71,40 +73,30 @@ public class NEW_Dish : MonoBehaviour
         _foodCondition = FoodCondition.CLEAN;
 
         _collider.enabled = true; 
-        _isPlated = false;
-        
-        foreach (GameObject item in _foodItems)
-            item.SetActive(false);
+        _hasFood = false;
 
-        Debug.Log($"Dish plated: {_isPlated}");
+        // Debug.Log($"{name} plated: {_isPlated}");
+        Debug.Log($"{this} developer mode: {_isDevloperMode}");
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (_isPlated)
+        if (_hasFood)
         {
-            Debug.LogError($"{gameObject.name} is already plated!");
+            // Debug.LogError($"{name} already has food on the plate!");
             return;
         }
 
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
         UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
-
-        // set the proper state of the plate
-        _isPlated = true;
-        _collider.enabled = false; 
-
-        // sashimi creation
-        if (ing != null) 
-            DoIngredientCollision(ing);
         
         // nigiri creation
-        else if (food != null)
+        if (food != null)
+        {
             DoFoodCollision(food);
-
-        // finishing effects for the dish
-        Destroy(other.gameObject);
-        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform, 1f);
-        SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+            Destroy(food.gameObject);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform, 1f);
+            SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+        }
     }
 
 #region Testing
@@ -161,7 +153,7 @@ public class NEW_Dish : MonoBehaviour
     public void DisableDish()
     {
         _dishScore = 0f;
-        _isPlated = false;
+        _hasFood = false;
         _collider.enabled = true;
 
         _foodItems[(int)_dishPlatter].GetComponent<NEW_Platter>().ResetMaterial();
@@ -172,11 +164,6 @@ public class NEW_Dish : MonoBehaviour
     public void SetFoodCondition(FoodCondition chosenState)
     {
         // guard clauses
-        if (!_isPlated)
-        {
-            Debug.LogError("Dish is not plated!");
-            return;
-        }
         if (_foodCondition != FoodCondition.CLEAN)    
         {
             Debug.LogError("Dish is already bad!");
@@ -198,37 +185,10 @@ public class NEW_Dish : MonoBehaviour
             case FoodCondition.ROTTEN: platter.SetRotten();     break;
             case FoodCondition.MOLDY:  platter.SetMoldy();      break;
         }        
+        Debug.LogWarning($"{name} has was set to {chosenState}");
     }
 
 #endregion
-
-#region Helpers
-
-    private void SetActiveDish(DishPlatter activeDishChosen)
-    {
-        if (activeDishChosen == DishPlatter.EMPTY)
-        {
-            _isPlated = false;
-            _collider.enabled = true;
-            Debug.LogError("Default mode chosen!");
-            return;
-        }
-
-        // enables the dish  
-        _dishPlatter = activeDishChosen;
-        _foodItems[(int)activeDishChosen].SetActive(true);
-               
-        // testing
-        Debug.LogWarning($"{activeDishChosen} is visible");
-        Debug.Log($"{gameObject.name} score: {_dishScore}");
-
-        if (!_isDevloperMode) 
-        {
-            StartCoroutine(Expire());
-            Debug.LogWarning($"{gameObject.name} is expiring!");    
-        }
-    }
-    
 
 #region Collision
 
@@ -254,27 +214,55 @@ public class NEW_Dish : MonoBehaviour
 
             case FoodCondition.CLEAN:
                 _dishScore = food.Score;
-                Debug.LogWarning($"{food.gameObject.name} has been plated to {gameObject.name}!");
+                Debug.LogWarning($"{food.name} has been plated to {name}!");
                 break;
 
             default: break;
         }
+
+        _hasFood = true;
+        // _collider.enabled = false;
+        Debug.Log($"{name} has food: {_hasFood}");
     }
     private void DoIngredientCollision(Ingredient ing)
     {
-        _isPlated = true;
+        _hasFood = true;
         // do a similar thing to food collision
 
         Debug.Log("No logic for ingredients yet");
 
         // SetActiveDish(ing.PlatterType);
-
-
-
-        
     }
 
 #endregion
+
+#region Helpers
+
+    private void SetActiveDish(DishPlatter activeDishChosen)
+    {
+        if (activeDishChosen == DishPlatter.EMPTY)
+        {
+            _hasFood = false;
+            _collider.enabled = true;
+            Debug.LogError("Default mode chosen!");
+            return;
+        }
+
+        // enables the dish  
+        _dishPlatter = activeDishChosen;
+        _foodItems[(int)activeDishChosen].SetActive(true);
+               
+        // testing
+        Debug.LogWarning($"{activeDishChosen} is visible");
+        // Debug.LogWarning($"{name} score: {_dishScore}");
+
+        if (!_isDevloperMode) 
+        {
+            StartCoroutine(Expire());
+            Debug.LogWarning($"{gameObject.name} is expiring!");    
+        }
+    }
+
 #endregion
 #endregion
 }   

@@ -159,7 +159,6 @@ public abstract class Ingredient : MonoBehaviour
         IngredientState = IngredientState.CONTAMINATED;
         _isFresh = false;
         FreshnessRate = 0f;
-        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
         ChangeMaterial();
     }
     public void Expire()

@@ -1,5 +1,5 @@
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// 
@@ -10,12 +10,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(NEW_Dish))]
 public class NEW_Plate : Equipment
 {
-#region Properties
 
-
-#endregion
-
-#region Private
+#region Members
 
     private NEW_Dish _dish;
     
@@ -23,43 +19,70 @@ public class NEW_Plate : Equipment
 
 #region Unity
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _dish = GetComponent<NEW_Dish>();
-    }
 
+        Debug.Log($"{this} developer mode: {_isDeveloperMode}");
+    }
     protected override void OnTriggerEnter(Collider other)
     {
-        if (_dish.IsPlated)
+        if (_dish.HasFood) 
         {
-            Debug.LogError($"{gameObject.name} contains food!");
+            // Debug.LogError($"{name} already contains food!");
             return;
         }
 
-        base.OnTriggerEnter(other);
+        if (!IsClean)
+            base.OnTriggerEnter(other);
     }
     protected override void OnCollisionEnter(Collision other) 
     {
         // cross-contamination logic
     }
 
+#region Testing
+
+    private void Update() => test();
+    private void test()
+    {
+        if (Input.GetKeyDown(KeyCode.C) && _isDeveloperMode) 
+        {
+            _usageCounter = 0;
+            _isClean = true;
+            _rend.materials = new Material[] { _cleanMat };
+        }
+    }
+
+#endregion
 #endregion
 
 #region Override
 
     public override void HitTheGround()
     {
-        base.HitTheGround();
-
-        if (_dish.IsPlated)
+        if (_dish.HasFood)
+        {
             _dish.SetFoodCondition(FoodCondition.MOLDY);
+            // Debug.LogWarning("The food got moldy!");
+        }
+
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                        "plate placed 01" : 
+                                        "plate placed 02",
+                                        SoundGroup.EQUIPMENT);
+        base.HitTheGround();
     }
     public override void Trashed()
     {
-        base.Trashed();
-
-        if (_dish.IsPlated)
+        if (_dish.HasFood)
+        {
             _dish.DisableDish();        
+            Debug.LogWarning("Food on the plate has been removed!");
+        }
+        
+        base.Trashed();
     }
     public void Served()
     {
