@@ -24,7 +24,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     [Header("Debugging")]
     [SerializeField] private List<GameObject> _plates;
-    [SerializeField] private bool _doneWashing = false;
 
     private const float PANEL_TIMER = 15f;
 

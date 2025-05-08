@@ -31,7 +31,7 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void Awake()
     {
         _collider = GetComponent<BoxCollider>();
-        Debug.Log($"{gameObject.name} developer mode: {_isDevloperMode}");
+        // Debug.Log($"{ToString()} developer mode: {_isDevloperMode}");
     }
     private void Start() 
     {
@@ -40,18 +40,20 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) 
     {
+        Ingredient ing = other.gameObject.GetComponent<Ingredient>();
         NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
-        
+        NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
+
         if (Order == null) 
         {
             Debug.LogError("CustomerOrder is null!");
             return;
         }        
-        if (plate == null) return;
-
-        // initializes variables for easier referencing
-        Ingredient ing = other.gameObject.GetComponent<Ingredient>();
-        NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
+        if (plate == null) 
+        {
+            Debug.LogError("Plate is null!");
+            return;
+        }
 
         // player has served an ingredient to the customer
         if (ing != null)

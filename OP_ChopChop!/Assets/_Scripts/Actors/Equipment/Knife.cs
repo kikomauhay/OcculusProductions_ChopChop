@@ -20,7 +20,7 @@ public class Knife : Equipment
 
 #endregion
 
-#region Helpers
+#region Public
 
     public void CallNextTutorial()
     {
@@ -31,14 +31,26 @@ public class Knife : Equipment
             StartCoroutine(OnBoardingHandler.Instance.Onboarding05());
             _tutorialPlayed = true;
         }         
-    }  
+    }
+    public override void HitTheGround()
+    {
+        base.HitTheGround();
+
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                        "knife dropped 01" : 
+                                        "knife dropped 02",
+                                        SoundGroup.EQUIPMENT);
+    }
+#endregion
+#region Helpers
+
     private void CheckMaterial() 
     {
         if (IsClean)
             _rend.material = _cleanMat;
         
         else         
-            _rend.materials = new Material[] { _dirtyMat, _outlineTexture };        
+            _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };        
     }
 
 #endregion
