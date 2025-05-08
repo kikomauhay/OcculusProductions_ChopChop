@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
-    void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter(Collision other)
     {
         GameObject obj = other.gameObject;
 
@@ -35,7 +35,7 @@ public class Floor : MonoBehaviour
         }
     }
 
-    void DoIngredientLogic(Ingredient ing)
+    private void DoIngredientLogic(Ingredient ing)
     {
         ing.Contaminate();
         
@@ -46,24 +46,10 @@ public class Floor : MonoBehaviour
         }
     }
 
-    void DoEquipmentLogic(Equipment eq)
-    {
+    private void DoEquipmentLogic(Equipment eq)
+    {                
         eq.HitTheGround();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                
-        // additional logic for equipment child classes
-        if (eq.GetComponent<Plate>() != null)
-        {
-            // ternary operator syntax -> condition ? val_if_true : val_if_false
-            SoundManager.Instance.PlaySound(Random.value > 0.5f ? "plate placed 01" : "plate placed 02", 
-                                            SoundGroup.EQUIPMENT);
-        }
-
-        if (eq.GetComponent<Knife>() != null)
-        {
-            // ternary operator syntax -> condition ? val_if_true : val_if_false
-            SoundManager.Instance.PlaySound(Random.value > 0.5f ? "knife dropped 01" : "knife dropped 02",
-                                            SoundGroup.EQUIPMENT);
-        }
+        Debug.LogWarning($"{eq.name} landed on the floor!");
     } 
 }

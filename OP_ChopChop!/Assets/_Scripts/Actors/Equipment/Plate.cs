@@ -52,6 +52,8 @@ public class Plate : Equipment
 
     public void TogglePlated() => IsPlated = !IsPlated;
     
+
+    /*    
     protected override void DoCleaning()
     {
         base.DoCleaning();
@@ -65,6 +67,7 @@ public class Plate : Equipment
         else
             _boxTrigger.enabled = false;
     }
+    */
     private void SnapToCenter()
     {
         if (transform.childCount < 1)

@@ -1,16 +1,18 @@
 using System.Collections;
+using System.Net.Http.Headers;
 using UnityEngine;
 
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
 {
-    public bool IsClean => _isClean;
-    public Material DirtyMaterial => _dirtyMat;
 
 #region Members
 
+    public bool IsClean => _isClean;
+    public Material DirtyMaterial => _dirtyMat;
+
     [SerializeField] protected bool _isClean;
-    [SerializeField] protected Material _outlineTexture, _cleanMat, _dirtyMat;
+    [SerializeField] protected Material _dirtyOSM, _cleanMat, _dirtyMat;
     protected Vector3 _startPosition;
     protected Renderer _rend;
 
@@ -19,10 +21,17 @@ public abstract class Equipment : MonoBehaviour
     protected int _usageCounter;                     // counter to know how many times equipment has been used
     private bool _coroutineRunning;
 
+    [Header("Debugging")]
+    [SerializeField] protected bool _isDeveloperMode;
+
 #endregion
 
 #region Unity
 
+    protected virtual void Awake()
+    {
+        _rend = GetComponent<Renderer>();
+    }
     protected virtual void Start() 
     {
         GameManager.Instance.OnStartService += ResetPosition;
@@ -32,8 +41,6 @@ public abstract class Equipment : MonoBehaviour
         _startPosition = transform.position;
 
         _usageCounter = 0;
-        _rend = GetComponent<Renderer>();
-        _rend.materials = new Material[] { _cleanMat };
 
         if (_maxUsageCounter == 0)
             Debug.LogError($"Max use for {gameObject.name} is 0");
@@ -41,22 +48,26 @@ public abstract class Equipment : MonoBehaviour
     protected virtual void OnDestroy() 
     {
         ResetPosition();
-        GameManager.Instance.OnStartService -= ResetPosition;
+
+        if (!_isDeveloperMode)
+            GameManager.Instance.OnStartService -= ResetPosition;
     }
     protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
-
-        if (sponge != null) 
-            DoCleaning();
+        
+        if (sponge != null)
+            DoCleaning(sponge);
     }
     protected virtual void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponent<Sponge>() == null) return;
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
+        
+        if (sponge == null) return;
 
         if (_coroutineRunning)
         {
-            StopCoroutine(Clean());
+            StopCoroutine(CO_Clean(sponge));
             _coroutineRunning = false;
         }
     }
@@ -147,7 +158,7 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter = _maxUsageCounter;
         _isClean = false;
-        _rend.materials = new Material[] { _dirtyMat, _outlineTexture };
+        _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
     }    
 
 #endregion
@@ -159,27 +170,28 @@ public abstract class Equipment : MonoBehaviour
         transform.position = _startPosition;
         transform.rotation = Quaternion.identity;
     }
-    protected IEnumerator Clean()
+    protected IEnumerator CO_Clean(Sponge sponge)
     {
         _coroutineRunning = true;
         yield return new WaitForSeconds(2f);
-        SetClean();
+        SetClean(sponge);
     }
-    protected void SetClean()
+    protected void SetClean(Sponge sponge)
     {
         _usageCounter = 0;
         _isClean = true;
         _rend.materials = new Material[] { _cleanMat };
         _coroutineRunning = false;
+        sponge.SetDirty();
     }
-    protected virtual void DoCleaning()
+    protected virtual void DoCleaning(Sponge sponge)
     {
         SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
         
         if (_coroutineRunning)
-            StopCoroutine(Clean());
+            StopCoroutine(CO_Clean(sponge));
         
-        StartCoroutine(Clean());
+        StartCoroutine(CO_Clean(sponge));
     }
 
 #endregion
