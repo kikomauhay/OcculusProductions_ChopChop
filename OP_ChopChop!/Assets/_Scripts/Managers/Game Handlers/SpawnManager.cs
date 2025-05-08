@@ -30,6 +30,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [Header("Customer Components")]
     [SerializeField] private CustomerSeat[] _customerSeats;
     [SerializeField] private ColliderCheck[] _colliderChecks;
+    [SerializeField] private NEW_ColliderCheck[] _newColliderChecks;
     private List<GameObject> _seatedCustomers = new List<GameObject>();
 
     [Header("Customer Spawning Timers"), Tooltip("Can be changed to use for testing")]
@@ -41,7 +42,21 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
 #region Unity_Methods
 
-    protected override void Awake() => base.Awake();
+    protected override void Awake() 
+    {
+        base.Awake();
+
+        if (_customerSeats.Length < 4)
+            Debug.LogWarning("Missing Elements in CustomerSeats[]");
+
+        if (_colliderChecks.Length < 4)
+            Debug.LogWarning("Missing Elements in ColliderChecks[]");
+
+        if (_newColliderChecks.Length < 4)
+            Debug.LogWarning("Missing Elements in NewColliderChecks[]");
+
+        Debug.Log($"Is Tutorial: {_isTutorial}");
+    }
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     private void Start() // BIND TO EVENTS
     {
@@ -55,7 +70,6 @@ public class SpawnManager : StaticInstance<SpawnManager>
         if (_isTutorial)    
             transform.position = new Vector3(0.09f, 0f, 0f);
 
-        Debug.Log($"Is Tutorial: {_isTutorial}");
         StartCoroutine(DelayedEventBinding());
     }
 
@@ -138,10 +152,10 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // assigns the index to the seat & collider
         CustomerSeat seat = _customerSeats[idx];
-        ColliderCheck collider = _colliderChecks[idx];
+        ColliderCheck colliderCheck = _colliderChecks[idx];
 
         // links a box collider & seat to the customer
-        collider.CustomerOrder = customer.GetComponent<CustomerOrder>();
+        colliderCheck.CustomerOrder = customer.GetComponent<CustomerOrder>();
         _seatedCustomers.Add(customer);
         customerActions.SeatIndex = idx;
 
@@ -177,10 +191,12 @@ public class SpawnManager : StaticInstance<SpawnManager>
         // assigns components to the new customer
         CustomerActions customerActions = tutorialCustomer.GetComponent<CustomerActions>();
         CustomerSeat seat = _customerSeats[0];
-        ColliderCheck collider = _colliderChecks[0];
+        // ColliderCheck collider = _colliderChecks[0];
+        NEW_ColliderCheck newCollider = _newColliderChecks[0];
 
         // links the box collider & seat to the customer
-        collider.CustomerOrder = tutorialCustomer.GetComponent<CustomerOrder>();
+        // collider.CustomerOrder = tutorialCustomer.GetComponent<CustomerOrder>();
+        newCollider.Order = tutorialCustomer.GetComponent<CustomerOrder>();
         _seatedCustomers.Add(tutorialCustomer);
         customerActions.SeatIndex = 0;
 
@@ -201,7 +217,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // removed any link from the removed customer 
         _customerSeats[idx].IsEmpty = true;
-        _colliderChecks[idx].CustomerOrder = null;
+        // _colliderChecks[idx].CustomerOrder = null;
+        _newColliderChecks[idx].Order = null;
     }   
     int GiveAvaiableSeat() // sets the index where the customer should sit
     {
@@ -235,6 +252,10 @@ public class SpawnManager : StaticInstance<SpawnManager>
         if (_colliderChecks.Length > 1)
             foreach (ColliderCheck col in _colliderChecks)
                 col.CustomerOrder = null;
+
+        if (_newColliderChecks.Length > 1)
+            foreach (NEW_ColliderCheck col in _newColliderChecks)
+                col.Order = null;
 
         if (_seatedCustomers.Count > 1)
         {

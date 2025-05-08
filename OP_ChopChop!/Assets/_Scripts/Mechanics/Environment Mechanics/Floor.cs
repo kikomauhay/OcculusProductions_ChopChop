@@ -15,7 +15,7 @@ public class Floor : MonoBehaviour
                 break;
 
             case TrashableType.FOOD:
-                obj.GetComponent<Food>().Contaminate();
+                obj.GetComponent<UPD_Food>().SetRotten();
                 SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
                 break;
 
@@ -48,7 +48,7 @@ public class Floor : MonoBehaviour
 
     void DoEquipmentLogic(Equipment eq)
     {
-        eq.HitTheFloor();
+        eq.HitTheGround();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 
         // additional logic for equipment child classes

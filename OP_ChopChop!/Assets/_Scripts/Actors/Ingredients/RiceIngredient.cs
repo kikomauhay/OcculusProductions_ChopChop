@@ -50,9 +50,9 @@ public class RiceIngredient : Ingredient
                                                                         _foodPrefabs[0] : _foodPrefabs[1],
                                                                         transform, SpawnObjectType.FOOD);
                 // sets up the food's score
-                Food food = foodToSpawn.GetComponent<Food>();
-                food.FoodType = ing.IngredientType == IngredientType.SALMON ? DishType.NIGIRI_SALMON : DishType.NIGIRI_TUNA;
-                food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
+                // UPD_Food food = foodToSpawn.GetComponent<UPD_Food>();
+                // food.Type = ing.IngredientType == IngredientType.SALMON ? DishType.NIGIRI_SALMON : DishType.NIGIRI_TUNA;
+                // food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
                 
                 Destroy(other.gameObject);
             }
