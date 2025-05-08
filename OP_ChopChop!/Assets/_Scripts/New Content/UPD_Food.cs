@@ -8,43 +8,41 @@ using UnityEngine;
 /// </summary>
 
 [RequireComponent(typeof(Trashable))]
-public abstract class Food : MonoBehaviour
+public class UPD_Food : MonoBehaviour
 {
-    public bool IsContaminated { get; private set; }
-    public bool IsExpired { get; private set; }
-    public float FoodScore { get; set; }
-    public DishType FoodType { get; set; }
 
-    [SerializeField] protected GameObject _dishPrefab;
-    [SerializeField] protected Material _rottenMat, _contaminatedMat, _outlineTexture;
+#region Properties
+    public FoodCondition Condition => _foodCondition;
+    public DishPlatter OrderType => _orderType;
+    public float Score => _foodScore;
+
+#endregion
+
+#region Private
+
+    [Header("Food Attrbutes")]
+    [SerializeField] private FoodCondition _foodCondition;
+    [SerializeField] private DishPlatter _orderType;
+    [SerializeField] private float _foodScore; 
+
+    [Header("Food Materials")]
+    [SerializeField] private Material _dirtyOSM;
+    [SerializeField] private Material _rottenMat, _moldyMat;
+
+#endregion
 
 #region Unity
 
-    protected virtual void Start()
+    private void Start()
     {
-        FoodScore = 0f;
-        IsContaminated = false;
-        IsExpired = false;
-    }
-    protected void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.GetComponent<Plate>() == null) return;
-        
-        if (!other.gameObject.GetComponent<Plate>().IsClean) return;
+        if (_orderType == DishPlatter.EMPTY)
+            Debug.LogError("OrderType is set to empty!");
 
-        if (IsContaminated || IsExpired) return;
-
-        // destorys both the food & plate to spawn in a new dish
-        Destroy(other.gameObject);
-        Destroy(gameObject);
-        CreateDish(other.transform);
-
-        // fancy UX effects
-        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform, 1f);
-        SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+        _foodCondition = FoodCondition.CLEAN;
     }
     protected virtual void OnCollisionEnter(Collision other)
     {
+        /*
         // food + ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
@@ -86,6 +84,8 @@ public abstract class Food : MonoBehaviour
             {
                 dish.HitTheFloor();
             }
+            {
+            }
 
             else if ((IsContaminated || IsExpired) &&
                      (!dish.IsExpired || !dish.IsContaminated))
@@ -93,25 +93,38 @@ public abstract class Food : MonoBehaviour
                 Contaminate();
             }
         }
+        */
     }
 
 #endregion
 
-    public abstract void CreateDish(Transform t);
-    public void Contaminate()
-    {
-        if (IsExpired) return;
+#region Public
 
-        IsContaminated = true;
-        GetComponent<MeshRenderer>().materials = new Material[] { _contaminatedMat, 
-                                                                  _outlineTexture };
+    public void SetRotten()
+    {
+        if (_foodCondition == FoodCondition.MOLDY) 
+        {
+            Debug.LogError($"{gameObject.name} is already moldy!");
+            return;
+        }
+        
+        _foodCondition = FoodCondition.ROTTEN; 
+        GetComponent<MeshRenderer>().materials = new Material[] { _moldyMat, 
+                                                                  _dirtyOSM };
     }
-    public void Expire()
+    public void SetMoldy()
     {
-        if (IsContaminated) return;
+        if (_foodCondition == FoodCondition.ROTTEN) 
+        {
+            Debug.LogError($"{gameObject.name} is already rotten!");
+            return;
+        }
 
-        IsExpired = true;
+        _foodCondition = FoodCondition.ROTTEN; 
         GetComponent<MeshRenderer>().materials = new Material[] { _rottenMat,
-                                                                  _outlineTexture };
+                                                                  _dirtyOSM };
     }
+    public void SetScore(float score) => _foodScore = score;
+
+#endregion
 }

@@ -16,7 +16,7 @@ public abstract class Dish : MonoBehaviour
     public float DishScore { get; set; }
     public bool IsContaminated { get; private set; } = false;
     public bool IsExpired { get; private set; } = false;
-    public DishType OrderDishType { get; set; }
+    public DishPlatter OrderDishType { get; set; }
     
 #endregion
 
@@ -24,11 +24,10 @@ public abstract class Dish : MonoBehaviour
     [SerializeField] Material _expiredMat, _contaminatedMat;
 
 #region Unity_Methods
-
-    // protected void Awake() => GetComponent<Plate>().BoxTrigger.enabled = false;
     protected void Start() => StartCoroutine(Decay());    
     protected virtual void OnCollisionEnter(Collision other)
     {
+        /*
         // dish + ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
@@ -42,14 +41,14 @@ public abstract class Dish : MonoBehaviour
         }
 
         // dish + food
-        if (other.gameObject.GetComponent<Food>() != null)
+        if (other.gameObject.GetComponent<UPD_Food>() != null)
         {
-            Food food = other.gameObject.GetComponent<Food>();
+            UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
             
             if ((!IsContaminated || !IsExpired) &&
                (food.IsExpired || food.IsContaminated))
             {
-                food.Contaminate();
+                food.SetRotten();
             }
 
             else if ((IsContaminated || IsExpired) && 
@@ -77,6 +76,7 @@ public abstract class Dish : MonoBehaviour
                 HitTheFloor();
             }
         }
+        */
     }
 
 #endregion
@@ -88,7 +88,7 @@ public abstract class Dish : MonoBehaviour
         IsContaminated = true;
         
         if (GetComponent<Plate>().IsClean)
-            GetComponent<Plate>().HitTheFloor();
+            GetComponent<Plate>().HitTheGround();
 
         GetComponentInChildren<MeshRenderer>().material = _contaminatedMat;
     }

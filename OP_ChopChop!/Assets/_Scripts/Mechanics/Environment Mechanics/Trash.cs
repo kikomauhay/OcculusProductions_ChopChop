@@ -22,7 +22,7 @@ public class Trash : MonoBehaviour
                 break;
 
             case TrashableType.FOOD:
-                DestroyFood(obj.GetComponent<Food>());
+                DestroyFood(obj.GetComponent<UPD_Food>());
                 break;
 
             case TrashableType.EQUIPMENT:
@@ -41,7 +41,7 @@ public class Trash : MonoBehaviour
         ing.Trashed();
     }
 
-    private void DestroyFood(Food food)
+    private void DestroyFood(UPD_Food food)
     {
         Destroy(food.gameObject);
         SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
@@ -49,7 +49,7 @@ public class Trash : MonoBehaviour
 
     private void DoEquipmentLogic(Equipment eq)
     {
-        eq.HitTheFloor();
+        eq.HitTheGround();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 

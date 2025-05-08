@@ -33,13 +33,6 @@ public class Enumerations : MonoBehaviour {}
 
 #region Food_Types
 
-    public enum DishType 
-    { 
-        NIGIRI_SALMON, 
-        NIGIRI_TUNA, 
-        SASHIMI_SALMON, 
-        SASHIMI_TUNA 
-    }
     public enum IngredientType // IN A CERTAIN ORDER (DON'T RE-ORDER)
     {    
         RICE, 

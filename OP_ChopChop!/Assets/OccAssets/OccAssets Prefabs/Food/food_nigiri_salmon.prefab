@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 143502373818450032}
   - component: {fileID: 6996217664734948619}
   - component: {fileID: 6426309820193985593}
-  - component: {fileID: 5640851362181884658}
+  - component: {fileID: 6275141043541121560}
   m_Layer: 0
   m_Name: food_nigiri_salmon
   m_TagString: Untagged
@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _trashType: 2
---- !u!114 &5640851362181884658
+--- !u!114 &6275141043541121560
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -305,11 +305,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5778702139965393049}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 195203d2a7057b642ab9cf6b89d6701f, type: 3}
+  m_Script: {fileID: 11500000, guid: a7deac2e85203e54184d73d0dc269e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dishPrefab: {fileID: 7531625885797523667, guid: 4a86d31137598b14fabad122af278644,
-    type: 3}
+  _foodCondition: 0
+  _orderType: 0
+  _foodScore: 100
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
   _rottenMat: {fileID: 2100000, guid: f54a32c163c4a894383b178de370a775, type: 2}
-  _contaminatedMat: {fileID: 2100000, guid: a4c6b3c27c6498f47bf4295749f2aa0e, type: 2}
-  _outlineTexture: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _moldyMat: {fileID: 2100000, guid: a4c6b3c27c6498f47bf4295749f2aa0e, type: 2}

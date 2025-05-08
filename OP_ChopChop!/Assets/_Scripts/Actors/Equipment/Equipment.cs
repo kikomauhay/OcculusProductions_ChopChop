@@ -21,18 +21,22 @@ public abstract class Equipment : MonoBehaviour
 
 #endregion
 
-#region Unity_Methods
+#region Unity
 
     protected virtual void Start() 
     {
         GameManager.Instance.OnStartService += ResetPosition;
         
+        _isClean = true;
         _coroutineRunning = false;
         _startPosition = transform.position;
 
         _usageCounter = 0;
         _rend = GetComponent<Renderer>();
-        _rend.material = _cleanMat;
+        _rend.materials = new Material[] { _cleanMat };
+
+        if (_maxUsageCounter == 0)
+            Debug.LogError($"Max use for {gameObject.name} is 0");
     }
     protected virtual void OnDestroy() 
     {
@@ -52,14 +56,13 @@ public abstract class Equipment : MonoBehaviour
 
         if (_coroutineRunning)
         {
-            StopCoroutine(CleanEquipment());
+            StopCoroutine(Clean());
             _coroutineRunning = false;
         }
     }
-    
-    // cross-contamination logic
-    protected virtual void OnCollisionEnter(Collision other)
+    protected virtual void OnCollisionEnter(Collision other) // CROSS-CONTAMINATION LOGIC
     {
+        /*
         if (GetComponent<Board>() != null) return;
 
         // equipment + another equipment
@@ -111,65 +114,72 @@ public abstract class Equipment : MonoBehaviour
             else if (IsClean && (!dish.IsExpired || !dish.IsContaminated))
                 Contaminate();
         }
+        */
     }
 
 #endregion
 
 #region Public
 
-    public virtual void HitTheFloor()
+#region Virtual
+
+    public virtual void HitTheGround()
     {
-        _usageCounter = _maxUsageCounter;
-        IncrementUseCounter();
+        SetDirty();
         ResetPosition();
     }
+    public virtual void Trashed()
+    {
+        SetDirty();
+        ResetPosition();
+    }
+
+#endregion
+
     public void IncrementUseCounter()
     {
         _usageCounter++;
 
-        // Debug.Log($"{name} use counter: {_usageCounter}/{_maxUsageCounter}");
-
-        if (_usageCounter >= _maxUsageCounter)
-            Contaminate();
+        if (_usageCounter == _maxUsageCounter) 
+            SetDirty();        
     }
-    public void Contaminate()
+    public void SetDirty()
     {
         _usageCounter = _maxUsageCounter;
         _isClean = false;
         _rend.materials = new Material[] { _dirtyMat, _outlineTexture };
-    }
+    }    
 
 #endregion
+
+#region Helpers
 
     protected void ResetPosition() 
     {
         transform.position = _startPosition;
         transform.rotation = Quaternion.identity;
     }
-    
-#region Cleaning
-
-    protected virtual void DoCleaning()
-    {
-        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
-        
-        if (_coroutineRunning)
-            StopCoroutine(CleanEquipment());
-        
-        StartCoroutine(CleanEquipment());
-    }
-    protected IEnumerator CleanEquipment()
+    protected IEnumerator Clean()
     {
         _coroutineRunning = true;
         yield return new WaitForSeconds(2f);
-        GetCleaned();
+        SetClean();
     }
-    protected void GetCleaned()
+    protected void SetClean()
     {
         _usageCounter = 0;
         _isClean = true;
         _rend.materials = new Material[] { _cleanMat };
         _coroutineRunning = false;
+    }
+    protected virtual void DoCleaning()
+    {
+        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
+        
+        if (_coroutineRunning)
+            StopCoroutine(Clean());
+        
+        StartCoroutine(Clean());
     }
 
 #endregion
