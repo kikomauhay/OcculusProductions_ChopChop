@@ -7,6 +7,8 @@ public class Sliceable : MonoBehaviour
 #region Members
 
     [SerializeField] private GameObject _currentPrefab, _nextPrefab;
+    [SerializeField] int _fishCuts;
+
     Collider _snap;
 
     IXRSelectInteractor _interactor;
@@ -37,14 +39,18 @@ public class Sliceable : MonoBehaviour
             if (_chopCounter >= 5)
             {
                 Sliced();
+                other.gameObject.GetComponent<Knife>().IncrementUseCounter();
                 return;
             }
 
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
-
+            SoundManager.Instance.PlaySound("knife chop", SoundGroup.EQUIPMENT);
+            
             // ternary operator syntax -> condition ? val_if_true : val_if_false
-            SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                            "fish slice 01" : "fish slice 02");
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                            "fish slice 01" : 
+                                            "fish slice 02",
+                                            SoundGroup.FOOD);
         }
 
         if (_interactor != null)
@@ -78,17 +84,22 @@ public class Sliceable : MonoBehaviour
         GetComponent<Collider>().isTrigger = false;
     }
 
-    public void SetSnap(Collider snap)
-    {
-        _snap = snap;
-    }
+    public void SetSnap(Collider snap) => _snap = snap;
 
     IEnumerator DoCutting()
     {  
         yield return null;
-        SpawnManager.Instance.SpawnObject(_nextPrefab,
-                                          transform,
-                                          SpawnObjectType.INGREDIENT);
+
+        for (int i = 0; i < _fishCuts; i++)
+        {
+            Transform t = transform;
+
+            t.position = new Vector3(transform.position.x,
+                                     transform.position.y + Random.Range(0.1f, 1f),
+                                     transform.position.z);
+
+            SpawnManager.Instance.SpawnObject(_nextPrefab, t, SpawnObjectType.INGREDIENT);
+        }
 
         _snap.gameObject.GetComponent<Snap>().CallReset();
         yield return null;

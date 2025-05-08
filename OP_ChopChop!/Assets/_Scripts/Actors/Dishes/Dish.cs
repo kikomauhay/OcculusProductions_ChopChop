@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -7,38 +8,98 @@ using UnityEngine;
 /// 
 /// </summary>
 
-
+[RequireComponent(typeof(Trashable))]
 public abstract class Dish : MonoBehaviour
 {
-
 #region Readers
 
     public float DishScore { get; set; }
-    public bool IsContaminated { get; set; }
-    public DishType OrderDishType { get; set; }
-    public IngredientState IngredientState { get; private set; }
+    public bool IsContaminated { get; private set; } = false;
+    public bool IsExpired { get; private set; } = false;
+    public DishPlatter OrderDishType { get; set; }
+    
+#endregion
+
+    [SerializeField] float _decayTimer; // 10s default (can be longer)
+    [SerializeField] Material _expiredMat, _contaminatedMat;
+
+#region Unity_Methods
+    protected void Start() => StartCoroutine(Decay());    
+    protected virtual void OnCollisionEnter(Collision other)
+    {
+        /*
+        // dish + ingredient
+        if (other.gameObject.GetComponent<Ingredient>() != null)
+        {
+            Ingredient ing = other.gameObject.GetComponent<Ingredient>();
+
+            if ((!IsContaminated || !IsExpired) && ing.IsFresh)
+                ing.Contaminate();
+
+            else if ((IsContaminated || IsExpired) && !ing.IsFresh)
+                HitTheFloor();
+        }
+
+        // dish + food
+        if (other.gameObject.GetComponent<UPD_Food>() != null)
+        {
+            UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
+            
+            if ((!IsContaminated || !IsExpired) &&
+               (food.IsExpired || food.IsContaminated))
+            {
+                food.SetRotten();
+            }
+
+            else if ((IsContaminated || IsExpired) && 
+                    (!food.IsExpired || !food.IsContaminated))
+            {
+                HitTheFloor();
+            }
+        }
+
+        // dish + another dish
+        if (other.gameObject.GetComponent<Dish>() != null)
+        {
+            Dish dish = other.gameObject.GetComponent<Dish>();
+
+            // contamination logic
+            if ((!IsContaminated || !IsExpired) && 
+                (dish.IsContaminated || dish.IsExpired))
+            {
+                dish.HitTheFloor();
+            }
+
+            else if ((IsContaminated || IsExpired) && 
+                     (!dish.IsExpired || !dish.IsContaminated))
+            {
+                HitTheFloor();
+            }
+        }
+        */
+    }
 
 #endregion
 
-
-    [SerializeField] protected Material _freshMat, _rottenMat;
-
-    void Start()
+    public void HitTheFloor()
     {
-        IngredientState = IngredientState.DEFAULT;
-        IsContaminated = false;
-     
-        GetComponent<Renderer>().material = _freshMat;
-    }
+        if (IsExpired) return;
 
-    public void ToggleContaminated()
+        IsContaminated = true;
+        
+        if (GetComponent<Plate>().IsClean)
+            GetComponent<Plate>().HitTheGround();
+
+        GetComponentInChildren<MeshRenderer>().material = _contaminatedMat;
+    }
+    protected IEnumerator Decay() // Expiration logic
     {
-        IsContaminated = !IsContaminated;
-        IngredientState = IngredientState.CONTAMINATED;
+        yield return new WaitForSeconds(_decayTimer);
 
-        GetComponentInParent<Plate>().ToggleClean();
-
-        GetComponent<Renderer>().material = IsContaminated ?
-                                            _freshMat : _rottenMat;
-    }
+        if (!IsContaminated && !IsExpired)
+        {
+            IsExpired = true;
+            GetComponentInChildren<MeshRenderer>().material = _expiredMat;
+        }
+    } 
 }

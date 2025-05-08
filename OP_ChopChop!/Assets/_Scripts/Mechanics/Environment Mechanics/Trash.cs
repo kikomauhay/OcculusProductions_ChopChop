@@ -1,52 +1,56 @@
-using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine;
 
 public class Trash : MonoBehaviour
 {
-    IXRSelectInteractor _mainInteractor;
-
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         GameObject obj = other.gameObject;
 
         if (obj.GetComponent<Trashable>() == null) return;
+
+        if (obj.GetComponent<Sponge>() != null)
+        {
+            obj.GetComponent<Sponge>().ResetPosition();
+            return;
+        }
         
         switch(obj.GetComponent<Trashable>().TrashTypes)
         {
             case TrashableType.INGREDIENT:
                 DestroyIngredient(obj.GetComponent<Ingredient>());
                 break;
+
             case TrashableType.FOOD:
-                DestroyFood(obj.GetComponent<Food>());
+                DestroyFood(obj.GetComponent<UPD_Food>());
                 break;
+
             case TrashableType.EQUIPMENT:
+                DoEquipmentLogic(obj.GetComponent<Equipment>());
                 break;
+
+            default: break;
         }
     }
 
-    #region Functions
+#region Functions
 
-    void DestroyIngredient(Ingredient ing)
+    private void DestroyIngredient(Ingredient ing)
     {
-        Destroy(gameObject);
+        Destroy(ing.gameObject);
+        ing.Trashed();
     }
 
-    void DestroyFood(Food food)
+    private void DestroyFood(UPD_Food food)
     {
-        Destroy(gameObject);
+        Destroy(food.gameObject);
+        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
     }
 
-    void DoEquipmentLogic(Equipment eq)
+    private void DoEquipmentLogic(Equipment eq)
     {
-        eq.ResetPosition();
+        eq.HitTheGround();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
-
-        // other logic for equipment child classes
-
-        if (eq.GetComponent<Plate>().IsClean)
-        {
-            eq.ToggleClean();
-        }
     }
 
     private void AttachToHand(GameObject _spawnedPlate, IXRSelectInteractor _interactor)
@@ -69,5 +73,5 @@ public class Trash : MonoBehaviour
         }
     }
 
-    #endregion
+#endregion
 }

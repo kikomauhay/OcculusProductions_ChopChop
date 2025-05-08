@@ -2,97 +2,57 @@ using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections;
 using UnityEngine;
 
-public class RiceSpawn : MonoBehaviour
+public class RiceSpawn : XRBaseInteractable
 {
-    public ActionBasedController Left, Right;
+    [SerializeField] private GameObject _ricePrefab;
+    [SerializeField] private Transform _spawnpoint;
+    [SerializeField] private bool _isTutorial;
 
-    IXRSelectInteractor _mainInteractor;
+    private bool _riceSpawned;
 
-    [SerializeField] GameObject _ricePrefab;
-    [SerializeField] Collider _spwnCollider;
-    [SerializeField] float _resetTimer;
-
-/*    void Awake()
+    protected override void OnEnable()
     {
-        Left = ControllerManager.Instance.LeftController;
-        Right = ControllerManager.Instance.RightController;
-    }*/
-
-    void OnTriggerEnter(Collider other)
-    {
-        IXRSelectInteractor interactor = null;
-
-        if (Left && other.gameObject.GetComponent<ActionBasedController>())
-        {
-            interactor = Left.GetComponent<XRDirectInteractor>();
-        }
-        else if (Right && other.gameObject.GetComponent<ActionBasedController>())
-        {
-            interactor = Right.GetComponent<XRDirectInteractor>();
-        }
-
-        if (interactor != null)
-        {
-            _mainInteractor = interactor;
-            Debug.Log("Interactor Set");
-
-            _mainInteractor.selectEntered.AddListener(RiceEvent);
-        }
-        else
-        {
-            Debug.LogError("Interactor is null or not valid.");
-        }
+        base.OnEnable();
+        selectEntered.AddListener(RiceEvent);
     }
-    void OnTriggerExit(Collider other)
+    protected override void OnDisable()
     {
-        _mainInteractor.selectEntered.RemoveListener(RiceEvent);
-        _mainInteractor = null;
-        Debug.Log("Main Interactor Removed");
+        base.OnDisable();
+        selectEntered.RemoveListener(RiceEvent);
     }
-    void RiceEvent(SelectEnterEventArgs args)
-    { 
-        Debug.LogWarning("Triggered, Rice spawned");
 
-        GameObject _newRice = SpawnManager.Instance.SpawnObject(_ricePrefab,
-                                                                    transform,
-                                                                    SpawnObjectType.INGREDIENT); 
+    private void Start()
+    {
+        if (interactionManager == null)
+            interactionManager = FindObjectOfType<XRInteractionManager>();
         
-        _spwnCollider.enabled = false;
-        AttachToHand(_newRice, _mainInteractor);
-        ResetTrigger();
+        _riceSpawned = false;
     }
 
-    private bool CheckGrip(ActionBasedController _controller)
+    private void RiceEvent(SelectEnterEventArgs args)
     {
-        return _controller.selectAction.action.ReadValue<float>() > 0.5f;
+        if (_riceSpawned) return;
+
+        _riceSpawned = true;
+
+        GameObject newRice = _isTutorial ? 
+                             Instantiate(_ricePrefab, transform.position, transform.rotation) :
+                             SpawnManager.Instance.SpawnObject(_ricePrefab, _spawnpoint,
+                                                               SpawnObjectType.INGREDIENT);
+
+        XRGrabInteractable _grabInteractable = newRice.GetComponent<XRGrabInteractable>();
+        interactionManager.SelectEnter(args.interactorObject, _grabInteractable);
+
+        base.OnSelectEntered(args);
+        StartCoroutine(ResetRiceSpawned());
+        
+        if (_isTutorial)
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding06());
     }
 
-    private void AttachToHand(GameObject _spawnedRice, IXRSelectInteractor _interactor)
+    private IEnumerator ResetRiceSpawned()
     {
-        XRGrabInteractable _grabInteractable = _spawnedRice.GetComponent<XRGrabInteractable>();
-        XRInteractionManager _interactionManager = _grabInteractable.interactionManager as XRInteractionManager;
-        if (_interactionManager == null 
-            && _interactor is MonoBehaviour interactorObject)
-        {
-            _interactionManager = interactorObject.GetComponentInParent<XRInteractionManager>();
-        }
-        if (_grabInteractable != null 
-            && _interactionManager != null)
-        {
-            _interactionManager.SelectEnter(_interactor, _grabInteractable);
-        }
-        else
-        {
-            Debug.LogError("Spawned object does not have an XRGrabInteractable component.");
-        }
-    }
-
-    private void ResetCollider() => _spwnCollider.enabled = true;
-    
-
-    private IEnumerator ResetTrigger()
-    {
-        yield return new WaitForSeconds(_resetTimer);
-        ResetCollider();
+        yield return new WaitForSeconds(4f);
+        _riceSpawned = false;    
     }
 }

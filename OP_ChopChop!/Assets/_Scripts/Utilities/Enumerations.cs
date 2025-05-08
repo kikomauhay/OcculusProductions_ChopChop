@@ -33,13 +33,6 @@ public class Enumerations : MonoBehaviour {}
 
 #region Food_Types
 
-    public enum DishType 
-    { 
-        NIGIRI_SALMON, 
-        NIGIRI_TUNA, 
-        SASHIMI_SALMON, 
-        SASHIMI_TUNA 
-    }
     public enum IngredientType // IN A CERTAIN ORDER (DON'T RE-ORDER)
     {    
         RICE, 
@@ -47,7 +40,7 @@ public class Enumerations : MonoBehaviour {}
         TUNA
     }
     public enum IngredientState // IN A CERTAIN ORDER (DON'T RE-ORDER)
-{ 
+    { 
         DEFAULT, 
         EXPIRED, 
         CONTAMINATED, 
@@ -59,18 +52,26 @@ public class Enumerations : MonoBehaviour {}
         GOOD,
         PERFECT,
         BAD
-    }
+}
 
 #endregion
 
 #region Others
+
+    public enum GameDifficulty
+    { 
+        EASY, 
+        NORMAL,
+        HARD
+    }
+
     public enum GameShift // IN A CERTAIN ORDER (DON'T RE-ORDER)
     {
-        DEFAULT,
-        TRAINING,
-        PRE_SERVICE,
-        SERVICE,
-        POST_SERVICE
+        Default,
+        Training,
+        PreService,
+        Service,
+        PostService
     }
     public enum TrashableType 
     { 
@@ -101,5 +102,14 @@ public class Enumerations : MonoBehaviour {}
         MAD,
         SUS
     }
-
+    public enum SoundGroup
+    { 
+        EQUIPMENT,
+        APPLIANCES,
+        FOOD,
+        GAME,
+        VFX,
+        CUSTOMER,
+        TUTORIAL
+    }
 #endregion

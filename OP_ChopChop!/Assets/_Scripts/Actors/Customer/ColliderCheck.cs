@@ -4,66 +4,86 @@ using UnityEngine;
 public class ColliderCheck : MonoBehaviour
 {
     public CustomerOrder CustomerOrder { get; set; }
+    [SerializeField] private bool _isTutorial;
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (CustomerOrder == null)
-        {
-            Debug.LogError("Null CustomerOrder");
-            return;
-        }
+        if (CustomerOrder == null) return;
 
+        // player served an ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
-            Debug.LogError("GIVEN ORDER IS AN INGREDIENT");
+            CustomerOrder.CustomerSR = 0f;
 
-            // CustomerOrder.StartCoroutine("DoNegativeReaction");
-            StartCoroutine(CustomerOrder.DoReaction(FaceVariant.MAD));
+            StartCoroutine(CustomerOrder.CO_DirtyReaction());
+            
+            Destroy(other.gameObject); // destroys the ingredient on collision
+            StartCoroutine(DisableCollider());
 
-            Destroy(other.gameObject);
+            Debug.LogError("Game Over!");
             return;
         }
 
-        Dish collidedDish = other.gameObject.GetComponentInChildren<Dish>();
         Plate plate = other.gameObject.GetComponent<Plate>();
+        Dish dish = other.gameObject.GetComponentInChildren<Dish>();
+        
+        // customer reaction based on the given order
+        CheckDish(dish);
 
-        if (CustomerOrder.OrderIsSameAs(collidedDish))
+        // finishing actions for the plate
+        Destroy(dish.gameObject);
+        StartCoroutine(DisableCollider());
+
+        plate.IncrementUseCounter();
+        plate.TogglePlated();
+
+        if (!_isTutorial) return;
+        
+        // Tuna Customer being served
+        if (CustomerOrder.IsTunaCustomer)
         {
-            Debug.LogWarning("CORRECT ORDER");
-
-            // CustomerOrder.StartCoroutine("DoPositiveReaction");
-            StartCoroutine(CustomerOrder.DoReaction(FaceVariant.HAPPY));
-
-            // calculates the customer SR
-            CustomerOrder.CustomerSR = (collidedDish.DishScore + CustomerOrder.PatienceRate) / 2f;
-
-            // customer "eats" the food
-            Destroy(collidedDish.gameObject);
-            // SpawnManager.Instance.RemoveCustomer(CustomerOrder.gameObject);
-
-            // plate.SetContaminated();      
-            plate.TogglePlated();
-            StartCoroutine(DisableColider());
-
-            return;
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
+            ShopManager.Instance.ClearList();
         }
 
-        Debug.LogError("WRONG ORDER");
-
-        // CustomerOrder.StartCoroutine("DoNegativeReaction");
-        /*        StartCoroutine(CustomerOrder.DoReaction(FaceVariant.MAD));
-
-                Destroy(other.gameObject);*/
-
-        //Create restriction on the code above, it also destroys the players hand on check
+        // Atrium being served
+        else if (CustomerOrder.IsTutorial) 
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
     }
 
-    IEnumerator DisableColider()
+#region Enumerators
+
+    private IEnumerator DisableCollider()
     {
         GetComponent<Collider>().enabled = false;
-
         yield return new WaitForSeconds(3f);
-
         GetComponent<Collider>().enabled = true;
     }
+
+#endregion
+
+#region Helpers
+
+    private void CheckDish(Dish d)
+    {
+        if (d.IsContaminated || d.IsExpired) // ORDER IS EXPIRED OR CONTAMINATED
+        {
+            CustomerOrder.CustomerSR = 0f;
+            Debug.LogError("Game Over!");
+            StartCoroutine(CustomerOrder.CO_DirtyReaction());
+        }
+        else if (CustomerOrder.OrderIsSameAs(d)) // CORRECT ORDER
+        {    
+            CustomerOrder.CustomerSR = (d.DishScore + CustomerOrder.PatienceRate) / 2f;
+            StartCoroutine(CustomerOrder.CO_HappyReaction());
+        }
+        else // WRONG ORDER
+        {
+            CustomerOrder.CustomerSR = 0f;
+            StartCoroutine(CustomerOrder.CO_AngryReaction());
+        }
+    }
+    public void DisableTutorial() => _isTutorial = false;
+
+#endregion
 }

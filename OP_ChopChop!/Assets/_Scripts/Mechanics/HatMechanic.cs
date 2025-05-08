@@ -1,15 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HatMechanic : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        ChefHat hat = other.gameObject.GetComponent<ChefHat>();
-        if(hat != null)
+        if (other.gameObject.GetComponent<ChefHat>() == null) return;
+
+        if (GameManager.Instance.CurrentShift == GameShift.Training) 
         {
-            hat.StartService();
+            OnBoardingHandler.Instance.Disable();
+            SoundManager.Instance.StopAllAudio(); // in case there is any ongoing tutorial lines
+            other.gameObject.GetComponent<ChefHat>().StartService();
         }
     }
 }

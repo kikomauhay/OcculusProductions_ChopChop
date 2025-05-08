@@ -1,15 +1,21 @@
-using UnityEngine;
+using System.Collections;
 
-public class ChefHat : StaticInstance<ChefHat> {
+public class ChefHat : PersistentSingleton<ChefHat> {
 
-    public bool HatWorn { get; private set; } = false;
+    public System.Action OnHatWorn;
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit(); 
 
-    public void StartService() 
+    public void StartService() => StartCoroutine(PreService());
+
+    private IEnumerator PreService()
     {
-        HatWorn = true;
-        GameManager.Instance.ChangeShift(GameShift.SERVICE);
+        StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
+        yield return null;
+
+        GameManager.Instance.ChangeShift(GameShift.PreService);
+        ShopManager.Instance.ClearList();
+        OnHatWorn?.Invoke();
     }
 }

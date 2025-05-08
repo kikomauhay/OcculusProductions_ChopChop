@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class Plate : Equipment
@@ -7,8 +6,12 @@ public class Plate : Equipment
 
     public bool IsPlated { get; private set; }
 
+
     [Tooltip("The Box Collider Component")] 
-    [SerializeField] Collider _boxTrigger;
+    [SerializeField] private Collider _boxTrigger;
+    [SerializeField] private bool _isTutorial;
+
+    private const float Y_OFFSET = 0.025f;
 
 #endregion
 
@@ -18,67 +21,65 @@ public class Plate : Equipment
     {
         base.Start();
 
-        name = "Plate";
         _maxUsageCounter = 1;
 
-        IsPlated = false;
-        _boxTrigger.enabled = true;
-    }
-    void OnTriggerEnter(Collider other)
-    {              
-        if (other.GetComponent<Food>() != null && !IsPlated)
+        if (transform.childCount > 1)
         {
-            Destroy(gameObject);
-            Destroy(other.gameObject);
-
-            StartCoroutine(PlateTheFood(other.GetComponent<Food>()));
+            IsPlated = true;
+            _boxTrigger.enabled = false;
+            // InvokeRepeating("SnapToCenter", 1f, 1f);  
+        }
+        else 
+        {
+            IsPlated = false;
+            _boxTrigger.enabled = true;
         }
 
-        if (other.GetComponent<Sponge>().IsWet && !IsClean)
-        {
-            StopCoroutine(DoCleaning());
-            StartCoroutine(DoCleaning());
-            DishWash();
-        }
+        Debug.Log($"Is clean: {IsClean}");                  
     }
-    void OnTriggerExit(Collider other)
+  
+    protected override void OnCollisionEnter(Collision other)
     {
-        if (other.GetComponent<Sponge>() != null) 
-            StopCoroutine(DoCleaning());
-    }
-
-    IEnumerator DoCleaning()
-    {
-        yield return new WaitForSeconds(2f);
-        ToggleClean();
-    }
-    IEnumerator PlateTheFood(Food food)
-    {
-        TogglePlated();
-        yield return new WaitForSeconds(1.5f);
-        food.CreateDish(transform);
-    }
+        base.OnCollisionEnter(other);
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ?
+                                        "plate placed 01" : "plate placed 02",
+                                        SoundGroup.EQUIPMENT);
+    } 
 
 #endregion
 
+#region Helpers
+
     public void TogglePlated() => IsPlated = !IsPlated;
-    private void DishWash()
+    
+    protected override void DoCleaning()
     {
+        base.DoCleaning();
+
         if (_boxTrigger == null) return;
 
         if (!IsClean && !IsPlated)
+        
             _boxTrigger.enabled = true;
 
         else
             _boxTrigger.enabled = false;
     }
-
-#region Testing
-
-    void test()
+    private void SnapToCenter()
     {
-        if (Input.GetKeyUp(KeyCode.Space))
-            ToggleClean(); // test
+        if (transform.childCount < 1)
+        {
+            CancelInvoke("SnapToCenter");
+            return;
+        }
+
+        Vector3 updatedPosition = transform.position;
+        updatedPosition = new Vector3 (updatedPosition.x, 
+                                       updatedPosition.y + Y_OFFSET,
+                                       updatedPosition.z);
+
+        transform.rotation = Quaternion.identity;
+        transform.GetChild(0).transform.position = updatedPosition;
     }
 
 #endregion

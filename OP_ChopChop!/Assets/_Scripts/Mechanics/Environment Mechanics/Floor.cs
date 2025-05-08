@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
         GameObject obj = other.gameObject;
 
@@ -15,7 +15,16 @@ public class Floor : MonoBehaviour
                 break;
 
             case TrashableType.FOOD:
-                DoFoodLogic(obj.GetComponent<Food>());
+                obj.GetComponent<UPD_Food>().SetRotten();
+                SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
+                break;
+
+            case TrashableType.DISH:
+                obj.GetComponent<Dish>().HitTheFloor();
+                SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                                "plate placed 01" : 
+                                                "plate placed 02", 
+                                                SoundGroup.EQUIPMENT);
                 break;
 
             case TrashableType.EQUIPMENT:
@@ -26,35 +35,35 @@ public class Floor : MonoBehaviour
         }
     }
 
-#region Collision_Logic
-
     void DoIngredientLogic(Ingredient ing)
     {
-        ing.ContaminateIngredient();
-        Debug.LogWarning($"{ing.gameObject.name} has been contaminated!");
-    }
-
-    void DoFoodLogic(Food food)
-    {
-        food.SetContaminated();
-        Debug.LogWarning($"{food.gameObject.name} has been contaminated!");
+        ing.Contaminate();
+        
+        if (ing.IngredientType == IngredientType.SALMON ||
+            ing.IngredientType == IngredientType.TUNA)
+        {
+            SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
+        }
     }
 
     void DoEquipmentLogic(Equipment eq)
     {
-        eq.ResetPosition();
+        eq.HitTheGround();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        
-        // other logic for equipment child classes
-        
-        if (eq.GetComponent<Plate>().IsClean)
+                
+        // additional logic for equipment child classes
+        if (eq.GetComponent<Plate>() != null)
         {
-            eq.ToggleClean();
+            // ternary operator syntax -> condition ? val_if_true : val_if_false
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? "plate placed 01" : "plate placed 02", 
+                                            SoundGroup.EQUIPMENT);
+        }
 
-            Debug.LogWarning($"{eq.gameObject.name} has gotten dirty!");
-        }  
+        if (eq.GetComponent<Knife>() != null)
+        {
+            // ternary operator syntax -> condition ? val_if_true : val_if_false
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? "knife dropped 01" : "knife dropped 02",
+                                            SoundGroup.EQUIPMENT);
+        }
     } 
-
-#endregion
-
 }
