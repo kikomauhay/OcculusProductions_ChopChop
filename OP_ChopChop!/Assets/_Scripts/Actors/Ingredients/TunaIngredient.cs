@@ -1,11 +1,6 @@
-public class TunaIngredient : FishIngredient
-{
-    protected override void Start()
-    {
-        base.Start();
+using UnityEngine;
 
-        name = "Tuna";
-        _ingredientType = IngredientType.TUNA;
-        _fishType = FishType.TUNA;
-    }
+public class TunaIngredient : Ingredient
+{
+
 }

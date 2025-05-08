@@ -1,23 +1,32 @@
+using System.Collections;
 using UnityEngine;
-
-/// <summary>
-/// 
-/// Anything that needs to move about the customer goes here
-/// 
-/// </summary>
 
 public class CustomerActions : MonoBehaviour
 {
-    [SerializeField] private float _customerSpeed;
-    [SerializeField] private Transform[] _targetLocations;
+    [SerializeField] private Transform _mouthTransform;
 
-    void Start() => _customerSpeed = _customerSpeed * Time.deltaTime;
-    void LateUpdate() => CustomerMoveToSeat();
+    public int SeatIndex { get; set; }
+                                                                  
+    public void TriggerEating() => SpawnManager.Instance.SpawnVFX(VFXType.RICE,
+                                                                  _mouthTransform,
+                                                                  3f);
 
-    private void CustomerMoveToSeat()
+
+    public IEnumerator RandomMeowing() 
     {
-        transform.position = Vector3.MoveTowards(transform.position, 
-                                                 _targetLocations[0].position, 
-                                                 _customerSpeed);
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ?
+                                       "cat enter 01" : 
+                                       "cat enter 02",
+                                        SoundGroup.CUSTOMER); 
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(10f, 30f));
+
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ?
+                                       "cat enter 01" : 
+                                       "cat enter 02",
+                                        SoundGroup.CUSTOMER); 
+        }
     }
 }
+

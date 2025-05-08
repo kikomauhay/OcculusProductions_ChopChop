@@ -1,70 +1,86 @@
- using UnityEngine;
+using UnityEngine;
 
 public class Plate : Equipment
 {
-    public bool IsDirty => _isDirty;
-    
-    [SerializeField] Material _dirtyPlateMat, _cleanPlateMat;
-    [SerializeField] Collider _cleanTrigger;
-    [SerializeField] bool _isDirty;
+#region Members
+
+    public bool IsPlated { get; private set; }
+
+
+    [Tooltip("The Box Collider Component")] 
+    [SerializeField] private Collider _boxTrigger;
+    [SerializeField] private bool _isTutorial;
+
+    private const float Y_OFFSET = 0.025f;
+
+#endregion
+
+#region Unity_Methods
 
     protected override void Start()
     {
         base.Start();
 
-        name = "Plate";
-        _isDirty = false;
-        _cleanTrigger.enabled = false;
+        _maxUsageCounter = 1;
 
-        GetComponent<MeshRenderer>().material = _cleanPlateMat;
+        if (transform.childCount > 1)
+        {
+            IsPlated = true;
+            _boxTrigger.enabled = false;
+            // InvokeRepeating("SnapToCenter", 1f, 1f);  
+        }
+        else 
+        {
+            IsPlated = false;
+            _boxTrigger.enabled = true;
+        }
+
+        Debug.Log($"Is clean: {IsClean}");                  
     }
-
-    void Update()
+  
+    protected override void OnCollisionEnter(Collision other)
     {
-        if (Input.GetKeyUp(KeyCode.Space)) 
-            TogglePlateSanitation(); // test
+        base.OnCollisionEnter(other);
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ?
+                                        "plate placed 01" : "plate placed 02",
+                                        SoundGroup.EQUIPMENT);
+    } 
 
-        if (_cleanTrigger == null) return;
+#endregion
 
-        DishWash();
-    }
+#region Helpers
 
-    private void OnTriggerStay(Collider other)
+    public void TogglePlated() => IsPlated = !IsPlated;
+    
+    protected override void DoCleaning()
     {
-        Sponge sponge = other.GetComponent<Sponge>();
-        Rigidbody _spongeRb = sponge.GetComponent<Rigidbody>();
-        //Create a formula that tracks the change in velocity and compares it to a certain value
-        //If velocity is greater than assigned value, start coroutine for cleaning
-        //suggestion ko lang coroutine but if there's a more efficient way in cleaning the plate please don't hesitate to try it out
-        //If you do go the coroutine route, I think you'd need to put the checker to avoid having the coroutine run again and again.       
-    }
+        base.DoCleaning();
 
-    private void DishWash()
-    {
-        if(_isDirty)
-            _cleanTrigger.enabled = true;
+        if (_boxTrigger == null) return;
 
-        else _cleanTrigger.enabled = false;
-    }
-    #region Public Functions
-    public void TogglePlateSanitation() 
-    {
-        _isDirty = !_isDirty;
-
-        if (_isDirty)
-            SetContaminated();
+        if (!IsClean && !IsPlated)
         
-        else SetCleaned();
+            _boxTrigger.enabled = true;
+
+        else
+            _boxTrigger.enabled = false;
     }
-    public void SetContaminated()
+    private void SnapToCenter()
     {
-        _isDirty = true;
-        GetComponent<MeshRenderer>().material = _dirtyPlateMat;
+        if (transform.childCount < 1)
+        {
+            CancelInvoke("SnapToCenter");
+            return;
+        }
+
+        Vector3 updatedPosition = transform.position;
+        updatedPosition = new Vector3 (updatedPosition.x, 
+                                       updatedPosition.y + Y_OFFSET,
+                                       updatedPosition.z);
+
+        transform.rotation = Quaternion.identity;
+        transform.GetChild(0).transform.position = updatedPosition;
     }
-    public void SetCleaned()
-    {
-        _isDirty = false;
-        GetComponent<MeshRenderer>().material = _cleanPlateMat;
-    }
-    #endregion
+
+#endregion
 }

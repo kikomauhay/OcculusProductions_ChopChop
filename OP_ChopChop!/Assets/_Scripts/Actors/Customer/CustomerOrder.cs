@@ -1,107 +1,211 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
+[RequireComponent(typeof(CustomerAppearance), typeof(CustomerActions))]
 public class CustomerOrder : MonoBehaviour
 {
-#region Members
+#region Readers
 
-    public DishType CustomerDishType { get; private set; } // what dish the customer wants to order   
+    public DishPlatter WantedPlatter { get; private set; } // what dish the customer wants to order   
     public float CustomerSR { get; set; }                  // (FoodScore of dish + _patienceRate) / 2
-    public float PatienceRate => _patienceRate;
-    
-    // timers
-    private float _customerDeleteTimer; // time it takes for the customer to eat and leave
-    private float _patienceRate;        // deduction rate to use
-    private float _customerScore;       // starts at 100 ang decreases over time
+    public float PatienceRate => _patienceDecreaseRate;
+    public bool IsLastCustomer { get; set; } = false;
 
-    [Header("Dish UI")]
-    [SerializeField] private GameObject[] _dishOrdersUI; // the different order UI for the customer 
-    [SerializeField] private Transform _orderUITransform; //Spawning of the order
+    public bool IsTutorial => _isTutorial; 
+    public bool IsTunaCustomer => _isTunaCustomer;
 
 #endregion
 
-#region Methods
+#region Members
 
-    void Start()
+    [Header("Dish UI")]
+    [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
+    [SerializeField] private Transform _orderUITransform; // Spawning of the order
+    
+    [Header("Money-earned Range")]
+    [SerializeField] private int _minCash;
+    [SerializeField] private int _maxCash; // testing
+
+    [Header("Money Reward Text"), SerializeField] private TextMeshProUGUI _txtMoneyReward;
+    [SerializeField] private float _patienceDecreaseRate; // 1.65; deduction rate to use
+
+    [Space(10f), SerializeField] private float _reactionTimer;
+
+    [Header("Onboarding")] 
+    [SerializeField] private bool _isTutorial;
+    [SerializeField] private bool _isTunaCustomer;
+   
+    private CustomerAppearance _appearance;
+    private GameObject _customerOrderUI;
+    private float _customerScore; // starts at 100 and decreases over time
+
+#endregion
+
+    private void Start()
     {
-        // randomizes the customer's order
-        // CustomerDishType = (DishType)Random.Range(0, System.Enum.GetValues(typeof(DishType)).Length);
-
-        CustomerDishType = DishType.NIGIRI_SALMON; // test
-
-        _customerScore = 100f; // will decrease overtime
-        _patienceRate = 1.65f; 
-        _customerDeleteTimer = 3f;
+        if (!_isTutorial)
+            GameManager.Instance.OnEndService += DestroyOrderUI;
         
-        CreateCustomerUI();
-        StartCoroutine(PatienceCountdown());
+        _appearance = GetComponent<CustomerAppearance>();
 
-        Debug.LogWarning($"{name}: {CustomerDishType}");
+        switch (GameManager.Instance.Difficulty) // will decrease overtime
+        {
+            case GameDifficulty.EASY:   _customerScore = 110f; break;
+            case GameDifficulty.NORMAL: _customerScore = 100f; break;
+            case GameDifficulty.HARD:   _customerScore = 90f;  break;
+            default:                                           break;
+        }
+
+        if (_isTutorial)
+        {
+            _patienceDecreaseRate = 0f;
+            WantedPlatter = _isTunaCustomer ? 
+                               DishPlatter.SASHIMI_TUNA : 
+                               DishPlatter.NIGIRI_SALMON;
+
+            OnBoardingHandler.Instance.OnTutorialEnd += Cleanup;
+        }
+        else 
+        {
+            _patienceDecreaseRate = 1.65f; // referenced from the document
+            WantedPlatter = (DishPlatter)Random.Range(0, _dishOrdersUI.Length);
+        }
+
+        CreateCustomerUI();
+        StartCoroutine(CO_PatienceCountdown());
     }
+    private void OnDestroy()
+    {
+        if (_isTutorial)
+        {
+            OnBoardingHandler.Instance.OnTutorialEnd -= Cleanup;
+            Destroy(_customerOrderUI);
+        }
+        else GameManager.Instance.OnEndService -= DestroyOrderUI; 
+
+        if (_isTunaCustomer)
+        {
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
+            SpawnManager.Instance.DisableTutorial();
+            ShopManager.Instance.ClearList();
+            return;
+        }
+
+        if (!IsLastCustomer) return;
+
+        if (GameManager.Instance.CurrentShift == GameShift.Service)
+        {
+            GameManager.Instance.StopAllCoroutines();
+            GameManager.Instance.ChangeShift(GameShift.PostService);
+        }
+    }
+
+    private void Cleanup() => Destroy(gameObject);
+
+#region Spawning_Helpers
 
     void CreateCustomerUI()
     {
-        Instantiate(_dishOrdersUI[(int)CustomerDishType], // i love type-casting
-                    _orderUITransform.position,
-                    _orderUITransform.rotation);
+        // aligns customer UI & customer order
+        _customerOrderUI = Instantiate(_dishOrdersUI[_isTutorial ? 0 : (int)WantedPlatter], 
+                                       _orderUITransform.position,
+                                       _orderUITransform.rotation,
+                                       transform);
     }
-
-    // will refine with AJ's help     
     void MakeSeatEmpty() // clears the seat of any customer references 
     {
-        CustomerSpawningManager.Instance.RemoveCustomer(gameObject);
-        CustomerSpawningManager.Instance.GetComponent<SpawnLocationScript>().IsPrefabPresent = false;
-        CustomerSpawningManager.Instance.StartCoroutine("SpawnNextCustomer");
+        SpawnManager.Instance.RemoveCustomer(gameObject);        
+        SpawnManager.Instance.StartCustomerSpawning();
+        GameManager.Instance.AddToCustomerScores(CustomerSR);
 
-        // adds the customer's score to the Scores list
-        GameManager.Instance.OnCustomerServed?.Invoke(CustomerSR);
+        // destroys both the customer and its UI
+        DestroyOrderUI();   
         Destroy(gameObject);
     }
-    public bool OrderIsSameAs(Dish dish) => dish?.OrderDishType == CustomerDishType;
-    
+    public bool OrderIsSameAs(Dish dish) => dish?.OrderDishType == WantedPlatter;
+    private void DestroyOrderUI() => Destroy(_customerOrderUI);
+
 #endregion
 
 #region Enumerators
 
-    IEnumerator DoPositiveReaction() // customer got the correct dish
+    private IEnumerator CO_PatienceCountdown()
     {
-        // customer eats the food before despawning
-        // can add animation of the customer eating & sfx
-
-        yield return new WaitForSeconds(_customerDeleteTimer);
-
-        MakeSeatEmpty();
-    }
-    IEnumerator DoNegativeReaction() // customer lost all patience or got the wrong order
-    {       
-        _customerScore = 0f;
-
-        yield return new WaitForSeconds(_customerDeleteTimer);
-
-        GameManager.Instance.OnCustomerLeft?.Invoke();
-        MakeSeatEmpty();
-    }
-    IEnumerator PatienceCountdown()
-    {
-        yield return new WaitForSeconds(3f); // time it takes for the customer to take a seat
+        // grace period before it actually starts counting down
+        yield return new WaitForSeconds(2f); 
 
         while (_customerScore > 0f)
         {
             yield return new WaitForSeconds(1f);
 
-            _customerScore -= _patienceRate;
-            // Debug.Log($"Customer score of {name} is now {_customerScore}");
+            _customerScore -= _patienceDecreaseRate;
 
             if (_customerScore < 1f)
+            {
                 _customerScore = 0f;
+                CustomerSR = 0f;
+            }
+            
+            // face change
+            if (_customerScore >= 80)
+                _appearance.SetFacialEmotion(FaceVariant.HAPPY);
+
+            else if (_customerScore >= 50)
+                _appearance.SetFacialEmotion(FaceVariant.NEUTRAL);
+            
+            else     
+                _appearance.SetAngryEmotion(0);            
         }
-
+        
         // customer lost all patience
-        _customerScore = 0f;   
-        Debug.Log(_customerScore);
-
-        yield return StartCoroutine(DoNegativeReaction());
+        yield return StartCoroutine(CO_CustomerLostPatience());
     }
+    private IEnumerator CO_CustomerLostPatience() // customer wasn't served
+    {
+        _appearance.SetAngryEmotion(2);
+        SoundManager.Instance.PlaySound("cat angry", SoundGroup.CUSTOMER);
+        yield return new WaitForSeconds(_reactionTimer);
+
+        MakeSeatEmpty();
+    }
+    public IEnumerator CO_HappyReaction() // customer got the correct order
+    {
+        // inital reaction
+        _appearance.SetFacialEmotion(FaceVariant.HAPPY);
+        StartCoroutine(_appearance.DoChweing(_customerScore));
+        SoundManager.Instance.PlaySound("cat happy", SoundGroup.CUSTOMER);
+        yield return new WaitForSeconds(_reactionTimer);
+
+        // final actions
+        GameManager.Instance.IncrementCustomersServed();
+        GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
+        MakeSeatEmpty();
+    }
+    public IEnumerator CO_AngryReaction() // customer got the wrong order
+    {
+        // initial reaction
+        _appearance.SetAngryEmotion(1);
+        _customerScore = 0f;
+        SoundManager.Instance.PlaySound("cat angry", SoundGroup.CUSTOMER);
+        yield return new WaitForSeconds(_reactionTimer);
+
+        // final actions
+        GameManager.Instance.IncrementCustomersServed();
+        MakeSeatEmpty();
+    }
+    public IEnumerator CO_DirtyReaction() // customer got an expired order
+    {
+        // inital reaction
+        _appearance.SetFacialEmotion(FaceVariant.SUS);
+        _customerScore = 0f;
+        SoundManager.Instance.PlaySound("cat yuck", SoundGroup.CUSTOMER);
+        yield return new WaitForSeconds(_reactionTimer);
+
+        // final actions
+        GameManager.Instance.IncrementCustomersServed();
+        StartCoroutine(GameManager.Instance.CO_CloseDownShop());
+    }       
 
 #endregion
 }

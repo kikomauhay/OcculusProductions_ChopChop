@@ -1,19 +1,63 @@
-using System;
 using UnityEngine;
+using System;
 
 public class SoundManager : Singleton<SoundManager>
 {
-    public AudioSource SoundSource;
-    public Sound[] Sounds;
-    int i = 0; // testing
+#region Members
+    
+    public AudioSource SoundSource, MusicSource;
+    
+    public Sound[] EquipmentSounds, ApplianceSounds, FoodSounds;
+    public Sound[] GameSounds, VFXSounds, CustomerSounds;
+    public Sound[] TutorialSounds;
+
+#endregion
+
+#region Unity
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    void Update() => test();
 
-    public void PlaySound(string title)
+#endregion
+
+    public void PlaySound(string title, SoundGroup type) 
     {
-        Sound s = Array.Find(Sounds, i => i.name == title);
+        Sound s = null;
+
+        switch (type)
+        {
+            case SoundGroup.EQUIPMENT:
+                s = Array.Find(EquipmentSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.APPLIANCES:
+                s = Array.Find(ApplianceSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.FOOD:
+                s = Array.Find(FoodSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.GAME:
+                s = Array.Find(GameSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.VFX:
+                s = Array.Find(VFXSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.CUSTOMER:
+                s = Array.Find(CustomerSounds, i => i.name == title);
+                break;
+
+            case SoundGroup.TUTORIAL:
+                s = Array.Find(TutorialSounds, i => i.name == title);
+                break;
+
+            default:
+                Debug.LogError("Wrong SoundGroup!");
+                break;
+        }
 
         if (s != null)
         {
@@ -22,26 +66,36 @@ public class SoundManager : Singleton<SoundManager>
             SoundSource.loop = s.loop;
             SoundSource.spatialBlend = 1f;
             SoundSource.PlayOneShot(s.clip);
+
+            if (s.loop) 
+            { 
+                SoundSource.Play();
+                return;
+            }
+            SoundSource.PlayOneShot(s.clip);
         }
         else Debug.LogError("Sound not found!");
     }
 
-    public void ToggleMute() => SoundSource.mute = !SoundSource.mute;
-    public void SetSoundVolume(float v) => SoundSource.volume = v;
+#region Audio_Balancing
 
-    void test()
+    public void ToggleMute() 
     {
-        // plays all the sounds in order
-        if (Input.GetKeyDown(KeyCode.Return)) {
-            SoundSource.PlayOneShot(Sounds[i].clip);
-            Debug.Log($"{Sounds[i].name}");
-        }
-        
-        // increment index 
-        if (Input.GetKeyDown(KeyCode.Space)) i++;
-
-        // random slice variants
-        if (Input.GetKeyDown(KeyCode.Escape))
-            PlaySound(UnityEngine.Random.value > 0.5f ? "fish slice 01" : "fish slice 02"); 
+        SoundSource.mute = !SoundSource.mute;
+        MusicSource.mute = !MusicSource.mute;
     }
+    public void SetSoundVolume(float v) => SoundSource.volume = v;
+    public void SetMusicVolume(float v) => MusicSource.volume = v;
+    public void StopMusic() => MusicSource.Stop();
+    public void StopAllAudio()
+    {
+        StopMusic();
+        SoundSource.Stop();
+    }
+
+    public bool SoundPlaying() => SoundSource.isPlaying;
+    public bool MusicPlaying() => MusicSource.isPlaying;
+    public bool AudioPlaying() => SoundPlaying() && MusicPlaying();
+    
+#endregion
 }

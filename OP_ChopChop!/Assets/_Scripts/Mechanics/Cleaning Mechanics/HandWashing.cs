@@ -1,50 +1,127 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HandWashing : MonoBehaviour
 {
+#region Members
 
-    //had another epiphany, gani pag kagising can you put all the coroutines inside cleanmanager na lang.
-    //maiwan lang dito should be the ontrigger stay pala
+    public bool IsWet { get; private set; }
 
-    [SerializeField] bool _isDirty;
-    [SerializeField] bool _coroutineTriggered;
-    [SerializeField] int _cleanCounter;
-    [SerializeField] float _timer;
+    [SerializeField] private bool _isDirty;
+    [SerializeField] public Collider HandWashCollider;
+    [SerializeField] private Material _handMaterial, _outlineTexture, _warningOutlineTexture;
 
-    private void FixedUpdate()
-    {
-        if(!_coroutineTriggered)
-            StartCoroutine(DecayRate());
+    private float _timer;
+    private bool _hasSpawnedVFX;
 
-        if (_cleanCounter <= 0)
-            _isDirty = true;
-        else _isDirty = false;
+#endregion
 
-        Debug.Log("Hand Dirty?" +_isDirty);
+#region Methods
+
+    void Start()
+    { 
+        IsWet = false;
+        HandWashCollider.enabled = false;
+        
+        _timer = 20f;
+        _isDirty = false;
+        _hasSpawnedVFX = false;
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<Sponge>() != null)
+        if (other.gameObject.GetComponent<Ingredient>() != null)
         {
-            //change sponge into soap or something along the way
-            //same sht with plate, velocity things
-            //instantiate bubble vfx
-            //set dirty to false after a few seconds of cleaning
+            if (_isDirty)
+            {
+                other.gameObject.GetComponent<Ingredient>().Contaminate();
+            }
         }
     }
 
-    IEnumerator DecayRate()
+    private void OnTriggerStay(Collider other)
     {
-        if (_coroutineTriggered) yield break;
-        _coroutineTriggered = true;
+        if (!IsWet) return;
 
-        while (_cleanCounter > 0)
+        if (other.gameObject.GetComponent<HandWashing>() != null)
         {
-            yield return new WaitForSeconds(_timer);
-            _cleanCounter -= 5;
+            if (GameManager.Instance.CurrentShift != GameShift.Training)
+            {
+                SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
+                                               HandWashCollider.transform, 
+                                               3f);
+            }
+            _timer -= Time.deltaTime;
+
+            if (_timer <= 0)
+            {
+                HandManager.Instance._handUsage = 30;
+                HandWashCollider.enabled = false;
+            }
         }
-        _coroutineTriggered = false;
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        _timer = 20f;
+
+        if (IsWet)
+            StartCoroutine(WetToggle());
+    }
+
+#endregion
+
+#region Helpers
+
+    public void Dirtify()
+    {
+        _isDirty = true;
+        Debug.LogWarning("Dirtified");
+
+        if (_isDirty)
+        {
+            SkinnedMeshRenderer r = GetComponentInChildren<SkinnedMeshRenderer>();
+            
+            if (r != null)
+            {
+                r.materials = new Material[] { _handMaterial, _outlineTexture };
+            }
+        }
+    }
+
+    public void WarningIndicator()
+    {
+        SkinnedMeshRenderer r = GetComponentInChildren<SkinnedMeshRenderer>();
+        
+        if (r != null)
+        {
+            r.materials = new Material[] { _handMaterial, _warningOutlineTexture };
+        }
+    }
+
+    public void Cleaned() => _isDirty = false;
+    public void ToggleWet() => IsWet = true;
+    public void PlayVFX()
+    {
+        if (_isDirty && !_hasSpawnedVFX)
+            StartCoroutine(SpawnVFXWithDelay());
+    }
+    
+#endregion
+
+#region Enuerators
+
+    private IEnumerator WetToggle()
+    {
+        yield return new WaitForSeconds(5f);
+        IsWet = false;
+    }
+    private IEnumerator SpawnVFXWithDelay()
+    {
+        _hasSpawnedVFX = true;
+        SpawnManager.Instance.SpawnVFX(VFXType.STINKY, HandWashCollider.transform, 3f);
+        yield return new WaitForSeconds(5f); // Delay before it can spawn again
+        _hasSpawnedVFX = false;
+    }
+
+#endregion
 }

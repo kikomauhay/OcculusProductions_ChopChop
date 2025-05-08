@@ -2,27 +2,68 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.GetComponent<Plate>() != null)
-        {
-            other.gameObject.GetComponent<Plate>().SetContaminated();
-            return;
-        }
-        if (other.gameObject.GetComponent<Trashable>() == null) return;
-        
-        switch (other.gameObject.GetComponent<Trashable>()._trashTypes)
+        GameObject obj = other.gameObject;
+
+        if (obj.GetComponent<Trashable>() == null) return;
+
+        switch (obj.GetComponent<Trashable>().TrashTypes)
         {
             case TrashableType.INGREDIENT:
-                other.gameObject.GetComponent<Ingredient>().ContaminateFood();
+                DoIngredientLogic(obj.GetComponent<Ingredient>());
                 break;
+
             case TrashableType.FOOD:
-                other.gameObject.GetComponent<Ingredient>().ContaminateFood();
+                obj.GetComponent<UPD_Food>().SetRotten();
+                SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
                 break;
+
+            case TrashableType.DISH:
+                obj.GetComponent<Dish>().HitTheFloor();
+                SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                                "plate placed 01" : 
+                                                "plate placed 02", 
+                                                SoundGroup.EQUIPMENT);
+                break;
+
             case TrashableType.EQUIPMENT:
-                Debug.LogWarning("Reset Equipment");
+                DoEquipmentLogic(obj.GetComponent<Equipment>());
                 break;
+
             default: break;
         }
     }
+
+    void DoIngredientLogic(Ingredient ing)
+    {
+        ing.Contaminate();
+        
+        if (ing.IngredientType == IngredientType.SALMON ||
+            ing.IngredientType == IngredientType.TUNA)
+        {
+            SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
+        }
+    }
+
+    void DoEquipmentLogic(Equipment eq)
+    {
+        eq.HitTheGround();
+        eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                
+        // additional logic for equipment child classes
+        if (eq.GetComponent<Plate>() != null)
+        {
+            // ternary operator syntax -> condition ? val_if_true : val_if_false
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? "plate placed 01" : "plate placed 02", 
+                                            SoundGroup.EQUIPMENT);
+        }
+
+        if (eq.GetComponent<Knife>() != null)
+        {
+            // ternary operator syntax -> condition ? val_if_true : val_if_false
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? "knife dropped 01" : "knife dropped 02",
+                                            SoundGroup.EQUIPMENT);
+        }
+    } 
 }

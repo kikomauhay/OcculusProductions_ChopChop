@@ -13,13 +13,7 @@ MonoBehaviour:
   m_Name: Rice Stats
   m_EditorClassIdentifier: 
   _type: 0
-  _materials: []
-  _decay:
-    Rate: 2
-    Speed: 5
-  _contaminated:
-    Rate: 5
-    Speed: 2
-  _stored:
-    Rate: 1
-    Speed: 10
+  _stateMaterials:
+  - {fileID: 2100000, guid: ccd7bda732b63f74bbb2e891ec211ce3, type: 2}
+  - {fileID: 2100000, guid: 0f9308779b87ea9409a85f099a321e99, type: 2}
+  - {fileID: 2100000, guid: 0f9308779b87ea9409a85f099a321e99, type: 2}

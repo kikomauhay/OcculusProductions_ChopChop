@@ -1,67 +1,64 @@
 using UnityEngine;
 using System;
 
-public enum MoldType { UNMOLDED, GOOD, PERFECT, BAD }
-
 public class RiceIngredient : Ingredient
 {
-    [Header("Finished Dishes"), Tooltip("Possible dishes the rice can combine with.")]
-    [SerializeField] GameObject[] _foodPrefabs; // 0 = salmon nigiri, 1 = tuna nigiri
-
-    [Header("VFX Settings")]
-    [SerializeField] float _vfxDestroyTime; // was initially at 2f  
+    [Header("Finished Dishes"), Tooltip("0 = salmon nigiri, 1 = tuna nigiri, 2 = salmon sashimi, 3 = tuna sashimi")]
+    [SerializeField] private GameObject[] _foodPrefabs; 
 
     [Header("Molding Attributes")]
-    [SerializeField] MoldType _moldType;
+    [SerializeField] private MoldType _moldType;
     public Action<int> OnRiceMolded; // check with Moldable.cs
+    private static bool TutorialDone { get; set; } 
 
     protected override void Start() 
     {
         base.Start();
-
         OnRiceMolded += ChangeRiceMold;
-        _moldType = MoldType.UNMOLDED;
-        _ingredientType = IngredientType.RICE;
-    }
 
-    void Reset() => OnRiceMolded -= ChangeRiceMold;
-
-    void OnTriggerEnter(Collider other) // combination of the food
-    {
-        if (other.gameObject.name == name) return;
-
-        if (_moldType != MoldType.PERFECT) return;
-
-        Ingredient ing = other.GetComponent<Ingredient>();
-        Vector3 pos = transform.position;
-        Quaternion rot = transform.rotation;
-
-        // gets the freshness rates of both ingredients before deleting them
-        Destroy(gameObject);
-        Destroy(other.gameObject);
-        SpawnManager.Instance.OnSpawnVFX?.Invoke(VFXType.SMOKE, pos, rot);
-        
-        // only nigiris for now (makis will be added after midterms)
-        if (ing.GetComponent<FishIngredient>().SliceType == SliceType.THIN)
+        if (!TutorialDone && _moldType == MoldType.PERFECT)
         {
-            GameObject foodToSpawn;
-            Food food = null;
-
-            if (ing.IngredientType == IngredientType.SALMON)
-                foodToSpawn = Instantiate(_foodPrefabs[0], pos, rot);
-            
-            else if (ing.IngredientType == IngredientType.TUNA)
-                foodToSpawn = Instantiate(_foodPrefabs[1], pos, rot);
-            
-            else return;
-
-            // sets up the food's score
-            food = foodToSpawn.GetComponent<Food>();
-            food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
-            food.FoodType = DishType.NIGIRI_SALMON; // only salmon for now (will add tuna later)
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding06());
+            TutorialDone = true;
         }
     }
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        OnRiceMolded -= ChangeRiceMold;
+    }
+
+    protected override void OnTriggerEnter(Collider other) // combination of the food
+    {
+        if (other.gameObject.name == name) return;
+        
+        if (_moldType != MoldType.PERFECT) return;
+
+        Ingredient ing = other.gameObject.GetComponent<Ingredient>();
+
+        if (ing != null)
+        {
+            // thinnest slice possible
+            if (ing.SliceIndex == 4)
+            {
+                Destroy(gameObject);
+
+                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);   
+                SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+
+                GameObject foodToSpawn = SpawnManager.Instance.SpawnObject(ing.IngredientType == IngredientType.SALMON ?
+                                                                        _foodPrefabs[0] : _foodPrefabs[1],
+                                                                        transform, SpawnObjectType.FOOD);
+                // sets up the food's score
+                // UPD_Food food = foodToSpawn.GetComponent<UPD_Food>();
+                // food.Type = ing.IngredientType == IngredientType.SALMON ? DishType.NIGIRI_SALMON : DishType.NIGIRI_TUNA;
+                // food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
+                
+                Destroy(other.gameObject);
+            }
+        }        
+    }
+    protected override void OnCollisionEnter(Collision other) => base.OnCollisionEnter(other);
 
     void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;
-    // change to incrementing index so you don't need to get a parameter
 }

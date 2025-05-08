@@ -1,14 +1,19 @@
+using UnityEngine.XR.Interaction.Toolkit;
+using System.Collections;
 using UnityEngine;
 
 public class Sliceable : MonoBehaviour
 {
 #region Members
 
-    [SerializeField] private GameObject _currentPrefab, _nextPrefab; // make this an array 
-    [SerializeField] private GameObject _sharpObject, _meatBoard; // references for the ingredient
-    [SerializeField] private GameObject _smokeVFX;
-    
-    private int _chopCounter;
+    [SerializeField] private GameObject _currentPrefab, _nextPrefab;
+    [SerializeField] int _fishCuts;
+
+    Collider _snap;
+
+    IXRSelectInteractor _interactor;
+
+    int _chopCounter;
     public bool IsAttached { get; set; }
 
 #endregion
@@ -19,64 +24,85 @@ public class Sliceable : MonoBehaviour
     {
         _chopCounter = 0;
         IsAttached = false;
-        _sharpObject = EquipmentManager.Instance?.Knife;
-        _meatBoard = EquipmentManager.Instance?.MeatBoard;
-    }
-    void Update()
-    {
-        if (_chopCounter >= 5)
-        {
-            Sliced();
-
-            // needs an explanation
-            _meatBoard.gameObject.GetComponent<Snap>().ResetSnap();
-        }
     }
     void OnTriggerEnter(Collider other)
     {
-        // check other gameobject if it has a knife script
-        Knife knife = other.gameObject.GetComponent<Knife>();
+        if (other.gameObject.GetComponent<Knife>() == null) return;
 
-        // if not null, +1 on chop counter
+        if (other.gameObject.GetComponent<ActionBasedController>() && IsAttached)
+            _interactor = other.gameObject.GetComponent<XRDirectInteractor>();
+
         if (IsAttached)
         {
-            if (knife != null)
+            _chopCounter++;
+
+            if (_chopCounter >= 5)
             {
-                Vector3 _currentPosition = _currentPrefab.transform.position;
-                Quaternion _currentRotation = _currentPrefab.transform.rotation;
-                _chopCounter++;
-
-                SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
-                SoundManager.Instance.PlaySound(Random.value > 0.5f ? "fish slice 01" : "fish slice 02");
-                Debug.Log("Chopping");
+                Sliced();
+                other.gameObject.GetComponent<Knife>().IncrementUseCounter();
+                return;
             }
-        }
-    }   
 
-#endregion
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+            SoundManager.Instance.PlaySound("knife chop", SoundGroup.EQUIPMENT);
+            
+            // ternary operator syntax -> condition ? val_if_true : val_if_false
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                            "fish slice 01" : 
+                                            "fish slice 02",
+                                            SoundGroup.FOOD);
+        }
+
+        if (_interactor != null)
+            _interactor.selectEntered.AddListener(Remove);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.GetComponent<ActionBasedController>())
+        {
+            // commented this out cuz this was producing a lot of errors
+            // _interactor.selectEntered.RemoveListener(Remove);
+            _interactor = null;
+        }
+    }
+
+    #endregion
 
     void Sliced()
     {
-        if (_currentPrefab != null)
-        {
-            // gets the position and rotation of prefab and then destroys it
-            Vector3 _currentPosition = _currentPrefab.transform.position;
-            Quaternion _currentRotation = _currentPrefab.transform.rotation;
+        if (_currentPrefab == null) return;
 
-            Destroy(_currentPrefab);
-            SpawnVFX(_smokeVFX, _currentPosition, _currentRotation);
-            Instantiate(_nextPrefab, _currentPosition, _currentRotation);
-            
-            SoundManager.Instance.PlaySound("knife chop");
-            Debug.Log("SLICED!");
-        }
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+        StartCoroutine(DoCutting());
     }
-    void SpawnVFX(GameObject vfxPrefab, Vector3 position, Quaternion rotation)
+
+    private void Remove(SelectEnterEventArgs args)
     {
-        if(vfxPrefab != null)
+        GetComponent<Rigidbody>().isKinematic = false;
+        IsAttached = false;
+        GetComponent<Collider>().isTrigger = false;
+    }
+
+    public void SetSnap(Collider snap) => _snap = snap;
+
+    IEnumerator DoCutting()
+    {  
+        yield return null;
+
+        for (int i = 0; i < _fishCuts; i++)
         {
-            GameObject VFXInstance = Instantiate(vfxPrefab, position, rotation);
-            Destroy(VFXInstance, 2f);
-        }    
+            Transform t = transform;
+
+            t.position = new Vector3(transform.position.x,
+                                     transform.position.y + Random.Range(0.1f, 1f),
+                                     transform.position.z);
+
+            SpawnManager.Instance.SpawnObject(_nextPrefab, t, SpawnObjectType.INGREDIENT);
+        }
+
+        _snap.gameObject.GetComponent<Snap>().CallReset();
+        yield return null;
+        Destroy(gameObject);
     }
 }

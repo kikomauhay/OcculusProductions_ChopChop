@@ -1,40 +1,56 @@
-using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine;
 
 public class Trash : MonoBehaviour
 {
-    IXRSelectInteractor _mainInteractor;
-
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<Trashable>() != null)
+        GameObject obj = other.gameObject;
+
+        if (obj.GetComponent<Trashable>() == null) return;
+
+        if (obj.GetComponent<Sponge>() != null)
         {
-            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashableType.INGREDIENT)
-            {
-                Destroy(other.gameObject);
-                SoundManager.Instance.PlaySound("dispose food");
-            }
-            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashableType.FOOD)
-            {
-                Debug.Log("Food has been thrown out");
-          /*      GameObject _DirtyPlate = InstantiatePlate();
-                AttachToHand(_DirtyPlate, _mainInteractor);*/
-                
-            }
-            if (other.gameObject.GetComponent<Trashable>()._trashTypes == TrashableType.EQUIPMENT)
-            {
-                //Reset Equipment here
-                //Set Reset Points
-            }
+            obj.GetComponent<Sponge>().ResetPosition();
+            return;
+        }
+        
+        switch(obj.GetComponent<Trashable>().TrashTypes)
+        {
+            case TrashableType.INGREDIENT:
+                DestroyIngredient(obj.GetComponent<Ingredient>());
+                break;
+
+            case TrashableType.FOOD:
+                DestroyFood(obj.GetComponent<UPD_Food>());
+                break;
+
+            case TrashableType.EQUIPMENT:
+                DoEquipmentLogic(obj.GetComponent<Equipment>());
+                break;
+
+            default: break;
         }
     }
 
-    #region Functions
+#region Functions
 
-    // If we have spawn manager na, put the Instantiate codes into spawn manager na lang
-    private GameObject InstantiatePlate(GameObject _plate, Vector3 _currentPosition, Quaternion _currentRotation)
+    private void DestroyIngredient(Ingredient ing)
     {
-        return Instantiate(_plate,_currentPosition,_currentRotation);
+        Destroy(ing.gameObject);
+        ing.Trashed();
+    }
+
+    private void DestroyFood(UPD_Food food)
+    {
+        Destroy(food.gameObject);
+        SoundManager.Instance.PlaySound("dispose food", SoundGroup.FOOD);
+    }
+
+    private void DoEquipmentLogic(Equipment eq)
+    {
+        eq.HitTheGround();
+        eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     private void AttachToHand(GameObject _spawnedPlate, IXRSelectInteractor _interactor)
@@ -57,5 +73,5 @@ public class Trash : MonoBehaviour
         }
     }
 
-    #endregion
+#endregion
 }
