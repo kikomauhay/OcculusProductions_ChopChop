@@ -37,10 +37,6 @@ public class NEW_Plate : Equipment
         if (!IsClean)
             base.OnTriggerEnter(other);
     }
-    protected override void OnCollisionEnter(Collision other) 
-    {
-        // cross-contamination logic
-    }
 
 #region Testing
 

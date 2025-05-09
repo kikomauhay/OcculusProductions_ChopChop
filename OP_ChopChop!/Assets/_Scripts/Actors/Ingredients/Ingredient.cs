@@ -95,6 +95,77 @@ public abstract class Ingredient : MonoBehaviour
         GameManager.Instance.OnEndService -= SetRotten;
     }
     protected abstract void OnTriggerEnter(Collider other);
+    protected void OnCollisionEnter(Collision other)
+    {
+        // ingredient -> sponge
+        if (other.gameObject.GetComponent<Ingredient>() != null)
+        {
+            Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+            if (!IsFresh) 
+            {
+                sponge.SetDirty();
+                Debug.LogWarning($"{name} contaminated {sponge.name}");
+            }
+        }
+
+        // ingredient -> another ingredient
+        if (other.gameObject.GetComponent<Ingredient>() != null)
+        {
+            Ingredient ing = other.gameObject.GetComponent<Ingredient>();
+
+            if (!IsFresh)
+            {
+                ing.SetMoldy();
+                Debug.LogWarning($"{name} contaminated {ing.name}");
+                return;
+            }
+            else if (!ing.IsFresh) 
+            {
+                SetMoldy();
+                Debug.LogWarning($"{ing.name} contaminated {name}");
+                return;
+            }
+        }
+
+        // ingredient -> food
+        if (other.gameObject.GetComponent<UPD_Food>() != null)
+        {
+            UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
+
+            if (!IsFresh)
+            {
+                food.SetMoldy();
+                Debug.LogWarning($"{name} contaminated {food.name}");
+                return;
+            }
+            else if (food.Condition != FoodCondition.CLEAN)
+            {
+                SetMoldy();
+                Debug.LogWarning($"{food.name} contaminated {name}");
+                return;
+            }
+        }
+
+        // ingredient -> equipment
+        if (other.gameObject.GetComponent<Equipment>() != null)
+        {
+            Equipment eq = other.gameObject.GetComponent<Equipment>();
+
+            if (!IsFresh)
+            {
+                eq.SetDirty();
+                Debug.LogWarning($"{name} contaminated {eq.name}");
+                return;
+            }
+            else if (!eq.IsClean)
+            {
+                SetMoldy();
+                Debug.LogWarning($"{eq.name} contaminated {name}");
+                return;
+            }
+        }
+    }
 
 #endregion
 #region Public
@@ -152,7 +223,7 @@ public abstract class Ingredient : MonoBehaviour
             default: break;
         }
     }
-    protected void StartDecaying() => StartCoroutine(DecayIngredient());
+    protected void StartDecaying() => StartCoroutine(CO_Decay());
 
 #endregion
 
@@ -160,7 +231,7 @@ public abstract class Ingredient : MonoBehaviour
 
 #region Enumerators
 
-    protected IEnumerator DecayIngredient() 
+    protected IEnumerator CO_Decay() 
     {
         yield return new WaitForSeconds(GRACE_PERIOD);
         
@@ -193,6 +264,8 @@ public abstract class Ingredient : MonoBehaviour
                 SoundManager.Instance.PlaySound("fish dropped");
                 ChangeMaterial();
             }
+
+            Debug.Log($"{name} freshness rate: {_freshnessRate}/100");
         }
     }
     protected IEnumerator Delay(float time)
