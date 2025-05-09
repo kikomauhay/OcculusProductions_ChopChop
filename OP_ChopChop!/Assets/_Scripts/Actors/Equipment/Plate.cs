@@ -37,14 +37,6 @@ public class Plate : Equipment
 
         Debug.Log($"Is clean: {IsClean}");                  
     }
-  
-    protected override void OnCollisionEnter(Collision other)
-    {
-        base.OnCollisionEnter(other);
-        SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
-                                        "plate placed 01" : 
-                                        "plate placed 02");
-    } 
 
 #endregion
 

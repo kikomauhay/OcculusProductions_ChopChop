@@ -145,21 +145,6 @@ public class NEW_Dish : MonoBehaviour
 
 #endregion
 
-#region Enumerators
-
-    private IEnumerator CO_Expire()
-    { 
-        yield return new WaitForSeconds(DECAY_TIME);
-
-        if (_foodCondition != FoodCondition.MOLDY)
-        {
-            _foodCondition = FoodCondition.ROTTEN;
-            _plate.SetDirty();
-        }
-    }
-
-#endregion
-
 #endregion
 
 #region Public
@@ -203,7 +188,6 @@ public class NEW_Dish : MonoBehaviour
     }
 
 #endregion
-
 #region Collision
 
     private void DoFoodCollision(UPD_Food food)
@@ -274,7 +258,6 @@ public class NEW_Dish : MonoBehaviour
     }
 
 #endregion
-
 #region Helpers
 
     private void SetActiveDish(DishPlatter activeDishChosen)
@@ -297,12 +280,28 @@ public class NEW_Dish : MonoBehaviour
 
         if (!_isDevloperMode) 
         {
-            StartCoroutine(CO_Expire());
+            StartCoroutine(CO_StartRotting());
             Debug.LogWarning($"{gameObject.name} is expiring!");    
         }
     }
 
 #endregion
+
+#endregion
+
+#region Enumerators
+
+    private IEnumerator CO_StartRotting()
+    { 
+        yield return new WaitForSeconds(DECAY_TIME);
+
+        if (_foodCondition != FoodCondition.MOLDY)
+        {
+            _foodCondition = FoodCondition.ROTTEN;
+            _plate.SetDirty();
+        }
+    }
+
 #endregion
 }   
 
