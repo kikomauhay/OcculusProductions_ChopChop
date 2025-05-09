@@ -33,7 +33,7 @@ public class HandWashing : MonoBehaviour
         {
             if (_isDirty)
             {
-                other.gameObject.GetComponent<Ingredient>().Contaminate();
+                other.gameObject.GetComponent<Ingredient>().SetMoldy();
             }
         }
     }

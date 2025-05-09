@@ -83,3 +83,15 @@ public class Moldable : MonoBehaviour
 
 #endregion
 }
+
+#region Enumerations
+
+    public enum MoldType // IN A CERTAIN ORDER (DON'T RE-ORDER)
+    {
+        NOT_MOLDED,
+        UNDER_MOLDED,
+        PERFECT,
+        OVER_MOLDED
+    }
+
+#endregion

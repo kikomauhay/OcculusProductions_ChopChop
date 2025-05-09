@@ -72,7 +72,7 @@ public class ColliderCheck : MonoBehaviour
             Debug.LogError("Game Over!");
             StartCoroutine(CustomerOrder.CO_DirtyReaction());
         }
-        else if (CustomerOrder.OrderIsSameAs(d)) // CORRECT ORDER
+        else if (CustomerOrder.WantedPlatter == d.OrderDishType) // CORRECT ORDER
         {    
             CustomerOrder.CustomerSR = (d.DishScore + CustomerOrder.PatienceRate) / 2f;
             StartCoroutine(CustomerOrder.CO_HappyReaction());

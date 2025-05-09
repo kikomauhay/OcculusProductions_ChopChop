@@ -1,4 +1,4 @@
 using UnityEngine;
 
-public class SashimiDish : Dish {}
+public class SashimiDish : MonoBehaviour {}
 

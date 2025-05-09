@@ -27,7 +27,7 @@ public class NEW_Platter : MonoBehaviour
     {
         _rend = GetComponent<Renderer>();
 
-        if (_materials.Length < 3)
+        if (_materials.Length != 3)
             Debug.LogWarning($"{_materials} has missing materials!");
 
         Debug.Log($"{name} developer mode: {_isDevloperMode}");

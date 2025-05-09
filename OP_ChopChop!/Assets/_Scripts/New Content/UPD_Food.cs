@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -11,13 +12,15 @@ using UnityEngine;
 public class UPD_Food : MonoBehaviour
 {
 
+#region Members
+
 #region Properties
+
     public FoodCondition Condition => _foodCondition;
     public DishPlatter OrderType => _orderType;
     public float Score => _foodScore;
 
 #endregion
-
 #region Private
 
     [Header("Food Attrbutes")]
@@ -29,10 +32,17 @@ public class UPD_Food : MonoBehaviour
     [SerializeField] private Material _dirtyOSM;
     [SerializeField] private Material _rottenMat, _moldyMat;
 
+    private Renderer _rend;
+
 #endregion
+
+#endregion
+
+#region Methods
 
 #region Unity
 
+    private void Awake() => _rend = GetComponent<Renderer>();
     private void Start()
     {
         if (_orderType == DishPlatter.EMPTY)
@@ -97,7 +107,6 @@ public class UPD_Food : MonoBehaviour
     }
 
 #endregion
-
 #region Public
 
     public void SetRotten()
@@ -109,8 +118,7 @@ public class UPD_Food : MonoBehaviour
         }
         
         _foodCondition = FoodCondition.ROTTEN; 
-        GetComponent<MeshRenderer>().materials = new Material[] { _moldyMat, 
-                                                                  _dirtyOSM };
+        _rend.materials = new Material[] { _rottenMat, _dirtyOSM };
     }
     public void SetMoldy()
     {
@@ -121,10 +129,17 @@ public class UPD_Food : MonoBehaviour
         }
 
         _foodCondition = FoodCondition.ROTTEN; 
-        GetComponent<MeshRenderer>().materials = new Material[] { _rottenMat,
-                                                                  _dirtyOSM };
+        _rend.materials = new Material[] { _moldyMat, _dirtyOSM };
     }
-    public void SetScore(float score) => _foodScore = score;
+    public void SetFoodScore(float score) => _foodScore = score;
 
 #endregion
+
+#endregion
+
+    private IEnumerator CO_StartRotting()
+    {
+        yield return new WaitForSeconds(10f);
+        SetRotten();
+    }
 }

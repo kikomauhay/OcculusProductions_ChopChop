@@ -401,3 +401,23 @@ public class GameManager : Singleton<GameManager>
 
 #endregion
 }
+
+#region Enuemrations
+
+    public enum GameDifficulty
+    { 
+        EASY, 
+        NORMAL,
+        HARD
+    }
+
+    public enum GameShift // IN A CERTAIN ORDER (DON'T RE-ORDER)
+    {
+        Default,
+        Training,
+        PreService,
+        Service,
+        PostService
+    }
+    
+#endregion
