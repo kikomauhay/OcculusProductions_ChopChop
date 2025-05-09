@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 3773463000732323671}
   - component: {fileID: 8784436518025228413}
   - component: {fileID: 3034134621103022654}
-  - component: {fileID: 3537111716930719708}
   - component: {fileID: 7216448029623111143}
+  - component: {fileID: 3537111716930719708}
   - component: {fileID: 3461659435830712588}
   m_Layer: 0
   m_Name: ing_tuna_slice_04
@@ -118,6 +118,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7216448029623111143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7924088626406575321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 1
 --- !u!114 &3537111716930719708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,19 +296,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &7216448029623111143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7924088626406575321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _trashType: 1
 --- !u!114 &3461659435830712588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,13 +308,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da93d8d7d8cacb841b99f6853e575221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sliceIndex: 4
+  _freshnessRate: 100
   _ingredientType: 2
-  _ingredientStats: {fileID: 11400000, guid: 8d861586e0d7fd446913bed80f383061, type: 2}
+  _sliceIndex: 4
   _isFresh: 1
-  _stateMaterials:
+  _materials:
   - {fileID: 2100000, guid: c1c0e9ddfa5a46c4da17419e1a576865, type: 2}
   - {fileID: 2100000, guid: 8b4fc6eb461b3874a9786d8d882af454, type: 2}
   - {fileID: 2100000, guid: 5a50d70a49f111244acf54b9ce99202c, type: 2}
-  _outlineShaderMaterial: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e,
-    type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _isDevloperMode: 0

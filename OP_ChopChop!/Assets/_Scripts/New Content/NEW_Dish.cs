@@ -147,7 +147,7 @@ public class NEW_Dish : MonoBehaviour
 
 #region Enumerators
 
-    private IEnumerator Expire()
+    private IEnumerator CO_Expire()
     { 
         yield return new WaitForSeconds(DECAY_TIME);
 
@@ -297,7 +297,7 @@ public class NEW_Dish : MonoBehaviour
 
         if (!_isDevloperMode) 
         {
-            StartCoroutine(Expire());
+            StartCoroutine(CO_Expire());
             Debug.LogWarning($"{gameObject.name} is expiring!");    
         }
     }

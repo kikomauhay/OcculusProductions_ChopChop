@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 6704614070973084445}
   - component: {fileID: 1830725055660031739}
   - component: {fileID: 6435378151288648285}
-  - component: {fileID: 9223341567872474543}
   - component: {fileID: 9223341567872474541}
+  - component: {fileID: 9223341567872474543}
   - component: {fileID: 7308610104729860123}
-  - component: {fileID: 9223341567872474544}
   - component: {fileID: 9223341567872474542}
+  - component: {fileID: 9223341567872474544}
   - component: {fileID: -8582130309659511611}
   m_Layer: 0
   m_Name: ing_Salmon_Slice_01
@@ -89,6 +89,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &9223341567872474541
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9223341567872474545}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6995026393548057533, guid: 3365feb6245de0d4cbd93d1336392de7, type: 3}
 --- !u!54 &9223341567872474543
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -105,20 +119,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &9223341567872474541
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9223341567872474545}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6995026393548057533, guid: 3365feb6245de0d4cbd93d1336392de7, type: 3}
 --- !u!114 &7308610104729860123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +132,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _trashType: 1
+--- !u!114 &9223341567872474542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9223341567872474545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentPrefab: {fileID: 9223341567872474545}
+  _nextPrefab: {fileID: 25980143380498068, guid: 8ba3dee17cdd5c3439f8b5065cfb0e99,
+    type: 3}
+  _fishCuts: 1
 --- !u!114 &9223341567872474544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,22 +313,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &9223341567872474542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9223341567872474545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentPrefab: {fileID: 9223341567872474545}
-  _nextPrefab: {fileID: 25980143380498068, guid: 8ba3dee17cdd5c3439f8b5065cfb0e99,
-    type: 3}
-  _fishCuts: 1
 --- !u!114 &-8582130309659511611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,13 +325,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d0a61dc6b2809f418a3cae42df6da65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sliceIndex: 1
+  _freshnessRate: 100
   _ingredientType: 1
-  _ingredientStats: {fileID: 11400000, guid: 8d861586e0d7fd446913bed80f383061, type: 2}
+  _sliceIndex: 1
   _isFresh: 1
-  _stateMaterials:
+  _materials:
   - {fileID: 2100000, guid: df85099f130039e4cb6d8efc45e64fb6, type: 2}
   - {fileID: 2100000, guid: 687d4e5e722a939438c3f7c90f33a074, type: 2}
   - {fileID: 2100000, guid: 72240683af66260488f9f6450c3ac908, type: 2}
-  _outlineShaderMaterial: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e,
-    type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _isDevloperMode: 0

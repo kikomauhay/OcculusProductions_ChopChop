@@ -123,7 +123,6 @@ public class CustomerOrder : MonoBehaviour
         DestroyOrderUI();   
         Destroy(gameObject);
     }
-    public bool OrderIsSameAs(Dish dish) => dish?.OrderDishType == WantedPlatter;
     private void DestroyOrderUI() => Destroy(_customerOrderUI);
 
 #endregion
