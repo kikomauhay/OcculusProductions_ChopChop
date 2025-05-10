@@ -1,16 +1,19 @@
 using System.Collections;
+using System.Linq.Expressions;
+using System.Net.Http.Headers;
 using UnityEngine;
 
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
 {
-    public bool IsClean => _isClean;
-    public Material DirtyMaterial => _dirtyMat;
 
 #region Members
 
+    public bool IsClean => _isClean;
+    public Material DirtyMaterial => _dirtyMat;
+
     [SerializeField] protected bool _isClean;
-    [SerializeField] protected Material _outlineTexture, _cleanMat, _dirtyMat;
+    [SerializeField] protected Material _dirtyOSM, _cleanMat, _dirtyMat;
     protected Vector3 _startPosition;
     protected Renderer _rend;
 
@@ -19,10 +22,17 @@ public abstract class Equipment : MonoBehaviour
     protected int _usageCounter;                     // counter to know how many times equipment has been used
     private bool _coroutineRunning;
 
+    [Header("Debugging")]
+    [SerializeField] protected bool _isDeveloperMode;
+
 #endregion
 
 #region Unity
 
+    protected virtual void Awake()
+    {
+        _rend = GetComponent<Renderer>();
+    }
     protected virtual void Start() 
     {
         GameManager.Instance.OnStartService += ResetPosition;
@@ -32,8 +42,6 @@ public abstract class Equipment : MonoBehaviour
         _startPosition = transform.position;
 
         _usageCounter = 0;
-        _rend = GetComponent<Renderer>();
-        _rend.materials = new Material[] { _cleanMat };
 
         if (_maxUsageCounter == 0)
             Debug.LogError($"Max use for {gameObject.name} is 0");
@@ -41,80 +49,99 @@ public abstract class Equipment : MonoBehaviour
     protected virtual void OnDestroy() 
     {
         ResetPosition();
-        GameManager.Instance.OnStartService -= ResetPosition;
+
+        if (!_isDeveloperMode)
+            GameManager.Instance.OnStartService -= ResetPosition;
     }
     protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
-
-        if (sponge != null) 
-            DoCleaning();
+        
+        if (sponge != null)
+            DoCleaning(sponge);
     }
     protected virtual void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponent<Sponge>() == null) return;
+        Sponge sponge = other.gameObject.GetComponent<Sponge>();
+        
+        if (sponge == null) return;
 
         if (_coroutineRunning)
         {
-            StopCoroutine(Clean());
+            StopCoroutine(CO_Clean(sponge));
             _coroutineRunning = false;
         }
     }
-    protected virtual void OnCollisionEnter(Collision other) // CROSS-CONTAMINATION LOGIC
+    protected void OnCollisionEnter(Collision other)
     {
-        /*
-        if (GetComponent<Board>() != null) return;
-
-        // equipment + another equipment
-        if (other.gameObject.GetComponent<Equipment>() != null)
+        // equipment -> sponge
+        if (other.gameObject.GetComponent<Ingredient>() != null)
         {
-            Equipment eq = other.gameObject.GetComponent<Equipment>();
-            
-            if (!IsClean && eq.IsClean) 
-                eq.Contaminate();
-            
-            else if (IsClean && !eq.IsClean) 
-                Contaminate();            
+            Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+            if (!_isClean) 
+            {
+                sponge.SetDirty();
+                Debug.LogWarning($"{name} contaminated {sponge.name}");
+            }
         }
 
-        // equipment + ingredient
+        // equipment -> ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             Ingredient ing = other.gameObject.GetComponent<Ingredient>();
 
-            if (!IsClean && ing.IsFresh) 
-                ing.Contaminate();
-            
-            else if (IsClean && !ing.IsFresh) 
-                Contaminate();
+            if (!_isClean)
+            {
+                ing.SetMoldy();
+                Debug.LogWarning($"{name} contaminated {ing.name}");
+                return;
+            }
+            else if (!ing.IsFresh) 
+            {
+                SetDirty();
+                Debug.LogWarning($"{ing.name} contaminated {name}");
+                return;
+            }
         }
 
-        // equipment + food
-        if (other.gameObject.GetComponent<Food>() != null)
+        // equipment -> food
+        if (other.gameObject.GetComponent<UPD_Food>() != null)
         {
-            Food food = other.gameObject.GetComponent<Food>();
+            UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
 
-            // contamination logic
-            if (!IsClean && (food.IsContaminated || food.IsExpired)) 
-                food.Contaminate();
-            
-            else if (IsClean && (!food.IsExpired || !food.IsContaminated)) 
-                Contaminate();
+            if (!_isClean)
+            {
+                food.SetMoldy();
+                Debug.LogWarning($"{name} contaminated {food.name}");
+                return;
+            }
+            else if (food.Condition != FoodCondition.CLEAN)
+            {
+                SetDirty();
+                Debug.LogWarning($"{food.name} contaminated {name}");
+                return;
+            }
         }
 
-        // equipment + dish
-        if (other.gameObject.GetComponent<Dish>() != null)
+        // equipment -> another equipment
+        if (other.gameObject.GetComponent<Equipment>() != null)
         {
-            Dish dish = other.gameObject.GetComponent<Dish>();
+            Equipment eq = other.gameObject.GetComponent<Equipment>();
 
-            // contamination logic
-            if (!IsClean && (dish.IsContaminated || dish.IsExpired))
-                dish.HitTheFloor();
-
-            else if (IsClean && (!dish.IsExpired || !dish.IsContaminated))
-                Contaminate();
+            if (!_isClean)
+            {
+                eq.SetDirty();
+                Debug.LogWarning($"{name} contaminated {eq.name}");
+                return;
+            }
+            else if (!eq.IsClean)
+            {
+                SetDirty();
+                Debug.LogWarning($"{eq.name} contaminated {name}");
+                return;
+            }
         }
-        */
     }
 
 #endregion
@@ -147,7 +174,7 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter = _maxUsageCounter;
         _isClean = false;
-        _rend.materials = new Material[] { _dirtyMat, _outlineTexture };
+        _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
     }    
 
 #endregion
@@ -159,27 +186,28 @@ public abstract class Equipment : MonoBehaviour
         transform.position = _startPosition;
         transform.rotation = Quaternion.identity;
     }
-    protected IEnumerator Clean()
+    protected IEnumerator CO_Clean(Sponge sponge)
     {
         _coroutineRunning = true;
         yield return new WaitForSeconds(2f);
-        SetClean();
+        SetClean(sponge);
     }
-    protected void SetClean()
+    protected void SetClean(Sponge sponge)
     {
         _usageCounter = 0;
         _isClean = true;
         _rend.materials = new Material[] { _cleanMat };
         _coroutineRunning = false;
+        sponge.SetDirty();
     }
-    protected virtual void DoCleaning()
+    protected virtual void DoCleaning(Sponge sponge)
     {
         SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
         
         if (_coroutineRunning)
-            StopCoroutine(Clean());
+            StopCoroutine(CO_Clean(sponge));
         
-        StartCoroutine(Clean());
+        StartCoroutine(CO_Clean(sponge));
     }
 
 #endregion

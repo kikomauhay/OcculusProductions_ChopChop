@@ -96,9 +96,25 @@ public class CustomerAppearance : MonoBehaviour
 #endregion
 }
 
+#region Structres
+
 [System.Serializable]
 public struct SkinVariant
 {
     public Material BodyMaterial;
     public Material[] EarVariants, TailVariants; 
 }
+
+#endregion
+
+#region Enumerations
+
+    public enum FaceVariant
+    {
+        NEUTRAL,
+        HAPPY,
+        MAD,
+        SUS
+    }
+
+#endregion

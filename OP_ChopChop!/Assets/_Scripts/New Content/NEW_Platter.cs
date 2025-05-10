@@ -27,12 +27,10 @@ public class NEW_Platter : MonoBehaviour
     {
         _rend = GetComponent<Renderer>();
 
-        if (_materials.Length < 3)
+        if (_materials.Length != 3)
             Debug.LogWarning($"{_materials} has missing materials!");
 
-        ResetMaterial();
-
-        Debug.Log($"{gameObject.name} developer mode: {_isDevloperMode}");
+        Debug.Log($"{name} developer mode: {_isDevloperMode}");
     }
 
 #region Testing
@@ -43,44 +41,29 @@ public class NEW_Platter : MonoBehaviour
     }
     private void test()
     {
-        if (!_isDevloperMode) 
-        {
-            Debug.LogError("Not in developer mode!");            
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            ResetMaterial();
-            Debug.LogWarning("Plate is clean!");
-        }
-
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            SetRotten();
-            Debug.LogWarning("Plate is rotten!");
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            SetMoldy();
-            Debug.LogWarning("Plate is moldy!");
-        }
+        if (Input.GetKeyDown(KeyCode.Q) && _isDevloperMode) ResetMaterial();
+        if (Input.GetKeyDown(KeyCode.W) && _isDevloperMode) SetRotten();
+        if (Input.GetKeyDown(KeyCode.E) && _isDevloperMode) SetMoldy();
     }
-
 #endregion
 
 #region Public
 
-    // just makes the material clean again
-    public void ResetMaterial() => 
+    public void ResetMaterial() // just makes the material clean again
+    {
         _rend.materials = new Material[] { _materials[0] };
-
-    public void SetRotten() => 
+        Debug.LogWarning($"{name} is clean!");
+    }
+    public void SetRotten()
+    {
         _rend.materials = new Material[] { _materials[1], _dirtyOSM };
-        
-    public void SetMoldy() => 
+        Debug.LogWarning($"{name} is rotten!");
+    }        
+    public void SetMoldy() 
+    {
         _rend.materials = new Material[] { _materials[2], _dirtyOSM };
+        Debug.LogWarning($"{name} is moldy!");
+    }
 
 #endregion
 }

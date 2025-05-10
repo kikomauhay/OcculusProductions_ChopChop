@@ -24,7 +24,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     [Header("Debugging")]
     [SerializeField] private List<GameObject> _plates;
-    [SerializeField] private bool _doneWashing = false;
 
     private const float PANEL_TIMER = 15f;
 
@@ -47,7 +46,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     public IEnumerator Onboarding01() // STARTING TUTORIAL
     {
         SpawnManager.Instance.SpawnTutorialCustomer(true);
-        SoundManager.Instance.PlaySound("onb 01", SoundGroup.TUTORIAL);
+        SoundManager.Instance.PlaySound("onb 01");
         yield return new WaitForSeconds(20f);
     
         _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
@@ -56,7 +55,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     public IEnumerator Onboarding02() // INGREDIENT ORDERING TUTORIAL
     {
         _faucetKnob.GetComponent<OutlineMaterial>().DisableHighlight();
-        SoundManager.Instance.PlaySound("onb 02", SoundGroup.TUTORIAL);
+        SoundManager.Instance.PlaySound("onb 02");
         yield return new WaitForSeconds(10f);
 
         _orderScreen.GetComponent<OutlineMaterial>().EnableHighlight(); 
@@ -64,7 +63,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     public IEnumerator Onboarding03() // FREEZER TUTORIAL
     {
         _orderScreen.GetComponent<OutlineMaterial>().DisableHighlight();
-        SoundManager.Instance.PlaySound("onb 03", SoundGroup.TUTORIAL);
+        SoundManager.Instance.PlaySound("onb 03");
         yield return new WaitForSeconds(3f);
 
         _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
@@ -72,7 +71,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     public IEnumerator Onboarding04() // CHOPPING TUTORIAL       
     {
         _freezer.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
-        SoundManager.Instance.PlaySound("onb 04", SoundGroup.TUTORIAL);
+        SoundManager.Instance.PlaySound("onb 04");
         yield return new WaitForSeconds(5f);
 
         _knife.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
@@ -81,26 +80,26 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     public IEnumerator Onboarding05() // MOLDING TUTORIAL             
     {
         _knife.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
-        SoundManager.Instance.PlaySound("onb 05", SoundGroup.TUTORIAL);
+        SoundManager.Instance.PlaySound("onb 05");
         yield return new WaitForSeconds(5f);
 
         StartCoroutine(EnableMoldingPanel());
     }
     public IEnumerator Onboarding06() // FOOD COMBINATION TUTORIAL    //WE ARE HEREEEE IN TERMS OF TESTING
     {
-        SoundManager.Instance.PlaySound("onb 06", SoundGroup.TUTORIAL);
+        SoundManager.Instance.PlaySound("onb 06");
         yield return new WaitForSeconds(10f);
     }
     public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL      //!!!!! NOT TRIGGERING!!!!!!
     {
-        SoundManager.Instance.PlaySound("onb 07", SoundGroup.TUTORIAL);
+        SoundManager.Instance.PlaySound("onb 07");
         yield return new WaitForSeconds(2f);
 
         SpawnManager.Instance.SpawnTutorialCustomer(false);
     }
     public IEnumerator Onboarding08() // CLEANING TUTORIAL     //THIS RUNS AFTER 06
     {
-        SoundManager.Instance.PlaySound("onb 08", SoundGroup.TUTORIAL);
+        SoundManager.Instance.PlaySound("onb 08");
         _sponge.GetComponent<OutlineMaterial>().EnableHighlight();
         yield return new WaitForSeconds(10f);
 
@@ -110,7 +109,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         // sponge.DisableHighlight is binded to an event when it's grabbed 
 
-        SoundManager.Instance.PlaySound("onb 09", SoundGroup.TUTORIAL);
+        SoundManager.Instance.PlaySound("onb 09");
         GameManager.Instance.EnableEOD();
         _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
         yield return new WaitForSeconds(8f);

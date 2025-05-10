@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -11,13 +12,15 @@ using UnityEngine;
 public class UPD_Food : MonoBehaviour
 {
 
+#region Members
+
 #region Properties
+
     public FoodCondition Condition => _foodCondition;
     public DishPlatter OrderType => _orderType;
     public float Score => _foodScore;
 
 #endregion
-
 #region Private
 
     [Header("Food Attrbutes")]
@@ -29,10 +32,17 @@ public class UPD_Food : MonoBehaviour
     [SerializeField] private Material _dirtyOSM;
     [SerializeField] private Material _rottenMat, _moldyMat;
 
+    private Renderer _rend;
+
 #endregion
+
+#endregion
+
+#region Methods
 
 #region Unity
 
+    private void Awake() => _rend = GetComponent<Renderer>();
     private void Start()
     {
         if (_orderType == DishPlatter.EMPTY)
@@ -40,64 +50,79 @@ public class UPD_Food : MonoBehaviour
 
         _foodCondition = FoodCondition.CLEAN;
     }
-    protected virtual void OnCollisionEnter(Collision other)
+    protected void OnCollisionEnter(Collision other)
     {
-        /*
-        // food + ingredient
+        // food -> sponge
+        if (other.gameObject.GetComponent<Ingredient>() != null)
+        {
+            Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+            if (_foodCondition != FoodCondition.CLEAN) 
+            {
+                sponge.SetDirty();
+                Debug.LogWarning($"{name} contaminated {sponge.name}");
+            }
+        }
+
+        // food -> ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             Ingredient ing = other.gameObject.GetComponent<Ingredient>();
 
-            if ((!IsContaminated || !IsExpired) && ing.IsFresh)
-                ing.Contaminate();
-
-            else if ((IsContaminated || IsExpired) && !ing.IsFresh)
-                Contaminate();
+            if (_foodCondition != FoodCondition.CLEAN)
+            {
+                ing.SetMoldy();
+                Debug.LogWarning($"{name} contaminated {ing.name}");
+                return;
+            }
+            else if (!ing.IsFresh) 
+            {
+                SetMoldy();
+                Debug.LogWarning($"{ing.name} contaminated {name}");
+                return;
+            }
         }
 
-        // food + another food
-        if (other.gameObject.GetComponent<Food>() != null)
+        // food -> another food
+        if (other.gameObject.GetComponent<UPD_Food>() != null)
         {
-            Food food = other.gameObject.GetComponent<Food>();
+            UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
 
-            if ((!IsContaminated || !IsExpired) &&
-               (food.IsExpired || food.IsContaminated))
+            if (_foodCondition != FoodCondition.CLEAN)
             {
-                food.Contaminate();
+                food.SetMoldy();
+                Debug.LogWarning($"{name} contaminated {food.name}");
+                return;
             }
-
-            else if ((IsContaminated || IsExpired) &&
-                    (!food.IsExpired || !food.IsContaminated))
+            else if (food.Condition != FoodCondition.CLEAN)
             {
-                Contaminate();
+                SetMoldy();
+                Debug.LogWarning($"{food.name} contaminated {name}");
+                return;
             }
         }
 
-        // food + dish
-        if (other.gameObject.GetComponent<Dish>() != null)
+        // food -> equipment
+        if (other.gameObject.GetComponent<Equipment>() != null)
         {
-            Dish dish = other.gameObject.GetComponent<Dish>();
+            Equipment eq = other.gameObject.GetComponent<Equipment>();
 
-            // contamination logic
-            if ((!IsContaminated || !IsExpired) &&
-                (dish.IsContaminated || dish.IsExpired))
+            if (_foodCondition != FoodCondition.CLEAN)
             {
-                dish.HitTheFloor();
+                eq.SetDirty();
+                Debug.LogWarning($"{name} contaminated {eq.name}");
+                return;
             }
+            else if (!eq.IsClean)
             {
-            }
-
-            else if ((IsContaminated || IsExpired) &&
-                     (!dish.IsExpired || !dish.IsContaminated))
-            {
-                Contaminate();
+                SetMoldy();
+                Debug.LogWarning($"{eq.name} contaminated {name}");
+                return;
             }
         }
-        */
     }
 
 #endregion
-
 #region Public
 
     public void SetRotten()
@@ -109,8 +134,7 @@ public class UPD_Food : MonoBehaviour
         }
         
         _foodCondition = FoodCondition.ROTTEN; 
-        GetComponent<MeshRenderer>().materials = new Material[] { _moldyMat, 
-                                                                  _dirtyOSM };
+        _rend.materials = new Material[] { _rottenMat, _dirtyOSM };
     }
     public void SetMoldy()
     {
@@ -121,10 +145,17 @@ public class UPD_Food : MonoBehaviour
         }
 
         _foodCondition = FoodCondition.ROTTEN; 
-        GetComponent<MeshRenderer>().materials = new Material[] { _rottenMat,
-                                                                  _dirtyOSM };
+        _rend.materials = new Material[] { _moldyMat, _dirtyOSM };
     }
-    public void SetScore(float score) => _foodScore = score;
+    public void SetFoodScore(float score) => _foodScore = score;
 
 #endregion
+
+#endregion
+
+    private IEnumerator CO_StartRotting()
+    {
+        yield return new WaitForSeconds(10f);
+        SetRotten();
+    }
 }

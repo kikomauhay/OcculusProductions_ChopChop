@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e27a61e5fd1aa4bb3f1bfe40cdffe4, type: 3}
   m_Name: tap water
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: d54437495e5377747b94f9c9a7be5514, type: 3}
-  loop: 1
-  volume: 0.8
-  source: {fileID: 0}
+  _clip: {fileID: 8300000, guid: d54437495e5377747b94f9c9a7be5514, type: 3}
+  _loop: 1
+  _volume: 0.8
+  _pitch: 1

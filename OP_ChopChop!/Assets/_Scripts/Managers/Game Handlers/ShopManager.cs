@@ -61,7 +61,7 @@ public class ShopManager : StaticInstance<ShopManager>
         if (_isTutorial)
         {
             // UX when the player has pressed the button
-            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("select");
             StartCoroutine(ButtonCooldownTimer(0));
 
             // waiting time for the salmon to spawn
@@ -84,7 +84,7 @@ public class ShopManager : StaticInstance<ShopManager>
         if (GameManager.Instance.CurrentPlayerMoney > 0)
         {
             // UX when the player has pressed the button
-            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("select");
             StartCoroutine(ButtonCooldownTimer(0));
             
             // deduction of money
@@ -104,7 +104,7 @@ public class ShopManager : StaticInstance<ShopManager>
         if (_isTutorial)
         {
             // UX when the player has pressed the button
-            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("select");
             StartCoroutine(ButtonCooldownTimer(1));
 
             // waiting time for the tuna to spawn
@@ -119,7 +119,7 @@ public class ShopManager : StaticInstance<ShopManager>
         if (GameManager.Instance.CurrentPlayerMoney > 0)
         {
             // UX when the player has pressed the button
-            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("select");
             StartCoroutine(ButtonCooldownTimer(1));
            
             // deduction of money
@@ -138,14 +138,14 @@ public class ShopManager : StaticInstance<ShopManager>
     {
         if (_isTutorial) 
         {
-            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("wrong");
             return;
         }
 
         if (GameManager.Instance.CurrentPlayerMoney > 0)
         {
             // UX when the player has pressed the button
-            SoundManager.Instance.PlaySound("select", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("select");
             StartCoroutine(ButtonCooldownTimer(2));
             
             // deduction of money

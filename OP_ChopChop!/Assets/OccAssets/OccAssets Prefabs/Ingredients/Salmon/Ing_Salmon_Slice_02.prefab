@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 3424188932474620900}
   - component: {fileID: 4930905729481944313}
   - component: {fileID: 364111711036480257}
-  - component: {fileID: 8137777030598702985}
   - component: {fileID: 8599531035883176251}
+  - component: {fileID: 8137777030598702985}
   - component: {fileID: 8897762708798986103}
   m_Layer: 0
   m_Name: Ing_Salmon_Slice_02
@@ -132,6 +132,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _trashType: 1
+--- !u!114 &8599531035883176251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25980143380498068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentPrefab: {fileID: 25980143380498068}
+  _nextPrefab: {fileID: 4045151705470340862, guid: 9df1f14a4977b5040aef63cc1fb2eb7f,
+    type: 3}
+  _fishCuts: 4
 --- !u!114 &8137777030598702985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,22 +313,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &8599531035883176251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 25980143380498068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentPrefab: {fileID: 25980143380498068}
-  _nextPrefab: {fileID: 4045151705470340862, guid: 9df1f14a4977b5040aef63cc1fb2eb7f,
-    type: 3}
-  _fishCuts: 4
 --- !u!114 &8897762708798986103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,13 +325,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d0a61dc6b2809f418a3cae42df6da65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sliceIndex: 2
+  _freshnessRate: 100
   _ingredientType: 1
-  _ingredientStats: {fileID: 11400000, guid: 8d861586e0d7fd446913bed80f383061, type: 2}
+  _sliceIndex: 2
   _isFresh: 1
-  _stateMaterials:
-  - {fileID: 2100000, guid: ac9dbb60a4f9d004b9b1d6718caa4dcd, type: 2}
+  _materials:
+  - {fileID: 2100000, guid: abf5a0b5dfce8624caf11b09137fb084, type: 2}
   - {fileID: 2100000, guid: fabc4cb7f27a4ea4da3aaeba205b12ab, type: 2}
   - {fileID: 2100000, guid: 9815059884c8e1e4c81e1b9c39457d59, type: 2}
-  _outlineShaderMaterial: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e,
-    type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _isDevloperMode: 0

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
+using Unity.VisualScripting;
 
 /// </summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -12,7 +14,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
 {
 #region Members
 
-    [Header("Debugging")]
+    [Header("Onboarding")]
     [SerializeField] private bool _isTutorial;
     [SerializeField] private Collider _tutorialCollider;
 
@@ -36,6 +38,10 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [Header("Customer Spawning Timers"), Tooltip("Can be changed to use for testing")]
     [SerializeField] private float _spawnCountdown;
     [SerializeField] private float _spawnInterval;
+
+    [Header("Debugging")]
+    [SerializeField] private bool _isDevloperMode;
+
     private int _spawnedCustomers;
 
 #endregion
@@ -54,8 +60,6 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         if (_newColliderChecks.Length < 4)
             Debug.LogWarning("Missing Elements in NewColliderChecks[]");
-
-        Debug.Log($"Is Tutorial: {_isTutorial}");
     }
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     private void Start() // BIND TO EVENTS
@@ -70,7 +74,11 @@ public class SpawnManager : StaticInstance<SpawnManager>
         if (_isTutorial)    
             transform.position = new Vector3(0.09f, 0f, 0f);
 
-        StartCoroutine(DelayedEventBinding());
+        if (!_isDevloperMode)
+            StartCoroutine(DelayedEventBinding());
+
+        // Debug.Log($"{name} tutorial mode: {_isTutorial}");
+        Debug.Log($"{name} developer mode: {_isDevloperMode}");
     }
 
     void Update()
@@ -83,6 +91,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
     }
     private void OnDestroy() // UNBIND FROM EVENTS
     {
+        if (_isDevloperMode) return;
+
         GameManager.Instance.OnStartService -= StartCustomerSpawning;
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
         OnBoardingHandler.Instance.OnTutorialEnd -= ClearCustomerSeats;
@@ -152,10 +162,13 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // assigns the index to the seat & collider
         CustomerSeat seat = _customerSeats[idx];
-        ColliderCheck colliderCheck = _colliderChecks[idx];
+        // ColliderCheck colliderCheck = _colliderChecks[idx];
+        NEW_ColliderCheck colliderCheck = _newColliderChecks[idx];
 
         // links a box collider & seat to the customer
-        colliderCheck.CustomerOrder = customer.GetComponent<CustomerOrder>();
+        // colliderCheck.CustomerOrder = customer.GetComponent<CustomerOrder>();
+        colliderCheck.Order = customer.GetComponent<CustomerOrder>();
+        
         _seatedCustomers.Add(customer);
         customerActions.SeatIndex = idx;
 
@@ -275,3 +288,25 @@ public class SpawnManager : StaticInstance<SpawnManager>
         _tutorialCollider.GetComponent<ColliderCheck>().DisableTutorial();
     }
 }
+
+#region Enumerations
+
+    public enum SpawnObjectType 
+    { 
+        INGREDIENT, 
+        FOOD, 
+        DISH, 
+        CUSTOMER, 
+        VFX 
+    }
+    public enum VFXType // & destroyTime
+    { 
+        SMOKE,   // 1s
+        BUBBLE,  // 3s
+        SPARKLE, // 5s
+        STINKY,  // 5s
+        RICE,    // 3s
+        SPLASH   // 4s
+    }
+
+#endregion

@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 6113326684752618579}
   - component: {fileID: 5741865313309141960}
   - component: {fileID: 2686660780185829169}
-  - component: {fileID: 7897937880567388518}
   - component: {fileID: -4767877429289264684}
+  - component: {fileID: 7897937880567388518}
   - component: {fileID: 5164491263210128998}
+  - component: {fileID: 801140025123405390}
   - component: {fileID: -4774002446948442366}
   - component: {fileID: 929184087666668667}
-  - component: {fileID: 801140025123405390}
   - component: {fileID: 2857641561674887348}
   m_Layer: 0
   m_Name: ing_rice_mold_01
@@ -90,6 +90,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &-4767877429289264684
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5821176368316166534}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1218369611395158969, guid: 74c7eec64039fcb44989d5f74c270525, type: 3}
 --- !u!54 &7897937880567388518
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -106,20 +120,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &-4767877429289264684
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5821176368316166534}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1218369611395158969, guid: 74c7eec64039fcb44989d5f74c270525, type: 3}
 --- !u!64 &5164491263210128998
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -134,6 +134,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1218369611395158969, guid: 74c7eec64039fcb44989d5f74c270525, type: 3}
+--- !u!114 &801140025123405390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5821176368316166534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 1
 --- !u!114 &-4774002446948442366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,19 +342,6 @@ MonoBehaviour:
   - {fileID: 4758083971582321263, guid: f0854a7719c9f3e40aa774c6318a612d, type: 3}
   _rice: {fileID: 2857641561674887348}
   _moldLimitPerStage: 5
---- !u!114 &801140025123405390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5821176368316166534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _trashType: 1
 --- !u!114 &2857641561674887348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,15 +354,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66126108b4485a44b12f6cb792ce21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sliceIndex: 0
+  _freshnessRate: 100
   _ingredientType: 0
-  _ingredientStats: {fileID: 11400000, guid: 6ab4ecd27a1bf534f83999d53cdf3f0e, type: 2}
+  _sliceIndex: 0
   _isFresh: 1
-  _stateMaterials:
+  _materials:
   - {fileID: 2100000, guid: 87fe71c75a70397449ed2e347e3b13e8, type: 2}
   - {fileID: 2100000, guid: df1081b64aa331848b730e4308992fbc, type: 2}
-  - {fileID: 2100000, guid: df1081b64aa331848b730e4308992fbc, type: 2}
-  _outlineShaderMaterial: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e,
-    type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _isDevloperMode: 0
   _foodPrefabs: []
   _moldType: 0
