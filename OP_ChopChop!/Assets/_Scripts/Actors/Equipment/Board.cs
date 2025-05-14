@@ -1,5 +1,3 @@
 using UnityEngine;
 
-public class Board : Equipment 
-{
-}
+public class Board : Equipment {}
