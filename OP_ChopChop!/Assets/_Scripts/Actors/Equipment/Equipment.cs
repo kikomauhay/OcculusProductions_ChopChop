@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Linq.Expressions;
-using System.Net.Http.Headers;
 using UnityEngine;
 
 [RequireComponent(typeof(Trashable))]
@@ -57,7 +55,9 @@ public abstract class Equipment : MonoBehaviour
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
         
-        if (sponge != null)
+        if (sponge == null) return;
+
+        if (sponge.IsClean)
             DoCleaning(sponge);
     }
     protected virtual void OnTriggerExit(Collider other)
@@ -143,6 +143,21 @@ public abstract class Equipment : MonoBehaviour
             }
         }
     }
+
+#region Testing
+
+    protected void Update() => test();
+    protected void test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && _isDeveloperMode)
+        {
+            SetDirty();
+            Debug.Log($"{name} is dirty!");
+        }
+    }
+
+
+#endregion
 
 #endregion
 

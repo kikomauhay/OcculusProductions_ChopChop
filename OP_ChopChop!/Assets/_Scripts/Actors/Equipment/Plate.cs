@@ -15,7 +15,7 @@ public class Plate : Equipment
 
 #endregion
 
-#region Unity_Methods
+#region Unity
 
     protected override void Start()
     {
@@ -27,7 +27,6 @@ public class Plate : Equipment
         {
             IsPlated = true;
             _boxTrigger.enabled = false;
-            // InvokeRepeating("SnapToCenter", 1f, 1f);  
         }
         else 
         {
@@ -39,6 +38,8 @@ public class Plate : Equipment
     }
 
 #endregion
+
+    public override void HitTheGround() => SetDirty();
 
 #region Helpers
 
