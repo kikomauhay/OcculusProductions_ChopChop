@@ -24,7 +24,13 @@ public class Sponge : MonoBehaviour
 
 #region Unity
 
-    private void Awake() => _rend = GetComponent<MeshRenderer>(); 
+    private void Awake() 
+    {
+        _rend = GetComponent<MeshRenderer>(); 
+
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+    }
     private void Start()
     {
         name = "Sponge";
@@ -33,15 +39,11 @@ public class Sponge : MonoBehaviour
 
         _startPosition = transform.position;
     }
-    
-    private IEnumerator DrySponge()
-    {
-        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, WET_DURATION);
-        yield return new WaitForSeconds(WET_DURATION);
 
-        // makes the sponge clean
-        _rend.materials = new Material[] { _cleanMat };
-        _isWet = false;
+    private void OnDestroy()
+    {
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
     }
 
 #endregion
@@ -64,4 +66,14 @@ public class Sponge : MonoBehaviour
     } 
 
 #endregion
+
+    private IEnumerator DrySponge()
+    {
+        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, WET_DURATION);
+        yield return new WaitForSeconds(WET_DURATION);
+
+        // makes the sponge clean
+        _rend.materials = new Material[] { _cleanMat };
+        _isWet = false;
+    }
 }
