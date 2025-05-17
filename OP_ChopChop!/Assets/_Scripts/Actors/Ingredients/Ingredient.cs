@@ -74,8 +74,11 @@ public abstract class Ingredient : MonoBehaviour
     protected virtual void Start() 
     {
         // ingredients will only decay once the shift has started  
-        GameManager.Instance.OnStartService += StartDecaying;
+        GameManager.Instance.OnStartService += () => StartCoroutine(CO_Decay());
         GameManager.Instance.OnEndService += SetRotten;
+
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd += () => Destroy(gameObject);
 
         IngredientState = IngredientState.DEFAULT;   
         _startPosition = transform.position;
@@ -85,14 +88,17 @@ public abstract class Ingredient : MonoBehaviour
 
         // in case some ingredients are spawned during Service time
         if (GameManager.Instance.CurrentShift == GameShift.Service)
-            StartDecaying();        
+            StartCoroutine(CO_Decay());        
     }
     protected virtual void OnDestroy() 
     {
         if (_isDevloperMode) return;
 
-        GameManager.Instance.OnStartService -= StartDecaying;
+        GameManager.Instance.OnStartService -= () => StartCoroutine(CO_Decay());
         GameManager.Instance.OnEndService -= SetRotten;
+
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd -= () => Destroy(gameObject);
     }
     protected abstract void OnTriggerEnter(Collider other);
     protected void OnCollisionEnter(Collision other)
@@ -223,7 +229,6 @@ public abstract class Ingredient : MonoBehaviour
             default: break;
         }
     }
-    protected void StartDecaying() => StartCoroutine(CO_Decay());
 
 #endregion
 

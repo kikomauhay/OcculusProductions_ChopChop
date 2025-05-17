@@ -4,7 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
 {
-
 #region Members
 
     public bool IsClean => _isClean;
@@ -30,11 +29,14 @@ public abstract class Equipment : MonoBehaviour
     protected virtual void Awake()
     {
         _rend = GetComponent<Renderer>();
+
+        GameManager.Instance.OnStartService += ResetPosition;
+        
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
     }
     protected virtual void Start() 
     {
-        GameManager.Instance.OnStartService += ResetPosition;
-        
         _isClean = true;
         _coroutineRunning = false;
         _startPosition = transform.position;
@@ -50,6 +52,9 @@ public abstract class Equipment : MonoBehaviour
 
         if (!_isDeveloperMode)
             GameManager.Instance.OnStartService -= ResetPosition;
+
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
     }
     protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
@@ -146,8 +151,8 @@ public abstract class Equipment : MonoBehaviour
 
 #region Testing
 
-    protected void Update() => test();
-    protected void test()
+    protected virtual void Update() => Test();
+    protected virtual void Test()
     {
         if (Input.GetKeyDown(KeyCode.Space) && _isDeveloperMode)
         {

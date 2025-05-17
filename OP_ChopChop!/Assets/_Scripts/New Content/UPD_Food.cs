@@ -42,7 +42,13 @@ public class UPD_Food : MonoBehaviour
 
 #region Unity
 
-    private void Awake() => _rend = GetComponent<Renderer>();
+    private void Awake() 
+    {
+        _rend = GetComponent<Renderer>();
+
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd += () => Destroy(gameObject);
+    }
     private void Start()
     {
         if (_orderType == DishPlatter.EMPTY)
@@ -121,9 +127,14 @@ public class UPD_Food : MonoBehaviour
             }
         }
     }
+    protected void Oestroy()
+    {
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd -= () => Destroy(gameObject);
+    }
 
-#endregion
-#region Public
+    #endregion
+    #region Public
 
     public void SetRotten()
     {

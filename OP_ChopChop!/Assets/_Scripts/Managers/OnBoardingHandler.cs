@@ -7,7 +7,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 {
 #region Members
 
-    public System.Action OnTutorialEnd;
+    public System.Action OnTutorialEnd { get; set; }
+    public int CurrentStep { get; private set; }
+
+#region SerializeField  
 
     [Header("Objects"), Tooltip("This is sequentually organized.")]
     [SerializeField] private GameObject _faucetKnob; 
@@ -25,8 +28,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [Header("Debugging")]
     [SerializeField] private List<GameObject> _plates;
 
+    private bool _canSkip;
     private const float PANEL_TIMER = 15f;
-
+    
+#endregion
 #endregion
 
 #region Unity
@@ -35,87 +40,165 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     protected override void Awake() 
     {
         base.Awake();
+
         _dirtyCollider.SetActive(false); 
-        // Debug.Log("Dirty collider enabled!");
+        _canSkip = false;
+        CurrentStep = 0;
+    }
+    private void Update()
+    {
+        /* if Button.Pressed() AND canSkip == true:
+                SkipTutorial()
+        */
     }
 
-#endregion   
+#endregion
 
 #region Onboarding
 
     public IEnumerator Onboarding01() // STARTING TUTORIAL
     {
-        SpawnManager.Instance.SpawnTutorialCustomer(true);
+        if (CurrentStep != 0) yield break;
+
+        _canSkip = true;
         SoundManager.Instance.PlaySound("onb 01");
-        yield return new WaitForSeconds(20f);
-    
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+        
+        // spawns Atrium & highlights the Faucet Knob
+        SpawnManager.Instance.SpawnTutorialCustomer(true);
         _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
+
+        yield return new WaitForSeconds(20f);
         Continue.action.Enable();
+        _canSkip = false;
+        CurrentStep++;
     }
     public IEnumerator Onboarding02() // INGREDIENT ORDERING TUTORIAL
     {
-        _faucetKnob.GetComponent<OutlineMaterial>().DisableHighlight();
-        SoundManager.Instance.PlaySound("onb 02");
-        yield return new WaitForSeconds(10f);
+        if (CurrentStep != 1) yield break;
 
+        _canSkip = true;
+        SoundManager.Instance.PlaySound("onb 02");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+        
+        // highlights the Order Screen & removes the highlight of the Faucet Knob
+        _faucetKnob.GetComponent<OutlineMaterial>().DisableHighlight();
         _orderScreen.GetComponent<OutlineMaterial>().EnableHighlight(); 
+        
+        yield return new WaitForSeconds(12f);
+        _canSkip = false;
+        CurrentStep++;
     }
     public IEnumerator Onboarding03() // FREEZER TUTORIAL
     {
-        _orderScreen.GetComponent<OutlineMaterial>().DisableHighlight();
-        SoundManager.Instance.PlaySound("onb 03");
-        yield return new WaitForSeconds(3f);
+        if (CurrentStep != 2) yield break;
 
+        _canSkip = true;
+        SoundManager.Instance.PlaySound("onb 03");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+
+        // highlights the freezer and removes the highlight of the Order Screen
+        _orderScreen.GetComponent<OutlineMaterial>().DisableHighlight();
         _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
+        
+        yield return new WaitForSeconds(21f);
+        _canSkip = false;
+        CurrentStep++;
     }   
     public IEnumerator Onboarding04() // CHOPPING TUTORIAL       
     {
-        _freezer.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
-        SoundManager.Instance.PlaySound("onb 04");
-        yield return new WaitForSeconds(5f);
+        if (CurrentStep != 3) yield break;
 
+        _canSkip = true;
+        SoundManager.Instance.PlaySound("onb 04");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+
+        // sets up the stuff for slicing & removes the highlight of the freezer
+        _freezer.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
         _knife.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
         StartCoroutine(EnableSlicingPanel());
+
+        yield return new WaitForSeconds(13f);
+        _canSkip = false;
+        CurrentStep++;
     }
     public IEnumerator Onboarding05() // MOLDING TUTORIAL             
     {
-        _knife.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
+        if (CurrentStep != 4) yield break;
+
+        _canSkip = true;
         SoundManager.Instance.PlaySound("onb 05");
-        yield return new WaitForSeconds(5f);
-
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+        
+        // removes the highlight in the knife 
+        _knife.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
         StartCoroutine(EnableMoldingPanel());
+
+        yield return new WaitForSeconds(10f);
+        _canSkip = false;
+        CurrentStep++;
     }
-    public IEnumerator Onboarding06() // FOOD COMBINATION TUTORIAL    //WE ARE HEREEEE IN TERMS OF TESTING
+    public IEnumerator Onboarding06() // FOOD COMBINATION TUTORIAL
     {
+        if (CurrentStep != 5) yield break;
+
+        _canSkip = true;
         SoundManager.Instance.PlaySound("onb 06");
-        yield return new WaitForSeconds(10f);
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+        
+        yield return new WaitForSeconds(14f);
+        _canSkip = false;
     }
-    public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL      //!!!!! NOT TRIGGERING!!!!!!
+    public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL
     {
+        if (CurrentStep != 6) yield break;
+
+        _canSkip = true;
         SoundManager.Instance.PlaySound("onb 07");
-        yield return new WaitForSeconds(2f);
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
 
+        // spawns the Tuna Sashimi customer
         SpawnManager.Instance.SpawnTutorialCustomer(false);
+        
+        yield return new WaitForSeconds(29f);
+        _canSkip = false;
+        CurrentStep++;
     }
-    public IEnumerator Onboarding08() // CLEANING TUTORIAL     //THIS RUNS AFTER 06
+    public IEnumerator Onboarding08() // CLEANING TUTORIAL
     {
-        SoundManager.Instance.PlaySound("onb 08");
-        _sponge.GetComponent<OutlineMaterial>().EnableHighlight();
-        yield return new WaitForSeconds(10f);
+        if (CurrentStep != 7) yield break;
 
+        _canSkip = true;
+        SoundManager.Instance.PlaySound("onb 08");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+        
+        // highlights the sponge and enables the dirty area
+        _sponge.GetComponent<OutlineMaterial>().EnableHighlight();
         _dirtyCollider.SetActive(true);
+
+        yield return new WaitForSeconds(1f);
+        _canSkip = false;
+        CurrentStep++;
     }
     public IEnumerator Onboarding09() // POST-SERVICE TUTORIAL
     {
-        // sponge.DisableHighlight is binded to an event when it's grabbed 
+        if (CurrentStep != 8) yield break;
 
+        _canSkip = true;
         SoundManager.Instance.PlaySound("onb 09");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+        
+        // shows the EOD to the player and 
         GameManager.Instance.EnableEOD();
         _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
-        yield return new WaitForSeconds(8f);
-
         _menuScreen.GetComponent<OutlineMaterial>().DisableHighlight();
+
+        yield return new WaitForSeconds(8f);
         StartCoroutine(EnableFriendlyTipPanel());
+
+        yield return new WaitForSeconds(52f);
+        _canSkip = false;
+        CurrentStep++;
     }
 
 #endregion
@@ -124,17 +207,73 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public void Disable()
     { 
-        gameObject.SetActive(false);
-        
         if (_plates.Count > 0)
-        {
             foreach (GameObject p in _plates)
-                Destroy(p);
-
-            _plates.Clear();
-        }
+                p.SetActive(false);        
 
         OnTutorialEnd?.Invoke();
+        gameObject.SetActive(false);
+    }
+    private void SkipTutorial()
+    {    
+        if (!_canSkip) return;
+
+        SoundManager.Instance.StopSound();
+        Debug.Log($"Skipped Onboarding 0{CurrentStep}");
+        
+        // stops the onboarding coroutine based on the CurrentStep
+        switch (CurrentStep)
+        {
+            case 0: 
+                StopCoroutine(Onboarding01()); 
+                Debug.LogWarning("Coroutine stopped!");
+                break;
+                
+            case 1: 
+                StopCoroutine(Onboarding02()); 
+                Debug.LogWarning("Coroutine stopped!");
+                break;
+            
+            case 2: 
+                StopCoroutine(Onboarding03()); 
+                Debug.LogWarning("Coroutine stopped!");
+                break;
+            
+            case 3: 
+                StopCoroutine(Onboarding04()); 
+                Debug.LogWarning("Coroutine stopped!");
+                break;
+            
+            case 4: 
+                StopCoroutine(Onboarding05()); 
+                Debug.LogWarning("Coroutine stopped!");
+                break;
+            
+            case 5: 
+                StopCoroutine(Onboarding06()); 
+                Debug.LogWarning("Coroutine stopped!");
+                break;
+            
+            case 6: 
+                StopCoroutine(Onboarding07()); 
+                Debug.LogWarning("Coroutine stopped!");
+                break;
+            
+            case 7: 
+                StopCoroutine(Onboarding08()); 
+                Debug.LogWarning("Coroutine stopped!");
+                break;
+            
+            case 8: 
+                StopCoroutine(Onboarding09()); 
+                Debug.LogWarning("Coroutine stopped!");
+                break;
+
+            default: break;
+        }
+        
+        _canSkip = false;
+        CurrentStep++;
     }
 
 #endregion    
@@ -162,3 +301,4 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 #endregion
 }
+
