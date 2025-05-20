@@ -1,8 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using System;
-using System.ComponentModel;
-using Unity.VisualScripting.Dependencies.Sqlite;
 
 /// <summary>
 /// 
@@ -49,7 +47,7 @@ public class NEW_Dish : MonoBehaviour
     private BoxCollider _collider;
     private NEW_Plate _plate;
     private const float DECAY_TIME = 30f;
-
+    
 #endregion
 
 #endregion
@@ -297,7 +295,7 @@ public class NEW_Dish : MonoBehaviour
 
         if (_foodCondition != FoodCondition.MOLDY)
         {
-            _foodCondition = FoodCondition.ROTTEN;
+            SetFoodCondition(FoodCondition.ROTTEN);
             _plate.SetDirty();
         }
     }

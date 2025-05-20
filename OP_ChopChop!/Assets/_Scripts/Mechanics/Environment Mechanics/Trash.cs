@@ -13,7 +13,6 @@ public class Trash : MonoBehaviour
             Debug.LogError($"{obj.name} is not a trashable object!");
             return;
         }
-
         if (obj.GetComponent<Sponge>() != null)
         {
             obj.GetComponent<Sponge>().ResetPosition();

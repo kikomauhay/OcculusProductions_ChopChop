@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -40,9 +39,11 @@ public class NEW_Plate : Equipment
 
 #region Testing
 
-    private void Update() => test();
-    private void test()
+    protected override void Update() => Test();
+    protected override void Test()
     {
+        base.Test();
+
         if (Input.GetKeyDown(KeyCode.C) && _isDeveloperMode) 
         {
             _usageCounter = 0;
