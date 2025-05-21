@@ -180,6 +180,7 @@ public abstract class Equipment : MonoBehaviour
         SetDirty();
         ResetPosition();
     }
+    public virtual void PickUpEquipment() {}
 
 #endregion
 
@@ -187,8 +188,8 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter++;
 
-        if (_usageCounter == _maxUsageCounter) 
-            SetDirty();        
+        if (_usageCounter == _maxUsageCounter)
+            SetDirty();
     }
     public void SetDirty()
     {
