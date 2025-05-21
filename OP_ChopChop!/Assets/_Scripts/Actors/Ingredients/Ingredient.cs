@@ -206,11 +206,25 @@ public abstract class Ingredient : MonoBehaviour
         StartCoroutine(Delay(2f));
         IngredientState = IngredientState.DEFAULT;
     }
+    public void PickUpIngredient()
+    {
+        string soundName = string.Empty;
+
+        switch (UnityEngine.Random.Range(0, 3))
+        {
+            case 0: soundName = "food grabbed 01"; break;
+            case 1: soundName = "food grabbed 02"; break;
+            case 2: soundName = "food grabbed 03"; break;
+            default: break;
+        }
+
+        SoundManager.Instance.PlaySound(soundName);
+    }
 
 #endregion
-#region Helpers
+    #region Helpers
 
-    protected virtual void ChangeMaterial() 
+    protected virtual void ChangeMaterial()
     {
         switch (IngredientState)
         {
