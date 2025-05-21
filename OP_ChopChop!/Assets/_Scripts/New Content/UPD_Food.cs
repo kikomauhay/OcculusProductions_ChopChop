@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -133,8 +134,8 @@ public class UPD_Food : MonoBehaviour
             OnBoardingHandler.Instance.OnTutorialEnd -= () => Destroy(gameObject);
     }
 
-    #endregion
-    #region Public
+#endregion
+#region Public
 
     public void SetRotten()
     {
@@ -159,10 +160,24 @@ public class UPD_Food : MonoBehaviour
         _rend.materials = new Material[] { _moldyMat, _dirtyOSM };
     }
     public void SetFoodScore(float score) => _foodScore = score;
+    public void PickUpFood()
+    {
+        string soundName = string.Empty;
+
+        switch (UnityEngine.Random.Range(0, 3))
+        {
+            case 0: soundName = "food grabbed 01"; break;
+            case 1: soundName = "food grabbed 02"; break;
+            case 2: soundName = "food grabbed 03"; break;
+            default: break;
+        }
+
+        SoundManager.Instance.PlaySound(soundName);
+    }
 
 #endregion
 
-#endregion
+    #endregion
 
     private IEnumerator CO_StartRotting()
     {
