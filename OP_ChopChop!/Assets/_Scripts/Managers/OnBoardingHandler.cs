@@ -69,7 +69,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         // spawns Atrium & highlights the Faucet Knob
         SpawnManager.Instance.SpawnTutorialCustomer(true);
         _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
-
+        PlayerHUD.Instance.txtTopHUDUpdate("Wash hands at kitchen sink");
         yield return new WaitForSeconds(20f);
         Continue.action.Enable();
         _canSkip = false;
@@ -81,6 +81,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _canSkip = true;
         SoundManager.Instance.PlaySound("onb 02");
+        PlayerHUD.Instance.txtTopHUDUpdate("Order Salmon from Shop screen near the freezers");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
         
         // highlights the Order Screen & removes the highlight of the Faucet Knob
@@ -97,6 +98,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _canSkip = true;
         SoundManager.Instance.PlaySound("onb 03");
+        PlayerHUD.Instance.txtTopHUDUpdate("Cut ingredient on chopping board with knife");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
 
         // highlights the freezer and removes the highlight of the Order Screen
@@ -113,6 +115,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _canSkip = true;
         SoundManager.Instance.PlaySound("onb 04");
+        PlayerHUD.Instance.txtTopHUDUpdate("Chop Chop!");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
 
         // sets up the stuff for slicing & removes the highlight of the freezer
@@ -130,6 +133,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _canSkip = true;
         SoundManager.Instance.PlaySound("onb 05");
+        PlayerHUD.Instance.txtTopHUDUpdate("Mold Rice");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
         
         // removes the highlight in the knife 
@@ -146,6 +150,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _canSkip = true;
         SoundManager.Instance.PlaySound("onb 06");
+        PlayerHUD.Instance.txtTopHUDUpdate("Make Nigiri Salmon!");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
         
         yield return new WaitForSeconds(14f);
@@ -157,6 +162,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _canSkip = true;
         SoundManager.Instance.PlaySound("onb 07");
+        PlayerHUD.Instance.txtTopHUDUpdate("Serve new customer");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
 
         // spawns the Tuna Sashimi customer
@@ -172,6 +178,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _canSkip = true;
         SoundManager.Instance.PlaySound("onb 08");
+        PlayerHUD.Instance.txtTopHUDUpdate("Cleaning Time!");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
         
         // highlights the sponge and enables the dirty area
@@ -188,6 +195,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _canSkip = true;
         SoundManager.Instance.PlaySound("onb 09");
+        PlayerHUD.Instance.txtTopHUDUpdate("Congratulations, you did it!!");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
         
         // shows the EOD to the player and 
@@ -199,6 +207,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         StartCoroutine(EnableFriendlyTipPanel());
 
         yield return new WaitForSeconds(52f);
+        PlayerHUD.Instance.txtTopHUDUpdate("");
         _canSkip = false;
         CurrentStep++;
     }
