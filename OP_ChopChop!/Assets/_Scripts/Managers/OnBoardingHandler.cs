@@ -47,9 +47,11 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     private void Update()
     {
-        /* if Button.Pressed() AND canSkip == true:
-                SkipTutorial()
-        */
+        if (_canSkip == true)
+        {
+            Continue.action.Enable();
+            Continue.action.performed += SkipTutorial;
+        }
     }
 
 #endregion
@@ -214,11 +216,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         OnTutorialEnd?.Invoke();
         gameObject.SetActive(false);
     }
-    private void SkipTutorial()
+    public void SkipTutorial(InputAction.CallbackContext context)
     {    
-        if (!_canSkip) return;
+        if (!_canSkip)
+        {
+            Debug.LogError("You can't skip at the moment!");
+            return;
+        }
 
         SoundManager.Instance.StopSound();
+        Debug.Log($"Current step: {CurrentStep}");
         Debug.Log($"Skipped Onboarding 0{CurrentStep}");
         
         // stops the onboarding coroutine based on the CurrentStep
@@ -272,8 +279,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             default: break;
         }
         
+        Continue.action.Disable();
         _canSkip = false;
         CurrentStep++;
+        Continue.action.performed -= SkipTutorial;
     }
 
 #endregion    
