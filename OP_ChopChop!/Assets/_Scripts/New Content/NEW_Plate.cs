@@ -23,7 +23,8 @@ public class NEW_Plate : Equipment
         base.Awake();
         _dish = GetComponent<NEW_Dish>();
 
-        Debug.Log($"{this} developer mode: {_isDeveloperMode}");
+        if (_isDeveloperMode)
+            Debug.Log($"{this} developer mode: {_isDeveloperMode}");
     }
     protected override void OnTriggerEnter(Collider other)
     {

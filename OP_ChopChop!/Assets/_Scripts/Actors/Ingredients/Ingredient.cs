@@ -37,7 +37,7 @@ public abstract class Ingredient : MonoBehaviour
     [SerializeField] protected Material _dirtyOSM;
 
     [Header("Debugging")]
-    [SerializeField] protected bool _isDevloperMode;
+    [SerializeField] protected bool _isDeveloperMode;
     
 #endregion
 #region Protected
@@ -69,7 +69,8 @@ public abstract class Ingredient : MonoBehaviour
         if (_materials.Length != 3)
             Debug.LogWarning("Missing elements in materials");
 
-        Debug.Log($"{name} developer mode: {_isDevloperMode}");
+        if (_isDeveloperMode)
+            Debug.Log($"{name} developer mode: {_isDeveloperMode}");
     }
     protected virtual void Start() 
     {
@@ -84,7 +85,7 @@ public abstract class Ingredient : MonoBehaviour
         _startPosition = transform.position;
         _freshnessRate = 100f;   
         
-        if (_isDevloperMode) return;
+        if (_isDeveloperMode) return;
 
         // in case some ingredients are spawned during Service time
         if (GameManager.Instance.CurrentShift == GameShift.Service)
@@ -92,7 +93,7 @@ public abstract class Ingredient : MonoBehaviour
     }
     protected virtual void OnDestroy() 
     {
-        if (_isDevloperMode) return;
+        if (_isDeveloperMode) return;
 
         GameManager.Instance.OnStartService -= () => StartCoroutine(CO_Decay());
         GameManager.Instance.OnEndService -= SetRotten;

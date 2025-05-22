@@ -48,7 +48,8 @@ public class ShopManager : StaticInstance<ShopManager>
         _txtTunaPrice.text = _tunaPrice.ToString();
         _txtRicePrice.text = _ricePrice.ToString();
         
-        Debug.Log($"Is Tutorial: {_isTutorial}");
+        if (_isTutorial)
+            Debug.Log($"{name} Is Tutorial: {_isTutorial}");
     }
     private void OnDestroy() => OnBoardingHandler.Instance.OnTutorialEnd -= ClearList;
 
