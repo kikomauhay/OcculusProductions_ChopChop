@@ -55,50 +55,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09e1b51f454122c44b0edc6dad257d3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SoundSource: {fileID: 1381343949912312284}
-  MusicSource: {fileID: 2274977270003740871}
-  EquipmentSounds:
-  - {fileID: 11400000, guid: c07da3fdc28de4343a45614ebdecef07, type: 2}
-  - {fileID: 11400000, guid: e751bf2d4f217014f92eed37bf1fa60c, type: 2}
-  - {fileID: 11400000, guid: bc8fe26c1b91a9349a3c33b2e2476671, type: 2}
-  - {fileID: 11400000, guid: 35cd130c85be52243a1e9d55cdee4f2f, type: 2}
-  - {fileID: 11400000, guid: 79067fd8a2be3f34197625b6ab5729f7, type: 2}
-  - {fileID: 11400000, guid: fb7f44ddbafceec4a8f28ce74f93202d, type: 2}
-  - {fileID: 11400000, guid: aeda599536ab91f4e84819a48e71e033, type: 2}
-  ApplianceSounds:
-  - {fileID: 11400000, guid: 090122577721d9e4fbc6bd6455c22b3f, type: 2}
-  - {fileID: 11400000, guid: dd0c2feea63a23548b7d16be8615d922, type: 2}
-  - {fileID: 11400000, guid: d05ffb2df6718f8408c3f2e173104e05, type: 2}
-  - {fileID: 11400000, guid: e32c77ee8c3c47146806c0ccc4ed249a, type: 2}
-  - {fileID: 11400000, guid: 8c8ab4ee7dda54d40978007f63650d34, type: 2}
-  - {fileID: 11400000, guid: d410da2289e059a4194a979775aa1a27, type: 2}
-  - {fileID: 11400000, guid: 85e5b72c57851d04d8c4d130a7076b3f, type: 2}
-  - {fileID: 11400000, guid: 36cc709c94d59e243b68065707dbcf39, type: 2}
-  FoodSounds:
-  - {fileID: 11400000, guid: 58accc5ba26e1ef4c89bb650ff4c9ce2, type: 2}
-  - {fileID: 11400000, guid: d8704a1675c543441ac3020c3b4979b0, type: 2}
-  - {fileID: 11400000, guid: b7ab5905d2e73c548b320336a65e4f52, type: 2}
-  - {fileID: 11400000, guid: 1ed1b36fa4ba9f341a8ed3173159c445, type: 2}
-  - {fileID: 11400000, guid: 276d23278dde54b44a7616cc0231c189, type: 2}
-  - {fileID: 11400000, guid: 1ebe7110ff553224abf84c76705162e3, type: 2}
-  - {fileID: 11400000, guid: cefdc090a0d239944a610bab81385ed0, type: 2}
-  GameSounds:
-  - {fileID: 11400000, guid: 9818fdd1bf8a1f94bbbca0eb11aaf6a9, type: 2}
-  - {fileID: 11400000, guid: bc490a16c1b1d474f9eb2db0614980ad, type: 2}
-  - {fileID: 11400000, guid: c7f2458590ad49e4f9bfcdd06e4a3f51, type: 2}
-  - {fileID: 11400000, guid: 24f41de4a4dfec540918dc6b5a818b09, type: 2}
-  - {fileID: 11400000, guid: 98ffb1670aa170e41be6a66d977cb2e4, type: 2}
-  - {fileID: 11400000, guid: abf11ae5c752cb04c94cc33a63f492e6, type: 2}
-  VFXSounds:
-  - {fileID: 11400000, guid: c26e0c694a84e174c9d6ed627d3dd922, type: 2}
-  - {fileID: 11400000, guid: 3a192c83a3c14754180abe2b96ccf940, type: 2}
-  CustomerSounds:
+  _soundSource: {fileID: 1381343949912312284}
+  _musicSource: {fileID: 2274977270003740871}
+  _sfx:
   - {fileID: 11400000, guid: c4102ca3719033b4289fb7bee4057164, type: 2}
   - {fileID: 11400000, guid: ba860c27891c6154fb79341430c805e1, type: 2}
   - {fileID: 11400000, guid: a444f7f5e4159494783b56b9e8fb235d, type: 2}
   - {fileID: 11400000, guid: 58dd6d70de6c9be429c0c1e3987aae1b, type: 2}
   - {fileID: 11400000, guid: f24a541431731ed42b5f3710e565b185, type: 2}
-  TutorialSounds:
+  - {fileID: 11400000, guid: 24f41de4a4dfec540918dc6b5a818b09, type: 2}
+  - {fileID: 11400000, guid: c07da3fdc28de4343a45614ebdecef07, type: 2}
+  - {fileID: 11400000, guid: 58accc5ba26e1ef4c89bb650ff4c9ce2, type: 2}
+  - {fileID: 11400000, guid: 090122577721d9e4fbc6bd6455c22b3f, type: 2}
+  - {fileID: 11400000, guid: dd0c2feea63a23548b7d16be8615d922, type: 2}
+  - {fileID: 11400000, guid: d05ffb2df6718f8408c3f2e173104e05, type: 2}
+  - {fileID: 11400000, guid: e32c77ee8c3c47146806c0ccc4ed249a, type: 2}
+  - {fileID: 11400000, guid: bc490a16c1b1d474f9eb2db0614980ad, type: 2}
+  - {fileID: 11400000, guid: 276d23278dde54b44a7616cc0231c189, type: 2}
+  - {fileID: 11400000, guid: b7ab5905d2e73c548b320336a65e4f52, type: 2}
+  - {fileID: 11400000, guid: 1ed1b36fa4ba9f341a8ed3173159c445, type: 2}
+  - {fileID: 11400000, guid: 98ffb1670aa170e41be6a66d977cb2e4, type: 2}
+  - {fileID: 11400000, guid: abf11ae5c752cb04c94cc33a63f492e6, type: 2}
+  - {fileID: 11400000, guid: 35cd130c85be52243a1e9d55cdee4f2f, type: 2}
+  - {fileID: 11400000, guid: e751bf2d4f217014f92eed37bf1fa60c, type: 2}
+  - {fileID: 11400000, guid: bc8fe26c1b91a9349a3c33b2e2476671, type: 2}
   - {fileID: 11400000, guid: bee3d4db8e05eb14cb2cf70799b0430c, type: 2}
   - {fileID: 11400000, guid: d96af1a411fb4c94f9f74088eac07344, type: 2}
   - {fileID: 11400000, guid: 829ffe2aa28fd194f978c44643e39fb7, type: 2}
@@ -108,6 +88,29 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2a58a5404fd915d44bc1aeacb7d1dad8, type: 2}
   - {fileID: 11400000, guid: e24a2a61a14aadb4087ccb29d2c7f7d3, type: 2}
   - {fileID: 11400000, guid: ff883e8b8cc42ef4da02d4e599f86613, type: 2}
+  - {fileID: 11400000, guid: fb7f44ddbafceec4a8f28ce74f93202d, type: 2}
+  - {fileID: 11400000, guid: aeda599536ab91f4e84819a48e71e033, type: 2}
+  - {fileID: 11400000, guid: c26e0c694a84e174c9d6ed627d3dd922, type: 2}
+  - {fileID: 11400000, guid: d410da2289e059a4194a979775aa1a27, type: 2}
+  - {fileID: 11400000, guid: 75163f7b799f5a444a220011b86b91c2, type: 2}
+  - {fileID: 11400000, guid: 8c8ab4ee7dda54d40978007f63650d34, type: 2}
+  - {fileID: 11400000, guid: 1ebe7110ff553224abf84c76705162e3, type: 2}
+  - {fileID: 11400000, guid: cefdc090a0d239944a610bab81385ed0, type: 2}
+  - {fileID: 11400000, guid: d8704a1675c543441ac3020c3b4979b0, type: 2}
+  - {fileID: 11400000, guid: c7f2458590ad49e4f9bfcdd06e4a3f51, type: 2}
+  - {fileID: 11400000, guid: 3a192c83a3c14754180abe2b96ccf940, type: 2}
+  - {fileID: 11400000, guid: 85e5b72c57851d04d8c4d130a7076b3f, type: 2}
+  - {fileID: 11400000, guid: 36cc709c94d59e243b68065707dbcf39, type: 2}
+  - {fileID: 11400000, guid: 9818fdd1bf8a1f94bbbca0eb11aaf6a9, type: 2}
+  - {fileID: 11400000, guid: e5cc1ac96ef379640adc5ff50e13040e, type: 2}
+  - {fileID: 11400000, guid: 09b708ebe60b6434c96580a4df8449b0, type: 2}
+  - {fileID: 11400000, guid: c100f4aaab80b1e4da32be3a4058a9ea, type: 2}
+  - {fileID: 11400000, guid: c8765c983d3dd8940a3cac6ea97bfcab, type: 2}
+  - {fileID: 11400000, guid: bcb6f5b722ddb8f47af351d42dcdf0c5, type: 2}
+  - {fileID: 11400000, guid: a1e26a6ea4f44e44195c078e12ac8f2c, type: 2}
+  - {fileID: 11400000, guid: cf93359a86526e94ebb6755d2de72b6b, type: 2}
+  _bgm: []
+  _isDeveloperMode: 0
 --- !u!1 &1381343949912312286
 GameObject:
   m_ObjectHideFlags: 0

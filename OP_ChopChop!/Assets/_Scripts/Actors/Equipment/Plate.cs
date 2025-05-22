@@ -15,7 +15,7 @@ public class Plate : Equipment
 
 #endregion
 
-#region Unity_Methods
+#region Unity
 
     protected override void Start()
     {
@@ -27,7 +27,6 @@ public class Plate : Equipment
         {
             IsPlated = true;
             _boxTrigger.enabled = false;
-            // InvokeRepeating("SnapToCenter", 1f, 1f);  
         }
         else 
         {
@@ -37,37 +36,14 @@ public class Plate : Equipment
 
         Debug.Log($"Is clean: {IsClean}");                  
     }
-  
-    protected override void OnCollisionEnter(Collision other)
-    {
-        base.OnCollisionEnter(other);
-        SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                        "plate placed 01" : "plate placed 02",
-                                        SoundGroup.EQUIPMENT);
-    } 
 
 #endregion
+
+    public override void HitTheGround() => SetDirty();
 
 #region Helpers
 
     public void TogglePlated() => IsPlated = !IsPlated;
-    
-
-    /*    
-    protected override void DoCleaning()
-    {
-        base.DoCleaning();
-
-        if (_boxTrigger == null) return;
-
-        if (!IsClean && !IsPlated)
-        
-            _boxTrigger.enabled = true;
-
-        else
-            _boxTrigger.enabled = false;
-    }
-    */
     private void SnapToCenter()
     {
         if (transform.childCount < 1)

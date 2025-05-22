@@ -9,7 +9,7 @@ public class HatMechanic : MonoBehaviour
         if (GameManager.Instance.CurrentShift == GameShift.Training) 
         {
             OnBoardingHandler.Instance.Disable();
-            SoundManager.Instance.StopAllAudio(); // in case there is any ongoing tutorial lines
+            SoundManager.Instance.StopAllSounds(); // in case there is any ongoing tutorial lines
             other.gameObject.GetComponent<ChefHat>().StartService();
         }
     }

@@ -47,7 +47,7 @@ public class NEW_Dish : MonoBehaviour
     private BoxCollider _collider;
     private NEW_Plate _plate;
     private const float DECAY_TIME = 30f;
-
+    
 #endregion
 
 #endregion
@@ -95,54 +95,51 @@ public class NEW_Dish : MonoBehaviour
             DoFoodCollision(food);
             Destroy(food.gameObject);
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform, 1f);
-            SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+            SoundManager.Instance.PlaySound("poof");
+            return;
         }
+
+        // sashimi creation
+        if (ing != null) 
+        {
+            if (ing.IngredientType == IngredientType.RICE)
+            {
+                Debug.LogError("There is no option for onigiri yet!");
+                return;
+            }
+            if (ing.SliceIndex != 3)
+            {
+                Debug.LogError("Not the proper slice!");
+                return;
+            }
+
+            DoIngredientCollision(ing);
+            Destroy(ing.gameObject);
+            SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform, 1f);
+            SoundManager.Instance.PlaySound("poof");
+        }         
     }
 
 #region Testing
 
-    private void Update() 
+    private void Test()
     {
-        test();
-    }
-    void test()
-    {
-        if (!_isDevloperMode) 
-        {
-            Debug.LogError("Not in developer mode!");            
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1) && _isDevloperMode)
             SetActiveDish(DishPlatter.NIGIRI_SALMON);
         
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && _isDevloperMode)
             SetActiveDish(DishPlatter.NIGIRI_TUNA);
         
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && _isDevloperMode)
             SetActiveDish(DishPlatter.SASHIMI_SALMON);
 
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        if (Input.GetKeyDown(KeyCode.Alpha4) && _isDevloperMode)
             SetActiveDish(DishPlatter.SASHIMI_TUNA);
 
-        if (Input.GetKeyDown(KeyCode.Delete)) 
+        if (Input.GetKeyDown(KeyCode.Delete) && _isDevloperMode)
             DisableDish();
     }
-
-#endregion
-
-#region Enumerators
-
-    private IEnumerator Expire()
-    { 
-        yield return new WaitForSeconds(DECAY_TIME);
-
-        if (_foodCondition != FoodCondition.MOLDY)
-        {
-            _foodCondition = FoodCondition.ROTTEN;
-            _plate.SetDirty();
-        }
-    }
+    private void Update() => Test();
 
 #endregion
 
@@ -189,7 +186,6 @@ public class NEW_Dish : MonoBehaviour
     }
 
 #endregion
-
 #region Collision
 
     private void DoFoodCollision(UPD_Food food)
@@ -210,6 +206,7 @@ public class NEW_Dish : MonoBehaviour
                 _plate.SetDirty();
                 SetFoodCondition(FoodCondition.ROTTEN);
                 Debug.LogError($"{food.gameObject.name} is rotten!");
+                SetFoodCondition(FoodCondition.ROTTEN);
                 break;
 
             case FoodCondition.CLEAN:
@@ -218,24 +215,47 @@ public class NEW_Dish : MonoBehaviour
                 break;
 
             default: break;
-        }
+        }   
 
         _hasFood = true;
-        // _collider.enabled = false;
+        _collider.enabled = false;
         Debug.Log($"{name} has food: {_hasFood}");
     }
     private void DoIngredientCollision(Ingredient ing)
-    {
+    { 
+        switch (ing.IngredientType)
+        {
+            case IngredientType.SALMON:
+                SetActiveDish(DishPlatter.SASHIMI_SALMON);
+                break;
+
+            case IngredientType.TUNA:
+                SetActiveDish(DishPlatter.SASHIMI_TUNA);
+                break;
+
+            default: break;
+        }
+
+        // checks if the ingredient still fresh
+        if (!ing.IsFresh)
+        {
+            _dishScore = 0f;
+            _plate.SetDirty();
+            SetFoodCondition(FoodCondition.MOLDY);
+            Debug.LogWarning($"{ing.name} is moldy!");
+        }
+        else 
+        {
+            _dishScore = ing.FreshnessRate;
+            Debug.LogWarning($"{ing.name} has been plated to {name}!");
+        }
+
         _hasFood = true;
-        // do a similar thing to food collision
-
-        Debug.Log("No logic for ingredients yet");
-
-        // SetActiveDish(ing.PlatterType);
+        _collider.enabled = false;
+        Debug.Log($"{name} has food: {_hasFood}");
     }
 
 #endregion
-
 #region Helpers
 
     private void SetActiveDish(DishPlatter activeDishChosen)
@@ -258,12 +278,28 @@ public class NEW_Dish : MonoBehaviour
 
         if (!_isDevloperMode) 
         {
-            StartCoroutine(Expire());
+            StartCoroutine(CO_StartRotting());
             Debug.LogWarning($"{gameObject.name} is expiring!");    
         }
     }
 
 #endregion
+
+#endregion
+
+#region Enumerators
+
+    private IEnumerator CO_StartRotting()
+    { 
+        yield return new WaitForSeconds(DECAY_TIME);
+
+        if (_foodCondition != FoodCondition.MOLDY)
+        {
+            SetFoodCondition(FoodCondition.ROTTEN);
+            _plate.SetDirty();
+        }
+    }
+
 #endregion
 }   
 

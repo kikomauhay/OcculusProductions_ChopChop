@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 5882075224571768497}
   - component: {fileID: 5171325172372142124}
   - component: {fileID: 6942741336084475872}
-  - component: {fileID: 669868463487353716}
-  - component: {fileID: 8616175002627663167}
   - component: {fileID: -8674296536146262974}
+  - component: {fileID: 8616175002627663167}
+  - component: {fileID: 669868463487353716}
   - component: {fileID: -1846288949608077986}
   m_Layer: 0
   m_Name: ing_tuna_slice_01
@@ -119,6 +119,35 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-8674296536146262974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8873129294027024833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 1
+--- !u!114 &8616175002627663167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8873129294027024833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentPrefab: {fileID: 8873129294027024833}
+  _nextPrefab: {fileID: 6478356933403155857, guid: 9a911ccd5190df34abd3e212acd21bf2,
+    type: 3}
+  _fishCuts: 1
 --- !u!114 &669868463487353716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,35 +313,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &8616175002627663167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8873129294027024833}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 352529e889cc66244b2ec757ca301fc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentPrefab: {fileID: 8873129294027024833}
-  _nextPrefab: {fileID: 6478356933403155857, guid: 9a911ccd5190df34abd3e212acd21bf2,
-    type: 3}
-  _fishCuts: 1
---- !u!114 &-8674296536146262974
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8873129294027024833}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _trashType: 1
 --- !u!114 &-1846288949608077986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,13 +325,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da93d8d7d8cacb841b99f6853e575221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sliceIndex: 1
+  _freshnessRate: 100
   _ingredientType: 2
-  _ingredientStats: {fileID: 11400000, guid: 8d861586e0d7fd446913bed80f383061, type: 2}
+  _sliceIndex: 1
   _isFresh: 1
-  _stateMaterials:
+  _materials:
   - {fileID: 2100000, guid: f61028c0366953e4788046e2c616ef7c, type: 2}
   - {fileID: 2100000, guid: d5ecec53fe399dc41ac99a3564d8b452, type: 2}
   - {fileID: 2100000, guid: 160c96c2041675e4a82719d438367313, type: 2}
-  _outlineShaderMaterial: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e,
-    type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _isDevloperMode: 0

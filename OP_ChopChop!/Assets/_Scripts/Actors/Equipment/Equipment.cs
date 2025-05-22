@@ -1,11 +1,9 @@
 using System.Collections;
-using System.Net.Http.Headers;
 using UnityEngine;
 
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
 {
-
 #region Members
 
     public bool IsClean => _isClean;
@@ -31,11 +29,14 @@ public abstract class Equipment : MonoBehaviour
     protected virtual void Awake()
     {
         _rend = GetComponent<Renderer>();
+
+        GameManager.Instance.OnStartService += ResetPosition;
+        
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
     }
     protected virtual void Start() 
     {
-        GameManager.Instance.OnStartService += ResetPosition;
-        
         _isClean = true;
         _coroutineRunning = false;
         _startPosition = transform.position;
@@ -51,12 +52,17 @@ public abstract class Equipment : MonoBehaviour
 
         if (!_isDeveloperMode)
             GameManager.Instance.OnStartService -= ResetPosition;
+
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
     }
     protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
         
-        if (sponge != null)
+        if (sponge == null) return;
+
+        if (sponge.IsClean)
             DoCleaning(sponge);
     }
     protected virtual void OnTriggerExit(Collider other)
@@ -71,62 +77,92 @@ public abstract class Equipment : MonoBehaviour
             _coroutineRunning = false;
         }
     }
-    protected virtual void OnCollisionEnter(Collision other) // CROSS-CONTAMINATION LOGIC
+    protected void OnCollisionEnter(Collision other)
     {
-        /*
-        if (GetComponent<Board>() != null) return;
-
-        // equipment + another equipment
-        if (other.gameObject.GetComponent<Equipment>() != null)
+        // equipment -> sponge
+        if (other.gameObject.GetComponent<Ingredient>() != null)
         {
-            Equipment eq = other.gameObject.GetComponent<Equipment>();
-            
-            if (!IsClean && eq.IsClean) 
-                eq.Contaminate();
-            
-            else if (IsClean && !eq.IsClean) 
-                Contaminate();            
+            Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+            if (!_isClean) 
+            {
+                sponge.SetDirty();
+                Debug.LogWarning($"{name} contaminated {sponge.name}");
+            }
         }
 
-        // equipment + ingredient
+        // equipment -> ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             Ingredient ing = other.gameObject.GetComponent<Ingredient>();
 
-            if (!IsClean && ing.IsFresh) 
-                ing.Contaminate();
-            
-            else if (IsClean && !ing.IsFresh) 
-                Contaminate();
+            if (!_isClean)
+            {
+                ing.SetMoldy();
+                Debug.LogWarning($"{name} contaminated {ing.name}");
+                return;
+            }
+            else if (!ing.IsFresh) 
+            {
+                SetDirty();
+                Debug.LogWarning($"{ing.name} contaminated {name}");
+                return;
+            }
         }
 
-        // equipment + food
-        if (other.gameObject.GetComponent<Food>() != null)
+        // equipment -> food
+        if (other.gameObject.GetComponent<UPD_Food>() != null)
         {
-            Food food = other.gameObject.GetComponent<Food>();
+            UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
 
-            // contamination logic
-            if (!IsClean && (food.IsContaminated || food.IsExpired)) 
-                food.Contaminate();
-            
-            else if (IsClean && (!food.IsExpired || !food.IsContaminated)) 
-                Contaminate();
+            if (!_isClean)
+            {
+                food.SetMoldy();
+                Debug.LogWarning($"{name} contaminated {food.name}");
+                return;
+            }
+            else if (food.Condition != FoodCondition.CLEAN)
+            {
+                SetDirty();
+                Debug.LogWarning($"{food.name} contaminated {name}");
+                return;
+            }
         }
 
-        // equipment + dish
-        if (other.gameObject.GetComponent<Dish>() != null)
+        // equipment -> another equipment
+        if (other.gameObject.GetComponent<Equipment>() != null)
         {
-            Dish dish = other.gameObject.GetComponent<Dish>();
+            Equipment eq = other.gameObject.GetComponent<Equipment>();
 
-            // contamination logic
-            if (!IsClean && (dish.IsContaminated || dish.IsExpired))
-                dish.HitTheFloor();
-
-            else if (IsClean && (!dish.IsExpired || !dish.IsContaminated))
-                Contaminate();
+            if (!_isClean)
+            {
+                eq.SetDirty();
+                Debug.LogWarning($"{name} contaminated {eq.name}");
+                return;
+            }
+            else if (!eq.IsClean)
+            {
+                SetDirty();
+                Debug.LogWarning($"{eq.name} contaminated {name}");
+                return;
+            }
         }
-        */
     }
+
+#region Testing
+
+    protected virtual void Update() => Test();
+    protected virtual void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && _isDeveloperMode)
+        {
+            SetDirty();
+            Debug.Log($"{name} is dirty!");
+        }
+    }
+
+
+#endregion
 
 #endregion
 
@@ -144,6 +180,7 @@ public abstract class Equipment : MonoBehaviour
         SetDirty();
         ResetPosition();
     }
+    public virtual void PickUpEquipment() {}
 
 #endregion
 
@@ -151,8 +188,8 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter++;
 
-        if (_usageCounter == _maxUsageCounter) 
-            SetDirty();        
+        if (_usageCounter == _maxUsageCounter)
+            SetDirty();
     }
     public void SetDirty()
     {

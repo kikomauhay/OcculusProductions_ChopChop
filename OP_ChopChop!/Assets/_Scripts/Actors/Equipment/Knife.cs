@@ -38,19 +38,20 @@ public class Knife : Equipment
 
         SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
                                         "knife dropped 01" : 
-                                        "knife dropped 02",
-                                        SoundGroup.EQUIPMENT);
+                                        "knife dropped 02");
     }
+    public override void PickUpEquipment() => SoundManager.Instance.PlaySound("knife grabbed");
+    
 #endregion
-#region Helpers
+    #region Helpers
 
-    private void CheckMaterial() 
+    private void CheckMaterial()
     {
         if (IsClean)
             _rend.material = _cleanMat;
-        
-        else         
-            _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };        
+
+        else
+            _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
     }
 
 #endregion

@@ -2,11 +2,17 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
+#region Unity 
+
     private void OnCollisionEnter(Collision other)
     {
         GameObject obj = other.gameObject;
 
-        if (obj.GetComponent<Trashable>() == null) return;
+        if (obj.GetComponent<Trashable>() == null) 
+        {
+            Debug.LogError($"{obj.name} is not a trashable object!");
+            return;
+        }
 
         switch (obj.GetComponent<Trashable>().TrashTypes)
         {
@@ -15,16 +21,7 @@ public class Floor : MonoBehaviour
                 break;
 
             case TrashableType.FOOD:
-                obj.GetComponent<UPD_Food>().SetRotten();
-                SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
-                break;
-
-            case TrashableType.DISH:
-                obj.GetComponent<Dish>().HitTheFloor();
-                SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
-                                                "plate placed 01" : 
-                                                "plate placed 02", 
-                                                SoundGroup.EQUIPMENT);
+                DoFoodLogic(obj.GetComponent<UPD_Food>());
                 break;
 
             case TrashableType.EQUIPMENT:
@@ -35,21 +32,49 @@ public class Floor : MonoBehaviour
         }
     }
 
+#endregion
+
+#region Collision
+
     private void DoIngredientLogic(Ingredient ing)
     {
-        ing.Contaminate();
-        
-        if (ing.IngredientType == IngredientType.SALMON ||
-            ing.IngredientType == IngredientType.TUNA)
+        if (ing == null)
         {
-            SoundManager.Instance.PlaySound("fish dropped", SoundGroup.FOOD);
+            Debug.LogError($"{ing.name} is not an ingredient");
+            return;
         }
-    }
 
+        ing.SetMoldy();
+        
+        if (ing.IngredientType != IngredientType.RICE)
+            SoundManager.Instance.PlaySound("fish dropped");
+
+        Debug.LogWarning($"{ing.name} landed on the floor!");
+    }
+    private void DoFoodLogic(UPD_Food food)
+    {
+        if (food == null)
+        {
+            Debug.LogError($"{food.name} is not a food");
+            return;
+        }
+
+        food.SetMoldy();
+        SoundManager.Instance.PlaySound("fish dropped");
+        Debug.LogWarning($"{food.name} landed on the floor!");
+    }
     private void DoEquipmentLogic(Equipment eq)
-    {                
+    {             
+        if (eq == null)
+        {
+            Debug.LogError($"{eq.name} is not an equipment");
+            return;
+        }
+
         eq.HitTheGround();
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        Debug.LogWarning($"{eq.name} landed on the floor!");
+        // Debug.LogWarning($"{eq.name} landed on the floor!");
     } 
+
+#endregion
 }
