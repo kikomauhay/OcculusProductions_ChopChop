@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
-using Unity.VisualScripting;
 
 /// </summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -40,7 +38,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [SerializeField] private float _spawnInterval;
 
     [Header("Debugging")]
-    [SerializeField] private bool _isDevloperMode;
+    [SerializeField] private bool _isDeveloperMode;
 
     private int _spawnedCustomers;
 
@@ -67,18 +65,21 @@ public class SpawnManager : StaticInstance<SpawnManager>
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
 
-        _spawnedCustomers = 0;    
+        _spawnedCustomers = 0;
         _spawnCountdown = 2f;
         _spawnInterval = 10f;
 
-        if (_isTutorial)    
+        if (_isTutorial)
+        {
             transform.position = new Vector3(0.09f, 0f, 0f);
+            Debug.Log($"{name} tutorial mode: {_isTutorial}");
+        }
 
-        if (!_isDevloperMode)
+        if (!_isDeveloperMode)
             StartCoroutine(DelayedEventBinding());
 
-        // Debug.Log($"{name} tutorial mode: {_isTutorial}");
-        Debug.Log($"{name} developer mode: {_isDevloperMode}");
+        else
+            Debug.Log($"{name} developer mode: {_isDeveloperMode}");
     }
 
     void Update()
@@ -91,7 +92,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
     }
     private void OnDestroy() // UNBIND FROM EVENTS
     {
-        if (_isDevloperMode) return;
+        if (_isDeveloperMode) return;
 
         GameManager.Instance.OnStartService -= StartCustomerSpawning;
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
