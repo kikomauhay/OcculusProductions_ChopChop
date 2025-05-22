@@ -22,9 +22,10 @@ public class SoundManager : Singleton<SoundManager> {
     protected override void Awake() 
     {
         base.Awake();
-        
-        Debug.Log(_soundIndex);
-        Debug.Log($"{name} developer mode: {_isDeveloperMode}");
+
+        // Debug.Log($"Sound index: {_soundIndex}");
+        if (_isDeveloperMode)
+            Debug.Log($"{name} developer mode: {_isDeveloperMode}");
     }
 
 #region Testing
