@@ -50,8 +50,8 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (_canSkip == true)
         {
-            // Continue.action.Enable();
-            // Continue.action.performed += SkipTutorial;
+            Continue.action.Enable();
+            Continue.action.performed += SkipTutorial;
         }
 
         test();
