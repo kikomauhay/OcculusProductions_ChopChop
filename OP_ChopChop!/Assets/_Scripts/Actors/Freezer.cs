@@ -8,11 +8,20 @@ public class Freezer : MonoBehaviour
     [SerializeField] private bool _isTutorial;
     [SerializeField] private List<Ingredient> _ingredients;
 
+    [Header("For Magnet Reaction")]
+    [SerializeField] private Transform snapToPoint;
+    [SerializeField] private Transform pointToSnap;
+
     private bool _tutorialPlayed = false;
 
-#endregion
+    #endregion
 
-#region Methods
+    #region Methods
+
+    private void Update()
+    {
+        //DoorSnapToBody();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -59,6 +68,19 @@ public class Freezer : MonoBehaviour
             StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
             _tutorialPlayed = true;
         }     
+    }
+    
+    //Logic for this, if distance between 2 objects is close, object1.transform.position = object2.transform.position
+    private void DoorSnapToBody()
+    {
+        Vector3 pointToPointDist = snapToPoint.transform.position - pointToSnap.transform.position;
+
+        Debug.Log(pointToPointDist.normalized);
+
+        if(pointToPointDist.magnitude <= 1)
+        {
+            pointToSnap.transform.position = snapToPoint.transform.position;
+        }
     }
 
 #endregion
