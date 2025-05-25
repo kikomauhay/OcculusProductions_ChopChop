@@ -97,8 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 5dde8fe804aa93a4f94fd5836e44b30d,
-    type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_LightingSettings: {fileID: 4890085278179872738, guid: bfdb68b3b06c2814990957f53e495cbf,
     type: 2}
 --- !u!196 &4
@@ -2730,6 +2729,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1025794914}
     m_Modifications:
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 624152731}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DoorSnapToBody
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Freezer, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 183183793245312674, guid: 3f4644e0dd6b47e40823a5cb55227aed,
         type: 3}
       propertyPath: m_RootOrder
@@ -2818,6 +2852,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _outlineMat: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
+--- !u!114 &624152731 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 183183793245312672, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+    type: 3}
+  m_PrefabInstance: {fileID: 624152727}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 392ed8cd15f33ee448978d513cf7b0ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &638353295
 GameObject:
   m_ObjectHideFlags: 0
@@ -8212,6 +8258,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1025794914}
     m_Modifications:
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 183183791709213967}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DoorSnapToBody
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Freezer, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 183183792870703975, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 183183793245312672, guid: 3f4644e0dd6b47e40823a5cb55227aed,
         type: 3}
       propertyPath: _isTutorial
@@ -8315,6 +8396,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _outlineMat: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
+--- !u!114 &183183791709213967 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 183183793245312672, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+    type: 3}
+  m_PrefabInstance: {fileID: 183183791709213963}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183183791709213964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 392ed8cd15f33ee448978d513cf7b0ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &543450651947255133 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2622024756028450185, guid: 8b4f93340f6c07d4ea819b263b3303d2,
