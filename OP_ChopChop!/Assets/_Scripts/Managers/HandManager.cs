@@ -8,6 +8,7 @@ public class HandManager : Singleton<HandManager>
 #region Members
     [SerializeField] Collider[] _handWashColliders;
     [SerializeField] HandWashing[] _handWashingScripts;
+    [SerializeField] GameObject[] _vfxStinky;
 
     public int _handUsage { get; set; }
     #endregion
@@ -19,9 +20,16 @@ public class HandManager : Singleton<HandManager>
     private void Start()
     {
         _handWashColliders = new Collider[_handWashingScripts.Length];
+
+        //for loop, hand wash scripts
         for (int i = 0; i < _handWashingScripts.Length; i++)
         {
             _handWashColliders[i] = _handWashingScripts[i].HandWashCollider;
+        }
+        //for loop, stinky vfx
+        for (int i = 0; i < _vfxStinky.Length; i++)
+        {
+            _vfxStinky[i].SetActive(false);
         }
         _handUsage = 30;
     }
@@ -48,7 +56,11 @@ public class HandManager : Singleton<HandManager>
             foreach(Collider collider in _handWashColliders)
             {
                 collider.gameObject.GetComponent<HandWashing>().Dirtify();
-                collider.gameObject.GetComponent<HandWashing>().PlayVFX();
+                
+            }
+            for (int i = 0; i < _vfxStinky.Length; i++)
+            {
+                _vfxStinky[i].SetActive(true);
             }
         }
         else
@@ -56,6 +68,10 @@ public class HandManager : Singleton<HandManager>
             foreach(Collider collider in _handWashColliders)
             {
                 collider.gameObject.GetComponent<HandWashing>().Cleaned();
+            }
+            for (int i = 0; i < _vfxStinky.Length; i++)
+            {
+                _vfxStinky[i].SetActive(false);
             }
         }
     }

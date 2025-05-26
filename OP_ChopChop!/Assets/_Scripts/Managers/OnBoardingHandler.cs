@@ -128,7 +128,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _canSkip = true;
         _tutorialPlaying = true;
         SoundManager.Instance.PlaySound("onb 03");
-        PlayerHUD.Instance.txtTopHUDUpdate("Cut ingredient on chopping board with knife");
+        PlayerHUD.Instance.txtTopHUDUpdate("Store salmon and get the one inside the freezer");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
 
         // highlights the freezer and removes the highlight of the Order Screen
@@ -148,7 +148,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _canSkip = true;
         _tutorialPlaying = true;
         SoundManager.Instance.PlaySound("onb 04");
-        PlayerHUD.Instance.txtTopHUDUpdate("Chop Chop!");
+        PlayerHUD.Instance.txtTopHUDUpdate("Chop Chop! at chopping board");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
 
         // sets up the stuff for slicing & removes the highlight of the freezer
@@ -348,6 +348,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _canSkip = false;
         _tutorialPlaying = false;
         CurrentStep++;
+        Debug.Log(CurrentStep);
 
         Continue.action.Disable();
         Continue.action.performed -= SkipTutorial;

@@ -16,7 +16,7 @@ public class Freezer : MonoBehaviour
 
     #endregion
 
-    #region Methods
+#region Methods
 
     private void Update()
     {
@@ -71,7 +71,7 @@ public class Freezer : MonoBehaviour
     }
     
     //Logic for this, if distance between 2 objects is close, object1.transform.position = object2.transform.position
-    private void DoorSnapToBody()
+    public void DoorSnapToBody()
     {
         Vector3 pointToPointDist = snapToPoint.transform.position - pointToSnap.transform.position;
 
