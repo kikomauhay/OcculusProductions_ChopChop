@@ -812,6 +812,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Left Teleport Interactor
       objectReference: {fileID: 0}
+    - target: {fileID: 7708679388415899527, guid: c1800acf6366418a9b5f610249000331,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1800acf6366418a9b5f610249000331, type: 3}
 --- !u!4 &457861417 stripped
@@ -1725,6 +1730,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Right Teleport Interactor
+      objectReference: {fileID: 0}
+    - target: {fileID: 7708679388415899527, guid: c1800acf6366418a9b5f610249000331,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1800acf6366418a9b5f610249000331, type: 3}
