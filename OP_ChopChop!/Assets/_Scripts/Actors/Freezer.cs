@@ -11,6 +11,7 @@ public class Freezer : MonoBehaviour
     [Header("For Magnet Reaction")]
     [SerializeField] private Transform snapToPoint;
     [SerializeField] private Transform pointToSnap;
+    [SerializeField] private float _snapSpeed;
 
     private bool _tutorialPlayed = false;
 
@@ -73,13 +74,13 @@ public class Freezer : MonoBehaviour
     //Logic for this, if distance between 2 objects is close, object1.transform.position = object2.transform.position
     public void DoorSnapToBody()
     {
-        Vector3 pointToPointDist = snapToPoint.transform.position - pointToSnap.transform.position;
+        float  pointToPointDist = Vector3.Distance(pointToSnap.position,snapToPoint.position);
 
-        Debug.Log(pointToPointDist.normalized);
+        Debug.Log($"Distance Calculated: {pointToPointDist}");
 
-        if(pointToPointDist.magnitude <= 1)
+        if(pointToPointDist <= 0.5F)
         {
-            pointToSnap.transform.position = snapToPoint.transform.position;
+            pointToSnap.position = Vector3.Lerp(pointToSnap.position,snapToPoint.position, Time.deltaTime * _snapSpeed);
         }
     }
 

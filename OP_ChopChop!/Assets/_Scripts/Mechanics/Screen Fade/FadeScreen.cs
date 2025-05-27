@@ -51,6 +51,7 @@ public class FadeScreen : MonoBehaviour
         Color col = _fadeColor;
         col.a = alphaOut;
         _renderer.material.SetColor("_Color", col);
+        this.gameObject.SetActive(false);
     } 
 
 #endregion

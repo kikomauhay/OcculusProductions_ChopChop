@@ -9,6 +9,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public System.Action OnTutorialEnd { get; set; }
     public int CurrentStep { get; private set; }
+    public bool TutorialPlaying { get; private set; }
 
 #region SerializeField  
 
@@ -38,13 +39,14 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 #region Unity
 
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    protected override void Awake() 
+    protected override void Awake()
     {
         base.Awake();
 
-        _dirtyCollider.SetActive(false); 
+        _dirtyCollider.SetActive(false);
         _canSkip = false;
         CurrentStep = 0;
+        TutorialPlaying = false;
     }
     private void Update()
     {
@@ -81,8 +83,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public IEnumerator Onboarding01() // STARTING TUTORIAL
     {
-        if (CurrentStep != 0) yield break;
-        if (_tutorialPlaying) yield break;
+        if (CurrentStep != 0)
+        {
+            Debug.LogError("Wrong step!");
+            yield break;
+        }
+        if (_tutorialPlaying)
+        {
+            Debug.LogError("Tutorial is already playing!");
+            yield break;
+        }
 
         _canSkip = true;
         _tutorialPlaying = true;
@@ -277,6 +287,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     public void SkipTutorial(InputAction.CallbackContext context)
     // public void SkipTutorial()
     {
+        /*
         if (!_canSkip)
         {
             Debug.LogError("You can't skip at the moment!");
@@ -352,6 +363,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         Continue.action.Disable();
         Continue.action.performed -= SkipTutorial;
+        */
     }
 
 #endregion    
