@@ -6,7 +6,7 @@ public class SoundManager : Singleton<SoundManager> {
 #region Members
 
     [SerializeField] private AudioSource _soundSource, _musicSource, _onboardingSource;
-    [SerializeField] private Sound[] _sfx, _bgm;
+    [SerializeField] private Sound[] _sfx, _bgm, _onb;
 
     [Header("Debugging")]
     [SerializeField] private bool _isDeveloperMode;
@@ -109,7 +109,7 @@ public class SoundManager : Singleton<SoundManager> {
     }
     public void PlayOnboarding(string title) 
     {
-        Sound s = Array.Find(_bgm, i => i.name == title);
+        Sound s = Array.Find(_onb, i => i.name == title);
 
         if (s == null) 
         {
@@ -124,7 +124,7 @@ public class SoundManager : Singleton<SoundManager> {
         _onboardingSource.clip = s.Clip;
         _onboardingSource.spatialBlend = 1f;
 
-        _onboardingSource.Play();
+        _onboardingSource.PlayOneShot(s.Clip);
     }
     
     public void StopMusic() => _musicSource.Stop();
