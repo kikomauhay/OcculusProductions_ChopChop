@@ -149,6 +149,12 @@ public class NEW_Dish : MonoBehaviour
 
     public void DisableDish()
     {
+        if (!_hasFood)
+        {
+            Debug.LogWarning("There's no food currently!");
+            return;
+        }
+
         _dishScore = 0f;
         _hasFood = false;
         _collider.enabled = true;
