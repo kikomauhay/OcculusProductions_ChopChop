@@ -115,8 +115,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     public IEnumerator Onboarding02() // INGREDIENT ORDERING TUTORIAL
     {
-        if (CurrentStep != 1) yield break;
-        if (_tutorialPlaying) yield break;
+        if (CurrentStep != 1)
+        {
+            Debug.LogError("Wrong step!");
+            yield break;
+        }
+        if (_tutorialPlaying)
+        {
+            Debug.LogError("Tutorial is already playing!");
+            yield break;
+        }
 
         _canSkip = true;
         _tutorialPlaying = true;
@@ -135,8 +143,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     public IEnumerator Onboarding03() // FREEZER TUTORIAL
     {
-        if (CurrentStep != 2) yield break;
-        if (_tutorialPlaying) yield break;
+        if (CurrentStep != 2)
+        {
+            Debug.LogError("Wrong step!");
+            yield break;
+        }
+        if (_tutorialPlaying)
+        {
+            Debug.LogError("Tutorial is already playing!");
+            yield break;
+        }
 
         _canSkip = true;
         _tutorialPlaying = true;
@@ -155,8 +171,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }   
     public IEnumerator Onboarding04() // CHOPPING TUTORIAL       
     {
-        if (CurrentStep != 3) yield break;
-        if (_tutorialPlaying) yield break;
+        if (CurrentStep != 3)
+        {
+            Debug.LogError("Wrong step!");
+            yield break;
+        }
+        if (_tutorialPlaying)
+        {
+            Debug.LogError("Tutorial is already playing!");
+            yield break;
+        }
 
         _canSkip = true;
         _tutorialPlaying = true;
@@ -176,8 +200,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     public IEnumerator Onboarding05() // MOLDING TUTORIAL             
     {
-        if (CurrentStep != 4) yield break;
-        if (_tutorialPlaying) yield break;
+        if (CurrentStep != 4)
+        {
+            Debug.LogError("Wrong step!");
+            yield break;
+        }
+        if (_tutorialPlaying)
+        {
+            Debug.LogError("Tutorial is already playing!");
+            yield break;
+        }
 
         _canSkip = true;
         _tutorialPlaying = true;
@@ -196,8 +228,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     public IEnumerator Onboarding06() // FOOD COMBINATION TUTORIAL
     {
-        if (CurrentStep != 5) yield break;
-        if (_tutorialPlaying) yield break;
+        if (CurrentStep != 5)
+        {
+            Debug.LogError("Wrong step!");
+            yield break;
+        }
+        if (_tutorialPlaying)
+        {
+            Debug.LogError("Tutorial is already playing!");
+            yield break;
+        }
 
         _canSkip = true;
         _tutorialPlaying = true;
@@ -211,8 +251,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL
     {
-        if (CurrentStep != 6) yield break;
-        if (_tutorialPlaying) yield break;
+        if (CurrentStep != 6)
+        {
+            Debug.LogError("Wrong step!");
+            yield break;
+        }
+        if (_tutorialPlaying)
+        {
+            Debug.LogError("Tutorial is already playing!");
+            yield break;
+        }
 
         _canSkip = true;
         _tutorialPlaying = true;
@@ -230,8 +278,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     public IEnumerator Onboarding08() // CLEANING TUTORIAL
     {
-        if (CurrentStep != 7) yield break;
-        if (_tutorialPlaying) yield break;
+        if (CurrentStep != 7)
+        {
+            Debug.LogError("Wrong step!");
+            yield break;
+        }
+        if (_tutorialPlaying)
+        {
+            Debug.LogError("Tutorial is already playing!");
+            yield break;
+        };
 
         _canSkip = true;
         _tutorialPlaying = true;
@@ -250,8 +306,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     public IEnumerator Onboarding09() // POST-SERVICE TUTORIAL
     {
-        if (CurrentStep != 8) yield break;
-        if (_tutorialPlaying) yield break;
+        if (CurrentStep != 8)
+        {
+            Debug.LogError("Wrong step!");
+            yield break;
+        }
+        if (_tutorialPlaying)
+        {
+            Debug.LogError("Tutorial is already playing!");
+            yield break;
+        }
 
         _canSkip = true;
         _tutorialPlaying = true;
