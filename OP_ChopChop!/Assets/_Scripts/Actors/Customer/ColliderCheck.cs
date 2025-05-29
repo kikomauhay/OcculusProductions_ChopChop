@@ -24,31 +24,23 @@ public class ColliderCheck : MonoBehaviour
             return;
         }
 
-        Plate plate = other.gameObject.GetComponent<Plate>();
-        Dish dish = other.gameObject.GetComponentInChildren<Dish>();
+        NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
+        NEW_Dish dish = other.gameObject.GetComponentInChildren<NEW_Dish>();
         
         // customer reaction based on the given order
         CheckDish(dish);
 
         // finishing actions for the plate
+
+
+
         Destroy(dish.gameObject);
         StartCoroutine(DisableCollider());
 
-        plate.IncrementUseCounter();
-        plate.TogglePlated();
 
         if (!_isTutorial) return;
         
-        // Tuna Customer being served
-        if (CustomerOrder.IsTunaCustomer)
-        {
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
-            ShopManager.Instance.ClearList();
-        }
-
-        // Atrium being served
-        else if (CustomerOrder.IsTutorial) 
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
+        
     }
 
 #region Enumerators
@@ -60,24 +52,29 @@ public class ColliderCheck : MonoBehaviour
         GetComponent<Collider>().enabled = true;
     }
 
-#endregion
+    #endregion
 
-#region Helpers
+    #region Helpers
 
-    private void CheckDish(Dish d)
+    private void CheckDish(NEW_Dish d)
     {
-        if (d.IsContaminated || d.IsExpired) // ORDER IS EXPIRED OR CONTAMINATED
+        // ORDER IS EXPIRED OR CONTAMINATED
+        if (d.FoodCondition != FoodCondition.CLEAN)
         {
             CustomerOrder.CustomerSR = 0f;
             Debug.LogError("Game Over!");
             StartCoroutine(CustomerOrder.CO_DirtyReaction());
         }
-        else if (CustomerOrder.WantedPlatter == d.OrderDishType) // CORRECT ORDER
-        {    
-            CustomerOrder.CustomerSR = (d.DishScore + CustomerOrder.PatienceRate) / 2f;
+
+        // CORRECT ORDER
+        else if (d.DishPlatter == CustomerOrder.WantedPlatter)
+        {
+            CustomerOrder.CustomerSR = (d.Score + CustomerOrder.PatienceRate) / 2f;
             StartCoroutine(CustomerOrder.CO_HappyReaction());
         }
-        else // WRONG ORDER
+
+        // WRONG ORDER
+        else
         {
             CustomerOrder.CustomerSR = 0f;
             StartCoroutine(CustomerOrder.CO_AngryReaction());

@@ -119,7 +119,7 @@ public class SoundManager : Singleton<SoundManager> {
 
         // adds the properties of the Sound to the AudioSource
         _onboardingSource.volume = s.Volume;
-        _onboardingSource.pitch = s.Pitch;
+        _onboardingSource.pitch = s.Pitch;      
         _onboardingSource.loop = s.Loop;
         _onboardingSource.clip = s.Clip;
         _onboardingSource.spatialBlend = 1f;

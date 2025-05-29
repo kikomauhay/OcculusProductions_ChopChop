@@ -31,7 +31,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private bool _isDeveloperMode;
 
     private bool _canSkip, _tutorialPlaying;
-    private const float PANEL_TIMER = 15f;
+    private const float PANEL_TIMER = 30f;
     
 #endregion
 #endregion

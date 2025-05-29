@@ -38,24 +38,24 @@ public class NEW_ColliderCheck : MonoBehaviour
         _collider.isTrigger = true;
         _collider.enabled = true;    
     }
-    private void OnTriggerEnter(Collider other) 
+    private void OnTriggerEnter(Collider other)
     {
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
         NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
         NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
 
-        if (Order == null) 
+        if (Order == null)
         {
             Debug.LogError("CustomerOrder is null!");
             return;
-        }        
-        if (plate == null) 
+        }
+        if (plate == null)
         {
             Debug.LogError("Plate is null!");
             return;
         }
 
-        // player has served an ingredient to the customer
+        // player has served an INGREDIENT to the customer
         if (ing != null)
         {
             DoIngredientCollision();
@@ -71,6 +71,24 @@ public class NEW_ColliderCheck : MonoBehaviour
         }
 
         StartCoroutine(CO_DisableCollider());
+
+        // TUTORIAL LOGIC AFTER THE DISH IS SERVED
+        if (!_isTutorial) return;
+
+        // TUNA CUSTOMER
+        if (Order.IsTunaCustomer) 
+        {
+            Debug.LogWarning("Tuna Sashimi customer was served!");
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
+            ShopManager.Instance.ClearList();
+        }
+
+        // ATRIUM CUSTOMER
+        else if (Order.IsTutorial)
+        {
+            Debug.LogWarning("Atrium was served!");
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
+        } 
     }
 
 #endregion
