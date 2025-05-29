@@ -204,20 +204,20 @@ public class NEW_Dish : MonoBehaviour
                 _dishScore = 0f;
                 _plate.SetDirty();
                 SetFoodCondition(FoodCondition.MOLDY);
-                Debug.LogWarning($"{food.gameObject.name} is moldy!");
+                // Debug.LogWarning($"{food.gameObject.name} is moldy!");
                 break;
             
             case FoodCondition.ROTTEN:
                 _dishScore = 0f;
                 _plate.SetDirty();
                 SetFoodCondition(FoodCondition.ROTTEN);
-                Debug.LogError($"{food.gameObject.name} is rotten!");
+                // Debug.LogError($"{food.gameObject.name} is rotten!");
                 SetFoodCondition(FoodCondition.ROTTEN);
                 break;
 
             case FoodCondition.CLEAN:
                 _dishScore = food.Score;
-                Debug.LogWarning($"{food.name} has been plated to {name}!");
+                // Debug.LogWarning($"{food.name} has been plated to {name}!");
                 break;
 
             default: break;
@@ -248,17 +248,17 @@ public class NEW_Dish : MonoBehaviour
             _dishScore = 0f;
             _plate.SetDirty();
             SetFoodCondition(FoodCondition.MOLDY);
-            Debug.LogWarning($"{ing.name} is moldy!");
+            // Debug.LogWarning($"{ing.name} is moldy!");
         }
         else 
         {
             _dishScore = ing.FreshnessRate;
-            Debug.LogWarning($"{ing.name} has been plated to {name}!");
+            // Debug.LogWarning($"{ing.name} has been plated to {name}!");
         }
 
         _hasFood = true;
         _collider.enabled = false;
-        Debug.Log($"{name} has food: {_hasFood}");
+        // Debug.Log($"{name} has food: {_hasFood}");
     }
 
 #endregion
@@ -285,7 +285,7 @@ public class NEW_Dish : MonoBehaviour
         if (!_isDevloperMode) 
         {
             StartCoroutine(CO_StartRotting());
-            Debug.LogWarning($"{gameObject.name} is expiring!");    
+            // Debug.LogWarning($"{gameObject.name} is expiring!");    
         }
     }
 
