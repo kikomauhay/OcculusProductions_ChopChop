@@ -63,8 +63,8 @@ public class NEW_ColliderCheck : MonoBehaviour
         if (dish != null)
         {
             DoDishCollision(dish);
-            plate.Served();
             dish.DisableDish();
+            plate.Served();
         }
 
         StartCoroutine(CO_DisableCollider());

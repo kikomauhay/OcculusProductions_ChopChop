@@ -249,7 +249,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _canSkip = false;
         _tutorialPlaying = false;
     }
-    public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL
+    public IEnumerator Onboarding07() // TUNA SASHIMI CUSTOMER TUTORIAL
     {
         if (CurrentStep != 6)
         {

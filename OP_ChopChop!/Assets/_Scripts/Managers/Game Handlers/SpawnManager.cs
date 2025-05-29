@@ -203,11 +203,9 @@ public class SpawnManager : StaticInstance<SpawnManager>
         // assigns components to the new customer
         CustomerActions customerActions = tutorialCustomer.GetComponent<CustomerActions>();
         CustomerSeat seat = _customerSeats[0];
-        // ColliderCheck collider = _colliderChecks[0];
         NEW_ColliderCheck newCollider = _newColliderChecks[0];
 
         // links the box collider & seat to the customer
-        // collider.CustomerOrder = tutorialCustomer.GetComponent<CustomerOrder>();
         newCollider.Order = tutorialCustomer.GetComponent<CustomerOrder>();
         _seatedCustomers.Add(tutorialCustomer);
         customerActions.SeatIndex = 0;
@@ -229,7 +227,6 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // removed any link from the removed customer 
         _customerSeats[idx].IsEmpty = true;
-        // _colliderChecks[idx].CustomerOrder = null;
         _newColliderChecks[idx].Order = null;
     }   
     int GiveAvaiableSeat() // sets the index where the customer should sit
