@@ -44,7 +44,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
 #endregion
 
-#region Unity_Methods
+#region Unity
 
     protected override void Awake() 
     {
@@ -163,11 +163,9 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // assigns the index to the seat & collider
         CustomerSeat seat = _customerSeats[idx];
-        // ColliderCheck colliderCheck = _colliderChecks[idx];
         NEW_ColliderCheck colliderCheck = _newColliderChecks[idx];
 
         // links a box collider & seat to the customer
-        // colliderCheck.CustomerOrder = customer.GetComponent<CustomerOrder>();
         colliderCheck.Order = customer.GetComponent<CustomerOrder>();
         
         _seatedCustomers.Add(customer);
