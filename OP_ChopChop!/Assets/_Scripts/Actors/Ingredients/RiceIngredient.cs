@@ -17,7 +17,7 @@ public class RiceIngredient : Ingredient
 
 #endregion
 
-    private static bool _tutorialDone;
+    private static bool _tutorialDone = false;
 
 #endregion
 
