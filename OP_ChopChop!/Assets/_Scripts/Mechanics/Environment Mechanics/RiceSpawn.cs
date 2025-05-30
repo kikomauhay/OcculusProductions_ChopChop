@@ -45,9 +45,6 @@ public class RiceSpawn : XRBaseInteractable
 
         base.OnSelectEntered(args);
         StartCoroutine(ResetRiceSpawned());
-        
-        if (_isTutorial)
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding06());
     }
 
     private IEnumerator ResetRiceSpawned()

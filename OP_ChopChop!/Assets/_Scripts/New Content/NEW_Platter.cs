@@ -30,7 +30,8 @@ public class NEW_Platter : MonoBehaviour
         if (_materials.Length != 3)
             Debug.LogWarning($"{_materials} has missing materials!");
 
-        Debug.Log($"{name} developer mode: {_isDevloperMode}");
+        if (_isDevloperMode)
+            Debug.Log($"{name} developer mode: {_isDevloperMode}");
     }
 
 #region Testing

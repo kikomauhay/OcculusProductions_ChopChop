@@ -63,6 +63,7 @@ public class NEW_ColliderCheck : MonoBehaviour
         if (dish != null)
         {
             DoDishCollision(dish);
+            dish.DisableDish();
             plate.Served();
         }
 
@@ -123,6 +124,9 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
 
 #endregion
+
+    public void DisableTutorial() => _isTutorial = false;
+
 
 #region Enumerators
 
