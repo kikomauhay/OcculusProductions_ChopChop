@@ -3,23 +3,35 @@ using System;
 
 public class RiceIngredient : Ingredient
 {
-    [Header("Finished Dishes"), Tooltip("0 = salmon nigiri, 1 = tuna nigiri, 2 = salmon sashimi, 3 = tuna sashimi")]
-    [SerializeField] private GameObject[] _foodPrefabs; 
+#region Members
+
+    public Action<int> OnRiceMolded;
+
+#region SerializeField
+
+    [Header("Food Prefabs"), Tooltip("0 = salmon nigiri, 1 = tuna nigiri")]
+    [SerializeField] private GameObject[] _foodPrefabs; // might add more dishes soon 
 
     [Header("Molding Attributes")]
     [SerializeField] private MoldType _moldType;
-    public Action<int> OnRiceMolded; // check with Moldable.cs
-    private static bool TutorialDone { get; set; } 
+
+#endregion
+
+    private static bool _tutorialDone = false;
+
+#endregion
+
+#region Methods
 
     protected override void Start() 
     {
         base.Start();
         OnRiceMolded += ChangeRiceMold;
 
-        if (!TutorialDone && _moldType == MoldType.PERFECT)
+        if (!_tutorialDone && _moldType == MoldType.PERFECT)
         {
             StartCoroutine(OnBoardingHandler.Instance.Onboarding06());
-            TutorialDone = true;
+            _tutorialDone = true;
         }
     }
     protected override void OnDestroy()
@@ -27,38 +39,64 @@ public class RiceIngredient : Ingredient
         base.OnDestroy();
         OnRiceMolded -= ChangeRiceMold;
     }
-
-    protected override void OnTriggerEnter(Collider other) // combination of the food
+    protected override void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == name) return;
-        
-        if (_moldType != MoldType.PERFECT) return;
-
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
 
-        if (ing != null)
+        // guard clauses
+        if (other.gameObject.name == name) 
         {
-            // thinnest slice possible
-            if (ing.SliceIndex == 4)
-            {
-                Destroy(gameObject);
+            Debug.LogError("Cannot combine with the same ingredient!");
+            return;
+        }
+        if (_moldType != MoldType.PERFECT) 
+        {
+            Debug.LogError($"Mold type of {name} is not perfect!");
+            return;
+        }       
+        if (ing == null)
+        {
+            Debug.LogError($"{other.name} is not an ingredient!");
+            return;
+        }
+        if (ing.SliceIndex != 4)
+        {
+            Debug.LogError($"{other.name} is not the correct slice!");
+            return;
+        }
+        if (ing.IngredientType == IngredientType.RICE)
+        {
+            Debug.LogError($"{other.name} is a rice ingredient!");
+            return;
+        }
 
-                SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);   
-                SoundManager.Instance.PlaySound("poof", SoundGroup.VFX);
+        // UX to make food combination more appealing 
+        SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, transform, 1f);
+        SoundManager.Instance.PlaySound("poof");
 
-                GameObject foodToSpawn = SpawnManager.Instance.SpawnObject(ing.IngredientType == IngredientType.SALMON ?
-                                                                        _foodPrefabs[0] : _foodPrefabs[1],
-                                                                        transform, SpawnObjectType.FOOD);
-                // sets up the food's score
-                // UPD_Food food = foodToSpawn.GetComponent<UPD_Food>();
-                // food.Type = ing.IngredientType == IngredientType.SALMON ? DishType.NIGIRI_SALMON : DishType.NIGIRI_TUNA;
-                // food.FoodScore = (FreshnessRate + ing.FreshnessRate) / 2f;
-                
-                Destroy(other.gameObject);
-            }
-        }        
+        // more readable way which prefab is being spawned
+        GameObject chosenFood = ing.IngredientType == IngredientType.SALMON ? 
+                                _foodPrefabs[0] : _foodPrefabs[1];
+
+        // spawns the proper food based on the collided object's ingredient type 
+        GameObject foodToSpawn = SpawnManager.Instance.SpawnObject(chosenFood,transform, 
+                                                                   SpawnObjectType.FOOD);
+        // sets up the food's score
+        foodToSpawn.GetComponent<UPD_Food>().SetFoodScore((FreshnessRate + ing.FreshnessRate) / 2f);
+        
+        Destroy(gameObject);
+        Destroy(other.gameObject);
     }
-    protected override void OnCollisionEnter(Collision other) => base.OnCollisionEnter(other);
 
-    void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;
+    protected override void ChangeMaterial()
+    {
+        _rend.materials = IngredientState == IngredientState.DEFAULT ? 
+                          new Material[] { _materials[1], _dirtyOSM } :  // dirty mode
+                          new Material[] { _materials[0] };              // clean mode
+  
+    }
+
+    private void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;
+
+#endregion 
 }

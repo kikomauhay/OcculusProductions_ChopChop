@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 [RequireComponent(typeof(Trashable))]
@@ -14,55 +13,67 @@ public class Sponge : MonoBehaviour
 
 #region Members
 
-    [SerializeField] private int _usageCounter, _maxUsageCounter;
     [SerializeField] private bool _isClean, _isWet;
-    [SerializeField] private Material _wetMat, _cleanMat, _dirtyMat;
+    [SerializeField] private Material _wetMat, _cleanMat, _dirtyMat, _dirtyOSM;
 
     private MeshRenderer _rend;
     private Vector3 _startPosition;
     private const float WET_DURATION = 10f;
-    
-#endregion 
+
+#endregion
 
 #region Unity
 
+    private void Awake() 
+    {
+        _rend = GetComponent<MeshRenderer>(); 
+
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+    }
     private void Start()
     {
         name = "Sponge";
         _isWet = false;
-        _usageCounter = 0;
+        _isClean = true;
 
-        if (_maxUsageCounter == 0)
-            _maxUsageCounter = 10;
-
-        _rend = GetComponent<MeshRenderer>();
-        _rend.material = _isClean ? _cleanMat : _dirtyMat;
         _startPosition = transform.position;
     }
-    
-    private IEnumerator DrySponge()
-    {
-        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, WET_DURATION);
-        yield return new WaitForSeconds(WET_DURATION);
 
-        // makes the sponge clean
-        _rend.material = _cleanMat;
-        _isWet = false;
-        _usageCounter = 0;
+    private void OnDestroy()
+    {
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+            OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
     }
 
 #endregion
 
 #region Public
 
-    public void SetWet() 
+    public void ResetPosition() => transform.position = _startPosition;
+    public void SetWet() // making the sponge wet also makes it clean 
     {
         _isWet = true;
-        _rend.material = _wetMat;
+        _isClean = true;
+        _rend.materials = new Material[] { _wetMat };
         StartCoroutine(DrySponge());
     }
-
-    public void ResetPosition() => transform.position = _startPosition;
+    public void SetDirty()
+    {
+        _isWet = false;
+        _isClean = false;
+        _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
+    } 
 
 #endregion
+
+    private IEnumerator DrySponge()
+    {
+        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, WET_DURATION);
+        yield return new WaitForSeconds(WET_DURATION);
+
+        // makes the sponge clean
+        _rend.materials = new Material[] { _cleanMat };
+        _isWet = false;
+    }
 }

@@ -31,44 +31,61 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void Awake()
     {
         _collider = GetComponent<BoxCollider>();
-        Debug.Log($"{gameObject.name} developer mode: {_isDevloperMode}");
+        // Debug.Log($"{ToString()} developer mode: {_isDevloperMode}");
     }
     private void Start() 
     {
         _collider.isTrigger = true;
         _collider.enabled = true;    
     }
-    private void OnTriggerEnter(Collider other) 
+    private void OnTriggerEnter(Collider other)
     {
-        NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
-        
-        if (Order == null) 
-        {
-            Debug.LogError("CustomerOrder is null!");
-            return;
-        }        
-        if (plate == null) return;
-
-        // initializes variables for easier referencing
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
+        NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
         NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
 
-        // player has served an ingredient to the customer
+        if (Order == null)
+        {
+            // Debug.LogError("CustomerOrder is null!");
+            return;
+        }
+
+        // player has served an INGREDIENT to the customer
         if (ing != null)
         {
             DoIngredientCollision();
+            Destroy(other.gameObject);
             plate.Served();
             return;
         }
 
         // player has served a DISH to the customer
-        else if (dish != null)
+        if (dish != null)
         {
             DoDishCollision(dish);
+            dish.DisableDish();
             plate.Served();
         }
 
         StartCoroutine(CO_DisableCollider());
+
+        // TUTORIAL LOGIC AFTER THE DISH IS SERVED
+        if (!_isTutorial) return;
+
+        // TUNA CUSTOMER
+        if (Order.IsTunaCustomer) 
+        {
+            Debug.LogWarning("Tuna Sashimi customer was served!");
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
+            ShopManager.Instance.ClearList();
+        }
+
+        // ATRIUM CUSTOMER
+        else if (Order.IsTutorial)
+        {
+            Debug.LogWarning("Atrium was served!");
+            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
+        } 
     }
 
 #endregion
@@ -107,6 +124,9 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
 
 #endregion
+
+    public void DisableTutorial() => _isTutorial = false;
+
 
 #region Enumerators
 

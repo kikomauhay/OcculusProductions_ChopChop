@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5760587150197054690}
   - component: {fileID: 2207780037383401782}
   - component: {fileID: 8460804047963292379}
-  - component: {fileID: 1002424700831925084}
   - component: {fileID: 1550129113633023412}
+  - component: {fileID: 1002424700831925084}
   - component: {fileID: -4699005975147565908}
   m_Layer: 0
   m_Name: ing_rice_mold_04
@@ -118,6 +118,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -3552172149559772626, guid: 4656b572cca2a2c4e96656c8cf6bad81, type: 3}
+--- !u!114 &1550129113633023412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4758083971582321263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 1
 --- !u!114 &1002424700831925084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,19 +283,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &1550129113633023412
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4758083971582321263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _trashType: 1
 --- !u!114 &-4699005975147565908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -295,15 +295,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a66126108b4485a44b12f6cb792ce21a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sliceIndex: 0
+  _freshnessRate: 100
   _ingredientType: 0
-  _ingredientStats: {fileID: 11400000, guid: 6ab4ecd27a1bf534f83999d53cdf3f0e, type: 2}
+  _sliceIndex: 0
   _isFresh: 1
-  _stateMaterials:
+  _materials:
   - {fileID: 2100000, guid: 87f23a8f25eb7d44fa6bf5365db4e1cc, type: 2}
   - {fileID: 2100000, guid: 3f7356298bd6521439d127a6c6488bb2, type: 2}
-  - {fileID: 2100000, guid: 3f7356298bd6521439d127a6c6488bb2, type: 2}
-  _outlineShaderMaterial: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e,
-    type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _isDevloperMode: 0
   _foodPrefabs: []
   _moldType: 3

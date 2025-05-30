@@ -39,7 +39,7 @@ public class ToggleFaucet : XRBaseInteractable
         
         _enabled = true;
         _water.SetActive(!_water.activeSelf);
-        SoundManager.Instance.PlaySound("toggle faucet", SoundGroup.APPLIANCES);
+        SoundManager.Instance.PlaySound("toggle faucet");
         StartCoroutine(Cooldown());
         base.OnSelectEntered(args);
 
@@ -49,7 +49,7 @@ public class ToggleFaucet : XRBaseInteractable
         {
             _toggleCount++;
             
-            if (_toggleCount == 2)
+            if (_toggleCount >= 2)
             {
                 _tutorialDone = true;
                 StartCoroutine(OnBoardingHandler.Instance.Onboarding02());

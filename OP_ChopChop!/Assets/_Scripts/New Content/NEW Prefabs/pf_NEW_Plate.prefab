@@ -116,7 +116,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: e52df8bbd99503e4db36c316f28c1134, type: 2}
   - {fileID: 2100000, guid: d52bdd2be36eb4942b30af37876d34ab, type: 2}
   _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
-  _isDevloperMode: 1
+  _isDevloperMode: 0
 --- !u!1 &2049378495843018361
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +233,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: e8f760c9a9633864fb37e9ad3fa931fb, type: 2}
   - {fileID: 2100000, guid: 4326a12257f62e947a3d10c0a73a5c14, type: 2}
   _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
-  _isDevloperMode: 1
+  _isDevloperMode: 0
 --- !u!1 &2822151428827094495
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,7 +350,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: f54a32c163c4a894383b178de370a775, type: 2}
   - {fileID: 2100000, guid: a4c6b3c27c6498f47bf4295749f2aa0e, type: 2}
   _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
-  _isDevloperMode: 1
+  _isDevloperMode: 0
 --- !u!1 &8177508596857924033
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,7 +384,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8177508596857924033}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.229, y: 0.55, z: -0.142}
+  m_LocalPosition: {x: -0.3497, y: 0.703, z: 0.352}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -551,7 +551,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 259709749910194250}
+        m_TargetAssemblyTypeName: NEW_Plate, Assembly-CSharp
+        m_MethodName: PickUpEquipment
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls:
@@ -698,10 +710,10 @@ MonoBehaviour:
   - {fileID: 2049378495843018361}
   _dishScore: 100
   _foodCondition: 0
-  _dishPlatter: 0
-  _isPlated: 0
+  _dishPlatter: -1
+  _hasFood: 0
   _highlightOSM: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
-  _isDevloperMode: 1
+  _isDevloperMode: 0
 --- !u!114 &259709749910194250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -715,10 +727,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isClean: 1
-  _outlineTexture: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
   _cleanMat: {fileID: 2100000, guid: 1e092fd237ae0844987f330f87170033, type: 2}
   _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
   _maxUsageCounter: 1
+  _isDeveloperMode: 0
 --- !u!1 &8244406753409235881
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,4 +848,4 @@ MonoBehaviour:
   - {fileID: 2100000, guid: cfa83527698872843b85bac2837cc3a3, type: 2}
   - {fileID: 2100000, guid: 02fcd8e70a533aa41a75535e2cb2e058, type: 2}
   _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
-  _isDevloperMode: 1
+  _isDevloperMode: 0

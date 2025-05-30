@@ -8,6 +8,11 @@ public class Freezer : MonoBehaviour
     [SerializeField] private bool _isTutorial;
     [SerializeField] private List<Ingredient> _ingredients;
 
+    [Header("Magnet Reaction")]
+    [SerializeField] private Transform snapToPoint;
+    [SerializeField] private Transform pointToSnap;
+    [SerializeField] private float _snapSpeed;
+
     private bool _tutorialPlayed = false;
 
 #endregion
@@ -22,7 +27,7 @@ public class Freezer : MonoBehaviour
 
         if (!ing.IsFresh)
         {
-            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("wrong");
             return;
         }
 
@@ -31,8 +36,8 @@ public class Freezer : MonoBehaviour
         _ingredients.Add(ing);
 
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                        "door opened 01" : "door opened 02",
-                                        SoundGroup.APPLIANCES);
+                                        "door opened 01" : 
+                                        "door opened 02");
         /*
         if (_isTutorial)
             GetComponent<OutlineMaterial>().DisableHighlight();
@@ -49,16 +54,32 @@ public class Freezer : MonoBehaviour
         ing.Unstored();
         
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                        "door closed 01" : "door closed 02",
-                                        SoundGroup.APPLIANCES);
+                                        "door closed 01" : 
+                                        "door closed 02");
 
         if (!_isTutorial) return;
 
-        if (!_tutorialPlayed)
+        if (!_tutorialPlayed)   
         {
             StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
             _tutorialPlayed = true;
         }     
+    }
+    
+    //Logic for this, if distance between 2 objects is close, object1.transform.position = object2.transform.position
+    public void DoorSnapToBody()
+    {
+        float pointToPointDist = Vector3.Distance(pointToSnap.position,
+                                                  snapToPoint.position);
+
+        Debug.Log($"Distance Calculated: {pointToPointDist}");
+
+        if (pointToPointDist <= 0.5f)
+        {
+            pointToSnap.position = Vector3.Lerp(pointToSnap.position,
+                                                snapToPoint.position, 
+                                                Time.deltaTime * _snapSpeed);
+        }
     }
 
 #endregion

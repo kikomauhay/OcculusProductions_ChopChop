@@ -38,6 +38,7 @@ public class SceneHandler : Singleton<SceneHandler>
 
     public IEnumerator LoadScene(string sceneName)
     {
+        _fadeScreen.gameObject.SetActive(true);
         IsFading = true;
         _fadeScreen.FadeOut();
         yield return new WaitForSeconds(_fadeScreen.FadeDuration);
@@ -55,7 +56,7 @@ public class SceneHandler : Singleton<SceneHandler>
         }
         else
         {
-            SoundManager.Instance.PlaySound("wrong", SoundGroup.GAME);
+            SoundManager.Instance.PlaySound("wrong");
             Debug.LogError("Wrong scene named!");
         } 
 
