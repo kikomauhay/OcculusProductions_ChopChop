@@ -83,7 +83,9 @@ public abstract class Ingredient : MonoBehaviour
 
         IngredientState = IngredientState.DEFAULT;   
         _startPosition = transform.position;
-        _freshnessRate = 100f;   
+        _freshnessRate = 100f;
+
+        ChangeMaterial();
         
         if (_isDeveloperMode) return;
 

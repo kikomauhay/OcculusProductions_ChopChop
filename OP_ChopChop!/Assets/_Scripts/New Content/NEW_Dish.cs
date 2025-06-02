@@ -225,7 +225,7 @@ public class NEW_Dish : MonoBehaviour
 
         _hasFood = true;
         _collider.enabled = false;
-        Debug.Log($"{name} has food: {_hasFood}");
+        // Debug.Log($"{name} has food: {_hasFood}");
     }
     private void DoIngredientCollision(Ingredient ing)
     { 
@@ -279,7 +279,7 @@ public class NEW_Dish : MonoBehaviour
         _foodItems[(int)activeDishChosen].SetActive(true);
                
         // testing
-        Debug.LogWarning($"{activeDishChosen} is visible");
+        // Debug.LogWarning($"{activeDishChosen} is visible");
         // Debug.LogWarning($"{name} score: {_dishScore}");
 
         if (!_isDevloperMode) 

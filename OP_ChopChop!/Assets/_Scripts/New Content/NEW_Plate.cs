@@ -10,13 +10,9 @@ using UnityEngine;
 public class NEW_Plate : Equipment
 {
 
-    #region Members
-
     private NEW_Dish _dish;
 
-    #endregion
-
-    #region Unity
+#region Unity
 
     protected override void Awake()
     {
@@ -38,7 +34,7 @@ public class NEW_Plate : Equipment
             base.OnTriggerEnter(other);
     }
 
-    #region Testing
+#region Testing
 
     protected override void Update() => Test();
     protected override void Test()
@@ -53,10 +49,10 @@ public class NEW_Plate : Equipment
         }
     }
 
-    #endregion
-    #endregion
+#endregion
+#endregion
 
-    #region Override
+#region Override
 
     public override void HitTheGround()
     {

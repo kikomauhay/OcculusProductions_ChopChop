@@ -239,7 +239,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             yield break;
         }
 
-        CurrentStep++;
         _canSkip = true;
         _tutorialPlaying = true;
         SoundManager.Instance.PlayOnboarding("onb 06");
@@ -249,6 +248,8 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         yield return new WaitForSeconds(14f);
         _canSkip = false;
         _tutorialPlaying = false;
+        CurrentStep++;
+        Debug.LogWarning($"Current Step (should be 6) before 07: 0{CurrentStep}");
     }
     public IEnumerator Onboarding07() // TUNA SASHIMI CUSTOMER TUTORIAL
     {

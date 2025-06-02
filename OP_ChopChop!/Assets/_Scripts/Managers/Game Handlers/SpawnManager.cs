@@ -29,7 +29,6 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
     [Header("Customer Components")]
     [SerializeField] private CustomerSeat[] _customerSeats;
-    [SerializeField] private ColliderCheck[] _colliderChecks;
     [SerializeField] private NEW_ColliderCheck[] _newColliderChecks;
     private List<GameObject> _seatedCustomers = new List<GameObject>();
 
@@ -52,9 +51,6 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         if (_customerSeats.Length < 4)
             Debug.LogWarning("Missing Elements in CustomerSeats[]");
-
-        if (_colliderChecks.Length < 4)
-            Debug.LogWarning("Missing Elements in ColliderChecks[]");
 
         if (_newColliderChecks.Length < 4)
             Debug.LogWarning("Missing Elements in NewColliderChecks[]");
@@ -257,11 +253,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         if (_customerSeats.Length > 1)
             foreach (CustomerSeat seat in _customerSeats)
                 seat.IsEmpty = true;        
-
-        if (_colliderChecks.Length > 1)
-            foreach (ColliderCheck col in _colliderChecks)
-                col.CustomerOrder = null;
-
+                
         if (_newColliderChecks.Length > 1)
             foreach (NEW_ColliderCheck col in _newColliderChecks)
                 col.Order = null;
@@ -281,7 +273,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
     public void DisableTutorial()
     {
         _isTutorial = false;
-        _tutorialCollider.GetComponent<ColliderCheck>().DisableTutorial();
+        _tutorialCollider.GetComponent<NEW_ColliderCheck>().DisableTutorial();
     }
 }
 
