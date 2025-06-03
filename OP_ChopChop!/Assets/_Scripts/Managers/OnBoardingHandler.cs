@@ -31,7 +31,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private bool _isDeveloperMode;
 
     private bool _canSkip, _tutorialPlaying;
-    private const float PANEL_TIMER = 15f;
+    private const float PANEL_TIMER = 30f;
     
 #endregion
 #endregion
@@ -88,12 +88,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 0)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
+            ReadOverlapError();
             yield break;
         }
 
@@ -117,12 +117,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 1)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
+            ReadOverlapError();
             yield break;
         }
 
@@ -145,12 +145,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 2)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
+            ReadOverlapError();
             yield break;
         }
 
@@ -173,12 +173,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 3)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
+            ReadOverlapError();
             yield break;
         }
 
@@ -202,12 +202,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 4)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
+            ReadOverlapError();
             yield break;
         }
 
@@ -230,12 +230,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 5)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
+            ReadOverlapError();
             yield break;
         }
 
@@ -244,21 +244,23 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         SoundManager.Instance.PlayOnboarding("onb 06");
         PlayerHUD.Instance.txtTopHUDUpdate("Combine the rice mold and the fish slice!");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-        
+
         yield return new WaitForSeconds(14f);
         _canSkip = false;
         _tutorialPlaying = false;
+        CurrentStep++;
+        Debug.LogWarning($"Current Step (should be 6) before 07: 0{CurrentStep}");
     }
-    public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL
+    public IEnumerator Onboarding07() // TUNA SASHIMI CUSTOMER TUTORIAL
     {
         if (CurrentStep != 6)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
+            ReadOverlapError();
             yield break;
         }
 
@@ -280,12 +282,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 7)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
+            ReadOverlapError();
             yield break;
         };
 
@@ -308,12 +310,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 8)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
+            ReadOverlapError();
             yield break;
         }
 
@@ -342,11 +344,14 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 #region Helpers
 
+    private void ReadStepError() => Debug.LogError($"Wrong step: {CurrentStep}");
+    private void ReadOverlapError() => Debug.LogError("Tutorial is already playing!");
+
     public void Disable()
-    { 
+    {
         if (_plates.Count > 0)
             foreach (GameObject p in _plates)
-                p.SetActive(false);        
+                p.SetActive(false);
 
         OnTutorialEnd?.Invoke();
         gameObject.SetActive(false);
