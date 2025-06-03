@@ -51,56 +51,176 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 #region Testing
 
-    private void Update()
-    {
-        if (_canSkip == true)
+    /*    private void Update()
         {
-            Continue.action.Enable();
-            Continue.action.performed += SkipTutorial;
+            if (_canSkip == true)
+            {
+                Continue.action.Enable();
+                Continue.action.performed += SkipTutorial;
+            }
+
+            test();
         }
+        private void test()
+        {
+            if (!_isDeveloperMode) return;
 
-        test();
-    }
-    private void test()
-    {
-        if (!_isDeveloperMode) return;
+            // if (Input.GetKeyDown(KeyCode.Space)) SkipTutorial();
+            if (Input.GetKeyDown(KeyCode.Return)) Debug.LogWarning($"Current step: {CurrentStep}");
 
-        // if (Input.GetKeyDown(KeyCode.Space)) SkipTutorial();
-        if (Input.GetKeyDown(KeyCode.Return)) Debug.LogWarning($"Current step: {CurrentStep}");
-
-        if (Input.GetKeyDown(KeyCode.Alpha1)) StartCoroutine(Onboarding01());
-        if (Input.GetKeyDown(KeyCode.Alpha2)) StartCoroutine(Onboarding02());
-        if (Input.GetKeyDown(KeyCode.Alpha3)) StartCoroutine(Onboarding03());
-        if (Input.GetKeyDown(KeyCode.Alpha4)) StartCoroutine(Onboarding04());
-        if (Input.GetKeyDown(KeyCode.Alpha5)) StartCoroutine(Onboarding05());
-        if (Input.GetKeyDown(KeyCode.Alpha6)) StartCoroutine(Onboarding06());
-        if (Input.GetKeyDown(KeyCode.Alpha7)) StartCoroutine(Onboarding07());
-        if (Input.GetKeyDown(KeyCode.Alpha8)) StartCoroutine(Onboarding08());
-        if (Input.GetKeyDown(KeyCode.Alpha9)) StartCoroutine(Onboarding09());
-    }
+            if (Input.GetKeyDown(KeyCode.Alpha1)) StartCoroutine(Onboarding01());
+            if (Input.GetKeyDown(KeyCode.Alpha2)) StartCoroutine(Onboarding02());
+            if (Input.GetKeyDown(KeyCode.Alpha3)) StartCoroutine(Onboarding03());
+            if (Input.GetKeyDown(KeyCode.Alpha4)) StartCoroutine(Onboarding04());
+            if (Input.GetKeyDown(KeyCode.Alpha5)) StartCoroutine(Onboarding05());
+            if (Input.GetKeyDown(KeyCode.Alpha6)) StartCoroutine(Onboarding06());
+            if (Input.GetKeyDown(KeyCode.Alpha7)) StartCoroutine(Onboarding07());
+            if (Input.GetKeyDown(KeyCode.Alpha8)) StartCoroutine(Onboarding08());
+            if (Input.GetKeyDown(KeyCode.Alpha9)) StartCoroutine(Onboarding09());
+        }*/
 
 #endregion
 #endregion
 
 #region Onboarding
 
-    public IEnumerator Onboarding01() // STARTING TUTORIAL
+#region Onb_Func
+
+    public void Onb_Func1()
     {
-        if (CurrentStep != 0)
-        {
-            Debug.LogError("Wrong step!");
-            yield break;
-        }
         if (_tutorialPlaying)
         {
-            Debug.LogError("Tutorial is already playing!");
-            yield break;
+            ReadOverlapError();
         }
 
         _canSkip = true;
         _tutorialPlaying = true;
         SoundManager.Instance.PlayOnboarding("onb 01");
         Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+    }
+
+    public void Onb_Func2()
+    {
+        if (_tutorialPlaying)
+        {
+            ReadOverlapError();
+        }
+
+        _canSkip = true;
+        _tutorialPlaying = true;
+        SoundManager.Instance.PlayOnboarding("onb 02");
+        PlayerHUD.Instance.txtTopHUDUpdate("Order one (1) Salmon Slab from Shop Screen near the freezers.");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+    }
+    public void Onb_Func3()
+    {
+        if (_tutorialPlaying)
+        {
+            ReadOverlapError();
+        }
+
+        _canSkip = true;
+        _tutorialPlaying = true;
+        SoundManager.Instance.PlayOnboarding("onb 03");
+        PlayerHUD.Instance.txtTopHUDUpdate("Store the Salmon Slab and get the one inside the freezer.");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+    }
+
+    public void Onb_Func4()
+    {
+        if (_tutorialPlaying)
+        {
+            ReadOverlapError();
+        }
+
+        _canSkip = true;
+        _tutorialPlaying = true;
+        SoundManager.Instance.PlayOnboarding("onb 04");
+        PlayerHUD.Instance.txtTopHUDUpdate("Chop Chop! the salmon slab!");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+    }
+
+    public void Onb_Func5()
+    {
+        if (_tutorialPlaying)
+        {
+            ReadOverlapError();
+        }
+
+        _canSkip = true;
+        _tutorialPlaying = true;
+        SoundManager.Instance.PlayOnboarding("onb 05");
+        PlayerHUD.Instance.txtTopHUDUpdate("Obtain the perfect rice mold.");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+    }
+
+    public void Onb_Func6()
+    {
+        if (_tutorialPlaying)
+        {
+            ReadOverlapError();
+        }
+
+        _canSkip = true;
+        _tutorialPlaying = true;
+        SoundManager.Instance.PlayOnboarding("onb 06");
+        PlayerHUD.Instance.txtTopHUDUpdate("Combine the rice mold and the fish slice!");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+    }
+
+    public void Onb_Func7()
+    {
+        if (_tutorialPlaying)
+        {
+            ReadOverlapError();
+        }
+
+        _canSkip = true;
+        _tutorialPlaying = true;
+        SoundManager.Instance.PlayOnboarding("onb 07");
+        PlayerHUD.Instance.txtTopHUDUpdate("Serve the new customer!");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+    }
+
+    public void Onb_Func8()
+    {
+        if (_tutorialPlaying)
+        {
+            ReadOverlapError();
+        };
+
+        _canSkip = true;
+        _tutorialPlaying = true;
+        SoundManager.Instance.PlayOnboarding("onb 08");
+        PlayerHUD.Instance.txtTopHUDUpdate("Cleaning time!");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+    }
+
+    public void Onb_Func9()
+    {
+        if (_tutorialPlaying)
+        {
+            ReadOverlapError();
+        }
+
+        _canSkip = true;
+        _tutorialPlaying = true;
+        SoundManager.Instance.PlayOnboarding("onb 09");
+        PlayerHUD.Instance.txtTopHUDUpdate("Congratulations, you did it!!");
+        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
+    }
+
+#endregion
+
+#region Onb_Enum
+
+    public IEnumerator Onboarding01() // STARTING TUTORIAL
+    {
+        if (CurrentStep != 0)
+        {
+            ReadStepError();
+            yield break;
+        }
 
         // spawns Atrium & highlights the Faucet Knob
         PlayerHUD.Instance.txtTopHUDUpdate("Wash your hands at kitchen sink.");
@@ -117,20 +237,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 1)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
-        if (_tutorialPlaying)
-        {
-            Debug.LogError("Tutorial is already playing!");
-            yield break;
-        }
-
-        _canSkip = true;
-        _tutorialPlaying = true;
-        SoundManager.Instance.PlayOnboarding("onb 02");
-        PlayerHUD.Instance.txtTopHUDUpdate("Order one (1) Salmon Slab from Shop Screen near the freezers.");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
         
         // highlights the Order Screen & removes the highlight of the Faucet Knob
         _faucetKnob.GetComponent<OutlineMaterial>().DisableHighlight();
@@ -145,20 +254,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 2)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
-        if (_tutorialPlaying)
-        {
-            Debug.LogError("Tutorial is already playing!");
-            yield break;
-        }
-
-        _canSkip = true;
-        _tutorialPlaying = true;
-        SoundManager.Instance.PlayOnboarding("onb 03");
-        PlayerHUD.Instance.txtTopHUDUpdate("Store the Salmon Slab and get the one inside the freezer.");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
 
         // highlights the freezer and removes the highlight of the Order Screen
         _orderScreen.GetComponent<OutlineMaterial>().DisableHighlight();
@@ -173,20 +271,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 3)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
-        if (_tutorialPlaying)
-        {
-            Debug.LogError("Tutorial is already playing!");
-            yield break;
-        }
-
-        _canSkip = true;
-        _tutorialPlaying = true;
-        SoundManager.Instance.PlayOnboarding("onb 04");
-        PlayerHUD.Instance.txtTopHUDUpdate("Chop Chop! the salmon slab!");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
 
         // sets up the stuff for slicing & removes the highlight of the freezer
         _freezer.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
@@ -202,20 +289,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 4)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
-        if (_tutorialPlaying)
-        {
-            Debug.LogError("Tutorial is already playing!");
-            yield break;
-        }
-
-        _canSkip = true;
-        _tutorialPlaying = true;
-        SoundManager.Instance.PlayOnboarding("onb 05");
-        PlayerHUD.Instance.txtTopHUDUpdate("Obtain the perfect rice mold.");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
         
         // removes the highlight in the knife 
         _knife.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
@@ -230,43 +306,23 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 5)
         {
-            Debug.LogError("Wrong step!");
-            yield break;
-        }
-        if (_tutorialPlaying)
-        {
-            Debug.LogError("Tutorial is already playing!");
+            ReadStepError();
             yield break;
         }
 
-        _canSkip = true;
-        _tutorialPlaying = true;
-        SoundManager.Instance.PlayOnboarding("onb 06");
-        PlayerHUD.Instance.txtTopHUDUpdate("Combine the rice mold and the fish slice!");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-        
         yield return new WaitForSeconds(14f);
         _canSkip = false;
         _tutorialPlaying = false;
+        CurrentStep++;
+        Debug.LogWarning($"Current Step (should be 6) before 07: 0{CurrentStep}");
     }
-    public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL
+    public IEnumerator Onboarding07() // TUNA SASHIMI CUSTOMER TUTORIAL
     {
         if (CurrentStep != 6)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
-        if (_tutorialPlaying)
-        {
-            Debug.LogError("Tutorial is already playing!");
-            yield break;
-        }
-
-        _canSkip = true;
-        _tutorialPlaying = true;
-        SoundManager.Instance.PlayOnboarding("onb 07");
-        PlayerHUD.Instance.txtTopHUDUpdate("Serve the new customer!");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
 
         // spawns the Tuna Sashimi customer
         SpawnManager.Instance.SpawnTutorialCustomer(false);
@@ -280,20 +336,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 7)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
-        if (_tutorialPlaying)
-        {
-            Debug.LogError("Tutorial is already playing!");
-            yield break;
-        };
-
-        _canSkip = true;
-        _tutorialPlaying = true;
-        SoundManager.Instance.PlayOnboarding("onb 08");
-        PlayerHUD.Instance.txtTopHUDUpdate("Cleaning time!");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
         
         // highlights the sponge and enables the dirty area
         _sponge.GetComponent<OutlineMaterial>().EnableHighlight();
@@ -308,20 +353,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (CurrentStep != 8)
         {
-            Debug.LogError("Wrong step!");
+            ReadStepError();
             yield break;
         }
-        if (_tutorialPlaying)
-        {
-            Debug.LogError("Tutorial is already playing!");
-            yield break;
-        }
-
-        _canSkip = true;
-        _tutorialPlaying = true;
-        SoundManager.Instance.PlayOnboarding("onb 09");
-        PlayerHUD.Instance.txtTopHUDUpdate("Congratulations, you did it!!");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
         
         // shows the EOD to the player and 
         GameManager.Instance.EnableEOD();
@@ -340,98 +374,103 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 #endregion
 
+#endregion
+
 #region Helpers
 
-    public void Disable()
-    { 
-        if (_plates.Count > 0)
-            foreach (GameObject p in _plates)
-                p.SetActive(false);        
+private void ReadStepError() => Debug.LogError($"Wrong step: {CurrentStep}");
+private void ReadOverlapError() => Debug.LogError("Tutorial is already playing!");
 
-        OnTutorialEnd?.Invoke();
-        gameObject.SetActive(false);
-    }
-    public void SkipTutorial(InputAction.CallbackContext context)
-    // public void SkipTutorial()
+public void Disable()
+{
+    if (_plates.Count > 0)
+        foreach (GameObject p in _plates)
+            p.SetActive(false);
+
+    OnTutorialEnd?.Invoke();
+    gameObject.SetActive(false);
+}
+public void SkipTutorial(InputAction.CallbackContext context)
+// public void SkipTutorial()
+{
+    /*
+    if (!_canSkip)
     {
-        /*
-        if (!_canSkip)
-        {
-            Debug.LogError("You can't skip at the moment!");
-            return;
-        }
-
-        SoundManager.Instance.StopSound();
-        // Debug.Log($"Current step: {CurrentStep}");
-        // Debug.Log($"Skipped Onboarding 0{CurrentStep}");
-
-        // stops the onboarding coroutine based on the CurrentStep
-        switch (CurrentStep)
-        {
-            case 0:
-                StopCoroutine(Onboarding01());
-                Debug.LogWarning("Onb 01 stopped!");
-                break;
-
-            case 1:
-                StopCoroutine(Onboarding02());
-                Debug.LogWarning("Onb 02 stopped!");
-                break;
-
-            case 2:
-                StopCoroutine(Onboarding03());
-                Debug.LogWarning("Onb 03 stopped!");
-                break;
-
-            case 3:
-                StopCoroutine(Onboarding04());
-                StopCoroutine(EnableSlicingPanel());
-                _slicingPanel.SetActive(false);
-                Debug.LogWarning("Onb 04 stopped!");
-                break;
-
-            case 4:
-                StopCoroutine(Onboarding05());
-                StopCoroutine(EnableMoldingPanel());
-                _moldingPanel.SetActive(false);
-                Debug.LogWarning("Onb 05 stopped!");
-                break;
-
-            case 5:
-                StopCoroutine(Onboarding06());
-                Debug.LogWarning("Onb 06 stopped!");
-                break;
-
-            case 6:
-                StopCoroutine(Onboarding07());
-                Debug.LogWarning("Onb 07 stopped!");
-                break;
-
-            case 7:
-                StopCoroutine(Onboarding08());
-                Debug.LogWarning("Onb 08 stopped!");
-                break;
-
-            case 8:
-                StopCoroutine(Onboarding09());
-                StopCoroutine(EnableFriendlyTipPanel());
-                _friendlyTipPanel.SetActive(false);
-                PlayerHUD.Instance.txtTopHUDUpdate("");
-                Debug.LogWarning("Done with Onboarding!");
-                break;
-
-            default: return;
-        }
-
-        _canSkip = false;
-        _tutorialPlaying = false;
-        CurrentStep++;
-        Debug.Log(CurrentStep);
-
-        Continue.action.Disable();
-        Continue.action.performed -= SkipTutorial;
-        */
+        Debug.LogError("You can't skip at the moment!");
+        return;
     }
+
+    SoundManager.Instance.StopSound();
+    // Debug.Log($"Current step: {CurrentStep}");
+    // Debug.Log($"Skipped Onboarding 0{CurrentStep}");
+
+    // stops the onboarding coroutine based on the CurrentStep
+    switch (CurrentStep)
+    {
+        case 0:
+            StopCoroutine(Onboarding01());
+            Debug.LogWarning("Onb 01 stopped!");
+            break;
+
+        case 1:
+            StopCoroutine(Onboarding02());
+            Debug.LogWarning("Onb 02 stopped!");
+            break;
+
+        case 2:
+            StopCoroutine(Onboarding03());
+            Debug.LogWarning("Onb 03 stopped!");
+            break;
+
+        case 3:
+            StopCoroutine(Onboarding04());
+            StopCoroutine(EnableSlicingPanel());
+            _slicingPanel.SetActive(false);
+            Debug.LogWarning("Onb 04 stopped!");
+            break;
+
+        case 4:
+            StopCoroutine(Onboarding05());
+            StopCoroutine(EnableMoldingPanel());
+            _moldingPanel.SetActive(false);
+            Debug.LogWarning("Onb 05 stopped!");
+            break;
+
+        case 5:
+            StopCoroutine(Onboarding06());
+            Debug.LogWarning("Onb 06 stopped!");
+            break;
+
+        case 6:
+            StopCoroutine(Onboarding07());
+            Debug.LogWarning("Onb 07 stopped!");
+            break;
+
+        case 7:
+            StopCoroutine(Onboarding08());
+            Debug.LogWarning("Onb 08 stopped!");
+            break;
+
+        case 8:
+            StopCoroutine(Onboarding09());
+            StopCoroutine(EnableFriendlyTipPanel());
+            _friendlyTipPanel.SetActive(false);
+            PlayerHUD.Instance.txtTopHUDUpdate("");
+            Debug.LogWarning("Done with Onboarding!");
+            break;
+
+        default: return;
+    }
+
+    _canSkip = false;
+    _tutorialPlaying = false;
+    CurrentStep++;
+    Debug.Log(CurrentStep);
+
+    Continue.action.Disable();
+    Continue.action.performed -= SkipTutorial;
+    */
+}
 
 #endregion    
 

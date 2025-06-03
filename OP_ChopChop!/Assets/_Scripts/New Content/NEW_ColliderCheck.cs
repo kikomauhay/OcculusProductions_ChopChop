@@ -46,12 +46,7 @@ public class NEW_ColliderCheck : MonoBehaviour
 
         if (Order == null)
         {
-            Debug.LogError("CustomerOrder is null!");
-            return;
-        }
-        if (plate == null)
-        {
-            Debug.LogError("Plate is null!");
+            // Debug.LogError("CustomerOrder is null!");
             return;
         }
 
@@ -59,14 +54,16 @@ public class NEW_ColliderCheck : MonoBehaviour
         if (ing != null)
         {
             DoIngredientCollision();
+            Destroy(other.gameObject);
             plate.Served();
             return;
         }
 
         // player has served a DISH to the customer
-        else if (dish != null)
+        if (dish != null)
         {
             DoDishCollision(dish);
+            dish.DisableDish();
             plate.Served();
         }
 
@@ -127,6 +124,9 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
 
 #endregion
+
+    public void DisableTutorial() => _isTutorial = false;
+
 
 #region Enumerators
 
