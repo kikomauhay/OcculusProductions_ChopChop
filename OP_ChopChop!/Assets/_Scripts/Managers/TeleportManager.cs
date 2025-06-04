@@ -49,17 +49,16 @@ public class TeleportManager : Singleton<TeleportManager>
     {
         if(context.performed)
         {
-            raysAreActive = !raysAreActive;
             foreach (GameObject ray in rays)
             {
-                ray.SetActive(raysAreActive);
+                ray.SetActive(true);
             }
         }
         else
         {
             foreach(GameObject ray in rays)
             {
-                ray.SetActive(!raysAreActive);
+                ray.SetActive(false);
             }
         }
     }
