@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
-using System.ComponentModel.Design.Serialization;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
@@ -39,10 +38,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     [SerializeField] private OutlineMaterial[] _highlightObjects;
 
-    private SoundManager _soundMgr;
-
-    private string[] _voiceLines = new string[9]
-    {
+    private string[] _voiceLines = new string[9] {
         "onb 01", "onb 02", "onb 03",
         "onb 04", "onb 05", "onb 06",
         "onb 07", "onb 08", "onb 09"
@@ -116,12 +112,14 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         // _highlightObjects[CurrentStep].EnableHighlight(); // only highlights the obj, removing highlight when it's grabbed
 
 
+
+
         StartCoroutine(CO_ToggleHighlight());
     }
 
     private void ProgressOnboarding()
     {
-        if (!_tutorialPlaying) return;
+        if (!_tutorialPlaying) return;  
 
         CurrentStep++;
         _tutorialPlaying = false;        
