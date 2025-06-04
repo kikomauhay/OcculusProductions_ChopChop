@@ -54,6 +54,11 @@ public class TeleportManager : Singleton<TeleportManager>
             foreach (GameObject ray in rays)
                 ray.SetActive(raysAreActive);
         }
+        else if (context.canceled)
+        {
+            foreach (GameObject ray in rays)
+                ray.SetActive(raysAreActive);
+        }
         /*
         //Not running from this point
         else
