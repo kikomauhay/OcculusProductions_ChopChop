@@ -66,7 +66,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         TutorialPlaying = false;
     }
 
-#region Testing
+    #region Testing
 
     /*    private void Update()
         {
@@ -96,10 +96,11 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             if (Input.GetKeyDown(KeyCode.Alpha9)) StartCoroutine(Onboarding09());
         }*/
 
-#endregion
-#endregion
+    #endregion
+    #endregion
 
-#region Onboarding
+
+#region NEW_Onboarding
 
     public void PlayOnboarding()
     {
@@ -118,7 +119,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         StartCoroutine(CO_ToggleHighlight());
     }
-
     private void ProgressOnboarding()
     {
         if (!_tutorialPlaying) return;
@@ -126,7 +126,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         CurrentStep++;
         _tutorialPlaying = false;        
     }
-
     private IEnumerator CO_ToggleHighlight()
     {
         _highlightObjects[CurrentStep].EnableHighlight();
@@ -139,9 +138,11 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         Debug.LogWarning($"New step: 0{CurrentStep + 1}");
     }
 
+#endregion
 
+#region Onboarding  
 
-    #region Onb_Func
+#region Onb_Func
 
     public void Onb_Func1()
     {
@@ -554,4 +555,3 @@ public void SkipTutorial(InputAction.CallbackContext context)
 
 #endregion
 }
-
