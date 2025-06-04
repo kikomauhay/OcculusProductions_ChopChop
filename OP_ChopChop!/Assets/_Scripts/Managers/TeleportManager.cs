@@ -54,6 +54,7 @@ public class TeleportManager : Singleton<TeleportManager>
                 ray.SetActive(true);
             }
         }
+        //Not running from this point
         else
         {
             foreach(GameObject ray in rays)

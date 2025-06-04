@@ -108,7 +108,8 @@ public class GameManager : Singleton<GameManager>
     public void RemoveLogo(InputAction.CallbackContext context)
     {
         // StartCoroutine(OnBoardingHandler.Instance.Onboarding01());
-        SoundManager.Instance.PlayOnboarding("onb 01");
+        //SoundManager.Instance.PlayOnboarding("onb 01");
+        OnBoardingHandler.Instance.PlayOnboarding();
         SoundManager.Instance.PlaySound("select");
 
         // unpause game, remove logo, and start onboarding
