@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
+using UnityEditor;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
@@ -42,6 +43,18 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         "onb 01", "onb 02", "onb 03",
         "onb 04", "onb 05", "onb 06",
         "onb 07", "onb 08", "onb 09"
+    };
+
+    private string[] _instructions = new string[9] {
+        "Wash your hands at kitchen sink.",
+        "Order one (1) Salmon Slab from Shop Screen near the freezers.",
+        "Store the Salmon Slab and get the one inside the freezer.",
+        "Chop Chop! the salmon slab!",
+        "Obtain the perfect rice mold.",
+        "Combine the rice mold and the fish slice!",
+        "Serve the new customer!",
+        "Cleaning time!",
+        "Congratulations, you did it!!"
     };
 
 #endregion
@@ -107,13 +120,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _tutorialPlaying = true;
         
+        // plays the VOICE LINE and INSTRUCTION
         SoundManager.Instance.PlayOnboarding(_voiceLines[CurrentStep]);
+        PlayerHUD.Instance.txtTopHUDUpdate(_instructions[CurrentStep]);
         Debug.Log($"Current step: 0{CurrentStep + 1}");
-        // _highlightObjects[CurrentStep].EnableHighlight(); // only highlights the obj, removing highlight when it's grabbed
 
-
-
-
+        DoExtraOnboarding(CurrentStep);
         StartCoroutine(CO_ToggleHighlight());
     }
 
@@ -137,9 +149,22 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         Debug.LogWarning($"New step: 0{CurrentStep + 1}");
     }
 
+    private void DoExtraOnboarding(int mode)
+    {
+        switch (mode)
+        {
+            case 0: SpawnManager.Instance.SpawnTutorialCustomer(true);  break;
+            case 4: StartCoroutine(EnableSlicingPanel());               break;
+            case 5: StartCoroutine(EnableMoldingPanel());               break;
+            case 6: SpawnManager.Instance.SpawnTutorialCustomer(false); break;
+            case 7: _dirtyCollider.SetActive(true);                     break;
+            case 8: GameManager.Instance.EnableEOD();                   break;
+            default:                                                    break;
+        }
+    }
 
 
-    #region Onb_Func
+#region Onb_Func
 
     public void Onb_Func1()
     {
@@ -283,7 +308,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
 
         yield return new WaitForSeconds(20f);
-        Continue.action.Enable();
+        // Continue.action.Enable();
         _canSkip = false;
         _tutorialPlaying = false;
         CurrentStep++;
