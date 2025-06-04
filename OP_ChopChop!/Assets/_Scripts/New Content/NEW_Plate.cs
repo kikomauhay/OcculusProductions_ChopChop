@@ -1,3 +1,4 @@
+// using System;
 using UnityEngine;
 
 /// <summary>
@@ -56,16 +57,19 @@ public class NEW_Plate : Equipment
 
     public override void HitTheGround()
     {
-/*        if (_dish.HasFood)
-        {
+        base.HitTheGround();
+
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ?
+                                        "plate placed 01" :
+                                        "plate placed 02");
+
+        if (_dish == null) return;
+
+        if (_dish.HasFood)
+        { 
             _dish.SetFoodCondition(FoodCondition.MOLDY);
             // Debug.LogWarning("The food got moldy!");
-        }*/
-
-        /*        SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                                "plate placed 01" :
-                                                "plate placed 02");*/
-        base.HitTheGround();
+        }        
     }
     public override void Trashed()
     {
