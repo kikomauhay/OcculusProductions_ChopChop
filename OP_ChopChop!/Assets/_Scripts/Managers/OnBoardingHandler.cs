@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
+using System.ComponentModel.Design.Serialization;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler> 
 {
@@ -31,8 +32,24 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private bool _isDeveloperMode;
 
     private bool _canSkip, _tutorialPlaying;
-    private const float PANEL_TIMER = 30f;
-    
+    private const float PANEL_TIMER = 30f, HIGHLIGHT_TIMER = 20f;
+
+
+#region New stuff
+
+    [SerializeField] private OutlineMaterial[] _highlightObjects;
+
+    private SoundManager _soundMgr;
+
+    private string[] _voiceLines = new string[9]
+    {
+        "onb 01", "onb 02", "onb 03",
+        "onb 04", "onb 05", "onb 06",
+        "onb 07", "onb 08", "onb 09"
+    };
+
+#endregion
+
 #endregion
 #endregion
 
@@ -84,7 +101,47 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
 #region Onboarding
 
-#region Onb_Func
+    public void PlayOnboarding()
+    {
+        if (_tutorialPlaying)
+        {
+            ReadStepError();
+            return;
+        }
+
+        _tutorialPlaying = true;
+        
+        SoundManager.Instance.PlayOnboarding(_voiceLines[CurrentStep]);
+        Debug.Log($"Current step: 0{CurrentStep + 1}");
+        // _highlightObjects[CurrentStep].EnableHighlight(); // only highlights the obj, removing highlight when it's grabbed
+
+
+        StartCoroutine(CO_ToggleHighlight());
+    }
+
+    private void ProgressOnboarding()
+    {
+        if (!_tutorialPlaying) return;
+
+        CurrentStep++;
+        _tutorialPlaying = false;        
+    }
+
+    private IEnumerator CO_ToggleHighlight()
+    {
+        _highlightObjects[CurrentStep].EnableHighlight();
+        yield return new WaitForSeconds(HIGHLIGHT_TIMER);
+
+        _highlightObjects[CurrentStep].DisableHighlight();
+        Debug.LogWarning("Disbled highlight");
+
+        ProgressOnboarding();
+        Debug.LogWarning($"New step: 0{CurrentStep + 1}");
+    }
+
+
+
+    #region Onb_Func
 
     public void Onb_Func1()
     {
