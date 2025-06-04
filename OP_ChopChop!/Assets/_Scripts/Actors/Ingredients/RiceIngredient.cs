@@ -5,7 +5,7 @@ public class RiceIngredient : Ingredient
 {
 #region Members
 
-    public Action<int> OnRiceMolded;
+    public Action<int> OnRiceMolded { get; set; }
 
 #region SerializeField
 
@@ -30,7 +30,7 @@ public class RiceIngredient : Ingredient
 
         if (!_tutorialDone && _moldType == MoldType.PERFECT)
         {
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding06());
+            OnBoardingHandler.Instance.PlayOnboarding();
             _tutorialDone = true;
         }
     }

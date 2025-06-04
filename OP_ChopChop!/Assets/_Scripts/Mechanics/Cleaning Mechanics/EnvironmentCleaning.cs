@@ -30,7 +30,7 @@ public class EnvironmentCleaning : MonoBehaviour
         
         if (_isTutorial) 
         {
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding09());
+            OnBoardingHandler.Instance.PlayOnboarding();
             gameObject.SetActive(false);
             return; 
         }
