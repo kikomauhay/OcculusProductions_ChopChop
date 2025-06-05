@@ -91,9 +91,8 @@ public class RiceIngredient : Ingredient
     protected override void ChangeMaterial()
     {
         _rend.materials = IngredientState == IngredientState.DEFAULT ? 
-                          new Material[] { _materials[0] }:              // clean mode
+                          new Material[] { _materials[0] } :            // clean mode
                           new Material[] { _materials[1], _dirtyOSM };  // dirty mode
-  
     }
 
     private void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;
