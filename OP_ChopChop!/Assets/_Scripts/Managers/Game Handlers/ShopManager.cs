@@ -72,11 +72,10 @@ public class ShopManager : StaticInstance<ShopManager>
                                                               _spawnpoint, 
                                                               SpawnObjectType.INGREDIENT));            
             
-            // removes the highlight and triggers the next tutorial  
+            // triggers the next tutorial  
             if (!_tutorialPlayed)
             {
-                StartCoroutine(OnBoardingHandler.Instance.Onboarding03());
-                Debug.Log("ONB 03 PLAYING");
+                OnBoardingHandler.Instance.PlayOnboarding();
                 _tutorialPlayed = true;
             }
             return;
