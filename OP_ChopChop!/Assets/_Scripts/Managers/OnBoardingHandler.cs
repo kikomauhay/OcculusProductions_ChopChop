@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler>
 {
-    #region properties
+    #region Properties
 
     public System.Action OnTutorialEnd { get; set; }
     public int CurrentStep { get; private set; }
