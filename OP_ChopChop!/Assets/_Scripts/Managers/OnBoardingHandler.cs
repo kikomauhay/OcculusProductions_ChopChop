@@ -91,6 +91,17 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         StartCoroutine(CO_ToggleHighlight());
     }
 
+    public void AddOnboardingIndex()
+    {
+
+        if(_tutorialPlaying)
+        {
+            CurrentStep++;
+            _tutorialPlaying = false;
+        }
+      
+    }
+
     #endregion
     #region Helpers
 
@@ -171,6 +182,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _highlightObjects[CurrentStep].DisableHighlight();
         Debug.LogWarning("Disbled highlight");
 
+        /*
         // progresses the onboarding to the next step
         if (_tutorialPlaying)
         {
@@ -178,6 +190,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             _tutorialPlaying = false;
             Debug.LogWarning($"New step: 0{CurrentStep + 1}");
         }
+        */
     }
 
     #endregion

@@ -75,6 +75,7 @@ public class ShopManager : StaticInstance<ShopManager>
             // triggers the next tutorial  
             if (!_tutorialPlayed)
             {
+                OnBoardingHandler.Instance.AddOnboardingIndex();
                 OnBoardingHandler.Instance.PlayOnboarding();
                 _tutorialPlayed = true;
             }
