@@ -75,12 +75,14 @@ public class NEW_ColliderCheck : MonoBehaviour
         if (Order.IsTunaCustomer) // TUNA CUSTOMER
         {
             Debug.LogWarning("Tuna Sashimi customer was served!");
+            OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
             ShopManager.Instance.ClearList();
         }       
         else if (Order.IsTutorial)  // ATRIUM CUSTOMER
         {
             Debug.LogWarning("Atrium was served!");
+            OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
         } 
     }

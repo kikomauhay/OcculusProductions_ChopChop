@@ -62,6 +62,7 @@ public class Freezer : MonoBehaviour
         if (!_tutorialPlayed)   
         {
             // StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
+            OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
             _tutorialPlayed = true;
         }     

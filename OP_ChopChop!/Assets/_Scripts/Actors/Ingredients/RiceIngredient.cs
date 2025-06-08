@@ -30,6 +30,7 @@ public class RiceIngredient : Ingredient
 
         if (!_tutorialDone && _moldType == MoldType.PERFECT)
         {
+            OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
             _tutorialDone = true;
         }
