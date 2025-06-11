@@ -94,8 +94,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public void AddOnboardingIndex()
     {
-
-        if(_tutorialPlaying)
+        if (_tutorialPlaying)
         {
             CurrentStep++;
             _tutorialPlaying = false;

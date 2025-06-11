@@ -1573,7 +1573,11 @@ PrefabInstance:
       propertyPath: _newColliderChecks.Array.data[7]
       value: 
       objectReference: {fileID: 606633228}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1597545421204645413, guid: 6d8e178db82292546afbe87fe1212197, type: 3}
+    - {fileID: 1597545422520328625, guid: 6d8e178db82292546afbe87fe1212197, type: 3}
+    - {fileID: 1597545420845833051, guid: 6d8e178db82292546afbe87fe1212197, type: 3}
+    - {fileID: 1597545421573541971, guid: 6d8e178db82292546afbe87fe1212197, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6d8e178db82292546afbe87fe1212197, type: 3}
 --- !u!65 &997598362 stripped
 BoxCollider:

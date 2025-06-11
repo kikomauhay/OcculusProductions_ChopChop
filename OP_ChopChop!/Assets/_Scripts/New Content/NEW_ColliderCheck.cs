@@ -55,7 +55,6 @@ public class NEW_ColliderCheck : MonoBehaviour
         {
             DoIngredientCollision();
             Destroy(other.gameObject);
-            plate.Served();
             return;
         }
 
