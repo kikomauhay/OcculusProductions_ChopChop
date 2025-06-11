@@ -88,6 +88,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         // some onboarding steps have extra actions
         DoExtraOnboarding(CurrentStep);
 
+        DoExtraOnboarding(CurrentStep);
         StartCoroutine(CO_ToggleHighlight());
     }
 
