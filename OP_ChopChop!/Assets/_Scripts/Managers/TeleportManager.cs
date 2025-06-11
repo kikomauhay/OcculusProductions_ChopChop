@@ -47,6 +47,16 @@ public class TeleportManager : Singleton<TeleportManager>
     #region Functions
     private void ToggleRays(InputAction.CallbackContext context)
     {
+        raysAreActive = !raysAreActive;
+        foreach (GameObject ray in rays)
+        {
+            ray.SetActive(raysAreActive);
+        }
+    }
+
+    /*
+    private void ToggleRays(InputAction.CallbackContext context)
+    {
         if (context.performed)
         {
             raysAreActive = !raysAreActive;
@@ -67,8 +77,8 @@ public class TeleportManager : Singleton<TeleportManager>
             {
                 ray.SetActive(false);
             }
-        } */
-    }
+        } 
+    }*/
     #endregion
 }
 
