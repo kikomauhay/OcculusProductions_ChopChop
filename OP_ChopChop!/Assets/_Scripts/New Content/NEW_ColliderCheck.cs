@@ -71,20 +71,19 @@ public class NEW_ColliderCheck : MonoBehaviour
 
         // TUTORIAL LOGIC AFTER THE DISH IS SERVED
         if (!_isTutorial) return;
-
-        // TUNA CUSTOMER
-        if (Order.IsTunaCustomer) 
+        
+        if (Order.IsTunaCustomer) // TUNA CUSTOMER
         {
             Debug.LogWarning("Tuna Sashimi customer was served!");
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding08());
+            OnBoardingHandler.Instance.AddOnboardingIndex();
+            OnBoardingHandler.Instance.PlayOnboarding();
             ShopManager.Instance.ClearList();
-        }
-
-        // ATRIUM CUSTOMER
-        else if (Order.IsTutorial)
+        }       
+        else if (Order.IsTutorial)  // ATRIUM CUSTOMER
         {
             Debug.LogWarning("Atrium was served!");
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding07());
+            OnBoardingHandler.Instance.AddOnboardingIndex();
+            OnBoardingHandler.Instance.PlayOnboarding();
         } 
     }
 
