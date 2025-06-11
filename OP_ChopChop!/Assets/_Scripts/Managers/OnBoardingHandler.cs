@@ -87,8 +87,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         // some onboarding steps have extra actions
         DoExtraOnboarding(CurrentStep);
-
-        DoExtraOnboarding(CurrentStep);
         StartCoroutine(CO_ToggleHighlight());
     }
 
@@ -99,7 +97,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             CurrentStep++;
             _tutorialPlaying = false;
         }
-      
     }
 
     #endregion
@@ -108,10 +105,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     private void ReadOverlapError() => Debug.LogError("Onboarding is already playing!");
     public void Disable()
     {
-        if (_plates.Count > 0)
-            foreach (GameObject p in _plates)
-                p.SetActive(false);
-
         OnTutorialEnd?.Invoke();
         gameObject.SetActive(false);
     }
@@ -137,12 +130,11 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (!_isDeveloperMode) return;
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             PlayOnboarding();
             Debug.Log($"Current step: 0{CurrentStep + 1}");
         }
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             CurrentStep++;
