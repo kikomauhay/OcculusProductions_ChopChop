@@ -73,16 +73,16 @@ public class NEW_ColliderCheck : MonoBehaviour
         
         if (Order.IsTunaCustomer) // TUNA CUSTOMER
         {
-            Debug.LogWarning("Tuna Sashimi customer was served!");
             OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
             ShopManager.Instance.ClearList();
+            Debug.LogWarning("Tuna Sashimi customer was served!");
         }       
         else if (Order.IsTutorial)  // ATRIUM CUSTOMER
         {
-            Debug.LogWarning("Atrium was served!");
             OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
+            Debug.LogWarning("Atrium was served!");
         } 
     }
 
@@ -113,11 +113,13 @@ public class NEW_ColliderCheck : MonoBehaviour
         {
             Order.CustomerSR = (dish.Score + Order.PatienceRate) / 2f;
             StartCoroutine(Order.CO_HappyReaction());
+            Debug.LogWarning("Happy reaction");
         }
-        else 
+        else
         {
             Order.CustomerSR = 0f;
             StartCoroutine(Order.CO_AngryReaction());
+            Debug.LogWarning("Angy reaction");
         }
     }
 
