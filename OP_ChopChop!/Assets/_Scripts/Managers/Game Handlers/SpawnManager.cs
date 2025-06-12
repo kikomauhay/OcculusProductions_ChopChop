@@ -176,15 +176,15 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         if (_spawnedCustomers == GameManager.Instance.MaxCustomerCount)
             customer.GetComponent<CustomerOrder>().IsLastCustomer = true;
-    } 
+    }
     public void SpawnTutorialCustomer(bool isAtrium)
     {
-        if (!_isTutorial) 
+        if (!_isTutorial)
         {
             Debug.LogError("Cannot spawn this type of customer!");
             return;
         }
-        if (GameManager.Instance.CurrentShift != GameShift.Training) 
+        if (GameManager.Instance.CurrentShift != GameShift.Training)
         {
             Debug.LogError($"Current shift is not in training mode!");
             return;
@@ -208,6 +208,12 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // prevents multiple customers getting the same seat 
         seat.IsEmpty = false;
+        
+        if (isAtrium)
+            Debug.LogWarning($"Spawned Atrium!");
+
+        else 
+            Debug.LogWarning($"Spawned Tuna Customer!");
     }
 
 #endregion

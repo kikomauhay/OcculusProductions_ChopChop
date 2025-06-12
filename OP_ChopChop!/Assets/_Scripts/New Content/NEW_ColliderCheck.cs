@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -46,7 +47,7 @@ public class NEW_ColliderCheck : MonoBehaviour
 
         if (Order == null)
         {
-            // Debug.LogError("CustomerOrder is null!");
+            Debug.LogError($"{Order} is null!");
             return;
         }
 
@@ -111,8 +112,13 @@ public class NEW_ColliderCheck : MonoBehaviour
         }
         else if (dish.DishPlatter == Order.WantedPlatter)
         {
-            Order.CustomerSR = (dish.Score + Order.PatienceRate) / 2f;
-            StartCoroutine(Order.CO_HappyReaction());
+            if (!Order.IsTutorial)
+            {
+                Order.CustomerSR = (dish.Score + Order.PatienceRate) / 2f;
+                StartCoroutine(Order.CO_HappyReaction());
+            }
+            else Destroy(Order.gameObject);
+
             Debug.LogWarning("Happy reaction");
         }
         else
