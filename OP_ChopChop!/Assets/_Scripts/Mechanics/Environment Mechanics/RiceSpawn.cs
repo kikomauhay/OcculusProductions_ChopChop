@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class RiceSpawn : XRBaseInteractable
 {
-    [SerializeField] private GameObject _ricePrefab;
+    [SerializeField] private GameObject _ricePrefab , _riceMesh, _riceSpwnCollider;
     [SerializeField] private Transform _spawnpoint;
     [SerializeField] private bool _isTutorial;
+    [SerializeField] private float _decrementHeightCount;
 
+    private int _spawnCount;
     private bool _riceSpawned;
+    private Vector3 _riceSpwnColliderPos;
 
     protected override void OnEnable()
     {
@@ -27,15 +30,35 @@ public class RiceSpawn : XRBaseInteractable
             interactionManager = FindObjectOfType<XRInteractionManager>();
         
         _riceSpawned = false;
+        _spawnCount = 7;
+        _riceSpwnColliderPos = transform.position;
+    }
+
+    private void Update()
+    {
+        if(_spawnCount <= 0)
+        {
+            Debug.LogWarning($"Rice left: {_spawnCount}");
+            _riceMesh.gameObject.SetActive(false);
+        }
+    }
+
+    public void ResetRice()
+    {
+        _spawnCount = 7;
+        _riceMesh.gameObject.SetActive(true);
+        _riceMesh.gameObject.transform.localPosition = new Vector3(0,0,0);
+        _riceSpwnCollider.gameObject.transform.position = _riceSpwnColliderPos;
     }
 
     private void RiceEvent(SelectEnterEventArgs args)
     {
-        if (_riceSpawned) return;
+        Debug.LogWarning($"Rice left: {_spawnCount}");
+        if (_riceSpawned || _spawnCount <= 0) return;
 
         _riceSpawned = true;
 
-        GameObject newRice = _isTutorial ? 
+        GameObject newRice = _isTutorial ?
                              Instantiate(_ricePrefab, transform.position, transform.rotation) :
                              SpawnManager.Instance.SpawnObject(_ricePrefab, _spawnpoint,
                                                                SpawnObjectType.INGREDIENT);
@@ -45,6 +68,14 @@ public class RiceSpawn : XRBaseInteractable
 
         base.OnSelectEntered(args);
         StartCoroutine(ResetRiceSpawned());
+
+        if(!_isTutorial)
+        {
+            Debug.LogWarning("Decrement Not Running");
+            _spawnCount--;
+            _riceMesh.gameObject.transform.localPosition -= new Vector3(0, _decrementHeightCount, 0);
+            _riceSpwnCollider.gameObject.transform.localPosition -= new Vector3(0, _decrementHeightCount, 0);
+        }
     }
 
     private IEnumerator ResetRiceSpawned()

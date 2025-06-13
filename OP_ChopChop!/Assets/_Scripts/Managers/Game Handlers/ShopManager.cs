@@ -8,7 +8,7 @@ public class ShopManager : StaticInstance<ShopManager>
 {
 #region Members
 
-    [SerializeField] GameObject _salmonPrefab, _tunaPrefab;
+    [SerializeField] GameObject _salmonPrefab, _tunaPrefab , _riceCooker;
     [SerializeField] Transform _spawnpoint;
 
     [Header("Ingredient Prices")]
@@ -65,8 +65,6 @@ public class ShopManager : StaticInstance<ShopManager>
             SoundManager.Instance.PlaySound("select");
             StartCoroutine(ButtonCooldownTimer(0));
 
-            // waiting time for the salmon to spawn
-            StartCoroutine(DeliveryWaitTime());
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
             _orderBoxes.Add(SpawnManager.Instance.SpawnObject(_salmonPrefab, 
                                                               _spawnpoint, 
@@ -92,8 +90,6 @@ public class ShopManager : StaticInstance<ShopManager>
             GameManager.Instance.DeductMoney(_salmonPrice);
             UpatePlayerMoneyUI();
             
-            // waiting time before the salmon spawns
-            StartCoroutine(DeliveryWaitTime());
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
             SpawnManager.Instance.SpawnObject(_salmonPrefab,
                                               _spawnpoint.transform,                    
@@ -108,8 +104,6 @@ public class ShopManager : StaticInstance<ShopManager>
             SoundManager.Instance.PlaySound("select");
             StartCoroutine(ButtonCooldownTimer(1));
 
-            // waiting time for the tuna to spawn
-            StartCoroutine(DeliveryWaitTime());
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
             _orderBoxes.Add(SpawnManager.Instance.SpawnObject(_tunaPrefab, 
                                                               _spawnpoint, 
@@ -127,8 +121,6 @@ public class ShopManager : StaticInstance<ShopManager>
             GameManager.Instance.DeductMoney(_tunaPrice);
             UpatePlayerMoneyUI();           
             
-            // waiting time before the tuna spawns
-            StartCoroutine(DeliveryWaitTime());
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
             SpawnManager.Instance.SpawnObject(_tunaPrefab,
                                               _spawnpoint.transform,
@@ -137,7 +129,7 @@ public class ShopManager : StaticInstance<ShopManager>
     }
     public void BuyRice()
     {
-        if (_isTutorial) 
+        if (_isTutorial)
         {
             SoundManager.Instance.PlaySound("wrong");
             return;
@@ -145,18 +137,22 @@ public class ShopManager : StaticInstance<ShopManager>
 
         if (GameManager.Instance.CurrentPlayerMoney > 0)
         {
+            Debug.LogWarning($"Rice Ordered, Money remaining: {GameManager.Instance.CurrentPlayerMoney} ");
             // UX when the player has pressed the button
             SoundManager.Instance.PlaySound("select");
             StartCoroutine(ButtonCooldownTimer(2));
-            
+
             // deduction of money
             GameManager.Instance.DeductMoney(_ricePrice);
             UpatePlayerMoneyUI();
 
             // waiting time before the rice spawns
-            StartCoroutine(DeliveryWaitTime());
-
-            // insert code below to reset the Rice at the Rice Cooker
+            StartCoroutine(RiceDeliveryWaitTime());
+        }
+        else
+        {
+            SoundManager.Instance.PlaySound("wrong");
+            return;
         }
     }
 
@@ -188,9 +184,11 @@ public class ShopManager : StaticInstance<ShopManager>
         _interactableButtons[index].interactable = true;
     }
 
-    private IEnumerator DeliveryWaitTime()
+    private IEnumerator RiceDeliveryWaitTime()
     {
+        Debug.LogWarning("Rice has been ordered, please wait");
         yield return new WaitForSeconds(5f);
+        _riceCooker.GetComponentInChildren<RiceSpawn>().ResetRice();
     } 
 
 #endregion
