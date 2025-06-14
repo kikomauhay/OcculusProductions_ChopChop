@@ -11,14 +11,13 @@ using UnityEngine;
 public class NEW_Plate : Equipment
 {
 
-    private NEW_Dish _dish;
+    [SerializeField] private NEW_Dish _dish;
 
 #region Unity
 
     protected override void Awake()
     {
         base.Awake();
-        _dish = GetComponent<NEW_Dish>();
 
         if (_isDeveloperMode)
             Debug.Log($"{this} developer mode: {_isDeveloperMode}");
@@ -27,7 +26,7 @@ public class NEW_Plate : Equipment
     {
         if (_dish.HasFood)
         {
-            // Debug.LogError($"{name} already contains food!");
+            Debug.LogError($"{name} already contains food!");
             return;
         }
 

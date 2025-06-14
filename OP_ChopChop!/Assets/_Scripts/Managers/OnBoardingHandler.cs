@@ -26,7 +26,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] public InputActionReference Continue;
 
     [Header("Debugging")]
-    [SerializeField] private List<GameObject> _plates;
     [SerializeField] private bool _isDeveloperMode;
 
     #endregion
@@ -87,20 +86,16 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         // some onboarding steps have extra actions
         DoExtraOnboarding(CurrentStep);
-
-        DoExtraOnboarding(CurrentStep);
         StartCoroutine(CO_ToggleHighlight());
     }
 
     public void AddOnboardingIndex()
     {
-
-        if(_tutorialPlaying)
+        if (_tutorialPlaying)
         {
             CurrentStep++;
             _tutorialPlaying = false;
         }
-      
     }
 
     #endregion
@@ -109,10 +104,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     private void ReadOverlapError() => Debug.LogError("Onboarding is already playing!");
     public void Disable()
     {
-        if (_plates.Count > 0)
-            foreach (GameObject p in _plates)
-                p.SetActive(false);
-
         OnTutorialEnd?.Invoke();
         gameObject.SetActive(false);
     }
@@ -138,12 +129,11 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (!_isDeveloperMode) return;
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             PlayOnboarding();
             Debug.Log($"Current step: 0{CurrentStep + 1}");
         }
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             CurrentStep++;
@@ -179,19 +169,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _highlightObjects[CurrentStep].EnableHighlight();
         yield return new WaitForSeconds(HIGHLIGHT_TIMER);
 
-        // Idk how to disable the highlight 
+        // Idk when I should disable the highlight 
         _highlightObjects[CurrentStep].DisableHighlight();
         Debug.LogWarning("Disbled highlight");
-
-        /*
-        // progresses the onboarding to the next step
-        if (_tutorialPlaying)
-        {
-            CurrentStep++;
-            _tutorialPlaying = false;
-            Debug.LogWarning($"New step: 0{CurrentStep + 1}");
-        }
-        */
     }
 
     #endregion

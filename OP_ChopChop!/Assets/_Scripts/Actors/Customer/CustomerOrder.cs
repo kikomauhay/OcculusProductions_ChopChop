@@ -104,7 +104,7 @@ public class CustomerOrder : MonoBehaviour
 
 #region Spawning_Helpers
 
-    void CreateCustomerUI()
+    private void CreateCustomerUI()
     {
         // aligns customer UI & customer order
         _customerOrderUI = Instantiate(_dishOrdersUI[_isTutorial ? 0 : (int)WantedPlatter], 
@@ -112,15 +112,21 @@ public class CustomerOrder : MonoBehaviour
                                        _orderUITransform.rotation,
                                        transform);
     }
-    void MakeSeatEmpty() // clears the seat of any customer references 
+    private void MakeSeatEmpty() // clears the seat of any customer references 
     {
-        SpawnManager.Instance.RemoveCustomer(gameObject);        
-        SpawnManager.Instance.StartCustomerSpawning();
-        GameManager.Instance.AddToCustomerScores(CustomerSR);
+        // de-links the customer order & the seat
+        SpawnManager.Instance.RemoveCustomer(gameObject);
+
+        if (!_isTutorial)
+        {
+            SpawnManager.Instance.StartCustomerSpawning();
+            GameManager.Instance.AddToCustomerScores(CustomerSR);
+        }
 
         // destroys both the customer and its UI
-        DestroyOrderUI();   
+        DestroyOrderUI();
         Destroy(gameObject);
+        Debug.LogWarning($"Destroyed {this}");
     }
     private void DestroyOrderUI() => Destroy(_customerOrderUI);
 

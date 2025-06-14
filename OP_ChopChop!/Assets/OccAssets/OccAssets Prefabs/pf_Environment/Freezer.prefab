@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 183183793245312675}
   - component: {fileID: 183183793245312672}
   - component: {fileID: 183183793245312673}
+  - component: {fileID: 183183791709213969}
   m_Layer: 0
   m_Name: Freezer
   m_TagString: Untagged
@@ -33,6 +34,7 @@ Transform:
   m_Children:
   - {fileID: 6435966320489347438}
   - {fileID: 1248868011818199309}
+  - {fileID: 6881885377056402206}
   - {fileID: 6460615138155699022}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -62,10 +64,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 392ed8cd15f33ee448978d513cf7b0ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isTutorial: 0
-  _ingredients: []
+  _isTutorial: 1
+  _ingredients:
+  - {fileID: 751231717886979270}
   snapToPoint: {fileID: 6460615138155699022}
   pointToSnap: {fileID: 1285653661472179758}
+  _snapSpeed: 0
 --- !u!114 &183183793245312673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +83,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _outlineMat: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
+--- !u!114 &183183791709213969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183183793245312684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565c6f2ef42812a42b1e12206e872c47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isInteractable: 0
+  _tutorialIndex: 2
 --- !u!1 &753311769084278398
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +126,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 183183793245312674}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6255666221692358955
 GameObject:
@@ -584,7 +602,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 183183793245312672}
+        m_TargetAssemblyTypeName: Freezer, Assembly-CSharp
+        m_MethodName: DoorSnapToBody
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -683,3 +713,103 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
+--- !u!114 &183183791709213966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8659182179552004685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ee06c9707717d4b8b65aacf9694a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineMat: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
+--- !u!1001 &183183793229223939
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 183183793245312674}
+    m_Modifications:
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.013804138
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.02120018
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.055300236
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7534949
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.65745384
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 82.212
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9223341567872474545, guid: f187849ca6808774d8c947b5df962e25,
+        type: 3}
+      propertyPath: m_Name
+      value: ing_Salmon_Slice_01
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f187849ca6808774d8c947b5df962e25, type: 3}
+--- !u!114 &751231717886979270 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -8582130309659511611, guid: f187849ca6808774d8c947b5df962e25,
+    type: 3}
+  m_PrefabInstance: {fileID: 183183793229223939}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d0a61dc6b2809f418a3cae42df6da65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &6881885377056402206 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6704614070973084445, guid: f187849ca6808774d8c947b5df962e25,
+    type: 3}
+  m_PrefabInstance: {fileID: 183183793229223939}
+  m_PrefabAsset: {fileID: 0}

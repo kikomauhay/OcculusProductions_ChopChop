@@ -225,7 +225,7 @@ public class NEW_Dish : MonoBehaviour
 
         _hasFood = true;
         _collider.enabled = false;
-        // Debug.Log($"{name} has food: {_hasFood}");
+        Debug.Log($"{name} has food: {_hasFood}");
     }
     private void DoIngredientCollision(Ingredient ing)
     { 
