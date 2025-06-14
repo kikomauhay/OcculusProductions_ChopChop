@@ -15,109 +15,133 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider))]
 public class NEW_ColliderCheck : MonoBehaviour 
 {
-#region Properties
+    #region Members
 
     public CustomerOrder Order { get; set; }
 
-#endregion
-
     [SerializeField] private bool _isTutorial;
     private Collider _collider;
+    private float _disableTimer;
 
     [Header("Debugging")]
     [SerializeField] private bool _isDevloperMode;
 
-#region Unity
+    #endregion
+
+    #region Unity
 
     private void Awake()
     {
         _collider = GetComponent<BoxCollider>();
-        // Debug.Log($"{ToString()} developer mode: {_isDevloperMode}");
+
+        if (_isDevloperMode)
+            Debug.Log($"{this} developer mode: {_isDevloperMode}");
     }
-    private void Start() 
+    private void Start()
     {
         _collider.isTrigger = true;
-        _collider.enabled = true;    
+        _collider.enabled = true;
+        _disableTimer = 5f; 
     }
     private void OnTriggerEnter(Collider other)
     {
-        Ingredient ing = other.gameObject.GetComponent<Ingredient>();
-        NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
-        NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
-
         if (Order == null)
         {
             Debug.LogError($"{Order} is null!");
             return;
         }
 
-        // player has served an INGREDIENT to the customer
-        if (ing != null)
+        if (other.gameObject.GetComponent<Ingredient>() != null)
         {
-            DoIngredientCollision();
+            // the player shouldn't get a Game Over in the tutorial
+            if (GameManager.Instance.CurrentShift == GameShift.Training)
+            {
+                Debug.LogError("Game over logic not possible in tutorial!");
+                return;
+            }
+
+            // starts the game over logic
+            Order.CustomerSR = 0f;
             Destroy(other.gameObject);
+            StartCoroutine(CO_DisableCollider());
+            StartCoroutine(GameManager.Instance.CO_GameOver());
+            StartCoroutine(Random.value > 0.5f ? Order.CO_DirtyReaction() :
+                                                 Order.CO_AngryReaction());
+
+            // test debug to confirm all logic has worked
+            Debug.LogError("Served an INGREDIENT!");
             return;
         }
 
-        // player has served a DISH to the customer
-        if (dish != null)
+        NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
+        NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
+
+        if (dish == null || plate == null)
         {
-            DoDishCollision(dish);
-            dish.DisableDish();
-            plate.Served();
+            Debug.LogError($"{other.name} has a missing Plate or Dish Script");
+            return;
         }
 
+        DoDishCollision(dish);
+
+        // visual cofirmation that the DISH was served 
+        dish.DisableDish();
+        plate.Served();
         StartCoroutine(CO_DisableCollider());
 
-        // TUTORIAL LOGIC AFTER THE DISH IS SERVED
-        if (!_isTutorial) return;
-        
+        if (_isTutorial)
+        {
+            OnBoardingHandler.Instance.AddOnboardingIndex();
+            OnBoardingHandler.Instance.PlayOnboarding();
+
+            if (Order.IsTunaCustomer)
+            {
+                ShopManager.Instance.ClearList();
+                Debug.LogWarning("Tuna Sashimi customer was served!");
+            }
+            else Debug.LogWarning("Atrium was served!");
+        }
+
+        /* -OLD ONBOARDING CALLS-
         if (Order.IsTunaCustomer) // TUNA CUSTOMER
         {
             OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
             ShopManager.Instance.ClearList();
             Debug.LogWarning("Tuna Sashimi customer was served!");
-        }       
+        }
         else if (Order.IsTutorial)  // ATRIUM CUSTOMER
         {
             OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
-            Debug.LogWarning("Atrium was served!");
+
         } 
+        */
     }
-
-#endregion
-
-#region Helpers
-
-    private void DoIngredientCollision() 
+    private IEnumerator CO_DisableCollider()
     {
-        Debug.LogError("Player has served an ingredient to the customer!");
-
-        Order.CustomerSR = 0f;
-
-        StartCoroutine(Random.value > 0.5f ? Order.CO_DirtyReaction() : 
-                                             Order.CO_AngryReaction());
-
-        StartCoroutine(GameManager.Instance.CO_GameOver());
+        _collider.enabled = false;
+        yield return new WaitForSeconds(_disableTimer);
+        _collider.enabled = true;
     }
-    private void DoDishCollision(NEW_Dish dish) 
+
+    #endregion
+
+    #region Helpers
+    
+    private void DoDishCollision(NEW_Dish dish)
     {
         if (dish.FoodCondition != FoodCondition.CLEAN)
         {
             Order.CustomerSR = 0f;
-            Debug.LogError("Game Over!");
             StartCoroutine(Order.CO_DirtyReaction());
+
+            Debug.LogWarning("Game Over!");
         }
         else if (dish.DishPlatter == Order.WantedPlatter)
         {
-            if (!Order.IsTutorial)
-            {
-                Order.CustomerSR = (dish.Score + Order.PatienceRate) / 2f;
-                StartCoroutine(Order.CO_HappyReaction());
-            }
-            else Destroy(Order.gameObject);
+            Order.CustomerSR = (dish.Score + Order.PatienceRate) / 2f;
+            StartCoroutine(Order.CO_HappyReaction());
 
             Debug.LogWarning("Happy reaction");
         }
@@ -125,24 +149,12 @@ public class NEW_ColliderCheck : MonoBehaviour
         {
             Order.CustomerSR = 0f;
             StartCoroutine(Order.CO_AngryReaction());
+
             Debug.LogWarning("Angy reaction");
         }
     }
-
-#endregion
-
     public void DisableTutorial() => _isTutorial = false;
 
-
-#region Enumerators
-
-    private IEnumerator CO_DisableCollider()
-    {
-        _collider.enabled = false;
-        yield return new WaitForSeconds(3f);
-        _collider.enabled = true;
-    }
-
-#endregion
-
+    
+    #endregion
 }

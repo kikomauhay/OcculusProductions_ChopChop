@@ -26,7 +26,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] public InputActionReference Continue;
 
     [Header("Debugging")]
-    [SerializeField] private List<GameObject> _plates;
     [SerializeField] private bool _isDeveloperMode;
 
     #endregion
@@ -170,19 +169,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         _highlightObjects[CurrentStep].EnableHighlight();
         yield return new WaitForSeconds(HIGHLIGHT_TIMER);
 
-        // Idk how to disable the highlight 
+        // Idk when I should disable the highlight 
         _highlightObjects[CurrentStep].DisableHighlight();
         Debug.LogWarning("Disbled highlight");
-
-        /*
-        // progresses the onboarding to the next step
-        if (_tutorialPlaying)
-        {
-            CurrentStep++;
-            _tutorialPlaying = false;
-            Debug.LogWarning($"New step: 0{CurrentStep + 1}");
-        }
-        */
     }
 
     #endregion
