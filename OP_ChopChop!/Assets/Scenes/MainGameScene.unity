@@ -1119,6 +1119,12 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3613839608882385316, guid: d9bb0abda740e5247b6a60a869661786, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d9bb0abda740e5247b6a60a869661786, type: 3}
+--- !u!65 &309819470 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 8872419951292501423, guid: d9bb0abda740e5247b6a60a869661786,
+    type: 3}
+  m_PrefabInstance: {fileID: 309819469}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &312042809
 GameObject:
   m_ObjectHideFlags: 0
@@ -5132,12 +5138,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1577026306}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1577026308 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 8872419951292501423, guid: d9bb0abda740e5247b6a60a869661786,
-    type: 3}
-  m_PrefabInstance: {fileID: 1577026306}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1610666279
 GameObject:
   m_ObjectHideFlags: 0
@@ -6238,7 +6238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
   m_Colliders:
-  - {fileID: 1577026308}
+  - {fileID: 309819470}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -7125,7 +7125,7 @@ Transform:
   - {fileID: 440174340}
   - {fileID: 1807871034}
   m_Father: {fileID: 2030309114}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2140408975
 GameObject:

@@ -1,3 +1,4 @@
+using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -78,9 +79,23 @@ public class Freezer : MonoBehaviour
 
         if (pointToPointDist <= 0.5f)
         {
-            pointToSnap.position = Vector3.Lerp(pointToSnap.position,
-                                                snapToPoint.position, 
-                                                Time.deltaTime * _snapSpeed);
+            Rigidbody rb = pointToSnap.GetComponentInParent<Rigidbody>();
+            XRGrabInteractable grab = pointToSnap.GetComponentInParent<XRGrabInteractable>();
+
+            if (grab == null && rb == null) return;
+
+            grab.enabled = false;
+            rb.isKinematic = true;
+
+            pointToSnap.position = Vector3.MoveTowards(pointToSnap.position,
+                                                       snapToPoint.position, 
+                                                       Time.deltaTime * _snapSpeed);
+            if(pointToPointDist < 0.01F)
+            {
+                grab.enabled = true;
+                rb.isKinematic = false;
+            }
+
         }
     }
 
