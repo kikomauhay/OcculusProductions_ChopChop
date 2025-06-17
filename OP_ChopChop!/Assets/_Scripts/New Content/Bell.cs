@@ -1,14 +1,31 @@
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
 
-public class Bell : StaticInstance<Bell> 
+public class Bell : XRBaseInteractable 
 {
-    private void OnTriggerEnter(Collider other)
+
+#region Unity
+
+    protected override void OnEnable()
     {
-        if (!other.gameObject.name.Contains("LeftHand") ||
-            !other.gameObject.name.Contains("RightHand"))
-        {
-            return;
-        }
+        base.OnEnable();
+        hoverEntered.AddListener(BellTrigger);
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        hoverEntered.RemoveListener(BellTrigger);
+    }
+
+#endregion
+
+#region PrivateFunctions
+
+    private void BellTrigger(HoverEnterEventArgs args)
+    {
+        //to prevent going back to training mid service
+        if (GameManager.Instance.CurrentShift == GameShift.Service) return;
 
         if (GameManager.Instance.CurrentShift == GameShift.Training)
         {
@@ -29,4 +46,6 @@ public class Bell : StaticInstance<Bell>
         ShopManager.Instance.ClearList();
         SoundManager.Instance.StopAllSounds(); // in case there is any ongoing tutorial lines
     }
+
+#endregion
 }
