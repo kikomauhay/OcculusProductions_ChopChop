@@ -76,19 +76,23 @@ public class NEW_ColliderCheck : MonoBehaviour
         NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
         NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
 
-        if (dish == null || plate == null)
+        // makes sure that you have both a PLATE & DISH script
+        if (plate != null && dish != null)
         {
-            Debug.LogError($"{other.name} has a missing Plate or Dish Script");
+            DoDishCollision(dish); // customer's reaction when getting the dish
+
+            // visual cofirmation that the DISH was served 
+            dish.DisableDish(); // removes the food from the plate
+            plate.Served(); // increments the use counter & removed the food            
+            
+            StartCoroutine(CO_DisableCollider()); // temporarily disables the collider
+        }
+        else 
+        {
+            Debug.LogError($"{other.name} has a missing Plate or Dish script");
             return;
         }
-
-        DoDishCollision(dish);
-
-        // visual cofirmation that the DISH was served 
-        dish.DisableDish();
-        plate.Served();
-        StartCoroutine(CO_DisableCollider());
-
+        
         if (_isTutorial)
         {
             OnBoardingHandler.Instance.AddOnboardingIndex();
@@ -101,28 +105,14 @@ public class NEW_ColliderCheck : MonoBehaviour
             }
             else Debug.LogWarning("Atrium was served!");
         }
-
-        /* -OLD ONBOARDING CALLS-
-        if (Order.IsTunaCustomer) // TUNA CUSTOMER
-        {
-            OnBoardingHandler.Instance.AddOnboardingIndex();
-            OnBoardingHandler.Instance.PlayOnboarding();
-            ShopManager.Instance.ClearList();
-            Debug.LogWarning("Tuna Sashimi customer was served!");
-        }
-        else if (Order.IsTutorial)  // ATRIUM CUSTOMER
-        {
-            OnBoardingHandler.Instance.AddOnboardingIndex();
-            OnBoardingHandler.Instance.PlayOnboarding();
-
-        } 
-        */
     }
     private IEnumerator CO_DisableCollider()
     {
         _collider.enabled = false;
         yield return new WaitForSeconds(_disableTimer);
+        
         _collider.enabled = true;
+        Order = null;
     }
 
     #endregion

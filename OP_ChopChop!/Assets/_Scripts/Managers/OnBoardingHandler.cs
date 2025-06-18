@@ -106,7 +106,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         OnTutorialEnd?.Invoke();
         gameObject.SetActive(false);
+        SoundManager.Instance.StopOnboarding();
+        PlayerHUD.Instance.HudOff();
     }
+
     private void DoExtraOnboarding(int mode)
     {
         switch (mode)
@@ -121,6 +124,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
                 GameManager.Instance.EnableEOD();
                 StartCoroutine(CO_EnableFriendlyTipPanel());
                 GameManager.Instance.TutorialDone = true;
+                
                 break;
 
             default: break;
@@ -162,7 +166,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         _friendlyTipPanel.SetActive(true);
         yield return new WaitForSeconds(PANEL_TIMER);
+        
         _friendlyTipPanel.SetActive(false);
+        PlayerHUD.Instance.Disable();
     }
     private IEnumerator CO_ToggleHighlight()
     {

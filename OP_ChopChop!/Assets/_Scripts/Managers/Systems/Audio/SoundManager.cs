@@ -129,6 +129,8 @@ public class SoundManager : Singleton<SoundManager> {
     
     public void StopMusic() => _musicSource.Stop();
     public void StopSound() => _soundSource.Stop();
+    public void StopOnboarding() => _onboardingSource.Stop();
+
 
 #endregion
 #region Audio Balancing

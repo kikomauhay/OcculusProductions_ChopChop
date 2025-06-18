@@ -24,16 +24,16 @@ public class Bell : XRBaseInteractable
 
     private void BellTrigger(HoverEnterEventArgs args)
     {
-        //to prevent going back to training mid service
+        // to prevent going back to training mid service
         if (GameManager.Instance.CurrentShift == GameShift.Service) return;
 
         if (GameManager.Instance.CurrentShift == GameShift.Training)
         {
-            SoundManager.Instance.PlaySound("change shift");
-            StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
-
             OnBoardingHandler.Instance.Disable();
             Debug.LogWarning("Tutorial disabled!");
+
+            SoundManager.Instance.PlaySound("change shift");
+            StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
 
             GameManager.Instance.ChangeShift(GameShift.PreService);
             GameManager.Instance.TutorialDone = true;
@@ -41,13 +41,14 @@ public class Bell : XRBaseInteractable
         }
         else
         {
+            GameManager.Instance.ChangeShift(GameShift.Training);
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
             Debug.LogWarning("Loading to TRS");
         }
 
         ShopManager.Instance.ClearList();
-        SoundManager.Instance.StopAllSounds(); // in case there is any ongoing tutorial lines
+        SoundManager.Instance.StopOnboarding(); // in case there is any ongoing tutorial lines
     }
 
 #endregion
