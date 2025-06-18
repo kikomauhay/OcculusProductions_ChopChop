@@ -34,6 +34,9 @@ public abstract class Equipment : MonoBehaviour
         
         if (GameManager.Instance.CurrentShift == GameShift.Training)
             OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+
+        if (_isDeveloperMode)
+            Debug.LogWarning($"{this} is developer mode: {_isDeveloperMode}");
     }
     protected virtual void Start() 
     {
@@ -44,7 +47,7 @@ public abstract class Equipment : MonoBehaviour
         _usageCounter = 0;
 
         if (_maxUsageCounter == 0)
-            Debug.LogError($"Max use for {gameObject.name} is 0");
+            Debug.LogError($"Current max use for {this} is 0");
     }
     protected virtual void OnDestroy() 
     {
@@ -79,18 +82,6 @@ public abstract class Equipment : MonoBehaviour
     }
     protected void OnCollisionEnter(Collision other)
     {
-        // equipment -> sponge
-        if (other.gameObject.GetComponent<Ingredient>() != null)
-        {
-            Sponge sponge = other.gameObject.GetComponent<Sponge>();
-
-            if (!_isClean) 
-            {
-                sponge.SetDirty();
-                Debug.LogWarning($"{name} contaminated {sponge.name}");
-            }
-        }
-
         // equipment -> ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
