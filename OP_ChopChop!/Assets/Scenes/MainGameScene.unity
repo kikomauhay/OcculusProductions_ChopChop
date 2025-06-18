@@ -1489,6 +1489,11 @@ PrefabInstance:
       propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 183183793245312672, guid: 3f4644e0dd6b47e40823a5cb55227aed,
+        type: 3}
+      propertyPath: _isTutorial
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 183183793245312674, guid: 3f4644e0dd6b47e40823a5cb55227aed,
         type: 3}
       propertyPath: m_RootOrder
@@ -7294,6 +7299,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ~ShopManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791498176419619017, guid: 7a609331d762229458520779795f465a,
+        type: 3}
+      propertyPath: _isTutorial
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8791498176419619017, guid: 7a609331d762229458520779795f465a,
         type: 3}

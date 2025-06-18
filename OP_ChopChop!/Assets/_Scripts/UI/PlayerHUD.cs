@@ -22,4 +22,11 @@ public class PlayerHUD : Singleton<PlayerHUD>
     {
         txtTopHUD.text = "Current Task: " + text;
     }
+
+    public void Disable() => gameObject.SetActive(false);
+
+    public void HudOff()
+    {
+        txtTopHUD.text = " ";
+    }
 }
