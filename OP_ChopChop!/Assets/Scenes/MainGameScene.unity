@@ -1041,6 +1041,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: pf_TpFloor
       objectReference: {fileID: 0}
+    - target: {fileID: 637955420998036028, guid: d9bb0abda740e5247b6a60a869661786,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2336919477517887479, guid: d9bb0abda740e5247b6a60a869661786,
         type: 3}
       propertyPath: m_RootOrder
@@ -1119,12 +1124,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3613839608882385316, guid: d9bb0abda740e5247b6a60a869661786, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d9bb0abda740e5247b6a60a869661786, type: 3}
---- !u!65 &309819470 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 8872419951292501423, guid: d9bb0abda740e5247b6a60a869661786,
-    type: 3}
-  m_PrefabInstance: {fileID: 309819469}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &312042809
 GameObject:
   m_ObjectHideFlags: 0
@@ -5138,6 +5137,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1577026306}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &1577026308 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 8872419951292501423, guid: d9bb0abda740e5247b6a60a869661786,
+    type: 3}
+  m_PrefabInstance: {fileID: 1577026306}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1610666279
 GameObject:
   m_ObjectHideFlags: 0
@@ -6221,8 +6226,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2030309114}
-  m_RootOrder: 17
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1784324189
 MonoBehaviour:
@@ -6238,7 +6243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
   m_Colliders:
-  - {fileID: 309819470}
+  - {fileID: 1577026308}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -6330,7 +6335,7 @@ MonoBehaviour:
   m_TeleportationProvider: {fileID: 0}
   m_MatchOrientation: 0
   m_MatchDirectionalInput: 0
-  m_TeleportTrigger: 1
+  m_TeleportTrigger: 0
   m_FilterSelectionByHitNormal: 0
   m_UpNormalToleranceDegrees: 30
   m_Teleporting:
@@ -6854,7 +6859,6 @@ Transform:
   - {fileID: 1689955457}
   - {fileID: 1622442948}
   - {fileID: 1165219972}
-  - {fileID: 1784324188}
   - {fileID: 2130186330}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -7125,7 +7129,7 @@ Transform:
   - {fileID: 440174340}
   - {fileID: 1807871034}
   m_Father: {fileID: 2030309114}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2140408975
 GameObject:

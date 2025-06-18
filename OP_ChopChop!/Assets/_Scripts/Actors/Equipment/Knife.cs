@@ -16,12 +16,17 @@ public class Knife : Equipment
             base.OnDestroy();
             CancelInvoke("CheckMaterial");  
         }
+    protected override void OnTriggerEnter(Collider other)
+    {
+        if (!IsClean)
+            base.OnTriggerEnter(other);
+    }
 
     #endregion
 
     #region Public
 
-        public override void HitTheGround()
+    public override void HitTheGround()
         {
             base.HitTheGround();
 
