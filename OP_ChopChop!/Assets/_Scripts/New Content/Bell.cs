@@ -35,6 +35,7 @@ public class Bell : XRBaseInteractable
             Debug.LogWarning("Tutorial disabled!");
 
             GameManager.Instance.ChangeShift(GameShift.PreService);
+            GameManager.Instance.TutorialDone = true;
             Debug.LogWarning("Loading to MGS");
         }
         else

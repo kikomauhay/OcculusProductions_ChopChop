@@ -120,6 +120,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 8:
                 GameManager.Instance.EnableEOD();
                 StartCoroutine(CO_EnableFriendlyTipPanel());
+                GameManager.Instance.TutorialDone = true;
                 break;
 
             default: break;
