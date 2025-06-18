@@ -18,7 +18,7 @@ public class Sponge : MonoBehaviour
 
     private MeshRenderer _rend;
     private Vector3 _startPosition;
-    private const float WET_DURATION = 10f;
+    private const float WET_DURATION = 20f;
 
 #endregion
 
@@ -30,6 +30,12 @@ public class Sponge : MonoBehaviour
 
         if (GameManager.Instance.CurrentShift == GameShift.Training)
             OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+
+        if (!_isClean)
+            Debug.LogWarning($"{this} is clean: {_isClean}");
+
+        if (_isWet)
+           Debug.LogWarning($"{this} is wet: {_isWet}");
     }
     private void Start()
     {
