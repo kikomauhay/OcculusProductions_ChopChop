@@ -28,7 +28,9 @@ public class RiceIngredient : Ingredient
         base.Start();
         OnRiceMolded += ChangeRiceMold;
 
-        if (!_tutorialDone && _moldType == MoldType.PERFECT)
+        if (!GameManager.Instance.TutorialDone 
+            && !_tutorialDone 
+            && _moldType == MoldType.PERFECT)
         {
             OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
