@@ -8,7 +8,9 @@ public class SalmonIngredient : Ingredient
     {
         base.Start();
 
-        if (!_tutorialDone && _sliceIndex == 4)
+        if (!GameManager.Instance.TutorialDone 
+            && !_tutorialDone 
+            && _sliceIndex == 4)
         {
             Debug.Log("THIS IS RUNNING");
             OnBoardingHandler.Instance.AddOnboardingIndex();

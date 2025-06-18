@@ -29,16 +29,19 @@ public class Bell : XRBaseInteractable
 
         if (GameManager.Instance.CurrentShift == GameShift.Training)
         {
+            SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
 
             OnBoardingHandler.Instance.Disable();
             Debug.LogWarning("Tutorial disabled!");
 
             GameManager.Instance.ChangeShift(GameShift.PreService);
+            GameManager.Instance.TutorialDone = true;
             Debug.LogWarning("Loading to MGS");
         }
         else
         {
+            SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
             Debug.LogWarning("Loading to TRS");
         }

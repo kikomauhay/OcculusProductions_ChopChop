@@ -37,6 +37,7 @@ public class GameManager : Singleton<GameManager>
     // DIFFICULTY
     public GameDifficulty Difficulty { get; private set; }
     public int MaxCustomerCount { get; set; }
+    public bool TutorialDone { get; set; }
     public bool IsGameOver { get; private set; }
     public bool IsPaused { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
