@@ -65,7 +65,7 @@ public abstract class Equipment : MonoBehaviour
         
         if (sponge == null) return;
 
-        if (sponge.IsClean)
+        if (sponge.IsClean || sponge.IsWet)
             DoCleaning(sponge);
     }
     protected virtual void OnTriggerExit(Collider other)
@@ -136,6 +136,19 @@ public abstract class Equipment : MonoBehaviour
                 SetDirty();
                 Debug.LogWarning($"{eq.name} contaminated {name}");
                 return;
+            }
+        }
+
+        if (other.gameObject.GetComponent<Sponge>() != null) 
+        {
+            Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+            if (!_isClean && sponge.IsWet && sponge.IsClean) 
+            {
+                //insert clean logic here
+                _isClean = true;
+                sponge.SetDirty();
+                Debug.LogWarning($"Equipment Cleaned: {_isClean}");
             }
         }
     }
