@@ -67,18 +67,21 @@ public class GameManager : Singleton<GameManager>
     private const float FIVE_MINUTES = 300f; // shift duration for Service
     private const float ONE_MINUTE = 60f; // shift duration for Service
 
-#endregion
+    #endregion
 
-#endregion
+    #endregion
 
-#region Methods
+    #region Methods
 
-#region Unity
+    #region Unity
 
     protected override void OnApplicationQuit()
     {
-        base.OnApplicationQuit(); 
+        base.OnApplicationQuit();
         Continue.action.performed -= RemoveLogo;
+        
+         if (_isDeveloperMode)
+            Debug.Log($"{this} developer mode: {_isDeveloperMode}");
     }
     protected override void Awake() // set starting money
     {
@@ -101,6 +104,14 @@ public class GameManager : Singleton<GameManager>
     {
         if (CurrentShift == GameShift.Service)
             ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
+
+        if (!_isDeveloperMode) return;
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Keyboard_RemoveLogo();
+            Debug.Log("Removed Chop Chop Logo");
+        }
     }
 
 #endregion
@@ -123,8 +134,25 @@ public class GameManager : Singleton<GameManager>
             Continue.action.performed -= RemoveLogo;
         }
     }
+    public void Keyboard_RemoveLogo()
+    {
+        SoundManager.Instance.PlaySound("select");
+        OnBoardingHandler.Instance.PlayOnboarding();
+
+        // unpauses the game, removes logo, and start onboarding
+        ChangeShift(GameShift.Training);
+        Continue.action.Disable();
+        _logoRemoved = true;
+        _logo.SetActive(false);
+
+        if (_logoRemoved)
+        {
+            Debug.Log("LOGO REMOVED");
+            Continue.action.performed -= RemoveLogo;
+        }
+    }
     public void TogglePause()
-    {   
+    {
         if (!SceneHandler.Instance.CanPause) return;
 
         IsPaused = !IsPaused;
@@ -134,7 +162,7 @@ public class GameManager : Singleton<GameManager>
             Time.timeScale = 0f;
             MainMenuHandler.Instance?.TogglePlayIcon(false);
             MainMenuHandler.Instance?.TogglePausePanel(true);
-        } 
+        }
         else
         {
             Time.timeScale = 1f;

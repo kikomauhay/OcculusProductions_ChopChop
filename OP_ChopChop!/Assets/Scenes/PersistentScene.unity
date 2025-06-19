@@ -984,6 +984,11 @@ PrefabInstance:
       propertyPath: _isTutorial
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 125501759102424119, guid: 6d8e178db82292546afbe87fe1212197,
+        type: 3}
+      propertyPath: _isDevloperMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1597545420471533184, guid: 6d8e178db82292546afbe87fe1212197,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -1523,7 +1528,7 @@ PrefabInstance:
     - target: {fileID: 2761784063978902506, guid: c1800acf6366418a9b5f610249000331,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2761784063978902506, guid: c1800acf6366418a9b5f610249000331,
         type: 3}

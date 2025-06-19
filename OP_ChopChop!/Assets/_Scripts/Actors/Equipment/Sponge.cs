@@ -26,10 +26,7 @@ public class Sponge : MonoBehaviour
 
     private void Awake() 
     {
-        _rend = GetComponent<MeshRenderer>(); 
-
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+        _rend = GetComponent<MeshRenderer>();
 
         if (!_isClean)
             Debug.LogWarning($"{this} is clean: {_isClean}");
