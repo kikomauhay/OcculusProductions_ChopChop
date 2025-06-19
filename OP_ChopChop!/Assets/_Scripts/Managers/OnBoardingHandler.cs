@@ -21,6 +21,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [Header("Panels")]
     [SerializeField] private GameObject _friendlyTipPanel;
     [SerializeField] private GameObject _slicingPanel, _moldingPanel;
+    [SerializeField] private PlayerHUD _playerHUD;
 
     [Header("Input Button Reference")]
     [SerializeField] public InputActionReference Continue;
@@ -82,7 +83,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         // plays the VOICE LINE and displays the INSTRUCTION for the tutorial
         SoundManager.Instance.PlayOnboarding(_voiceLines[CurrentStep]);
-        PlayerHUD.Instance.txtTopHUDUpdate(_instructions[CurrentStep]);
+        _playerHUD.txtTopHUDUpdate(_instructions[CurrentStep]);
 
         // some onboarding steps have extra actions
         DoExtraOnboarding(CurrentStep);
@@ -107,7 +108,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         OnTutorialEnd?.Invoke();
         gameObject.SetActive(false);
         SoundManager.Instance.StopOnboarding();
-        PlayerHUD.Instance.HudOff();
+        _playerHUD.enabled = false;
     }
 
     private void DoExtraOnboarding(int mode)
@@ -168,7 +169,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         yield return new WaitForSeconds(PANEL_TIMER);
         
         _friendlyTipPanel.SetActive(false);
-        PlayerHUD.Instance.Disable();
+        _playerHUD.enabled = false;
     }
     private IEnumerator CO_ToggleHighlight()
     {
