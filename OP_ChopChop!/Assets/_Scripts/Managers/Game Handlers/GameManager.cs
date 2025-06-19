@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
 using System;
-using Unity.VisualScripting;
 
 /// <summary> -WHAT DOES THIS SCRIPT DO-
 ///
@@ -38,6 +37,7 @@ public class GameManager : Singleton<GameManager>
     // DIFFICULTY
     public GameDifficulty Difficulty { get; private set; }
     public int MaxCustomerCount { get; set; }
+    public bool TutorialDone { get; set; }
     public bool IsGameOver { get; private set; }
     public bool IsPaused { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
@@ -108,10 +108,10 @@ public class GameManager : Singleton<GameManager>
 
     public void RemoveLogo(InputAction.CallbackContext context)
     {
-        StartCoroutine(OnBoardingHandler.Instance.Onboarding01());
         SoundManager.Instance.PlaySound("select");
+        OnBoardingHandler.Instance.PlayOnboarding();
 
-        // unpause game, remove logo, and start onboarding
+        // unpauses the game, removes logo, and start onboarding
         ChangeShift(GameShift.Training);
         Continue.action.Disable();
         _logoRemoved = true;

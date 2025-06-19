@@ -1,3 +1,4 @@
+using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,11 @@ public class Freezer : MonoBehaviour
 
     [SerializeField] private bool _isTutorial;
     [SerializeField] private List<Ingredient> _ingredients;
+
+    [Header("Magnet Reaction")]
+    [SerializeField] private Transform snapToPoint;
+    [SerializeField] private Transform pointToSnap;
+    [SerializeField] private float _snapSpeed;
 
     private bool _tutorialPlayed = false;
 
@@ -54,11 +60,43 @@ public class Freezer : MonoBehaviour
 
         if (!_isTutorial) return;
 
-        if (!_tutorialPlayed)
+        if (!_tutorialPlayed)   
         {
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
+            // StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
+            OnBoardingHandler.Instance.AddOnboardingIndex();
+            OnBoardingHandler.Instance.PlayOnboarding();
             _tutorialPlayed = true;
         }     
+    }
+    
+    //Logic for this, if distance between 2 objects is close, object1.transform.position = object2.transform.position
+    public void DoorSnapToBody()
+    {
+        float pointToPointDist = Vector3.Distance(pointToSnap.position,
+                                                  snapToPoint.position);
+
+        Debug.Log($"Distance Calculated: {pointToPointDist}");
+
+        if (pointToPointDist <= 0.5f)
+        {
+            Rigidbody rb = pointToSnap.GetComponentInParent<Rigidbody>();
+            XRGrabInteractable grab = pointToSnap.GetComponentInParent<XRGrabInteractable>();
+
+            if (grab == null && rb == null) return;
+
+            grab.enabled = false;
+            rb.isKinematic = true;
+
+            pointToSnap.position = Vector3.MoveTowards(pointToSnap.position,
+                                                       snapToPoint.position, 
+                                                       Time.deltaTime * _snapSpeed);
+            if(pointToPointDist < 0.01F)
+            {
+                grab.enabled = true;
+                rb.isKinematic = false;
+            }
+
+        }
     }
 
 #endregion

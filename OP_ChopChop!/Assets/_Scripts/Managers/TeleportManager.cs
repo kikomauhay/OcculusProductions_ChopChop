@@ -53,6 +53,32 @@ public class TeleportManager : Singleton<TeleportManager>
             ray.SetActive(raysAreActive);
         }
     }
+
+    /*
+    private void ToggleRays(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            raysAreActive = !raysAreActive;
+
+            foreach (GameObject ray in rays)
+                ray.SetActive(raysAreActive);
+        }
+        else if (context.canceled)
+        {
+            foreach (GameObject ray in rays)
+                ray.SetActive(raysAreActive);
+        }
+        /*
+        //Not running from this point
+        else
+        {
+            foreach(GameObject ray in rays)
+            {
+                ray.SetActive(false);
+            }
+        } 
+    }*/
     #endregion
 }
 

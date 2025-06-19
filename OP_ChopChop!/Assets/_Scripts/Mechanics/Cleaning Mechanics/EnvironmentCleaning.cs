@@ -8,6 +8,8 @@ public class EnvironmentCleaning : MonoBehaviour
     [SerializeField] private bool _isTutorial;  
     [SerializeField] private Collider _col;
 
+    private static bool _tutorialDone = false;
+
 #endregion
 
 #region Unity
@@ -28,10 +30,14 @@ public class EnvironmentCleaning : MonoBehaviour
         if (sponge.IsWet)
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, sponge.transform, 5f);
         
-        if (_isTutorial) 
+        if (_isTutorial && !_tutorialDone) 
         {
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding09());
+            OnBoardingHandler.Instance.AddOnboardingIndex();
+            OnBoardingHandler.Instance.PlayOnboarding();
+            
+            _tutorialDone = true;
             gameObject.SetActive(false);
+            Debug.LogWarning($"{this} is disabled!");
             return; 
         }
         

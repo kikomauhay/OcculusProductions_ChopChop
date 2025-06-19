@@ -3,54 +3,51 @@ using UnityEngine;
 public class Knife : Equipment
 {
     [SerializeField] private bool _isTutorial;
-    private bool _tutorialPlayed = false;
 
-#region Unity
+    #region Unity
 
-    protected override void Start()
-    {
-        base.Start();
-        InvokeRepeating("CheckMaterial", 1f, 1f);
-    }
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        CancelInvoke("CheckMaterial");  
-    }
-
-#endregion
-
-#region Public
-
-    public void CallNextTutorial()
-    {
-        if (_tutorialPlayed) return;
-
-        if (_isTutorial)
+        protected override void Start()
         {
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding05());
-            _tutorialPlayed = true;
-        }         
-    }
-    public override void HitTheGround()
+            base.Start();
+            InvokeRepeating("CheckMaterial", 1f, 1f);
+        }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            CancelInvoke("CheckMaterial");  
+        }
+    protected override void OnTriggerEnter(Collider other)
     {
-        base.HitTheGround();
-
-        SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
-                                        "knife dropped 01" : 
-                                        "knife dropped 02");
+        if (!IsClean)
+            base.OnTriggerEnter(other);
     }
-#endregion
-#region Helpers
 
-    private void CheckMaterial() 
+    #endregion
+
+    #region Public
+
+    public override void HitTheGround()
+        {
+            base.HitTheGround();
+
+            SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
+                                            "knife dropped 01" : 
+                                            "knife dropped 02");
+        }
+        public override void PickUpEquipment() => SoundManager.Instance.PlaySound("knife grabbed");
+    
+    #endregion
+
+    #region Helpers
+
+    private void CheckMaterial()
     {
         if (IsClean)
             _rend.material = _cleanMat;
-        
-        else         
-            _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };        
+
+        else
+            _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
     }
 
-#endregion
+    #endregion
 }

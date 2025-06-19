@@ -94,7 +94,7 @@ MeshCollider:
   m_GameObject: {fileID: 1766035949685682747}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -211,7 +211,7 @@ MeshCollider:
   m_GameObject: {fileID: 2049378495843018361}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -328,7 +328,7 @@ MeshCollider:
   m_GameObject: {fileID: 2822151428827094495}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30
@@ -369,6 +369,7 @@ GameObject:
   - component: {fileID: 3892583932352973843}
   - component: {fileID: 259709749910194251}
   - component: {fileID: 259709749910194250}
+  - component: {fileID: 7237779126816456883}
   m_Layer: 0
   m_Name: pf_NEW_Plate
   m_TagString: Untagged
@@ -551,7 +552,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 259709749910194250}
+        m_TargetAssemblyTypeName: NEW_Plate, Assembly-CSharp
+        m_MethodName: PickUpEquipment
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
       m_Calls:
@@ -720,6 +733,20 @@ MonoBehaviour:
   _dirtyMat: {fileID: 2100000, guid: 5b78e705081b1034fbfca6d38643d05e, type: 2}
   _maxUsageCounter: 1
   _isDeveloperMode: 0
+  _dish: {fileID: 259709749910194251}
+--- !u!114 &7237779126816456883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8177508596857924033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ee06c9707717d4b8b65aacf9694a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineMat: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
 --- !u!1 &8244406753409235881
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +841,7 @@ MeshCollider:
   m_GameObject: {fileID: 8244406753409235881}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: 30

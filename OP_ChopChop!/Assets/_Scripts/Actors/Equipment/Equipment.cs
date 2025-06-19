@@ -34,6 +34,9 @@ public abstract class Equipment : MonoBehaviour
         
         if (GameManager.Instance.CurrentShift == GameShift.Training)
             OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+
+        if (_isDeveloperMode)
+            Debug.LogWarning($"{this} is developer mode: {_isDeveloperMode}");
     }
     protected virtual void Start() 
     {
@@ -44,7 +47,7 @@ public abstract class Equipment : MonoBehaviour
         _usageCounter = 0;
 
         if (_maxUsageCounter == 0)
-            Debug.LogError($"Max use for {gameObject.name} is 0");
+            Debug.LogError($"Current max use for {this} is 0");
     }
     protected virtual void OnDestroy() 
     {
@@ -62,7 +65,7 @@ public abstract class Equipment : MonoBehaviour
         
         if (sponge == null) return;
 
-        if (sponge.IsClean)
+        if (sponge.IsClean || sponge.IsWet)
             DoCleaning(sponge);
     }
     protected virtual void OnTriggerExit(Collider other)
@@ -79,18 +82,6 @@ public abstract class Equipment : MonoBehaviour
     }
     protected void OnCollisionEnter(Collision other)
     {
-        // equipment -> sponge
-        if (other.gameObject.GetComponent<Ingredient>() != null)
-        {
-            Sponge sponge = other.gameObject.GetComponent<Sponge>();
-
-            if (!_isClean) 
-            {
-                sponge.SetDirty();
-                Debug.LogWarning($"{name} contaminated {sponge.name}");
-            }
-        }
-
         // equipment -> ingredient
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
@@ -147,6 +138,19 @@ public abstract class Equipment : MonoBehaviour
                 return;
             }
         }
+
+        if (other.gameObject.GetComponent<Sponge>() != null) 
+        {
+            Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+            if (!_isClean && sponge.IsWet && sponge.IsClean) 
+            {
+                //insert clean logic here
+                _isClean = true;
+                sponge.SetDirty();
+                Debug.LogWarning($"Equipment Cleaned: {_isClean}");
+            }
+        }
     }
 
 #region Testing
@@ -180,6 +184,7 @@ public abstract class Equipment : MonoBehaviour
         SetDirty();
         ResetPosition();
     }
+    public virtual void PickUpEquipment() {}
 
 #endregion
 
@@ -187,8 +192,8 @@ public abstract class Equipment : MonoBehaviour
     {
         _usageCounter++;
 
-        if (_usageCounter == _maxUsageCounter) 
-            SetDirty();        
+        if (_usageCounter == _maxUsageCounter)
+            SetDirty();
     }
     public void SetDirty()
     {

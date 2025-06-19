@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1646482214}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.665, y: 0.246, z: 0.354}
+  m_LocalPosition: {x: -0.016, y: 0.09, z: 0.427}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2288,6 +2288,8 @@ GameObject:
   - component: {fileID: 8294232023934247849}
   - component: {fileID: 8947883180188198000}
   - component: {fileID: 8791498176419619017}
+  - component: {fileID: 1837609475}
+  - component: {fileID: 1837609476}
   m_Layer: 0
   m_Name: ~ShopManager
   m_TagString: Untagged
@@ -2396,15 +2398,42 @@ MonoBehaviour:
   _ricePrice: 50
   _salmonPrice: 100
   _tunaPrice: 70
+  _txtPlayerMoney: {fileID: 7208262895775594932}
   _txtRicePrice: {fileID: 7988309047089001113}
   _txtSalmonPrice: {fileID: 8946947378307029268}
   _txtTunaPrice: {fileID: 7318283706988463373}
-  _txtPlayerMoney: {fileID: 7208262895775594932}
   _interactableButtons:
   - {fileID: 1696801737730508055}
   - {fileID: 4379672902651748861}
   - {fileID: 5340195205307591855}
-  _isTutorial: 0
+  _isTutorial: 1
+--- !u!114 &1837609475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7501858316963447420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ee06c9707717d4b8b65aacf9694a98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineMat: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
+--- !u!114 &1837609476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7501858316963447420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565c6f2ef42812a42b1e12206e872c47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isInteractable: 0
+  _tutorialIndex: 1
 --- !u!1 &7633227258215998624
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,9 +10,9 @@ public class DishCleaning : MonoBehaviour
         // future fix: add counters to imitate the feeling of cleaning
 
         if (other.gameObject.GetComponent<Sponge>().IsWet)
-        {
+    {
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
-            other.gameObject.GetComponent<Plate>().StartCoroutine("CleanEquipment");
+            // other.gameObject.GetComponent<NEW_Plate>().StartCoroutine("CleanEquipment");
         }
     }
 }

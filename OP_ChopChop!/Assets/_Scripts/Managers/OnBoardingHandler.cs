@@ -3,302 +3,184 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
 
-public class OnBoardingHandler : Singleton<OnBoardingHandler> 
+public class OnBoardingHandler : Singleton<OnBoardingHandler>
 {
-#region Members
+    #region Properties
 
     public System.Action OnTutorialEnd { get; set; }
     public int CurrentStep { get; private set; }
+    public bool TutorialPlaying { get; private set; }
 
-#region SerializeField  
+    #endregion
+    #region SerializeField  
 
-    [Header("Objects"), Tooltip("This is sequentually organized.")]
-    [SerializeField] private GameObject _faucetKnob; 
-    [SerializeField] private GameObject _orderScreen, _freezer, _knife;
-    [SerializeField] private GameObject _riceCooker, _plate, _sponge, _menuScreen;
+    [Header("Highlihght Objects"), Tooltip("This is sequentually organized.")]
+    [SerializeField] private OutlineMaterial[] _highlightObjects;
     [SerializeField, Space(5f)] private GameObject _dirtyCollider; // should be deactivated by default
 
     [Header("Panels")]
     [SerializeField] private GameObject _friendlyTipPanel;
     [SerializeField] private GameObject _slicingPanel, _moldingPanel;
+    [SerializeField] private PlayerHUD _playerHUD;
 
     [Header("Input Button Reference")]
     [SerializeField] public InputActionReference Continue;
 
     [Header("Debugging")]
-    [SerializeField] private List<GameObject> _plates;
+    [SerializeField] private bool _isDeveloperMode;
 
-    private bool _canSkip;
-    private const float PANEL_TIMER = 15f;
-    
-#endregion
-#endregion
+    #endregion
+    #region Private 
 
-#region Unity
+    private bool _tutorialPlaying;
+    private const float PANEL_TIMER = 30f, HIGHLIGHT_TIMER = 20f;
+    private string[] _voiceLines = new string[9]
+    {
+        "onb 01", "onb 02", "onb 03",
+        "onb 04", "onb 05", "onb 06",
+        "onb 07", "onb 08", "onb 09"
+    };
+    private string[] _instructions = new string[9]
+    {
+        "Wash your hands at kitchen sink.",
+        "Order one (1) Salmon Slab from Shop Screen near the freezers.",
+        "Store the Salmon Slab and get the one inside the freezer.",
+        "Chop Chop! the salmon slab!",
+        "Obtain the perfect rice mold.",
+        "Combine the rice mold and the fish slice!",
+        "Serve the new customer!",
+        "Cleaning time!",
+        "Congratulations, you did it!!"
+    };
+
+    #endregion
+
+    #region Unity
 
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    protected override void Awake() 
+    protected override void Awake()
     {
         base.Awake();
 
-        _dirtyCollider.SetActive(false); 
-        _canSkip = false;
+        _dirtyCollider.SetActive(false);
         CurrentStep = 0;
+        TutorialPlaying = false;
     }
-    private void Update()
+    private void Update() => Test(); 
+
+    #endregion
+    #region Tutorial
+
+    public void PlayOnboarding()
     {
-        /* if Button.Pressed() AND canSkip == true:
-                SkipTutorial()
-        */
-    }
+        if (_tutorialPlaying)
+        {
+            ReadOverlapError();
+            return;
+        }
 
-#endregion
+        _tutorialPlaying = true;
 
-#region Onboarding
+        // plays the VOICE LINE and displays the INSTRUCTION for the tutorial
+        SoundManager.Instance.PlayOnboarding(_voiceLines[CurrentStep]);
+        _playerHUD.txtTopHUDUpdate(_instructions[CurrentStep]);
 
-    public IEnumerator Onboarding01() // STARTING TUTORIAL
-    {
-        if (CurrentStep != 0) yield break;
-
-        _canSkip = true;
-        SoundManager.Instance.PlaySound("onb 01");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-        
-        // spawns Atrium & highlights the Faucet Knob
-        SpawnManager.Instance.SpawnTutorialCustomer(true);
-        _faucetKnob.GetComponent<OutlineMaterial>().EnableHighlight();
-
-        yield return new WaitForSeconds(20f);
-        Continue.action.Enable();
-        _canSkip = false;
-        CurrentStep++;
-    }
-    public IEnumerator Onboarding02() // INGREDIENT ORDERING TUTORIAL
-    {
-        if (CurrentStep != 1) yield break;
-
-        _canSkip = true;
-        SoundManager.Instance.PlaySound("onb 02");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-        
-        // highlights the Order Screen & removes the highlight of the Faucet Knob
-        _faucetKnob.GetComponent<OutlineMaterial>().DisableHighlight();
-        _orderScreen.GetComponent<OutlineMaterial>().EnableHighlight(); 
-        
-        yield return new WaitForSeconds(12f);
-        _canSkip = false;
-        CurrentStep++;
-    }
-    public IEnumerator Onboarding03() // FREEZER TUTORIAL
-    {
-        if (CurrentStep != 2) yield break;
-
-        _canSkip = true;
-        SoundManager.Instance.PlaySound("onb 03");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-
-        // highlights the freezer and removes the highlight of the Order Screen
-        _orderScreen.GetComponent<OutlineMaterial>().DisableHighlight();
-        _freezer.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
-        
-        yield return new WaitForSeconds(21f);
-        _canSkip = false;
-        CurrentStep++;
-    }   
-    public IEnumerator Onboarding04() // CHOPPING TUTORIAL       
-    {
-        if (CurrentStep != 3) yield break;
-
-        _canSkip = true;
-        SoundManager.Instance.PlaySound("onb 04");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-
-        // sets up the stuff for slicing & removes the highlight of the freezer
-        _freezer.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
-        _knife.GetComponentInChildren<OutlineMaterial>().EnableHighlight();
-        StartCoroutine(EnableSlicingPanel());
-
-        yield return new WaitForSeconds(13f);
-        _canSkip = false;
-        CurrentStep++;
-    }
-    public IEnumerator Onboarding05() // MOLDING TUTORIAL             
-    {
-        if (CurrentStep != 4) yield break;
-
-        _canSkip = true;
-        SoundManager.Instance.PlaySound("onb 05");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-        
-        // removes the highlight in the knife 
-        _knife.GetComponentInChildren<OutlineMaterial>().DisableHighlight();
-        StartCoroutine(EnableMoldingPanel());
-
-        yield return new WaitForSeconds(10f);
-        _canSkip = false;
-        CurrentStep++;
-    }
-    public IEnumerator Onboarding06() // FOOD COMBINATION TUTORIAL
-    {
-        if (CurrentStep != 5) yield break;
-
-        _canSkip = true;
-        SoundManager.Instance.PlaySound("onb 06");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-        
-        yield return new WaitForSeconds(14f);
-        _canSkip = false;
-    }
-    public IEnumerator Onboarding07() // SECOND CUSTOMER TUTORIAL
-    {
-        if (CurrentStep != 6) yield break;
-
-        _canSkip = true;
-        SoundManager.Instance.PlaySound("onb 07");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-
-        // spawns the Tuna Sashimi customer
-        SpawnManager.Instance.SpawnTutorialCustomer(false);
-        
-        yield return new WaitForSeconds(29f);
-        _canSkip = false;
-        CurrentStep++;
-    }
-    public IEnumerator Onboarding08() // CLEANING TUTORIAL
-    {
-        if (CurrentStep != 7) yield break;
-
-        _canSkip = true;
-        SoundManager.Instance.PlaySound("onb 08");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-        
-        // highlights the sponge and enables the dirty area
-        _sponge.GetComponent<OutlineMaterial>().EnableHighlight();
-        _dirtyCollider.SetActive(true);
-
-        yield return new WaitForSeconds(1f);
-        _canSkip = false;
-        CurrentStep++;
-    }
-    public IEnumerator Onboarding09() // POST-SERVICE TUTORIAL
-    {
-        if (CurrentStep != 8) yield break;
-
-        _canSkip = true;
-        SoundManager.Instance.PlaySound("onb 09");
-        Debug.LogWarning($"Playing Onboarding 0{CurrentStep + 1}");
-        
-        // shows the EOD to the player and 
-        GameManager.Instance.EnableEOD();
-        _menuScreen.GetComponent<OutlineMaterial>().EnableHighlight();
-        _menuScreen.GetComponent<OutlineMaterial>().DisableHighlight();
-
-        yield return new WaitForSeconds(8f);
-        StartCoroutine(EnableFriendlyTipPanel());
-
-        yield return new WaitForSeconds(52f);
-        _canSkip = false;
-        CurrentStep++;
+        // some onboarding steps have extra actions
+        DoExtraOnboarding(CurrentStep);
+        StartCoroutine(CO_ToggleHighlight());
     }
 
-#endregion
+    public void AddOnboardingIndex()
+    {
+        if (_tutorialPlaying)
+        {
+            CurrentStep++;
+            _tutorialPlaying = false;
+        }
+    }
 
-#region Helpers
+    #endregion
+    #region Helpers
 
+    private void ReadOverlapError() => Debug.LogError("Onboarding is already playing!");
     public void Disable()
-    { 
-        if (_plates.Count > 0)
-            foreach (GameObject p in _plates)
-                p.SetActive(false);        
-
+    {
         OnTutorialEnd?.Invoke();
         gameObject.SetActive(false);
+        SoundManager.Instance.StopOnboarding();
+        _playerHUD.enabled = false;
     }
-    private void SkipTutorial()
-    {    
-        if (!_canSkip) return;
 
-        SoundManager.Instance.StopSound();
-        Debug.Log($"Skipped Onboarding 0{CurrentStep}");
-        
-        // stops the onboarding coroutine based on the CurrentStep
-        switch (CurrentStep)
+    private void DoExtraOnboarding(int mode)
+    {
+        switch (mode)
         {
-            case 0: 
-                StopCoroutine(Onboarding01()); 
-                Debug.LogWarning("Coroutine stopped!");
-                break;
+            case 0: SpawnManager.Instance.SpawnTutorialCustomer(true); break;
+            case 3: StartCoroutine(CO_EnableSlicingPanel()); break;
+            case 4: StartCoroutine(CO_EnableMoldingPanel()); break;
+            case 6: SpawnManager.Instance.SpawnTutorialCustomer(false); break;
+            case 7: _dirtyCollider.SetActive(true); break;
+
+            case 8:
+                GameManager.Instance.EnableEOD();
+                StartCoroutine(CO_EnableFriendlyTipPanel());
+                GameManager.Instance.TutorialDone = true;
                 
-            case 1: 
-                StopCoroutine(Onboarding02()); 
-                Debug.LogWarning("Coroutine stopped!");
-                break;
-            
-            case 2: 
-                StopCoroutine(Onboarding03()); 
-                Debug.LogWarning("Coroutine stopped!");
-                break;
-            
-            case 3: 
-                StopCoroutine(Onboarding04()); 
-                Debug.LogWarning("Coroutine stopped!");
-                break;
-            
-            case 4: 
-                StopCoroutine(Onboarding05()); 
-                Debug.LogWarning("Coroutine stopped!");
-                break;
-            
-            case 5: 
-                StopCoroutine(Onboarding06()); 
-                Debug.LogWarning("Coroutine stopped!");
-                break;
-            
-            case 6: 
-                StopCoroutine(Onboarding07()); 
-                Debug.LogWarning("Coroutine stopped!");
-                break;
-            
-            case 7: 
-                StopCoroutine(Onboarding08()); 
-                Debug.LogWarning("Coroutine stopped!");
-                break;
-            
-            case 8: 
-                StopCoroutine(Onboarding09()); 
-                Debug.LogWarning("Coroutine stopped!");
                 break;
 
             default: break;
         }
-        
-        _canSkip = false;
-        CurrentStep++;
     }
-
-#endregion    
-
-#region Enumerators
-
-    private IEnumerator EnableSlicingPanel()
+    private void Test()
     {
-         _slicingPanel.SetActive(true);
-         yield return new WaitForSeconds(PANEL_TIMER);
-         _slicingPanel.SetActive(false);
+        if (!_isDeveloperMode) return;
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            PlayOnboarding();
+            Debug.Log($"Current step: 0{CurrentStep + 1}");
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            CurrentStep++;
+            Debug.LogWarning($"Incremented CurrentStep. New step: 0{CurrentStep + 1}");
+        }
     }
-    private IEnumerator EnableMoldingPanel()
+
+    #endregion
+
+    #region Enumerators
+
+    private IEnumerator CO_EnableSlicingPanel()
     {
-         _moldingPanel.SetActive(true);
-         yield return new WaitForSeconds(PANEL_TIMER);
-         _moldingPanel.SetActive(false);
+        _slicingPanel.SetActive(true);
+        yield return new WaitForSeconds(PANEL_TIMER);
+        _slicingPanel.SetActive(false);
     }
-    private IEnumerator EnableFriendlyTipPanel()
+    private IEnumerator CO_EnableMoldingPanel()
+    {
+        _moldingPanel.SetActive(true);
+        yield return new WaitForSeconds(PANEL_TIMER);
+        _moldingPanel.SetActive(false);
+    }
+    private IEnumerator CO_EnableFriendlyTipPanel()
     {
         _friendlyTipPanel.SetActive(true);
         yield return new WaitForSeconds(PANEL_TIMER);
+        
         _friendlyTipPanel.SetActive(false);
+        _playerHUD.enabled = false;
+    }
+    private IEnumerator CO_ToggleHighlight()
+    {
+        // highlights the object for a set amount of time
+        _highlightObjects[CurrentStep].EnableHighlight();
+        yield return new WaitForSeconds(HIGHLIGHT_TIMER);
+
+        // Idk when I should disable the highlight 
+        _highlightObjects[CurrentStep].DisableHighlight();
+        Debug.LogWarning("Disbled highlight");
     }
 
-#endregion
+    #endregion
 }
-

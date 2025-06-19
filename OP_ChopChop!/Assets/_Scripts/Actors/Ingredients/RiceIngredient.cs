@@ -5,7 +5,7 @@ public class RiceIngredient : Ingredient
 {
 #region Members
 
-    public Action<int> OnRiceMolded;
+    public Action<int> OnRiceMolded { get; set; }
 
 #region SerializeField
 
@@ -17,7 +17,7 @@ public class RiceIngredient : Ingredient
 
 #endregion
 
-    private static bool _tutorialDone;
+    private static bool _tutorialDone = false;
 
 #endregion
 
@@ -28,9 +28,12 @@ public class RiceIngredient : Ingredient
         base.Start();
         OnRiceMolded += ChangeRiceMold;
 
-        if (!_tutorialDone && _moldType == MoldType.PERFECT)
+        if (!GameManager.Instance.TutorialDone 
+            && !_tutorialDone 
+            && _moldType == MoldType.PERFECT)
         {
-            StartCoroutine(OnBoardingHandler.Instance.Onboarding06());
+            OnBoardingHandler.Instance.AddOnboardingIndex();
+            OnBoardingHandler.Instance.PlayOnboarding();
             _tutorialDone = true;
         }
     }
@@ -91,9 +94,8 @@ public class RiceIngredient : Ingredient
     protected override void ChangeMaterial()
     {
         _rend.materials = IngredientState == IngredientState.DEFAULT ? 
-                          new Material[] { _materials[1], _dirtyOSM } : 
-                          new Material[] { _materials[0] }; 
-  
+                          new Material[] { _materials[0] } :            // clean mode
+                          new Material[] { _materials[1], _dirtyOSM };  // dirty mode
     }
 
     private void ChangeRiceMold(int moldIndex) => _moldType = (MoldType)moldIndex;

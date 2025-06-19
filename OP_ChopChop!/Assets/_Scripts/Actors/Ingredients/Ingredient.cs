@@ -37,7 +37,7 @@ public abstract class Ingredient : MonoBehaviour
     [SerializeField] protected Material _dirtyOSM;
 
     [Header("Debugging")]
-    [SerializeField] protected bool _isDevloperMode;
+    [SerializeField] protected bool _isDeveloperMode;
     
 #endregion
 #region Protected
@@ -69,7 +69,8 @@ public abstract class Ingredient : MonoBehaviour
         if (_materials.Length != 3)
             Debug.LogWarning("Missing elements in materials");
 
-        Debug.Log($"{name} developer mode: {_isDevloperMode}");
+        if (_isDeveloperMode)
+            Debug.Log($"{name} developer mode: {_isDeveloperMode}");
     }
     protected virtual void Start() 
     {
@@ -82,9 +83,11 @@ public abstract class Ingredient : MonoBehaviour
 
         IngredientState = IngredientState.DEFAULT;   
         _startPosition = transform.position;
-        _freshnessRate = 100f;   
+        _freshnessRate = 100f;
+
+        ChangeMaterial();
         
-        if (_isDevloperMode) return;
+        if (_isDeveloperMode) return;
 
         // in case some ingredients are spawned during Service time
         if (GameManager.Instance.CurrentShift == GameShift.Service)
@@ -92,7 +95,7 @@ public abstract class Ingredient : MonoBehaviour
     }
     protected virtual void OnDestroy() 
     {
-        if (_isDevloperMode) return;
+        if (_isDeveloperMode) return;
 
         GameManager.Instance.OnStartService -= () => StartCoroutine(CO_Decay());
         GameManager.Instance.OnEndService -= SetRotten;
@@ -206,11 +209,25 @@ public abstract class Ingredient : MonoBehaviour
         StartCoroutine(Delay(2f));
         IngredientState = IngredientState.DEFAULT;
     }
+    public void PickUpIngredient()
+    {
+        string soundName = string.Empty;
+
+        switch (UnityEngine.Random.Range(0, 3))
+        {
+            case 0: soundName = "food grabbed 01"; break;
+            case 1: soundName = "food grabbed 02"; break;
+            case 2: soundName = "food grabbed 03"; break;
+            default: break;
+        }
+
+        SoundManager.Instance.PlaySound(soundName);
+    }
 
 #endregion
-#region Helpers
+    #region Helpers
 
-    protected virtual void ChangeMaterial() 
+    protected virtual void ChangeMaterial()
     {
         switch (IngredientState)
         {
