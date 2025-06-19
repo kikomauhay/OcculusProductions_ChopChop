@@ -1,5 +1,5 @@
 using System.Collections;
-using Unity.VisualScripting;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /// <summary>
@@ -36,6 +36,9 @@ public class NEW_ColliderCheck : MonoBehaviour
 
         if (_isDevloperMode)
             Debug.Log($"{this} developer mode: {_isDevloperMode}");
+
+        if (_isTutorial)
+            Debug.Log($"{this} tutorial mode: {_isTutorial}");
     }
     private void Start()
     {
@@ -43,11 +46,20 @@ public class NEW_ColliderCheck : MonoBehaviour
         _collider.enabled = true;
         _disableTimer = 5f; 
     }
+    private void Update()
+    {
+        if (!_isDevloperMode) return;
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            Debug.Log($"{this} wanted plater: {Order.WantedPlatter}");
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (Order == null)
         {
-            Debug.LogError($"{Order} is null!");
+            Debug.LogError($"CustomerOrder is null!");
             return;
         }
 
@@ -84,15 +96,15 @@ public class NEW_ColliderCheck : MonoBehaviour
             // visual cofirmation that the DISH was served 
             dish.DisableDish(); // removes the food from the plate
             plate.Served(); // increments the use counter & removed the food            
-            
+
             StartCoroutine(CO_DisableCollider()); // temporarily disables the collider
         }
-        else 
+        else
         {
             Debug.LogError($"{other.name} has a missing Plate or Dish script");
             return;
         }
-        
+
         if (_isTutorial)
         {
             OnBoardingHandler.Instance.AddOnboardingIndex();
@@ -109,10 +121,14 @@ public class NEW_ColliderCheck : MonoBehaviour
     private IEnumerator CO_DisableCollider()
     {
         _collider.enabled = false;
+        Debug.LogWarning("Collider disabled!");
         yield return new WaitForSeconds(_disableTimer);
-        
+
         _collider.enabled = true;
+        Debug.LogWarning("Collider enabled!");
+
         Order = null;
+        Debug.LogWarning("CustomerOrder is now null!");
     }
 
     #endregion

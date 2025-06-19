@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// 
@@ -64,19 +65,22 @@ public class NEW_Dish : MonoBehaviour
         if (_foodItems.Length < 4)
             Debug.LogWarning($"Missing elements in {_foodItems}");
 
+        if (_isDevloperMode)
+            Debug.Log($"{this} developer mode: {_isDevloperMode}");
+            
+        if (_hasFood)
+            Debug.Log($"{this} developer mode: {_hasFood}");
+        
         foreach (GameObject item in _foodItems)
             item.SetActive(false);
     }
     private void Start() 
     {
-        _dishPlatter = DishPlatter.EMPTY;
+        // _dishPlatter = DishPlatter.EMPTY;
         _foodCondition = FoodCondition.CLEAN;
 
-        _collider.enabled = true; 
-        _hasFood = false;
-
-        // Debug.Log($"{name} plated: {_isPlated}");
-        Debug.Log($"{this} developer mode: {_isDevloperMode}");
+        // _collider.enabled = true; 
+        // _hasFood = false;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -124,20 +128,14 @@ public class NEW_Dish : MonoBehaviour
 
     private void Test()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && _isDevloperMode)
-            SetActiveDish(DishPlatter.NIGIRI_SALMON);
-        
-        if (Input.GetKeyDown(KeyCode.Alpha2) && _isDevloperMode)
-            SetActiveDish(DishPlatter.NIGIRI_TUNA);
-        
-        if (Input.GetKeyDown(KeyCode.Alpha3) && _isDevloperMode)
-            SetActiveDish(DishPlatter.SASHIMI_SALMON);
+        if (!_isDevloperMode) return;
 
-        if (Input.GetKeyDown(KeyCode.Alpha4) && _isDevloperMode)
-            SetActiveDish(DishPlatter.SASHIMI_TUNA);
+        if (Input.GetKeyDown(KeyCode.Q)) SetActiveDish(DishPlatter.NIGIRI_SALMON);
+        if (Input.GetKeyDown(KeyCode.W)) SetActiveDish(DishPlatter.NIGIRI_TUNA);
+        if (Input.GetKeyDown(KeyCode.E)) SetActiveDish(DishPlatter.SASHIMI_SALMON);
+        if (Input.GetKeyDown(KeyCode.R)) SetActiveDish(DishPlatter.SASHIMI_TUNA);
 
-        if (Input.GetKeyDown(KeyCode.Delete) && _isDevloperMode)
-            DisableDish();
+        if (Input.GetKeyDown(KeyCode.Delete)) DisableDish();
     }
     private void Update() => Test();
 

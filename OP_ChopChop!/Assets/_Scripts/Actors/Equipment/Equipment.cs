@@ -31,9 +31,6 @@ public abstract class Equipment : MonoBehaviour
         _rend = GetComponent<Renderer>();
 
         GameManager.Instance.OnStartService += ResetPosition;
-        
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
 
         if (_isDeveloperMode)
             Debug.LogWarning($"{this} is developer mode: {_isDeveloperMode}");
