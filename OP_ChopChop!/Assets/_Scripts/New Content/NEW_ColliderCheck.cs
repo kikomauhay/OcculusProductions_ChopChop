@@ -114,6 +114,7 @@ public class NEW_ColliderCheck : MonoBehaviour
             {
                 ShopManager.Instance.ClearList();
                 Debug.LogWarning("Tuna Sashimi customer was served!");
+                _isTutorial = false;
             }
             else Debug.LogWarning("Atrium was served!");
         }
