@@ -15,7 +15,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     #region SerializeField  
 
     [Header("Highlihght Objects"), Tooltip("This is sequentually organized.")]
-    [SerializeField] private OutlineMaterial[] _highlightObjects; 
+    [SerializeField] private OutlineMaterial[] _highlightObjects;
     [SerializeField, Space(5f)] private GameObject _dirtyCollider; // should be deactivated by default
 
     [Header("Panels")]
@@ -123,14 +123,14 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 0: SpawnManager.Instance.SpawnTutorialCustomer(true); break;
             case 3: StartCoroutine(CO_EnableSlicingPanel()); break;
             case 4: StartCoroutine(CO_EnableMoldingPanel()); break;
-            case 6: SpawnManager.Instance.SpawnTutorialCustomer(false); break;
+            case 6: StartCoroutine(CO_SpawnBenny()); break;
             case 7: _dirtyCollider.SetActive(true); break;
 
             case 8:
                 GameManager.Instance.EnableEOD();
                 StartCoroutine(CO_EnableFriendlyTipPanel());
                 GameManager.Instance.TutorialDone = true;
-                
+
                 break;
 
             default: break;
@@ -148,47 +148,47 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         if (Input.GetKeyDown(KeyCode.Escape))
             Debug.Log($"{this} current step: 0{CurrentStep}");
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             CurrentStep = 0;
             _isTutorialPlaying = false;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2)) 
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             CurrentStep = 1;
             _isTutorialPlaying = false;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) 
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             CurrentStep = 2;
             _isTutorialPlaying = false;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4)) 
+        if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             CurrentStep = 3;
             _isTutorialPlaying = false;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha5)) 
+        if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             CurrentStep = 4;
             _isTutorialPlaying = false;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha6)) 
+        if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             CurrentStep = 5;
             _isTutorialPlaying = false;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha7)) 
+        if (Input.GetKeyDown(KeyCode.Alpha7))
         {
             CurrentStep = 6;
             _isTutorialPlaying = false;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha8)) 
+        if (Input.GetKeyDown(KeyCode.Alpha8))
         {
             CurrentStep = 7;
             _isTutorialPlaying = false;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha9)) 
+        if (Input.GetKeyDown(KeyCode.Alpha9))
         {
             CurrentStep = 8;
             _isTutorialPlaying = false;
@@ -215,7 +215,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         _friendlyTipPanel.SetActive(true);
         yield return new WaitForSeconds(PANEL_TIMER);
-        
+
         _friendlyTipPanel.SetActive(false);
         _playerHUD.enabled = false;
     }
@@ -227,6 +227,13 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         // Idk when I should disable the highlight 
         _highlightObjects[CurrentStep].DisableHighlight();
+    }
+
+    private IEnumerator CO_SpawnBenny()
+    {
+        // 1 sec longer so that Atrium can despawn properly
+        yield return new WaitForSeconds(3f);
+        SpawnManager.Instance.SpawnTutorialCustomer(false);
     }
 
     #endregion
