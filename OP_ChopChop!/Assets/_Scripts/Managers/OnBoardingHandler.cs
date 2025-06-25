@@ -232,7 +232,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     private IEnumerator CO_SpawnBenny()
     {
         // 1 sec longer so that Atrium can despawn properly
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(10f);
         SpawnManager.Instance.SpawnTutorialCustomer(false);
     }
 

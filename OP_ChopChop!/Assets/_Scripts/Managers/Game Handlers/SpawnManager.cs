@@ -210,12 +210,14 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // prevents multiple customers getting the same seat 
         seat.IsEmpty = false;
-        
+
         if (isAtrium)
             Debug.LogWarning($"Spawned Atrium!");
 
-        else 
+        else
             Debug.LogWarning($"Spawned Tuna Customer!");
+
+        Debug.Log($"{newCollider} wanted Order: {newCollider.Order.WantedPlatter}");
     }
 
 #endregion
