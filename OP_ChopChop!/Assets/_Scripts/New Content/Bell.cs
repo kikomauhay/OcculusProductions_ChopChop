@@ -22,6 +22,14 @@ public class Bell : XRBaseInteractable
 
     private void Start() => _gameMgr = GameManager.Instance;
 
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Backspace))
+        {
+            Keyboard_BellTrigger();
+        }
+    }
+
     #endregion
 
     #region Private Functions
