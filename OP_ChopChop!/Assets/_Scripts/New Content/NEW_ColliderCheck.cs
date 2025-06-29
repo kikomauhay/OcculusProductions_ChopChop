@@ -113,8 +113,7 @@ public class NEW_ColliderCheck : MonoBehaviour
             if (Order.IsTunaCustomer)
             {
                 ShopManager.Instance.ClearList();
-                Debug.LogWarning("Tuna Sashimi customer was served!");
-                _isTutorial = false;
+                Debug.LogWarning("Benny was served!");
             }
             else Debug.LogWarning("Atrium was served!");
         }

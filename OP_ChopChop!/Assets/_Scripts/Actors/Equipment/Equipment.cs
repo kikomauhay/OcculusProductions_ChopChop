@@ -145,8 +145,13 @@ public abstract class Equipment : MonoBehaviour
                 //insert clean logic here
                 _isClean = true;
                 sponge.SetDirty();
-                Debug.LogWarning($"Equipment Cleaned: {_isClean}");
+                Debug.LogWarning($"{sponge.name} cleaned {name}");
             }
+/*            else if(_isClean && !sponge.IsClean)
+            {
+                SetDirty();
+                Debug.LogWarning($"{sponge.name} contaminated {name}");
+            }*/
         }
     }
 
