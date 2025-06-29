@@ -62,6 +62,7 @@ public class ToggleFaucet : XRBaseInteractable
                 _tutorialDone = true;
                 OnBoardingHandler.Instance.AddOnboardingIndex();
                 OnBoardingHandler.Instance.PlayOnboarding();
+                _isTutorial = false;
             }
         }
     }

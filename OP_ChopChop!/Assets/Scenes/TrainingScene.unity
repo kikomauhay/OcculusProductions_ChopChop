@@ -2875,6 +2875,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: test salmon nigiri
       objectReference: {fileID: 0}
+    - target: {fileID: 8177508596857924033, guid: 8091a57b6bea6e241899a71b143e7ee0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8806657209617036155, guid: 8091a57b6bea6e241899a71b143e7ee0,
         type: 3}
       propertyPath: m_RootOrder
@@ -5729,7 +5734,7 @@ PrefabInstance:
     - target: {fileID: 8177508596857924033, guid: 8091a57b6bea6e241899a71b143e7ee0,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8806657209617036155, guid: 8091a57b6bea6e241899a71b143e7ee0,
         type: 3}

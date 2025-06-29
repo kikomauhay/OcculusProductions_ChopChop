@@ -70,6 +70,7 @@ public class Freezer : MonoBehaviour
             OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
             _tutorialPlayed = true;
+            _isTutorial = false;
         }
     }
     public void DoorSnapToBody()

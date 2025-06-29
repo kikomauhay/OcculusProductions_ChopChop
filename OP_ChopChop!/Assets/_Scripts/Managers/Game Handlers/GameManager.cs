@@ -241,6 +241,7 @@ public class GameManager : Singleton<GameManager>
     private void DoService()
     {
         ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
+        SoundManager.Instance.PlayMusic("bgm");
 
         float timer = _isDeveloperMode ? _testTimer * 10f : FIVE_MINUTES; 
 
@@ -255,7 +256,7 @@ public class GameManager : Singleton<GameManager>
     }
     private void DoPostService() // rating calculations
     {
-        OnEndService?.Invoke(); 
+        OnEndService?.Invoke();
         TurnOnEndOfDayReceipt();
     }
     private void ChangeDifficuty(int score)
