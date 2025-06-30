@@ -28,7 +28,7 @@ public class NEW_Plate : Equipment
 
         if (_dish.HasFood)
         {
-            Debug.LogWarning($"{name} already contains food!");
+            Debug.LogWarning($"Can't clean {name} becuase it contains food!");
             return;
         }
 

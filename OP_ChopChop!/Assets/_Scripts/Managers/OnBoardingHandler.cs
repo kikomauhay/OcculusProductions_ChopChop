@@ -113,6 +113,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         OnTutorialEnd?.Invoke();
         gameObject.SetActive(false);
         SoundManager.Instance.StopOnboarding();
+        GameManager.Instance.TutorialDone = true;
         _playerHUD.enabled = false;
     }
 

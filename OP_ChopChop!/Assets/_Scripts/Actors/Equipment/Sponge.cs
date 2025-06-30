@@ -18,7 +18,7 @@ public class Sponge : MonoBehaviour
 
     private MeshRenderer _rend;
     private Vector3 _startPosition;
-    private const float WET_DURATION = 20f;
+    private const float WET_DURATION = 30f;
 
 #endregion
 
