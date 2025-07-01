@@ -47,7 +47,7 @@ public class UPD_Food : MonoBehaviour
         _rend = GetComponent<Renderer>();
 
         if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd += () => Destroy(gameObject);
+            OnBoardingHandler.Instance.OnTutorialEnd += DestoryGameObject;
     }
     private void Start()
     {
@@ -127,10 +127,15 @@ public class UPD_Food : MonoBehaviour
             }
         }
     }
-    protected void Oestroy()
+    protected void OnDestroy()
     {
         if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd -= () => Destroy(gameObject);
+            OnBoardingHandler.Instance.OnTutorialEnd -= DestoryGameObject;
+    }
+
+    private void DestoryGameObject()
+    {
+        Destroy(this.gameObject);
     }
 
 #endregion
