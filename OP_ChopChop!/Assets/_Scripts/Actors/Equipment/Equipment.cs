@@ -18,7 +18,6 @@ public abstract class Equipment : MonoBehaviour
     [SerializeField] protected int _maxUsageCounter; // max counter before it gets dirty
     protected int _usageCounter;                     // counter to know how many times equipment has been used
     private bool _coroutineRunning;
-    private const float CLEANING_TIME = 2f;
 
     [Header("Debugging")]
     [SerializeField] protected bool _isDeveloperMode;
@@ -63,10 +62,8 @@ public abstract class Equipment : MonoBehaviour
         
         if (sponge == null) return;
 
-        if (sponge.IsWet && !_coroutineRunning)
-        {
+        if (sponge.IsClean || sponge.IsWet)
             DoCleaning(sponge);
-        }
     }
     protected virtual void OnTriggerExit(Collider other)
     {
@@ -138,6 +135,18 @@ public abstract class Equipment : MonoBehaviour
                 return;
             }
         }
+
+        if (other.gameObject.GetComponent<Sponge>() != null) 
+        {
+            Sponge sponge = other.gameObject.GetComponent<Sponge>();
+
+            if (!_isClean && sponge.IsWet && sponge.IsClean) 
+            {
+                //insert clean logic here
+                SetClean(sponge);
+                Debug.LogWarning($"{sponge.name} cleaned {name}");
+            }
+        }
     }
 
 #region Testing
@@ -187,7 +196,7 @@ public abstract class Equipment : MonoBehaviour
         _usageCounter = _maxUsageCounter;
         _isClean = false;
         _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
-    }    
+    }
 
 #endregion
 
@@ -201,32 +210,25 @@ public abstract class Equipment : MonoBehaviour
     protected IEnumerator CO_Clean(Sponge sponge)
     {
         _coroutineRunning = true;
-        yield return new WaitForSeconds(CLEANING_TIME);
-
+        yield return new WaitForSeconds(2f);
         SetClean(sponge);
     }
     protected void SetClean(Sponge sponge)
     {
-        // cleans the equipment
         _usageCounter = 0;
         _isClean = true;
         _rend.materials = new Material[] { _cleanMat };
         _coroutineRunning = false;
-
-        // referenced inside the funcion to prevent from making more issues
         sponge.SetDirty();
     }
     protected virtual void DoCleaning(Sponge sponge)
     {
-        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
-                                       sponge.gameObject.transform, 
-                                       5f);
+        SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 5f);
         
         if (_coroutineRunning)
             StopCoroutine(CO_Clean(sponge));
         
-        else 
-            StartCoroutine(CO_Clean(sponge));
+        StartCoroutine(CO_Clean(sponge));
     }
 
 #endregion
