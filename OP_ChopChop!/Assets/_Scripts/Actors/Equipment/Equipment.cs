@@ -143,15 +143,9 @@ public abstract class Equipment : MonoBehaviour
             if (!_isClean && sponge.IsWet && sponge.IsClean) 
             {
                 //insert clean logic here
-                _isClean = true;
-                sponge.SetDirty();
+                SetClean(sponge);
                 Debug.LogWarning($"{sponge.name} cleaned {name}");
             }
-/*            else if(_isClean && !sponge.IsClean)
-            {
-                SetDirty();
-                Debug.LogWarning($"{sponge.name} contaminated {name}");
-            }*/
         }
     }
 
@@ -202,7 +196,7 @@ public abstract class Equipment : MonoBehaviour
         _usageCounter = _maxUsageCounter;
         _isClean = false;
         _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
-    }    
+    }
 
 #endregion
 
