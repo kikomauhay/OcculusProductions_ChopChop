@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class OnBoardingHandler : Singleton<OnBoardingHandler>
 {
@@ -9,7 +9,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
     public System.Action OnTutorialEnd { get; set; }
     public int CurrentStep { get; private set; }
-    public bool TutorialPlaying { get; private set; }
+    public bool IsTutorialPlaying { get; private set; }
 
     #endregion
     #region SerializeField  
@@ -21,6 +21,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [Header("Panels")]
     [SerializeField] private GameObject _friendlyTipPanel;
     [SerializeField] private GameObject _slicingPanel, _moldingPanel;
+    [SerializeField] private PlayerHUD _playerHUD;
 
     [Header("Input Button Reference")]
     [SerializeField] public InputActionReference Continue;
@@ -31,7 +32,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     #endregion
     #region Private 
 
-    private bool _tutorialPlaying;
+    private bool _isTutorialPlaying;
     private const float PANEL_TIMER = 30f, HIGHLIGHT_TIMER = 20f;
     private string[] _voiceLines = new string[9]
     {
@@ -42,11 +43,11 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     private string[] _instructions = new string[9]
     {
         "Wash your hands at kitchen sink.",
-        "Order one (1) Salmon Slab from Shop Screen near the freezers.",
-        "Store the Salmon Slab and get the one inside the freezer.",
+        "Order one (1) Tuna Slab from Shop Screen near the freezers.",
+        "Store the Tuna Slab in the freezer and get the Salmon Slab.",
         "Chop Chop! the salmon slab!",
-        "Obtain the perfect rice mold.",
-        "Combine the rice mold and the fish slice!",
+        "Mold the rice three (3) times.",
+        "Combine the rice mold and the salmon slice!",
         "Serve the new customer!",
         "Cleaning time!",
         "Congratulations, you did it!!"
@@ -63,38 +64,43 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         _dirtyCollider.SetActive(false);
         CurrentStep = 0;
-        TutorialPlaying = false;
+        IsTutorialPlaying = false;
+
+        if (_isDeveloperMode)
+            Debug.Log($"{this} is developer mode: {_isDeveloperMode}");
     }
-    private void Update() => Test(); 
+    private void Update() => Test();
 
     #endregion
     #region Tutorial
 
     public void PlayOnboarding()
     {
-        if (_tutorialPlaying)
+        if (_isTutorialPlaying)
         {
             ReadOverlapError();
             return;
         }
 
-        _tutorialPlaying = true;
+        _isTutorialPlaying = true;
 
         // plays the VOICE LINE and displays the INSTRUCTION for the tutorial
         SoundManager.Instance.PlayOnboarding(_voiceLines[CurrentStep]);
-        PlayerHUD.Instance.txtTopHUDUpdate(_instructions[CurrentStep]);
+        _playerHUD.txtTopHUDUpdate(_instructions[CurrentStep]);
 
         // some onboarding steps have extra actions
         DoExtraOnboarding(CurrentStep);
         StartCoroutine(CO_ToggleHighlight());
+
+        Debug.Log($"{this} is playing Onb 0{CurrentStep}");
     }
 
     public void AddOnboardingIndex()
     {
-        if (_tutorialPlaying)
+        if (_isTutorialPlaying)
         {
             CurrentStep++;
-            _tutorialPlaying = false;
+            _isTutorialPlaying = false;
         }
     }
 
@@ -106,7 +112,11 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         OnTutorialEnd?.Invoke();
         gameObject.SetActive(false);
+        SoundManager.Instance.StopOnboarding();
+        GameManager.Instance.TutorialDone = true;
+        _playerHUD.enabled = false;
     }
+
     private void DoExtraOnboarding(int mode)
     {
         switch (mode)
@@ -114,13 +124,14 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             case 0: SpawnManager.Instance.SpawnTutorialCustomer(true); break;
             case 3: StartCoroutine(CO_EnableSlicingPanel()); break;
             case 4: StartCoroutine(CO_EnableMoldingPanel()); break;
-            case 6: SpawnManager.Instance.SpawnTutorialCustomer(false); break;
+            case 6: StartCoroutine(CO_SpawnBenny()); break;
             case 7: _dirtyCollider.SetActive(true); break;
 
             case 8:
                 GameManager.Instance.EnableEOD();
                 StartCoroutine(CO_EnableFriendlyTipPanel());
                 GameManager.Instance.TutorialDone = true;
+
                 break;
 
             default: break;
@@ -130,15 +141,58 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         if (!_isDeveloperMode) return;
 
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             PlayOnboarding();
             Debug.Log($"Current step: 0{CurrentStep + 1}");
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Debug.Log($"{this} current step: 0{CurrentStep}");
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            CurrentStep++;
-            Debug.LogWarning($"Incremented CurrentStep. New step: 0{CurrentStep + 1}");
+            CurrentStep = 0;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            CurrentStep = 1;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            CurrentStep = 2;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            CurrentStep = 3;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            CurrentStep = 4;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            CurrentStep = 5;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            CurrentStep = 6;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            CurrentStep = 7;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            CurrentStep = 8;
+            _isTutorialPlaying = false;
         }
     }
 
@@ -162,7 +216,9 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     {
         _friendlyTipPanel.SetActive(true);
         yield return new WaitForSeconds(PANEL_TIMER);
+
         _friendlyTipPanel.SetActive(false);
+        _playerHUD.enabled = false;
     }
     private IEnumerator CO_ToggleHighlight()
     {
@@ -172,7 +228,13 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         // Idk when I should disable the highlight 
         _highlightObjects[CurrentStep].DisableHighlight();
-        Debug.LogWarning("Disbled highlight");
+    }
+
+    private IEnumerator CO_SpawnBenny()
+    {
+        // 1 sec longer so that Atrium can despawn properly
+        yield return new WaitForSeconds(10f);
+        SpawnManager.Instance.SpawnTutorialCustomer(false);
     }
 
     #endregion

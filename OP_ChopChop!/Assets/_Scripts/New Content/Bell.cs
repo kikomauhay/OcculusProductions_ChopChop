@@ -1,52 +1,90 @@
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
 
-public class Bell : XRBaseInteractable 
+public class Bell : XRBaseInteractable
 {
+    #region Members
+    private GameManager _gameMgr;
 
-#region Unity
+    [SerializeField] private bool _isDeveloperMode;
+
+    #endregion
+    
+    #region Unity
 
     protected override void OnEnable()
     {
         base.OnEnable();
         hoverEntered.AddListener(BellTrigger);
     }
-
     protected override void OnDisable()
     {
         base.OnDisable();
         hoverEntered.RemoveListener(BellTrigger);
     }
+    private void Start() => _gameMgr = GameManager.Instance;
+    private void Update()
+    {
+        if (!_isDeveloperMode) return;
 
-#endregion
+        if (Input.GetKeyUp(KeyCode.Backspace))
+        {
+            Keyboard_BellTrigger();
+        }
+    }
 
-#region PrivateFunctions
+    #endregion
+
+    #region Private Functions
 
     private void BellTrigger(HoverEnterEventArgs args)
-    {
-        //to prevent going back to training mid service
-        if (GameManager.Instance.CurrentShift == GameShift.Service) return;
-
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
+    {   
+        if (_gameMgr.CurrentShift == GameShift.Training)
         {
-            StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
-
+            // when you press the bell in TRS, the tutorial stops and you immediately go to MGS
             OnBoardingHandler.Instance.Disable();
             Debug.LogWarning("Tutorial disabled!");
 
-            GameManager.Instance.ChangeShift(GameShift.PreService);
-            GameManager.Instance.TutorialDone = true;
+            // UX for the scene change
+            SoundManager.Instance.PlaySound("change shift");
+            StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
+
+
+            _gameMgr.ChangeShift(GameShift.PreService);
             Debug.LogWarning("Loading to MGS");
         }
-        else
+        else if (_gameMgr.CurrentShift == GameShift.Service)
         {
+            _gameMgr.ChangeShift(GameShift.Training);
+            SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
             Debug.LogWarning("Loading to TRS");
         }
+    }
+    private void Keyboard_BellTrigger()
+    {
+       if (_gameMgr.CurrentShift == GameShift.Training)
+        {
+            // when you press the bell in TRS, the tutorial stops and you immediately go to MGS
+            OnBoardingHandler.Instance.Disable();
+            Debug.LogWarning("Tutorial disabled!");
 
-        ShopManager.Instance.ClearList();
-        SoundManager.Instance.StopAllSounds(); // in case there is any ongoing tutorial lines
+            // UX for the scene change
+            SoundManager.Instance.PlaySound("change shift");
+            StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
+
+
+            _gameMgr.ChangeShift(GameShift.PreService);
+            Debug.LogWarning("Loading to MGS");
+        }
+        else if (_gameMgr.CurrentShift == GameShift.Service)
+        {
+            _gameMgr.ChangeShift(GameShift.Training);
+            SoundManager.Instance.PlaySound("change shift");
+            StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
+            Debug.LogWarning("Loading to TRS");
+        }
     }
 
-#endregion
+    #endregion
 }

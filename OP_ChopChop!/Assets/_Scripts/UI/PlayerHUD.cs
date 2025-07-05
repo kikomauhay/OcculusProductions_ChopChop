@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerHUD : Singleton<PlayerHUD>
+public class PlayerHUD : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI txtTopHUD;
 
-    protected override void Awake() // set starting money
+    private void Awake() 
     {
-        base.Awake();
         txtTopHUD.text = " ";
-    }
-
-    protected override void OnApplicationQuit()
-    {
-        base.OnApplicationQuit();
     }
 
     public void txtTopHUDUpdate(string text)

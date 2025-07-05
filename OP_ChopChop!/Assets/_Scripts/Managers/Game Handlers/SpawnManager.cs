@@ -80,10 +80,12 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (!_isDeveloperMode) return;
+
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
             SpawnTutorialCustomer(true);
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
             SpawnTutorialCustomer(false);
     }
     private void OnDestroy() // UNBIND FROM EVENTS
@@ -208,12 +210,14 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // prevents multiple customers getting the same seat 
         seat.IsEmpty = false;
-        
+
         if (isAtrium)
             Debug.LogWarning($"Spawned Atrium!");
 
-        else 
+        else
             Debug.LogWarning($"Spawned Tuna Customer!");
+
+        Debug.Log($"{newCollider} wanted Order: {newCollider.Order.WantedPlatter}");
     }
 
 #endregion

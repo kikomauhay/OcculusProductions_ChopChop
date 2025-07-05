@@ -70,13 +70,7 @@ public class ShopManager : StaticInstance<ShopManager>
                                                               _spawnpoint, 
                                                               SpawnObjectType.INGREDIENT));            
             
-            // triggers the next tutorial  
-            if (!_tutorialPlayed)
-            {
-                OnBoardingHandler.Instance.AddOnboardingIndex();
-                OnBoardingHandler.Instance.PlayOnboarding();
-                _tutorialPlayed = true;
-            }
+            
             return;
         }       
 
@@ -107,7 +101,16 @@ public class ShopManager : StaticInstance<ShopManager>
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, _spawnpoint, 2f);
             _orderBoxes.Add(SpawnManager.Instance.SpawnObject(_tunaPrefab, 
                                                               _spawnpoint, 
-                                                              SpawnObjectType.INGREDIENT));     
+                                                              SpawnObjectType.INGREDIENT));
+            // triggers the next tutorial  
+            if (!_tutorialPlayed)
+            {
+                OnBoardingHandler.Instance.AddOnboardingIndex();
+                OnBoardingHandler.Instance.PlayOnboarding();
+                _tutorialPlayed = true;
+                _isTutorial = false;
+            }
+
             return;
         }
 

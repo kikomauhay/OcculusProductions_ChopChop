@@ -1,9 +1,9 @@
 using UnityEngine;
 using System;
 
-public class SoundManager : Singleton<SoundManager> {
-
-#region Members
+public class SoundManager : Singleton<SoundManager> 
+{
+    #region Members
 
     [SerializeField] private AudioSource _soundSource, _musicSource, _onboardingSource;
     [SerializeField] private Sound[] _sfx, _bgm, _onb;
@@ -12,11 +12,11 @@ public class SoundManager : Singleton<SoundManager> {
     [SerializeField] private bool _isDeveloperMode;
     private int _soundIndex = 0;
 
-#endregion 
+    #endregion 
 
-#region Methods
+    #region Methods
 
-#region Unity
+    #region Unity
 
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     protected override void Awake() 
@@ -27,8 +27,10 @@ public class SoundManager : Singleton<SoundManager> {
         if (_isDeveloperMode)
             Debug.Log($"{name} developer mode: {_isDeveloperMode}");
     }
+    private void Start() => GameManager.Instance.OnEndService += StopAllSounds;
+    private void OnDestroy() => GameManager.Instance.OnEndService -= StopAllSounds;    
 
-#region Testing
+    #region Testing
 
     private void test()
     {
@@ -44,12 +46,12 @@ public class SoundManager : Singleton<SoundManager> {
 
     private void Update() => test();
 
-#endregion
+    #endregion
 
-#endregion
-#region Public
+    #endregion
+    #region Public
 
-#region Audio Playback
+    #region Audio Playback
 
     public void TogglePauseMusic() 
     {
@@ -61,8 +63,14 @@ public class SoundManager : Singleton<SoundManager> {
     }
     public void StopAllSounds()
     {
-        _soundSource.Stop();
-        _musicSource.Stop();
+        if (_soundSource.isPlaying)
+            _soundSource.Stop();
+
+        if (_musicSource.isPlaying)
+            _musicSource.Stop();
+
+        if (_onboardingSource.isPlaying)
+            _onboardingSource.Stop();
     }
     public void PlaySound(string title) 
     {    
@@ -129,6 +137,8 @@ public class SoundManager : Singleton<SoundManager> {
     
     public void StopMusic() => _musicSource.Stop();
     public void StopSound() => _soundSource.Stop();
+    public void StopOnboarding() => _onboardingSource.Stop();
+
 
 #endregion
 #region Audio Balancing

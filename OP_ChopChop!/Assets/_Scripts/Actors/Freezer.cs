@@ -1,10 +1,11 @@
 using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class Freezer : MonoBehaviour
 {
-#region Members
+    #region Members
 
     [SerializeField] private bool _isTutorial;
     [SerializeField] private List<Ingredient> _ingredients;
@@ -16,9 +17,12 @@ public class Freezer : MonoBehaviour
 
     private bool _tutorialPlayed = false;
 
-#endregion
+    #endregion
 
-#region Methods
+    #region Methods
+
+    private void Start() =>
+        OnBoardingHandler.Instance.OnTutorialEnd += () => StartCoroutine(CO_DisableTutorial());
 
     private void OnTriggerEnter(Collider other)
     {
@@ -37,7 +41,7 @@ public class Freezer : MonoBehaviour
         _ingredients.Add(ing);
 
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                        "door opened 01" : 
+                                        "door opened 01" :
                                         "door opened 02");
         /*
         if (_isTutorial)
@@ -53,31 +57,34 @@ public class Freezer : MonoBehaviour
         // removes the ingredient to the freezer & changes its decay rate
         _ingredients.Remove(ing);
         ing.Unstored();
-        
+
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
-                                        "door closed 01" : 
+                                        "door closed 01" :
                                         "door closed 02");
 
         if (!_isTutorial) return;
 
-        if (!_tutorialPlayed)   
+        if (!_tutorialPlayed)
         {
             // StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
             OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
             _tutorialPlayed = true;
-        }     
+            _isTutorial = false;
+        }
     }
-    
-    //Logic for this, if distance between 2 objects is close, object1.transform.position = object2.transform.position
     public void DoorSnapToBody()
     {
+        // if distance between 2 objects is close, 
+        // object1.transform.position = object2.transform.position
+
+        float distanceThreshold = 0.5f;
         float pointToPointDist = Vector3.Distance(pointToSnap.position,
                                                   snapToPoint.position);
 
         Debug.Log($"Distance Calculated: {pointToPointDist}");
 
-        if (pointToPointDist <= 0.5f)
+        if (pointToPointDist <= distanceThreshold)
         {
             Rigidbody rb = pointToSnap.GetComponentInParent<Rigidbody>();
             XRGrabInteractable grab = pointToSnap.GetComponentInParent<XRGrabInteractable>();
@@ -88,15 +95,25 @@ public class Freezer : MonoBehaviour
             rb.isKinematic = true;
 
             pointToSnap.position = Vector3.MoveTowards(pointToSnap.position,
-                                                       snapToPoint.position, 
+                                                       snapToPoint.position,
                                                        Time.deltaTime * _snapSpeed);
-            if(pointToPointDist < 0.01F)
+            if (pointToPointDist < 0.01F)
             {
                 grab.enabled = true;
                 rb.isKinematic = false;
             }
 
         }
+    }
+
+    private IEnumerator CO_DisableTutorial()
+    {
+        if (!_isTutorial) yield break;
+        
+        yield return null;
+
+        _isTutorial = false;
+        OnBoardingHandler.Instance.OnTutorialEnd -= () => StartCoroutine(CO_DisableTutorial());
     }
 
 #endregion
