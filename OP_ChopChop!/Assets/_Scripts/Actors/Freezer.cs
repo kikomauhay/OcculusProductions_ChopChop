@@ -2,10 +2,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-
 public class Freezer : MonoBehaviour
 {
-    #region Members
+    #region SerializeField
 
     [SerializeField] private bool _isTutorial;
     [SerializeField] private List<Ingredient> _ingredients;
@@ -15,21 +14,27 @@ public class Freezer : MonoBehaviour
     [SerializeField] private Transform pointToSnap;
     [SerializeField] private float _snapSpeed;
 
+    #endregion
+    #region Private
+
+    private NEW_TutorialComponent _tutorialComponent;
     private bool _tutorialPlayed = false;
 
     #endregion
 
-    #region Methods
+    #region Unity
 
-    private void Start() =>
-        OnBoardingHandler.Instance.OnTutorialEnd += () => StartCoroutine(CO_DisableTutorial());
-
+    private void Start()
+    {
+        OnBoardingHandler.Instance.OnTutorialEnd += EndTutorial; // it's also getting unsubbed in the function
+        _tutorialComponent = GetComponent<NEW_TutorialComponent>();
+    }
     private void OnTriggerEnter(Collider other)
     {
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
 
+        if (!_tutorialComponent.IsInteractable) return;
         if (ing == null) return;
-
         if (!ing.IsFresh)
         {
             SoundManager.Instance.PlaySound("wrong");
@@ -52,6 +57,7 @@ public class Freezer : MonoBehaviour
     {
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
 
+        if (!_tutorialComponent.IsInteractable) return;
         if (ing == null) return;
 
         // removes the ingredient to the freezer & changes its decay rate
@@ -66,7 +72,6 @@ public class Freezer : MonoBehaviour
 
         if (!_tutorialPlayed)
         {
-            // StartCoroutine(OnBoardingHandler.Instance.Onboarding04());
             OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
             _tutorialPlayed = true;
@@ -106,14 +111,15 @@ public class Freezer : MonoBehaviour
         }
     }
 
+    private void EndTutorial() => StartCoroutine(CO_DisableTutorial());
     private IEnumerator CO_DisableTutorial()
     {
         if (!_isTutorial) yield break;
-        
+
         yield return null;
 
         _isTutorial = false;
-        OnBoardingHandler.Instance.OnTutorialEnd -= () => StartCoroutine(CO_DisableTutorial());
+        OnBoardingHandler.Instance.OnTutorialEnd -= EndTutorial;
     }
 
 #endregion
