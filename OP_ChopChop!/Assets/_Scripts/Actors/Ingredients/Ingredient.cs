@@ -79,7 +79,7 @@ public abstract class Ingredient : MonoBehaviour
         GameManager.Instance.OnEndService += SetRotten;
 
         if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd += () => Destroy(gameObject);
+            OnBoardingHandler.Instance.OnTutorialEnd += DestroyGameObject;
 
         IngredientState = IngredientState.DEFAULT;   
         _startPosition = transform.position;
@@ -93,6 +93,13 @@ public abstract class Ingredient : MonoBehaviour
         if (GameManager.Instance.CurrentShift == GameShift.Service)
             StartCoroutine(CO_Decay());        
     }
+
+    private void DestroyGameObject()
+    {
+        Destroy(this.gameObject);
+    }
+
+
     protected virtual void OnDestroy() 
     {
         if (_isDeveloperMode) return;
@@ -101,7 +108,7 @@ public abstract class Ingredient : MonoBehaviour
         GameManager.Instance.OnEndService -= SetRotten;
 
         if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd -= () => Destroy(gameObject);
+            OnBoardingHandler.Instance.OnTutorialEnd -= DestroyGameObject;
     }
     protected abstract void OnTriggerEnter(Collider other);
     protected void OnCollisionEnter(Collision other)

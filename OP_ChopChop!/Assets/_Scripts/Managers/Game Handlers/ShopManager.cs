@@ -108,6 +108,7 @@ public class ShopManager : StaticInstance<ShopManager>
                 OnBoardingHandler.Instance.AddOnboardingIndex();
                 OnBoardingHandler.Instance.PlayOnboarding();
                 _tutorialPlayed = true;
+                _isTutorial = false;
             }
 
             return;

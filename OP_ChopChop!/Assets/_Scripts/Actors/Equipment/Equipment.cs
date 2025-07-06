@@ -31,9 +31,6 @@ public abstract class Equipment : MonoBehaviour
         _rend = GetComponent<Renderer>();
 
         GameManager.Instance.OnStartService += ResetPosition;
-        
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
 
         if (_isDeveloperMode)
             Debug.LogWarning($"{this} is developer mode: {_isDeveloperMode}");
@@ -146,9 +143,8 @@ public abstract class Equipment : MonoBehaviour
             if (!_isClean && sponge.IsWet && sponge.IsClean) 
             {
                 //insert clean logic here
-                _isClean = true;
-                sponge.SetDirty();
-                Debug.LogWarning($"Equipment Cleaned: {_isClean}");
+                SetClean(sponge);
+                Debug.LogWarning($"{sponge.name} cleaned {name}");
             }
         }
     }
@@ -200,7 +196,7 @@ public abstract class Equipment : MonoBehaviour
         _usageCounter = _maxUsageCounter;
         _isClean = false;
         _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
-    }    
+    }
 
 #endregion
 

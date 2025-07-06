@@ -24,9 +24,11 @@ public class NEW_Plate : Equipment
     }
     protected override void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.GetComponent<Sponge>() == null) return;
+
         if (_dish.HasFood)
         {
-            Debug.LogError($"{name} already contains food!");
+            Debug.LogWarning($"Can't clean {name} becuase it contains food!");
             return;
         }
 
