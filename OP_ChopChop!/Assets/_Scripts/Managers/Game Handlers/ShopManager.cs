@@ -24,8 +24,10 @@ public class ShopManager : StaticInstance<ShopManager>
 
     [Header("Onboarding")]
     [SerializeField] private bool _isTutorial;  
+
     
     private bool _tutorialPlayed;
+    private NEW_TutorialComponent _tutorialComponent;
     private List<GameObject> _orderBoxes;
 
 #endregion
@@ -38,6 +40,7 @@ public class ShopManager : StaticInstance<ShopManager>
     {
         OnBoardingHandler.Instance.OnTutorialEnd += ClearList;
 
+        _tutorialComponent = GetComponent<NEW_TutorialComponent>();
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
         _tutorialPlayed = false;
         _orderBoxes = new List<GameObject>();
@@ -59,7 +62,7 @@ public class ShopManager : StaticInstance<ShopManager>
 
     public void BuySalmon()
     {
-        if (_isTutorial)
+        if (_isTutorial && _tutorialComponent.IsInteractable)
         {
             // UX when the player has pressed the button
             SoundManager.Instance.PlaySound("select");
@@ -92,7 +95,7 @@ public class ShopManager : StaticInstance<ShopManager>
     }
     public void BuyTuna()
     {
-        if (_isTutorial)
+        if (_isTutorial && _tutorialComponent.IsInteractable)
         {
             // UX when the player has pressed the button
             SoundManager.Instance.PlaySound("select");
@@ -132,7 +135,7 @@ public class ShopManager : StaticInstance<ShopManager>
     }
     public void BuyRice()
     {
-        if (_isTutorial)
+        if (_isTutorial && _tutorialComponent.IsInteractable)
         {
             SoundManager.Instance.PlaySound("wrong");
             return;

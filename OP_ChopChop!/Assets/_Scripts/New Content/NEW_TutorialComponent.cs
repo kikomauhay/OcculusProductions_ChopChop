@@ -3,15 +3,15 @@ using UnityEngine;
 public class NEW_TutorialComponent : MonoBehaviour
 {
     public bool IsInteractable => _isInteractable;
-    
+
     [SerializeField] private bool _isInteractable;
     [SerializeField] private int _tutorialIndex;
 
-    private OnBoardingHandler handler;
+    private OnBoardingHandler _onbHandler;
 
     private void Start()
     {
-        handler = OnBoardingHandler.Instance;
+        _onbHandler = OnBoardingHandler.Instance;
 
         if (GameManager.Instance.CurrentShift == GameShift.Service)
             EnableInteraction();
@@ -20,6 +20,7 @@ public class NEW_TutorialComponent : MonoBehaviour
     public void DisableInteraction() => _isInteractable = false;
     public void EnableInteraction() => _isInteractable = true;
 
+    /*
     public void PlayOnboarding()
     {
         if (!_isInteractable)
@@ -37,4 +38,5 @@ public class NEW_TutorialComponent : MonoBehaviour
         handler.PlayOnboarding();
         Debug.LogWarning($"Playing Onboarding 0{handler.CurrentStep}");
     }
+    */
 }
