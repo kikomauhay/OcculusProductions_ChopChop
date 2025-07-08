@@ -66,7 +66,11 @@ public class RiceSpawn : XRBaseInteractable
     {
         Debug.LogWarning($"Rice left: {_spawnCount}");
 
-        if (!_tutorialComponent.IsInteractable) return;
+        if (!_tutorialComponent.IsInteractable && 
+            !_tutorialComponent.IsCorrectIndex())
+        {
+            return;
+        }
 
         if (_riceSpawned || _spawnCount <= 0) return;
 
