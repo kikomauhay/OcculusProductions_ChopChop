@@ -237,7 +237,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         // prevents any index range errors
         if (CurrentStep < _tutorialComponents.Length)
-            _tutorialComponents[CurrentStep + 1].EnableInteraction();
+            _tutorialComponents[CurrentStep].EnableInteraction();
     }
 
     private IEnumerator CO_SpawnBenny()

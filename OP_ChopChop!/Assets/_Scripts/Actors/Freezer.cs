@@ -33,7 +33,13 @@ public class Freezer : MonoBehaviour
     {
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
 
-        if (!_tutorialComponent.IsInteractable) return;
+        // onboarding will only trigger at the correct index
+        if (!_tutorialComponent.IsInteractable &&  
+            !_tutorialComponent.IsCorrectIndex())
+        {
+            return;
+        } 
+        
         if (ing == null) return;
         if (!ing.IsFresh)
         {
@@ -48,16 +54,18 @@ public class Freezer : MonoBehaviour
         SoundManager.Instance.PlaySound(Random.value > 0.5f ?
                                         "door opened 01" :
                                         "door opened 02");
-        /*
-        if (_isTutorial)
-            GetComponent<OutlineMaterial>().DisableHighlight();
-        */
     }
     private void OnTriggerExit(Collider other)
     {
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
 
-        if (!_tutorialComponent.IsInteractable) return;
+        // onboarding will only trigger at the correct index
+        if (!_tutorialComponent.IsInteractable && 
+            !_tutorialComponent.IsCorrectIndex())
+        {
+            return;
+        }
+
         if (ing == null) return;
 
         // removes the ingredient to the freezer & changes its decay rate
