@@ -17,7 +17,7 @@ public class RiceSpawn : XRBaseInteractable
     private int _spawnCount;
     private bool _riceSpawned;
     private Vector3 _riceSpwnColliderPos;
-    private NEW_TutorialComponent _tutorialComponent;
+    [SerializeField] private NEW_TutorialComponent _tutorialComponent;
 
     #endregion
 
@@ -66,7 +66,11 @@ public class RiceSpawn : XRBaseInteractable
     {
         Debug.LogWarning($"Rice left: {_spawnCount}");
 
-        if (!_tutorialComponent.IsInteractable) return;
+        if (!_tutorialComponent.IsInteractable && 
+            !_tutorialComponent.IsCorrectIndex())
+        {
+            return;
+        }
 
         if (_riceSpawned || _spawnCount <= 0) return;
 
