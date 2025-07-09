@@ -17,7 +17,7 @@ public class RiceSpawn : XRBaseInteractable
     private int _spawnCount;
     private bool _riceSpawned;
     private Vector3 _riceSpwnColliderPos;
-    private NEW_TutorialComponent _tutorialComponent;
+    [SerializeField] private NEW_TutorialComponent _tutorialComponent;
 
     #endregion
 
