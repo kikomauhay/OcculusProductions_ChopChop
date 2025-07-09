@@ -12,12 +12,10 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] private bool _isDeveloperMode;
     private int _soundIndex = 0;
 
-    #endregion 
-
-    #region Methods
+    #endregion
 
     #region Unity
-
+        
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     protected override void Awake() 
     {
@@ -28,10 +26,8 @@ public class SoundManager : Singleton<SoundManager>
             Debug.Log($"{name} developer mode: {_isDeveloperMode}");
     }
     private void Start() => GameManager.Instance.OnEndService += StopAllSounds;
+    private void Update() => test();
     private void OnDestroy() => GameManager.Instance.OnEndService -= StopAllSounds;    
-
-    #region Testing
-
     private void test()
     {
         if (Input.GetKeyDown(KeyCode.DownArrow) && _isDeveloperMode)
@@ -44,13 +40,7 @@ public class SoundManager : Singleton<SoundManager>
             PlaySound(_sfx[_soundIndex].name);
     }
 
-    private void Update() => test();
-
     #endregion
-
-    #endregion
-    #region Public
-
     #region Audio Playback
 
     public void TogglePauseMusic() 
@@ -89,12 +79,7 @@ public class SoundManager : Singleton<SoundManager>
         _soundSource.clip = s.Clip;
         _soundSource.spatialBlend = 1f;
 
-        // loops the sound if needed
-        if (s.Loop)
-            _soundSource.Play();
-
-        else
-            _soundSource.PlayOneShot(s.Clip);
+        _soundSource.Play();
     }
     public void PlayMusic(string title) 
     {
@@ -132,18 +117,17 @@ public class SoundManager : Singleton<SoundManager>
         _onboardingSource.clip = s.Clip;
         _onboardingSource.spatialBlend = 1f;
 
-        _onboardingSource.PlayOneShot(s.Clip);
+        _onboardingSource.Play();
     }
     
     public void StopMusic() => _musicSource.Stop();
     public void StopSound() => _soundSource.Stop();
     public void StopOnboarding() => _onboardingSource.Stop();
 
+    #endregion
+    #region Audio Balancing
 
-#endregion
-#region Audio Balancing
-
-    public void ToggleMute() 
+    public void ToggleMute()
     {
         _soundSource.mute = !_soundSource.mute;
         _musicSource.mute = !_musicSource.mute;
@@ -153,9 +137,5 @@ public class SoundManager : Singleton<SoundManager>
     public void SetMusicVolume(float v) => _musicSource.volume = v;
     public void SetMusicPitch(float p) => _musicSource.pitch= p;
 
-#endregion
-
-#endregion
-
-#endregion
+    #endregion
 }
