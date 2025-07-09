@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class ShopManager : StaticInstance<ShopManager> 
 {
-#region Members
+    #region SerializeField
 
     [SerializeField] GameObject _salmonPrefab, _tunaPrefab , _riceCooker;
     [SerializeField] Transform _spawnpoint;
@@ -24,13 +24,17 @@ public class ShopManager : StaticInstance<ShopManager>
 
     [Header("Onboarding")]
     [SerializeField] private bool _isTutorial;  
+
+    #endregion
+    #region Private
     
     private bool _tutorialPlayed;
+    private NEW_TutorialComponent _tutorialComponent;
     private List<GameObject> _orderBoxes;
 
-#endregion
+    #endregion
 
-#region Unity
+    #region Unity
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
@@ -38,6 +42,7 @@ public class ShopManager : StaticInstance<ShopManager>
     {
         OnBoardingHandler.Instance.OnTutorialEnd += ClearList;
 
+        _tutorialComponent = GetComponent<NEW_TutorialComponent>();
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
         _tutorialPlayed = false;
         _orderBoxes = new List<GameObject>();
@@ -53,13 +58,13 @@ public class ShopManager : StaticInstance<ShopManager>
     }
     private void OnDestroy() => OnBoardingHandler.Instance.OnTutorialEnd -= ClearList;
 
-#endregion
-
-#region Buying
+    #endregion
+    #region Buttons
 
     public void BuySalmon()
     {
-        if (_isTutorial)
+        // plays the onboarding only when it's at the correct time 
+        if (_isTutorial && _tutorialComponent.IsInteractable && _tutorialComponent.IsCorrectIndex())
         {
             // UX when the player has pressed the button
             SoundManager.Instance.PlaySound("select");
@@ -69,8 +74,6 @@ public class ShopManager : StaticInstance<ShopManager>
             _orderBoxes.Add(SpawnManager.Instance.SpawnObject(_salmonPrefab, 
                                                               _spawnpoint, 
                                                               SpawnObjectType.INGREDIENT));            
-            
-            
             return;
         }       
 
@@ -92,7 +95,8 @@ public class ShopManager : StaticInstance<ShopManager>
     }
     public void BuyTuna()
     {
-        if (_isTutorial)
+        // plays the onboarding only when it's at the correct time 
+        if (_isTutorial && _tutorialComponent.IsInteractable && _tutorialComponent.IsCorrectIndex())
         {
             // UX when the player has pressed the button
             SoundManager.Instance.PlaySound("select");
@@ -132,7 +136,8 @@ public class ShopManager : StaticInstance<ShopManager>
     }
     public void BuyRice()
     {
-        if (_isTutorial)
+        // plays the onboarding only when it's at the correct time 
+        if (_isTutorial && _tutorialComponent.IsInteractable && _tutorialComponent.IsCorrectIndex())
         {
             SoundManager.Instance.PlaySound("wrong");
             return;
@@ -159,9 +164,8 @@ public class ShopManager : StaticInstance<ShopManager>
         }
     }
 
-#endregion
-    
-#region Helpers
+    #endregion
+    #region Helpers
 
     public void ClearList()
     {
@@ -178,7 +182,7 @@ public class ShopManager : StaticInstance<ShopManager>
 
 #endregion
 
-#region Enumerators
+    #region Enumerators
 
     private IEnumerator ButtonCooldownTimer(int index)
     {
@@ -194,5 +198,5 @@ public class ShopManager : StaticInstance<ShopManager>
         _riceCooker.GetComponentInChildren<RiceSpawn>().ResetRice();
     } 
 
-#endregion
+    #endregion
 }

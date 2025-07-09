@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class TeleportManager : Singleton<TeleportManager>
 {
@@ -40,6 +41,26 @@ public class TeleportManager : Singleton<TeleportManager>
         foreach (GameObject ray in rays)
         {
             ray.SetActive(false);
+        }
+    }
+
+    private void Update()
+    {
+        //debug, don't remove til TP is verified to be fixed
+        if (rays == null || !raysAreActive) return;
+
+        foreach (GameObject rayGO in rays)
+        {
+            if (rayGO.activeInHierarchy)
+            {
+                XRRayInteractor rayInteractor = rayGO.GetComponent<XRRayInteractor>();
+
+                if (rayInteractor != null && rayInteractor.TryGetCurrent3DRaycastHit(out RaycastHit hit))
+                {
+                    GameObject hitObject = hit.collider.gameObject;
+                    Debug.Log($"Ray hit object: {hitObject.name} on Layer: {LayerMask.LayerToName(hitObject.layer)}");
+                }
+            }
         }
     }
     #endregion
