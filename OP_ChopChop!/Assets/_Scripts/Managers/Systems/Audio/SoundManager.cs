@@ -62,8 +62,8 @@ public class SoundManager : Singleton<SoundManager>
         if (_onboardingSource.isPlaying)
             _onboardingSource.Stop();
     }
-    public void PlaySound(string title) 
-    {    
+    public void PlaySound(string title)
+    {
         Sound s = Array.Find(_sfx, i => i.name == title);
 
         if (s == null)
@@ -79,7 +79,11 @@ public class SoundManager : Singleton<SoundManager>
         _soundSource.clip = s.Clip;
         _soundSource.spatialBlend = 1f;
 
-        _soundSource.Play();
+        if (s.Loop)
+            _soundSource.Play();
+
+        else
+            _soundSource.PlayOneShot(s.Clip);
     }
     public void PlayMusic(string title) 
     {
