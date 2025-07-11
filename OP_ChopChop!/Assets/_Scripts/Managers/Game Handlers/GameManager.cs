@@ -222,7 +222,7 @@ public class GameManager : Singleton<GameManager>
         ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
 
         float serviceTimer = _isDeveloperMode ? _testTimer : ONE_MINUTE;
-        
+
         Debug.Log($"waiting {serviceTimer}s to change to service");
         StartCoroutine(CO_ShiftCountdown(serviceTimer, GameShift.Service));
 
@@ -230,19 +230,19 @@ public class GameManager : Singleton<GameManager>
     }     
     private void DoService()
     {
+        float timer = _isDeveloperMode ? _testTimer * 10f : FIVE_MINUTES; 
+
+        ClockScript.Instance.UpdateTimeRemaining(timer);
         ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
         SoundManager.Instance.PlayMusic("bgm");
-
-        float timer = _isDeveloperMode ? _testTimer * 10f : FIVE_MINUTES; 
 
         OnStartService?.Invoke(); // all ingredients start decaying
         _finalScore = 0;
 
-        // change to 5 mins when done testing
-        Debug.Log($"waiting {timer}s to change to service");
+        // Debug.Log($"waiting {timer}s to change to service");
+        StartCoroutine(KitchenCleaningManager.Instance.CO_EnableDirtyColliders());
         StartCoroutine(CO_ShiftCountdown(timer, GameShift.PostService));
 
-        // ClockScript.Instance.UpdateTimeRemaining(_testTimer);
     }
     private void DoPostService() // rating calculations
     {

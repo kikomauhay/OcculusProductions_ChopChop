@@ -21,7 +21,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
             else if (value < 1)
                 _maxDirtyColliders = 1;
-            
+
             else
                 _maxDirtyColliders = value;
         }
@@ -29,7 +29,9 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
     #endregion
     #region Members
+
     [SerializeField] private GameObject[] _dirtyColliders;
+    private const float ONE_MINUTE = 60f;
     private float _decayTimer, _decayRate, _cleanlinessThreshold;
     private int _maxDirtyColliders;
     private bool _canClean;
@@ -43,7 +45,6 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     private void Start()
     {
         OnCleanedArea += IncreaseCleanRate;
-        GameManager.Instance.OnStartService += StartKitchenDecay;
         GameManager.Instance.OnEndService += StopAllCoroutines;
 
         KitchenScore = 100f;
@@ -55,27 +56,26 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         _canClean = false;           // prevents the player from cleaning too much
 
         if (_maxDirtyColliders < 1)
-            Debug.LogWarning($"There will be {_maxDirtyColliders} colliders available!");
+            Debug.LogWarning($"There will only be {_maxDirtyColliders} colliders available!");
     }
     private void OnDestroy()
     {
         OnCleanedArea -= IncreaseCleanRate;
-        GameManager.Instance.OnStartService -= StartKitchenDecay;
         GameManager.Instance.OnEndService -= StopAllCoroutines;
     }
 
     #endregion
-    #region Private
+    #region Pubilc
 
-    private void StartKitchenDecay() => StartCoroutine(CO_DecayKitchen());
-    private void ToggleKitchenColliders(bool turnedOn)
-    {
-        foreach (GameObject gameObject in _dirtyColliders)
-            gameObject.SetActive(turnedOn);
-    }
-    private void ToggleRandomColliders()
+    public void EnableRandomColliders()
     {
         int counter = 0;
+
+        if (MaxDirtyColliders == 4)
+        {
+            ToggleKitchenColliders(true);
+            return;
+        }
 
         do
         {
@@ -83,14 +83,25 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
             {
                 if (counter == MaxDirtyColliders) break;
 
-                if (UnityEngine.Random.value > 0.5f)
+                if (UnityEngine.Random.value > 0.5f &&
+                    !_dirtyColliders[i].activeSelf)
                 {
                     _dirtyColliders[i].SetActive(true);
                     counter++;
                 }
-            } 
+            }
         }
-        while (counter != MaxDirtyColliders);       
+        while (counter != MaxDirtyColliders); // in case of bad odds       
+    }
+
+    #endregion
+    #region Private
+
+    private void StartKitchenDecay() => StartCoroutine(CO_DecayKitchen());
+    private void ToggleKitchenColliders(bool isActive)
+    {
+        foreach (GameObject gameObject in _dirtyColliders)
+            gameObject.SetActive(isActive);
     }
     private void IncreaseCleanRate()
     {
@@ -112,6 +123,8 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
     #endregion
     #region Enumerators
+
+    /* -OLD KITCHEN DECAY LOGIC- 
     private IEnumerator CO_DecayKitchen()
     {
         KitchenScore = 100;
@@ -123,7 +136,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
             yield return new WaitForSeconds(_decayTimer);
             KitchenScore -= _decayRate;
 
-            if (KitchenScore < 70F && !_canClean)
+            if (KitchenScore < 70f && !_canClean)
             {
                 _canClean = true;
                 ToggleKitchenColliders(true);
@@ -134,6 +147,12 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
                 ToggleKitchenColliders(false);
             }
         }
+    }
+    */
+    public IEnumerator CO_EnableDirtyColliders()
+    {
+        yield return new WaitForSeconds(ONE_MINUTE);
+        EnableRandomColliders();
     }
 
     #endregion
