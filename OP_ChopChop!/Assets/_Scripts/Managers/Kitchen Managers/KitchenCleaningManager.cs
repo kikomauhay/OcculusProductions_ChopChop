@@ -47,7 +47,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         OnCleanedArea += IncreaseCleanRate;
         GameManager.Instance.OnEndService += StopAllCoroutines;
 
-        KitchenScore = 100f;
+        KitchenScore = 85f; // so that even if there's only 1 dirty collider (needs balance testing)
         HandUsageCounter = 30;
         _decayTimer = 5f;
         _decayRate = 5f;
@@ -56,7 +56,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         _canClean = false;           // prevents the player from cleaning too much
 
         if (_maxDirtyColliders < 1)
-            Debug.LogWarning($"There will only be {_maxDirtyColliders} colliders available!");
+            Debug.LogWarning($"There will only be {_maxDirtyColliders} colliders available!");  
     }
     private void OnDestroy()
     {
@@ -73,7 +73,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
         if (MaxDirtyColliders == 4)
         {
-            ToggleKitchenColliders(true);
+            EnableColliders(true);
             return;
         }
 
@@ -93,17 +93,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         }
         while (counter != MaxDirtyColliders); // in case of bad odds       
     }
-
-    #endregion
-    #region Private
-
-    private void StartKitchenDecay() => StartCoroutine(CO_DecayKitchen());
-    private void ToggleKitchenColliders(bool isActive)
-    {
-        foreach (GameObject gameObject in _dirtyColliders)
-            gameObject.SetActive(isActive);
-    }
-    private void IncreaseCleanRate()
+    public void IncreaseCleanRate()
     {
         if (!_canClean) // no need to focus too much on cleaning
         {
@@ -112,8 +102,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         }
 
         // enables the decay mechanic to start again
-        if (KitchenScore < 1)
-            StartCoroutine(CO_DecayKitchen());
+        // if (KitchenScore < 1) StartCoroutine(CO_DecayKitchen());
 
         KitchenScore += UnityEngine.Random.Range(5, 10); // test value for now
 
@@ -122,9 +111,19 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     }
 
     #endregion
+    #region Private
+
+    private void StartKitchenDecay() => StartCoroutine(CO_DecayKitchen());
+    private void EnableColliders(bool isActive)
+    {
+        foreach (GameObject gameObject in _dirtyColliders)
+            gameObject.SetActive(isActive);
+    }
+
+    #endregion
     #region Enumerators
 
-    /* -OLD KITCHEN DECAY LOGIC- 
+    // -OLD KITCHEN DECAY LOGIC- 
     private IEnumerator CO_DecayKitchen()
     {
         KitchenScore = 100;
@@ -139,16 +138,15 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
             if (KitchenScore < 70f && !_canClean)
             {
                 _canClean = true;
-                ToggleKitchenColliders(true);
+                EnableColliders(true);
             }
             else if (KitchenScore > _cleanlinessThreshold)
             {
                 _canClean = false;
-                ToggleKitchenColliders(false);
+                EnableColliders(false);
             }
         }
-    }
-    */
+    }    
     public IEnumerator CO_EnableDirtyColliders()
     {
         yield return new WaitForSeconds(ONE_MINUTE);
