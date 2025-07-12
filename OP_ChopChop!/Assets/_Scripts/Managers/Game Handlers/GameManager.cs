@@ -22,28 +22,23 @@ using System;
 
 public class GameManager : Singleton<GameManager>
 {
-#region Members
+    #region Properties
 
-#region Public
-
-    public Action OnStartService, OnEndService;
-    public InputActionReference Continue;
-
-#endregion
-#region Properties
-
+    public Action OnStartService { get; set; }
+    public Action OnEndService { get; set; }
+    public InputActionReference Continue { get; set; }
     public GameShift CurrentShift { get; private set; } = GameShift.Default;
     
     // DIFFICULTY
     public GameDifficulty Difficulty { get; private set; }
-    public int MaxCustomerCount { get; set; }
+    public int MaxCustomerCount { get; private set; }
     public bool TutorialDone { get; set; }
     public bool IsGameOver { get; private set; }
     public bool IsPaused { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
 
-#endregion   
-#region SerializeField
+    #endregion  
+    #region SerializeField
 
     [SerializeField] private float _testTimer;
     [SerializeField] private float _startingPlayerMoney;
@@ -56,7 +51,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private bool _isDeveloperMode;
 
 #endregion
-#region Private
+    #region Private
 
     // SCORING VALUES
     private List<float> _customerSRScores;
@@ -68,10 +63,6 @@ public class GameManager : Singleton<GameManager>
     private const float ONE_MINUTE = 60f; // shift duration for Service
 
     #endregion
-
-    #endregion
-
-    #region Methods
 
     #region Unity
 
@@ -100,7 +91,8 @@ public class GameManager : Singleton<GameManager>
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
     }
-    private void Update()
+    private void Update() => Test();    
+    private void Test()
     {
         if (CurrentShift == GameShift.Service)
             ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
@@ -114,8 +106,8 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-#endregion
-#region Public
+    #endregion
+    #region Public
 
     public void RemoveLogo(InputAction.CallbackContext context)
     {
@@ -215,24 +207,22 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
         SoundManager.Instance.PlaySound("change shift");
-    } 
+    }
     public void EnableEOD()
     {
         if (_isTutorial)
-            TurnOnEndOfDayReceipt();
+            EnableEODReceipt();
     }
 
-#endregion
-#region Private
-
-#region Game-related
+    #endregion
+    #region Game Shifts
 
     private void DoPreService() // change to 1 min when done testing
     {
         ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
 
         float serviceTimer = _isDeveloperMode ? _testTimer : ONE_MINUTE;
-        
+
         Debug.Log($"waiting {serviceTimer}s to change to service");
         StartCoroutine(CO_ShiftCountdown(serviceTimer, GameShift.Service));
 
@@ -240,43 +230,47 @@ public class GameManager : Singleton<GameManager>
     }     
     private void DoService()
     {
+        float timer = _isDeveloperMode ? _testTimer * 10f : FIVE_MINUTES; 
+
+        ClockScript.Instance.UpdateTimeRemaining(timer);
         ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
         SoundManager.Instance.PlayMusic("bgm");
-
-        float timer = _isDeveloperMode ? _testTimer * 10f : FIVE_MINUTES; 
 
         OnStartService?.Invoke(); // all ingredients start decaying
         _finalScore = 0;
 
-        // change to 5 mins when done testing
-        Debug.Log($"waiting {timer}s to change to service");
+        // Debug.Log($"waiting {timer}s to change to service");
+        StartCoroutine(KitchenCleaningManager.Instance.CO_EnableDirtyColliders());
         StartCoroutine(CO_ShiftCountdown(timer, GameShift.PostService));
 
-        // ClockScript.Instance.UpdateTimeRemaining(_testTimer);
     }
     private void DoPostService() // rating calculations
     {
         OnEndService?.Invoke();
-        TurnOnEndOfDayReceipt();
+        EnableEODReceipt();
     }
     private void ChangeDifficuty(int score)
     {
-        if (score < 3) // B or higher
+        if (score < 3) // player scored B or higher
         {
             if (Difficulty != GameDifficulty.HARD)
                 Difficulty++;
- 
+
             MaxCustomerCount++;
+            KitchenCleaningManager.Instance.MaxDirtyColliders++;
         }
-        else if (score == 3) // C
+        else if (score == 3) // player scored C 
         {
             if (Difficulty != GameDifficulty.EASY)
                 Difficulty++;
 
             if (MaxCustomerCount > 3)
+            {
                 MaxCustomerCount--;
+                KitchenCleaningManager.Instance.MaxDirtyColliders--;
+            }
         }
-        else 
+        else // player scored below C
         {
             StartCoroutine(CO_GameOver());
             return;
@@ -290,11 +284,10 @@ public class GameManager : Singleton<GameManager>
             // 
     }
 
-#endregion
-#region End-Of-Day Rating
+    #endregion
+    #region EOD Rating
 
-   
-    private void TurnOnEndOfDayReceipt()
+    private void EnableEODReceipt()
     {
         // enables the EOD receipt
         MainMenuHandler.Instance.ToggleEODPanel();
@@ -380,13 +373,9 @@ public class GameManager : Singleton<GameManager>
         OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
     }
 
-#endregion
+    #endregion
 
-#endregion
-
-#endregion
-
-#region Enumerators
+    #region Enumerators
 
     IEnumerator CO_ShiftCountdown(float timer, GameShift shift)
     {
