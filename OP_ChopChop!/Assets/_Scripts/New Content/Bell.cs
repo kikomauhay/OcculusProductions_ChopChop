@@ -51,6 +51,7 @@ public class Bell : XRBaseInteractable
 
 
             _gameMgr.ChangeShift(GameShift.PreService);
+            _gameMgr.DisableTutorial();
             Debug.LogWarning("Loading to MGS");
         }
         else if (_gameMgr.CurrentShift == GameShift.Service)
