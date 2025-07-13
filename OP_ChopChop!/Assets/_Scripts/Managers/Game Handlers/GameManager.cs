@@ -59,7 +59,7 @@ public class GameManager : Singleton<GameManager>
 
     private const float MAX_MONEY = 9999f;
     private const float FIVE_MINUTES = 300f; // shift duration for Service
-    private const float ONE_MINUTE = 60f; // shift duration for Service
+    private const float ONE_MINUTE = 60f; // shift duration for Pre-Service
 
     #endregion
 
