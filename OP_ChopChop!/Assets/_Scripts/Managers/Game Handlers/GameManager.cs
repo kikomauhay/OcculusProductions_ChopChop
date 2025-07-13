@@ -22,11 +22,10 @@ using System;
 
 public class GameManager : Singleton<GameManager>
 {
-    #region Properties
+    public Action OnStartService, OnEndService;
+    public InputActionReference Continue;
 
-    public Action OnStartService { get; set; }
-    public Action OnEndService { get; set; }
-    public InputActionReference Continue { get; set; }
+    #region Properties
     public GameShift CurrentShift { get; private set; } = GameShift.Default;
     
     // DIFFICULTY
@@ -226,7 +225,7 @@ public class GameManager : Singleton<GameManager>
         Debug.Log($"waiting {serviceTimer}s to change to service");
         StartCoroutine(CO_ShiftCountdown(serviceTimer, GameShift.Service));
 
-        // ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
+        ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
     }     
     private void DoService()
     {
