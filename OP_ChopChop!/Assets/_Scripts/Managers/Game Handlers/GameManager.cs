@@ -49,7 +49,7 @@ public class GameManager : Singleton<GameManager>
     [Header("Debugging")]
     [SerializeField] private bool _isDeveloperMode;
 
-#endregion
+    #endregion
     #region Private
 
     // SCORING VALUES
@@ -90,7 +90,7 @@ public class GameManager : Singleton<GameManager>
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
     }
-    private void Update() => Test();    
+    private void Update() => Test();
     private void Test()
     {
         if (CurrentShift == GameShift.Service)
@@ -103,6 +103,11 @@ public class GameManager : Singleton<GameManager>
             Keyboard_RemoveLogo();
             Debug.Log("Removed Chop Chop Logo");
         }
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            ChangeShift(GameShift.PostService);
+        }
+
     }
 
     #endregion
@@ -186,7 +191,7 @@ public class GameManager : Singleton<GameManager>
     }
     public void ChangeShift(GameShift chosenShift)
     {
-        if (chosenShift == CurrentShift) 
+        if (chosenShift == CurrentShift)
         {
             Debug.LogError("You cannot go to the same shift again!");
             return;
@@ -196,9 +201,9 @@ public class GameManager : Singleton<GameManager>
 
         switch (chosenShift)
         {
-            case GameShift.Training:                     break;
-            case GameShift.PreService:  DoPreService();  break;
-            case GameShift.Service:     DoService();     break;
+            case GameShift.Training: break;
+            case GameShift.PreService: DoPreService(); break;
+            case GameShift.Service: DoService(); break;
             case GameShift.PostService: DoPostService(); break;
 
             default:
@@ -206,11 +211,23 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
         SoundManager.Instance.PlaySound("change shift");
+        Debug.LogWarning($"Shifted to {CurrentShift}"!);
     }
     public void EnableEOD()
     {
         if (_isTutorial)
             EnableEODReceipt();
+    }
+    public void DisableTutorial()
+    {
+        if (!_isTutorial)
+        {
+            Debug.LogError($"{gameObject.name} is already not a tutorial!");
+            return;
+        }
+
+        _isTutorial = false;
+        OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
     }
 
     #endregion
@@ -229,7 +246,7 @@ public class GameManager : Singleton<GameManager>
     }     
     private void DoService()
     {
-        float timer = _isDeveloperMode ? _testTimer * 10f : FIVE_MINUTES; 
+        float timer = _isDeveloperMode ? _testTimer * 3f: FIVE_MINUTES; 
 
         ClockScript.Instance.UpdateTimeRemaining(timer);
         ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
@@ -241,7 +258,6 @@ public class GameManager : Singleton<GameManager>
         // Debug.Log($"waiting {timer}s to change to service");
         StartCoroutine(KitchenCleaningManager.Instance.CO_EnableDirtyColliders());
         StartCoroutine(CO_ShiftCountdown(timer, GameShift.PostService));
-
     }
     private void DoPostService() // rating calculations
     {
@@ -360,17 +376,7 @@ public class GameManager : Singleton<GameManager>
 
         return n / list.Count;
     }
-    private void DisableTutorial()
-    {
-        if (!_isTutorial)
-        {
-            Debug.LogError($"{gameObject.name} is already not a tutorial!");
-            return;
-        }
-
-        _isTutorial = false;
-        OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
-    }
+    
 
     #endregion
 
