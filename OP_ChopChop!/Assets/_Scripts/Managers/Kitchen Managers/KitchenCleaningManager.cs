@@ -69,14 +69,19 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
     public void EnableRandomColliders()
     {
-        int counter = 0;
+        // int counter = 0; included in the OLD SPANWING LOGIC
 
-        if (MaxDirtyColliders == 4)
+        if (_maxDirtyColliders != 4)
         {
-            EnableColliders(true);
-            return;
+            for (int i = 0; i < _maxDirtyColliders; i++)
+            {
+                _dirtyColliders[i].SetActive(true);
+                Debug.LogWarning($"{this}: a dirty collider has spawned!");
+            }
         }
+        else EnableAllColliders(true);    
 
+        /* -OLD SPAWNING LOGIC-
         do
         {
             for (int i = 0; i < _dirtyColliders.Length; i++)
@@ -88,10 +93,12 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
                 {
                     _dirtyColliders[i].SetActive(true);
                     counter++;
+                    Debug.LogWarning($"{this}: a dirty collider has spawned!");
                 }
             }
         }
-        while (counter != MaxDirtyColliders); // in case of bad odds       
+        while (counter != MaxDirtyColliders); // in case of bad odds 
+        */
     }
     public void IncreaseCleanRate()
     {
@@ -113,8 +120,8 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     #endregion
     #region Private
 
-    private void StartKitchenDecay() => StartCoroutine(CO_DecayKitchen());
-    private void EnableColliders(bool isActive)
+    // private void StartKitchenDecay() => StartCoroutine(CO_DecayKitchen());
+    private void EnableAllColliders(bool isActive)
     {
         foreach (GameObject gameObject in _dirtyColliders)
             gameObject.SetActive(isActive);
@@ -123,7 +130,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     #endregion
     #region Enumerators
 
-    // -OLD KITCHEN DECAY LOGIC- 
+    /* -OLD KITCHEN DECAY LOGIC- 
     private IEnumerator CO_DecayKitchen()
     {
         KitchenScore = 100;
@@ -138,19 +145,21 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
             if (KitchenScore < 70f && !_canClean)
             {
                 _canClean = true;
-                EnableColliders(true);
+                EnableAllColliders(true);
             }
             else if (KitchenScore > _cleanlinessThreshold)
             {
                 _canClean = false;
-                EnableColliders(false);
+                EnableAllColliders(false);
             }
         }
-    }    
+    }
+    */
     public IEnumerator CO_EnableDirtyColliders()
     {
         yield return new WaitForSeconds(ONE_MINUTE);
         EnableRandomColliders();
+        Debug.LogWarning($"{this}: dirty colliders done spawning!");
     }
 
     #endregion
