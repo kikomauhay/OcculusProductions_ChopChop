@@ -91,7 +91,7 @@ public class Sliceable : MonoBehaviour
         {
             Transform t = transform;
 
-            t.position = new Vector3(transform.position.x,
+            t.position = new Vector3(transform.position.x - 1,
                                      transform.position.y + Random.Range(0.1f, 1f),
                                      transform.position.z);
 

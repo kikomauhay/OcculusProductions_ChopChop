@@ -31,7 +31,7 @@ public class HandManager : Singleton<HandManager>
         {
             _vfxStinky[i].SetActive(false);
         }
-        _handUsage = 30;
+        _handUsage = 5;
     }
 
     private void FixedUpdate()
@@ -43,7 +43,7 @@ public class HandManager : Singleton<HandManager>
             Debug.LogWarning(_handUsage);
         }
 
-        if (_handUsage < 15)
+        if (_handUsage <= 5)
         {
             foreach(Collider collider in _handWashColliders)
             {
@@ -83,6 +83,7 @@ public class HandManager : Singleton<HandManager>
     public void DecrementUsage()
     {
         _handUsage--;
+        Debug.LogWarning($"Oh no, my hand is getting diry! {_handUsage}");
     }
 
 #endregion

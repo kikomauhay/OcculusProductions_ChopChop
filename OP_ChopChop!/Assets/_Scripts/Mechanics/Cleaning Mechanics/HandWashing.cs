@@ -54,7 +54,7 @@ public class HandWashing : MonoBehaviour
 
             if (_timer <= 0)
             {
-                HandManager.Instance._handUsage = 30;
+                HandManager.Instance._handUsage = 10;
                 HandWashCollider.enabled = false;
             }
         }
