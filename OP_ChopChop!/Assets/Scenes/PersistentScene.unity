@@ -1078,7 +1078,7 @@ PrefabInstance:
     - target: {fileID: 6947499026945697538, guid: 503c92ba1756f9249bd90c2a83bd03e0,
         type: 3}
       propertyPath: _isDeveloperMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 503c92ba1756f9249bd90c2a83bd03e0, type: 3}
@@ -1443,12 +1443,12 @@ PrefabInstance:
     - target: {fileID: 7564253948250721294, guid: 6d8e178db82292546afbe87fe1212197,
         type: 3}
       propertyPath: _spawnInterval
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7564253948250721294, guid: 6d8e178db82292546afbe87fe1212197,
         type: 3}
       propertyPath: _spawnCountdown
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7564253948250721294, guid: 6d8e178db82292546afbe87fe1212197,
         type: 3}
