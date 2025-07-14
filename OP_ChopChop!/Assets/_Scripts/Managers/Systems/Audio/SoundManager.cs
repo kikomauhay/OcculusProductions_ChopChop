@@ -7,10 +7,11 @@ public class SoundManager : Singleton<SoundManager>
 
     [SerializeField] private AudioSource _soundSource, _musicSource, _onboardingSource;
     [SerializeField] private Sound[] _sfx, _bgm, _onb;
+    private int _soundIndex = 0;
 
     [Header("Debugging")]
     [SerializeField] private bool _isDeveloperMode;
-    private int _soundIndex = 0;
+    [SerializeField] private float _minPitch, _maxPitch;
 
     #endregion
 
@@ -27,17 +28,22 @@ public class SoundManager : Singleton<SoundManager>
     }
     private void Start() => GameManager.Instance.OnEndService += StopAllSounds;
     private void Update() => test();
-    private void OnDestroy() => GameManager.Instance.OnEndService -= StopAllSounds;    
+    private void OnDestroy() => GameManager.Instance.OnEndService -= StopAllSounds;
     private void test()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow) && _isDeveloperMode)
+        if (!_isDeveloperMode) return;
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             _soundIndex++;
             Debug.Log(_soundIndex);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && _isDeveloperMode)
+        if (Input.GetKeyDown(KeyCode.Space))
             PlaySound(_sfx[_soundIndex].name);
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+            PlaySound(UnityEngine.Random.value > 0.5f ? "cat enter 01" : "cat enter 02");
     }
 
     #endregion
@@ -74,16 +80,21 @@ public class SoundManager : Singleton<SoundManager>
 
         // adds the properties of the Sound to the AudioSource
         _soundSource.volume = s.Volume;
-        _soundSource.pitch = s.Pitch;
         _soundSource.loop = s.Loop;
         _soundSource.clip = s.Clip;
         _soundSource.spatialBlend = 1f;
 
+        // pitch variety for the cat meows
+        if (title == "cat enter 01" || title == "cat enter 02")
+            _soundSource.pitch = UnityEngine.Random.Range(_minPitch, _maxPitch);
+
+        else _soundSource.pitch = s.Pitch;
+
+        // faucet sometimes needs to loop for a long tinme when it's opened
         if (s.Loop)
             _soundSource.Play();
 
-        else
-            _soundSource.PlayOneShot(s.Clip);
+        else _soundSource.PlayOneShot(s.Clip);
     }
     public void PlayMusic(string title) 
     {

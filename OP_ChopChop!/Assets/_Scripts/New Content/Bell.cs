@@ -34,7 +34,6 @@ public class Bell : XRBaseInteractable
     }
 
     #endregion
-
     #region Private Functions
 
     private void BellTrigger(HoverEnterEventArgs args)
@@ -87,6 +86,5 @@ public class Bell : XRBaseInteractable
         }
     }
     
-
     #endregion
 }

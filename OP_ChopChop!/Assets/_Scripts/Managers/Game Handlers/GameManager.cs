@@ -107,7 +107,6 @@ public class GameManager : Singleton<GameManager>
         {
             ChangeShift(GameShift.PostService);
         }
-
     }
 
     #endregion
