@@ -46,14 +46,19 @@ public class Sponge : MonoBehaviour
     private void OnDestroy()
     {
         if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
+            OnBoardingHandler.Instance.OnTutorialEnd -= HitTheFloor;
     }
 
-#endregion
+    #endregion
 
-#region Public
+    #region Public
 
-    public void ResetPosition() => transform.position = _startPosition;
+    public void HitTheFloor()
+    {
+        transform.position = _startPosition;
+        transform.rotation = Quaternion.identity;
+        SetDirty();
+    }
     public void SetWet() // making the sponge wet also makes it clean 
     {
         _isWet = true;
