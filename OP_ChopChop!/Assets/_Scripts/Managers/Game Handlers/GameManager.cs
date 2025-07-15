@@ -22,10 +22,9 @@ using System;
 
 public class GameManager : Singleton<GameManager>
 {
+    #region Properties
     public Action OnStartService, OnEndService;
     public InputActionReference Continue;
-
-    #region Properties
     public GameShift CurrentShift { get; private set; } = GameShift.Default;
     
     // DIFFICULTY

@@ -72,9 +72,14 @@ public class SoundManager : Singleton<SoundManager>
             return;
         }
 
+        // pitch variation for the customers
+        if (title == "cat enter 01" || title == "cat enter 02")
+            _soundSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+
+        else _soundSource.pitch = s.Pitch;
+
         // adds the properties of the Sound to the AudioSource
         _soundSource.volume = s.Volume;
-        _soundSource.pitch = s.Pitch;
         _soundSource.loop = s.Loop;
         _soundSource.clip = s.Clip;
         _soundSource.spatialBlend = 1f;
