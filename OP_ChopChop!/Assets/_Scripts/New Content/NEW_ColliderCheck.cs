@@ -60,15 +60,17 @@ public class NEW_ColliderCheck : MonoBehaviour
         if (Order == null)
         {
             Debug.LogError($"CustomerOrder is null!");
+            SoundManager.Instance.PlaySound("wrong");
             return;
         }
-
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             // the player shouldn't get a Game Over in the tutorial
-            if (GameManager.Instance.CurrentShift == GameShift.Training)
+            if (_isTutorial)
             {
+                // AJ says the player to serve the custoemr properly         
                 Debug.LogError("Game over logic not possible in tutorial!");
+                SoundManager.Instance.PlaySound("wrong");
                 return;
             }
 
@@ -102,9 +104,12 @@ public class NEW_ColliderCheck : MonoBehaviour
         else
         {
             Debug.LogError($"{other.name} has a missing Plate or Dish script");
+            SoundManager.Instance.PlaySound("wrong");
+
             return;
         }
 
+        // extra stuff during onboarding 
         if (_isTutorial)
         {
             OnBoardingHandler.Instance.AddOnboardingIndex();
