@@ -34,7 +34,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     #region Private
 
     private bool _isTutorialPlaying;
-    private const float PANEL_TIMER = 30f, HIGHLIGHT_TIMER = 20f;
+    private const float PANEL_TIMER = 30f, HIGHLIGHT_TIMER = 15f;
     private string[] _voiceLines = new string[9]
     {
         "onb 01", "onb 02", "onb 03",
