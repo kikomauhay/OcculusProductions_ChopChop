@@ -91,9 +91,8 @@ public class Sliceable : MonoBehaviour
         {
             Transform t = transform;
 
-            t.position = new Vector3(transform.position.x - 1,
-                                     transform.position.y + Random.Range(0.1f, 1f),
-                                     transform.position.z);
+            //still wonky, just store the transform somewhere and then pass it on to here
+            t.position = SpawnManager.Instance.FishSliceSpawnPoint.position;
 
             SpawnManager.Instance.SpawnObject(_nextPrefab, t, SpawnObjectType.INGREDIENT);
         }

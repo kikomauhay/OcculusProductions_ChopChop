@@ -25,6 +25,7 @@ public class Water : MonoBehaviour
 
             if (!handWash.IsWet)
                 handWash.ToggleWet();
+                Debug.LogWarning($" Hand Status: {handWash.IsWet}");
         }
     }
     private void OnTriggerStay(Collider other)

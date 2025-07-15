@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public class HandWashing : MonoBehaviour
 #region Members
 
     public bool IsWet { get; private set; }
+    public static Action<int> OnHandCleaned;
 
     [SerializeField] private bool _isDirty;
     [SerializeField] public Collider HandWashCollider;
@@ -23,7 +25,7 @@ public class HandWashing : MonoBehaviour
         IsWet = false;
         HandWashCollider.enabled = false;
         
-        _timer = 20f;
+        _timer = 3f;
         _isDirty = false;
         _hasSpawnedVFX = false;
     }
@@ -44,25 +46,24 @@ public class HandWashing : MonoBehaviour
 
         if (other.gameObject.GetComponent<HandWashing>() != null)
         {
-            if (GameManager.Instance.CurrentShift != GameShift.Training)
-            {
-                SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
-                                               HandWashCollider.transform, 
-                                               3f);
-            }
+            Debug.LogWarning($"Hand is washing uwu, wash it for {_timer} more seconds");
+            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
+                                            HandWashCollider.transform, 
+                                            3f);
+            
             _timer -= Time.deltaTime;
 
             if (_timer <= 0)
             {
-                HandManager.Instance._handUsage = 10;
-                HandWashCollider.enabled = false;
+                Debug.LogWarning($"Hand Status: {_isDirty}");
+                OnHandCleaned?.Invoke(10);
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _timer = 20f;
+        _timer = 3f;
 
         if (IsWet)
             StartCoroutine(WetToggle());
@@ -98,7 +99,17 @@ public class HandWashing : MonoBehaviour
         }
     }
 
-    public void Cleaned() => _isDirty = false;
+    public void Cleaned()
+    {
+        SkinnedMeshRenderer r = GetComponentInChildren<SkinnedMeshRenderer>();
+        _isDirty = false;
+
+        if (r != null && !_isDirty)
+        {
+            r.materials = new Material[] { _handMaterial};
+        }
+
+    }
     public void ToggleWet() => IsWet = true;
     public void PlayVFX()
     {
@@ -114,6 +125,7 @@ public class HandWashing : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         IsWet = false;
+        Debug.LogWarning($" Hand Status: {IsWet}");
     }
     private IEnumerator SpawnVFXWithDelay()
     {
