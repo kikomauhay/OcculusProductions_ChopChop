@@ -8,6 +8,11 @@ public class Floor : MonoBehaviour
     {
         GameObject obj = other.gameObject;
 
+        if (obj.GetComponent<Sponge>() != null)
+        {
+            obj.GetComponent<Sponge>().HitTheGround();
+            return;
+        }
         if (obj.GetComponent<Trashable>() == null) 
         {
             Debug.LogError($"{obj.name} is not a trashable object!");

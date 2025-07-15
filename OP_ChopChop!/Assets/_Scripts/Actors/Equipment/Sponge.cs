@@ -54,6 +54,12 @@ public class Sponge : MonoBehaviour
 #region Public
 
     public void ResetPosition() => transform.position = _startPosition;
+    public void HitTheGround()
+    {
+        transform.rotation = Quaternion.identity;
+        ResetPosition();
+        SetDirty();
+    }
     public void SetWet() // making the sponge wet also makes it clean 
     {
         _isWet = true;
