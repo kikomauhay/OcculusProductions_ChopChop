@@ -27,14 +27,14 @@ public class Knife : Equipment
     #region Public
 
     public override void HitTheGround()
-        {
-            base.HitTheGround();
+    {
+        base.HitTheGround();
 
-            SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
-                                            "knife dropped 01" : 
-                                            "knife dropped 02");
-        }
-        public override void PickUpEquipment() => SoundManager.Instance.PlaySound("knife grabbed");
+        SoundManager.Instance.PlaySound(Random.value > 0.5f ?
+                                        "knife dropped 01" :
+                                        "knife dropped 02");
+    }
+    public override void PickUpEquipment() => SoundManager.Instance.PlaySound("knife grabbed");
     
     #endregion
 
@@ -42,11 +42,8 @@ public class Knife : Equipment
 
     private void CheckMaterial()
     {
-        if (IsClean)
-            _rend.material = _cleanMat;
-
-        else
-            _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
+        _rend.materials = IsClean ? new Material[] { _cleanMat } :
+                                    new Material[] { _dirtyMat, _dirtyOSM };
     }
 
     #endregion

@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
 {
-#region Members
+    #region Members
 
     public bool IsClean => _isClean;
     public Material DirtyMaterial => _dirtyMat;
@@ -22,9 +22,9 @@ public abstract class Equipment : MonoBehaviour
     [Header("Debugging")]
     [SerializeField] protected bool _isDeveloperMode;
 
-#endregion
+    #endregion
 
-#region Unity
+    #region Unity
 
     protected virtual void Awake()
     {
@@ -46,6 +46,7 @@ public abstract class Equipment : MonoBehaviour
         if (_maxUsageCounter == 0)
             Debug.LogError($"Current max use for {this} is 0");
     }
+    protected virtual void Update() => Test();
     protected virtual void OnDestroy() 
     {
         ResetPosition();
@@ -149,9 +150,6 @@ public abstract class Equipment : MonoBehaviour
         }
     }
 
-#region Testing
-
-    protected virtual void Update() => Test();
     protected virtual void Test()
     {
         if (Input.GetKeyDown(KeyCode.Space) && _isDeveloperMode)
@@ -161,14 +159,10 @@ public abstract class Equipment : MonoBehaviour
         }
     }
 
+    #endregion
+    #region Public
 
-#endregion
-
-#endregion
-
-#region Public
-
-#region Virtual
+    #region Virtual
 
     public virtual void HitTheGround()
     {
@@ -199,19 +193,12 @@ public abstract class Equipment : MonoBehaviour
     }
 
 #endregion
-
-#region Helpers
+    #region Helpers
 
     protected void ResetPosition() 
     {
         transform.position = _startPosition;
         transform.rotation = Quaternion.identity;
-    }
-    protected IEnumerator CO_Clean(Sponge sponge)
-    {
-        _coroutineRunning = true;
-        yield return new WaitForSeconds(2f);
-        SetClean(sponge);
     }
     protected void SetClean(Sponge sponge)
     {
@@ -231,5 +218,16 @@ public abstract class Equipment : MonoBehaviour
         StartCoroutine(CO_Clean(sponge));
     }
 
-#endregion
+    #endregion
+
+    #region Enumerators
+
+    protected IEnumerator CO_Clean(Sponge sponge)
+    {
+        _coroutineRunning = true;
+        yield return new WaitForSeconds(2f);
+        SetClean(sponge);
+    }
+
+    #endregion
 }
