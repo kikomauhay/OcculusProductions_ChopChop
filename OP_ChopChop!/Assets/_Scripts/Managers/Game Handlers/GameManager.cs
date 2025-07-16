@@ -234,21 +234,20 @@ public class GameManager : Singleton<GameManager>
 
     private void DoPreService() // change to 1 min when done testing
     {
-        ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
-
         float serviceTimer = _isDeveloperMode ? _testTimer : ONE_MINUTE;
 
         Debug.Log($"waiting {serviceTimer}s to change to service");
         StartCoroutine(CO_ShiftCountdown(serviceTimer, GameShift.Service));
 
         ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
-    }     
+        ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
+    }
     private void DoService()
     {
         float timer = _isDeveloperMode ? _testTimer * 3f: FIVE_MINUTES; 
 
         ClockScript.Instance.UpdateTimeRemaining(timer);
-        ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
+        ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
         SoundManager.Instance.PlayMusic("bgm");
 
         OnStartService?.Invoke(); // all ingredients start decaying
@@ -262,6 +261,7 @@ public class GameManager : Singleton<GameManager>
     {
         OnEndService?.Invoke();
         EnableEODReceipt();
+        ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
     }
     private void ChangeDifficuty(int score)
     {

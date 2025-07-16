@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 1805324865721997815}
   - component: {fileID: 4533218476006501693}
   - component: {fileID: 4025179905600532621}
+  - component: {fileID: 608453644745513240}
+  - component: {fileID: 7017279044278499798}
   m_Layer: 0
   m_Name: pf_foodbowl
   m_TagString: Untagged
@@ -98,3 +100,34 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5358991509302202112, guid: 2d3326f796839f844930b7a7ea56b6ae, type: 3}
+--- !u!114 &608453644745513240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731932763005734120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d75cecc6d6b224fa9d803b178c54ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trashType: 0
+--- !u!114 &7017279044278499798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731932763005734120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d31cc3ba3796a742987c0c32b5b94f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isClean: 1
+  _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
+  _cleanMat: {fileID: 2100000, guid: 17e3bed4249173e49a59955974b4bf05, type: 2}
+  _dirtyMat: {fileID: 0}
+  _maxUsageCounter: 200
+  _isDeveloperMode: 0

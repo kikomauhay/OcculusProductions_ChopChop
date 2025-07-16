@@ -94,7 +94,6 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
 
     #endregion
-
     #region Helpers
 
     private void DoIngredientCollision(Ingredient ing)
