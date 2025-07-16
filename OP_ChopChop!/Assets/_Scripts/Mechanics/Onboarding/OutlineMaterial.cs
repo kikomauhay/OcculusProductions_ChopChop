@@ -18,12 +18,12 @@ public class OutlineMaterial : MonoBehaviour
     {
         // this will only change when the tutorial is active
         if (!GameManager.Instance.TutorialDone)
-            _rend.materials = new Material[] { _cleanMat, _outlineMat };
+            _rend.materials = new Material[] { _rend.material, _outlineMat };
     }
     public void DisableHighlight() 
     {
         // this will only change when the tutorial is active
         if (!GameManager.Instance.TutorialDone)
-            _rend.materials = new Material[] { _cleanMat };
+            _rend.materials = new Material[] { _rend.material };
     }
 }

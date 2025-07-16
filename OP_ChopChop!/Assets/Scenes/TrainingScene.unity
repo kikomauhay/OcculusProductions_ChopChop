@@ -3769,6 +3769,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.296
       objectReference: {fileID: 0}
+    - target: {fileID: 5369240913971532206, guid: 5ab3e672be634b5419c451c218720ae4,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369240913971532206, guid: 5ab3e672be634b5419c451c218720ae4,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5369240913971532206, guid: 5ab3e672be634b5419c451c218720ae4,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DecrementUsage
+      objectReference: {fileID: 0}
     - target: {fileID: 7269845803971795389, guid: 5ab3e672be634b5419c451c218720ae4,
         type: 3}
       propertyPath: m_IsTrigger
