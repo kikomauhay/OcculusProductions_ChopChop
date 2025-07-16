@@ -39,6 +39,11 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [Header("Debugging")]
     [SerializeField] private bool _isDeveloperMode;
 
+    [Header("Fish Slice Spawn Point")]
+    [SerializeField] Transform _fishSliceSpawnPoint;
+
+    public Transform FishSliceSpawnPoint{ get => _fishSliceSpawnPoint; set => _fishSliceSpawnPoint = value; }
+
     private int _spawnedCustomers;
 
 #endregion

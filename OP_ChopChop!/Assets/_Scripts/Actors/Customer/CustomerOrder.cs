@@ -37,6 +37,7 @@ public class CustomerOrder : MonoBehaviour
     [SerializeField] private bool _isTunaCustomer;
    
     private CustomerAppearance _appearance;
+    private CustomerActions _actions;
     private GameObject _customerOrderUI;
     private float _customerScore; // starts at 100 and decreases over time
 
@@ -48,6 +49,7 @@ public class CustomerOrder : MonoBehaviour
             GameManager.Instance.OnEndService += DestroyOrderUI;
         
         _appearance = GetComponent<CustomerAppearance>();
+        _actions = GetComponent<CustomerActions>();
 
         switch (GameManager.Instance.Difficulty) // will decrease overtime
         {
@@ -142,7 +144,7 @@ public class CustomerOrder : MonoBehaviour
         while (_customerScore > 0f)
         {
             yield return new WaitForSeconds(1f);
-
+    
             _customerScore -= _patienceDecreaseRate;
 
             if (_customerScore < 1f)
@@ -177,6 +179,8 @@ public class CustomerOrder : MonoBehaviour
     {
         // inital reaction
         _appearance.SetFacialEmotion(FaceVariant.HAPPY);
+        _actions.TriggerEating();
+
         StartCoroutine(_appearance.DoChweing(_customerScore));
         SoundManager.Instance.PlaySound("cat happy");
         yield return new WaitForSeconds(_reactionTimer);

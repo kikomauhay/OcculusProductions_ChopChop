@@ -5,18 +5,30 @@ using UnityEngine;
 
 public class HandManager : Singleton<HandManager>
 {
-#region Members
-    [SerializeField] Collider[] _handWashColliders;
-    [SerializeField] HandWashing[] _handWashingScripts;
-    [SerializeField] GameObject[] _vfxStinky;
+    #region Members
 
-    public int _handUsage { get; set; }
+    [SerializeField] private Collider[] _handWashColliders;
+    [SerializeField] private HandWashing[] _handWashingScripts;
+    [SerializeField] private GameObject[] _vfxStinky;
+    [SerializeField] private int _handUsage;
+
     #endregion
 
-#region Unity
+    #region Unity
 
     protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
+
+    private void OnEnable()
+    {
+        HandWashing.OnHandCleaned += ResetHandUsage;
+    }
+
+    private void OnDisable()
+    {
+        HandWashing.OnHandCleaned -= ResetHandUsage;
+    }
+
     private void Start()
     {
         _handWashColliders = new Collider[_handWashingScripts.Length];
@@ -31,27 +43,11 @@ public class HandManager : Singleton<HandManager>
         {
             _vfxStinky[i].SetActive(false);
         }
-        _handUsage = 30;
     }
 
     private void FixedUpdate()
     {
-        //test
-        if(Input.GetKeyUp(KeyCode.S))
-        {
-            DecrementUsage();
-            Debug.LogWarning(_handUsage);
-        }
-
-        if (_handUsage < 15)
-        {
-            foreach(Collider collider in _handWashColliders)
-            {
-                collider.enabled = true;
-                collider.gameObject.GetComponent<HandWashing>().WarningIndicator();
-            }
-        }
-        if(_handUsage <= 0)
+        if (_handUsage <= 0)
         {
             foreach(Collider collider in _handWashColliders)
             {
@@ -63,17 +59,31 @@ public class HandManager : Singleton<HandManager>
                 _vfxStinky[i].SetActive(true);
             }
         }
-        else
+        else if(_handUsage <= 5)
+        {
+            foreach(Collider collider in _handWashColliders)
+            {
+                collider.enabled = true;
+                collider.gameObject.GetComponent<HandWashing>().WarningIndicator();
+            }
+        }
+        else if (_handUsage > 5)
         {
             foreach(Collider collider in _handWashColliders)
             {
                 collider.gameObject.GetComponent<HandWashing>().Cleaned();
+                collider.enabled=false;
             }
             for (int i = 0; i < _vfxStinky.Length; i++)
             {
                 _vfxStinky[i].SetActive(false);
             }
         }
+    }
+
+    private void ResetHandUsage(int _value)
+    {
+        _handUsage = _value;
     }
 
 #endregion
@@ -83,6 +93,7 @@ public class HandManager : Singleton<HandManager>
     public void DecrementUsage()
     {
         _handUsage--;
+        Debug.LogWarning($"Oh no, my hand is getting diry! {_handUsage}");
     }
 
 #endregion

@@ -9,7 +9,7 @@ public class Bell : XRBaseInteractable
     [SerializeField] private bool _isDeveloperMode;
 
     #endregion
-    
+
     #region Unity
 
     protected override void OnEnable()
@@ -38,7 +38,7 @@ public class Bell : XRBaseInteractable
     #region Private Functions
 
     private void BellTrigger(HoverEnterEventArgs args)
-    {   
+    {
         if (_gameMgr.CurrentShift == GameShift.Training)
         {
             // when you press the bell in TRS, the tutorial stops and you immediately go to MGS
@@ -51,6 +51,7 @@ public class Bell : XRBaseInteractable
 
 
             _gameMgr.ChangeShift(GameShift.PreService);
+            _gameMgr.DisableTutorial();
             Debug.LogWarning("Loading to MGS");
         }
         else if (_gameMgr.CurrentShift == GameShift.Service)
@@ -63,7 +64,7 @@ public class Bell : XRBaseInteractable
     }
     private void Keyboard_BellTrigger()
     {
-       if (_gameMgr.CurrentShift == GameShift.Training)
+        if (_gameMgr.CurrentShift == GameShift.Training)
         {
             // when you press the bell in TRS, the tutorial stops and you immediately go to MGS
             OnBoardingHandler.Instance.Disable();
@@ -73,8 +74,8 @@ public class Bell : XRBaseInteractable
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
 
-
             _gameMgr.ChangeShift(GameShift.PreService);
+            _gameMgr.DisableTutorial();
             Debug.LogWarning("Loading to MGS");
         }
         else if (_gameMgr.CurrentShift == GameShift.Service)
@@ -85,6 +86,7 @@ public class Bell : XRBaseInteractable
             Debug.LogWarning("Loading to TRS");
         }
     }
+    
 
     #endregion
 }

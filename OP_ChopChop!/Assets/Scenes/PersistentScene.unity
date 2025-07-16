@@ -201,6 +201,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2419348460469501691, guid: 194346df99dc7284d87dd6a84aedd265,
+        type: 3}
+      propertyPath: _isDeveloperMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 194346df99dc7284d87dd6a84aedd265, type: 3}
 --- !u!4 &110657788 stripped
@@ -741,7 +746,7 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  m_TeleportationProvider: {fileID: 0}
+  m_TeleportationProvider: {fileID: 391014582476441008}
   m_MatchOrientation: 0
   m_MatchDirectionalInput: 0
   m_TeleportTrigger: 0
@@ -978,6 +983,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &683845704
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 683845705}
+  m_Layer: 0
+  m_Name: FishSliceSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &683845705
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683845704}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.637, y: 1.117, z: 0.939}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &820884217
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1059,6 +1095,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _isTutorial
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6947499026945697538, guid: 503c92ba1756f9249bd90c2a83bd03e0,
+        type: 3}
+      propertyPath: _isDeveloperMode
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 503c92ba1756f9249bd90c2a83bd03e0, type: 3}
@@ -1443,6 +1484,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 7564253948250721294, guid: 6d8e178db82292546afbe87fe1212197,
         type: 3}
+      propertyPath: _fishSliceSpawnPoint
+      value: 
+      objectReference: {fileID: 683845705}
+    - target: {fileID: 7564253948250721294, guid: 6d8e178db82292546afbe87fe1212197,
+        type: 3}
       propertyPath: _newColliderChecks.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -1567,7 +1613,7 @@ PrefabInstance:
     - target: {fileID: 2336919477517887479, guid: d9bb0abda740e5247b6a60a869661786,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44776553
+      value: -0.49
       objectReference: {fileID: 0}
     - target: {fileID: 2336919477517887479, guid: d9bb0abda740e5247b6a60a869661786,
         type: 3}
@@ -4648,6 +4694,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 641790559}
     m_Modifications:
+    - target: {fileID: 1138800542123962652, guid: ab95a20a6b1df2648b5aaa58e1058807,
+        type: 3}
+      propertyPath: _handUsage
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1138800542123962652, guid: ab95a20a6b1df2648b5aaa58e1058807,
         type: 3}
       propertyPath: _vfxStinky.Array.size

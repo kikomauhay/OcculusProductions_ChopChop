@@ -13,9 +13,8 @@ using System;
 [RequireComponent(typeof(Trashable))]
 public abstract class Ingredient : MonoBehaviour
 {
-#region Members
 
-#region Properties
+    #region Properties
 
     public IngredientState IngredientState { get; private set; }
     public IngredientType IngredientType => _ingredientType;
@@ -23,8 +22,8 @@ public abstract class Ingredient : MonoBehaviour
     public int SliceIndex => _sliceIndex;
     public bool IsFresh => _isFresh;
 
-#endregion
-#region SerializeField
+    #endregion
+    #region SerializeField
 
     [Header("Ingredient Attributes")]
     [SerializeField, Range(0f, 100f)] protected float _freshnessRate;
@@ -39,14 +38,14 @@ public abstract class Ingredient : MonoBehaviour
     [Header("Debugging")]
     [SerializeField] protected bool _isDeveloperMode;
     
-#endregion
-#region Protected
+    #endregion
+    #region Protected
 
     protected Vector3 _startPosition;
     protected MeshRenderer _rend;
 
-#endregion
-#region Private
+    #endregion
+    #region Private
     
     private const float GRACE_PERIOD = 10f;
     private const float DECAY_SPEED = 4f;
@@ -54,13 +53,9 @@ public abstract class Ingredient : MonoBehaviour
     private const float NORMAL_RATE = 2f; 
     private const float DIRTY_RATE = 25f;
 
-#endregion
+    #endregion
 
-#endregion
-
-#region Methods 
-
-#region Unity
+    #region Unity
 
     protected void Awake()
     {
@@ -75,7 +70,7 @@ public abstract class Ingredient : MonoBehaviour
     protected virtual void Start() 
     {
         // ingredients will only decay once the shift has started  
-        GameManager.Instance.OnStartService += () => StartCoroutine(CO_Decay());
+        GameManager.Instance.OnStartService += StartDecay;
         GameManager.Instance.OnEndService += SetRotten;
 
         if (GameManager.Instance.CurrentShift == GameShift.Training)
@@ -93,18 +88,11 @@ public abstract class Ingredient : MonoBehaviour
         if (GameManager.Instance.CurrentShift == GameShift.Service)
             StartCoroutine(CO_Decay());        
     }
-
-    private void DestroyGameObject()
-    {
-        Destroy(this.gameObject);
-    }
-
-
     protected virtual void OnDestroy() 
     {
         if (_isDeveloperMode) return;
 
-        GameManager.Instance.OnStartService -= () => StartCoroutine(CO_Decay());
+        GameManager.Instance.OnStartService -= StartDecay;
         GameManager.Instance.OnEndService -= SetRotten;
 
         if (GameManager.Instance.CurrentShift == GameShift.Training)
@@ -183,8 +171,8 @@ public abstract class Ingredient : MonoBehaviour
         }
     }
 
-#endregion
-#region Public
+    #endregion
+    #region Public
 
     public void Trashed()
     {
@@ -231,9 +219,14 @@ public abstract class Ingredient : MonoBehaviour
         SoundManager.Instance.PlaySound(soundName);
     }
 
-#endregion
+    #endregion
     #region Helpers
 
+    private void StartDecay() => StartCoroutine(CO_Decay());
+    private void DestroyGameObject()
+    {
+        Destroy(this.gameObject);
+    }
     protected virtual void ChangeMaterial()
     {
         switch (IngredientState)
@@ -254,11 +247,9 @@ public abstract class Ingredient : MonoBehaviour
         }
     }
 
-#endregion
+    #endregion
 
-#endregion
-
-#region Enumerators
+    #region Enumerators
 
     protected IEnumerator CO_Decay() 
     {
@@ -308,7 +299,7 @@ public abstract class Ingredient : MonoBehaviour
         yield return new WaitForSeconds(time);
     }
 
-#endregion
+    #endregion
 }
 
 #region Enumerations
