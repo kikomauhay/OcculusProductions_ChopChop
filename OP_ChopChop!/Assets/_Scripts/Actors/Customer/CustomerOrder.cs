@@ -164,7 +164,6 @@ public class CustomerOrder : MonoBehaviour
                 _appearance.SetAngryEmotion(0);            
         }
         
-        // customer lost all patience
         yield return StartCoroutine(CO_CustomerLostPatience());
     }
     private IEnumerator CO_CustomerLostPatience() // customer wasn't served
