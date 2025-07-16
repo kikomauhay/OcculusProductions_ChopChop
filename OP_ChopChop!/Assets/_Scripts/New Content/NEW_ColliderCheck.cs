@@ -1,4 +1,5 @@
 using System.Collections;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -20,6 +21,9 @@ public class NEW_ColliderCheck : MonoBehaviour
     public CustomerOrder Order { get; set; }
 
     [SerializeField] private bool _isTutorial;
+    [SerializeField] private float _dishPercantage = 0.8f;
+    [SerializeField] private float _patiencePercentage = 0.2f;
+
     private Collider _collider;
     private float _disableTimer;
 
@@ -131,7 +135,11 @@ public class NEW_ColliderCheck : MonoBehaviour
         }
         else if (dish.DishPlatter == Order.WantedPlatter)
         {
-            Order.CustomerSR = (dish.Score + Order.PatienceRate) / 2f;
+            // dish quality has more focus becuase of CAPSTN
+            float dishScore = dish.Score * _dishPercantage;
+            float patienceScore = Order.PatienceRate * _patiencePercentage;
+            Order.CustomerSR = (dishScore + patienceScore) / 2f;
+
             StartCoroutine(Order.CO_HappyReaction());
             Debug.LogWarning("Happy reaction");
 
