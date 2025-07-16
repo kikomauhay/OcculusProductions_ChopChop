@@ -1,4 +1,4 @@
-using UnityEngine;
+    using UnityEngine;
 using System;
 
 public class SoundManager : Singleton<SoundManager> 
@@ -30,14 +30,19 @@ public class SoundManager : Singleton<SoundManager>
     private void OnDestroy() => GameManager.Instance.OnEndService -= StopAllSounds;    
     private void test()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow) && _isDeveloperMode)
+        if (!_isDeveloperMode) return;
+
+         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             _soundIndex++;
             Debug.Log(_soundIndex);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && _isDeveloperMode)
+        if (Input.GetKeyDown(KeyCode.Space))
             PlaySound(_sfx[_soundIndex].name);
+
+        if (Input.GetKeyDown(KeyCode.Delete))
+            PlaySound("wrong order");
     }
 
     #endregion
