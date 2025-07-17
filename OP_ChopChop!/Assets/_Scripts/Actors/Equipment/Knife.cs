@@ -10,8 +10,6 @@ public class Knife : Equipment
         {
             base.Start();
             InvokeRepeating("CheckMaterial", 1f, 1f);
-
-            HandManager.Instance.SetKnife(this);
         }
         protected override void OnDestroy()
         {

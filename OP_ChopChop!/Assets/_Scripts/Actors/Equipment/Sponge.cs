@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Trashable))]
 public class Sponge : MonoBehaviour
@@ -17,6 +18,7 @@ public class Sponge : MonoBehaviour
     [SerializeField] private Material _wetMat, _cleanMat, _dirtyMat, _dirtyOSM;
 
     private MeshRenderer _rend;
+    private XRGrabInteractable _interactable;
     private Vector3 _startPosition;
     private const float WET_DURATION = 30f;
 
@@ -27,6 +29,7 @@ public class Sponge : MonoBehaviour
     private void Awake() 
     {
         _rend = GetComponent<MeshRenderer>();
+        _interactable = GetComponent<XRGrabInteractable>();
 
         if (!_isClean)
             Debug.LogWarning($"{this} is clean: {_isClean}");
@@ -41,6 +44,9 @@ public class Sponge : MonoBehaviour
         _isClean = true;
 
         _startPosition = transform.position;
+
+        if(_interactable != null)
+            HandManager.Instance.RegisterGrabbable(_interactable);
     }
 
     private void OnDestroy()

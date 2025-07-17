@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
@@ -13,6 +14,7 @@ public abstract class Equipment : MonoBehaviour
     [SerializeField] protected Material _dirtyOSM, _cleanMat, _dirtyMat;
     protected Vector3 _startPosition;
     protected Renderer _rend;
+    protected XRGrabInteractable _interactable;
 
     // DIRTY MECHANIC
     [SerializeField] protected int _maxUsageCounter; // max counter before it gets dirty
@@ -29,6 +31,7 @@ public abstract class Equipment : MonoBehaviour
     protected virtual void Awake()
     {
         _rend = GetComponent<Renderer>();
+        _interactable = GetComponent<XRGrabInteractable>();
 
         GameManager.Instance.OnStartService += ResetPosition;
 
@@ -45,6 +48,10 @@ public abstract class Equipment : MonoBehaviour
 
         if (_maxUsageCounter == 0)
             Debug.LogError($"Current max use for {this} is 0");
+
+        if (_interactable != null) 
+            HandManager.Instance.RegisterGrabbable(_interactable);
+
     }
     protected virtual void Update() => Test();
     protected virtual void OnDestroy() 

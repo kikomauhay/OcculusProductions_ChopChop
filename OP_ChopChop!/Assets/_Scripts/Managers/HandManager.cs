@@ -13,7 +13,7 @@ public class HandManager : Singleton<HandManager>
     [SerializeField] private GameObject[] _vfxStinky;
     [SerializeField] private int _handUsage;
 
-    private XRGrabInteractable _knifeGI;
+    private List<XRGrabInteractable> _grabbableGI = new List<XRGrabInteractable>();
 
     #endregion
 
@@ -29,7 +29,11 @@ public class HandManager : Singleton<HandManager>
     private void OnDisable()
     {
         HandWashing.OnHandCleaned -= ResetHandUsage;
-        _knifeGI.selectExited.RemoveListener(DecrementUsage);
+
+        foreach (XRGrabInteractable _interactable in _grabbableGI)
+        {
+            _interactable.selectExited.RemoveListener(DecrementUsage);
+        }
     }
 
     protected override void Awake()
@@ -51,16 +55,6 @@ public class HandManager : Singleton<HandManager>
         for (int i = 0; i < _vfxStinky.Length; i++)
         {
             _vfxStinky[i].SetActive(false);
-        }
-    }
-
-    private void Update()
-    {
-        //for inspector testing
-        if (Input.GetKeyUp(KeyCode.Backspace))
-        {
-            Debug.LogWarning($"Hand cleanliness: {_handUsage}");
-            //DecrementUsage();
         }
     }
 
@@ -119,15 +113,15 @@ public class HandManager : Singleton<HandManager>
     {
         _handUsage--;
         Debug.LogWarning($"Oh no, my hand is getting diry! {_handUsage}");
-
-        // CompareHandUsage();
     }
 
-    public void SetKnife(Knife knife)
+    public void RegisterGrabbable(XRGrabInteractable _interactable)
     {
-        _knifeGI = knife.GetComponent<XRGrabInteractable>();
-
-        _knifeGI.selectExited.AddListener(DecrementUsage);
+        if (!_grabbableGI.Contains(_interactable))
+        {
+            _grabbableGI.Add(_interactable);
+            _interactable.selectExited.AddListener(DecrementUsage);
+        }
     }
 
     #endregion
