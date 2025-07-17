@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class HandManager : Singleton<HandManager>
 {
@@ -12,11 +13,12 @@ public class HandManager : Singleton<HandManager>
     [SerializeField] private GameObject[] _vfxStinky;
     [SerializeField] private int _handUsage;
 
+    private List<XRGrabInteractable> _grabbableGI = new List<XRGrabInteractable>();
+
     #endregion
 
     #region Unity
 
-    protected override void Awake() => base.Awake();
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
 
     private void OnEnable()
@@ -27,18 +29,29 @@ public class HandManager : Singleton<HandManager>
     private void OnDisable()
     {
         HandWashing.OnHandCleaned -= ResetHandUsage;
+
+        foreach (XRGrabInteractable _interactable in _grabbableGI)
+        {
+            _interactable.selectExited.RemoveListener(DecrementUsage);
+        }
+    }
+
+    protected override void Awake()
+    {
+        _handUsage = 5;
+        base.Awake();
     }
 
     private void Start()
     {
         _handWashColliders = new Collider[_handWashingScripts.Length];
 
-        //for loop, hand wash scripts
         for (int i = 0; i < _handWashingScripts.Length; i++)
         {
             _handWashColliders[i] = _handWashingScripts[i].HandWashCollider;
         }
-        //for loop, stinky vfx
+
+        //QoL update this, attach stinky to hands and just toggle them
         for (int i = 0; i < _vfxStinky.Length; i++)
         {
             _vfxStinky[i].SetActive(false);
@@ -47,21 +60,35 @@ public class HandManager : Singleton<HandManager>
 
     private void FixedUpdate()
     {
+        CompareHandUsage();
+    }
+
+    private void ResetHandUsage(int _value)
+    {
+        Debug.Log("Hello");
+        _handUsage = _value;
+    }
+
+#endregion
+
+    #region Helpers
+
+    private void CompareHandUsage()
+    {
         if (_handUsage <= 0)
         {
-            foreach(Collider collider in _handWashColliders)
+            foreach (Collider collider in _handWashColliders)
             {
                 collider.gameObject.GetComponent<HandWashing>().Dirtify();
-                
             }
             for (int i = 0; i < _vfxStinky.Length; i++)
             {
                 _vfxStinky[i].SetActive(true);
             }
         }
-        else if(_handUsage <= 5)
+        else if (_handUsage <= 5)
         {
-            foreach(Collider collider in _handWashColliders)
+            foreach (Collider collider in _handWashColliders)
             {
                 collider.enabled = true;
                 collider.gameObject.GetComponent<HandWashing>().WarningIndicator();
@@ -69,10 +96,10 @@ public class HandManager : Singleton<HandManager>
         }
         else if (_handUsage > 5)
         {
-            foreach(Collider collider in _handWashColliders)
+            foreach (Collider collider in _handWashColliders)
             {
                 collider.gameObject.GetComponent<HandWashing>().Cleaned();
-                collider.enabled=false;
+                collider.enabled = false;
             }
             for (int i = 0; i < _vfxStinky.Length; i++)
             {
@@ -81,20 +108,21 @@ public class HandManager : Singleton<HandManager>
         }
     }
 
-    private void ResetHandUsage(int _value)
-    {
-        _handUsage = _value;
-    }
 
-#endregion
-
-#region public functions
-
-    public void DecrementUsage()
+    public void DecrementUsage(SelectExitEventArgs args)
     {
         _handUsage--;
         Debug.LogWarning($"Oh no, my hand is getting diry! {_handUsage}");
     }
 
-#endregion
+    public void RegisterGrabbable(XRGrabInteractable _interactable)
+    {
+        if (!_grabbableGI.Contains(_interactable))
+        {
+            _grabbableGI.Add(_interactable);
+            _interactable.selectExited.AddListener(DecrementUsage);
+        }
+    }
+
+    #endregion
 }

@@ -35,7 +35,6 @@ public class Moldable : MonoBehaviour
 
     public void InsertInteractor(SelectEnterEventArgs args)
     {
-        Debug.LogWarning("Meow interactor works");
         _interactors.Add(args.interactorObject);
     }
 
