@@ -1,4 +1,5 @@
 using System.Collections;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -20,6 +21,9 @@ public class NEW_ColliderCheck : MonoBehaviour
     public CustomerOrder Order { get; set; }
 
     [SerializeField] private bool _isTutorial;
+    [SerializeField] private float _dishPercantage = 0.8f;
+    [SerializeField] private float _patiencePercentage = 0.2f;
+
     private Collider _collider;
     private float _disableTimer;
 
@@ -94,7 +98,6 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
 
     #endregion
-
     #region Helpers
 
     private void DoIngredientCollision(Ingredient ing)
@@ -123,30 +126,36 @@ public class NEW_ColliderCheck : MonoBehaviour
     {
         if (dish.FoodCondition != FoodCondition.CLEAN)
         {
-            Order.CustomerSR = 0f;
-            StartCoroutine(Order.CO_DirtyReaction());
-            Debug.LogWarning("Game Over!");
-
-            if (_isTutorial)
-                PlayWrongDishServed();
+            if (_isTutorial) 
+            {
+                Order.CustomerSR = 0f;
+                StartCoroutine(Order.CO_DirtyReaction());
+                Debug.LogWarning("Game Over!");
+            }
+            else PlayWrongDishServed();
         }
         else if (dish.DishPlatter == Order.WantedPlatter)
         {
-            Order.CustomerSR = (dish.Score + Order.PatienceRate) / 2f;
-            StartCoroutine(Order.CO_HappyReaction());
-            Debug.LogWarning("Happy reaction");
-
             if (_isTutorial)
                 PlayExtraOnboarding();
-        }
-        else
-        {
-            Order.CustomerSR = 0f;
-            StartCoroutine(Order.CO_AngryReaction());
-            Debug.LogWarning("Angy reaction");
+                
+            // dish quality has more focus becuase of CAPSTN
+            float dishScore = dish.Score * _dishPercantage;
+            float patienceScore = Order.PatienceRate * _patiencePercentage;
+            Order.CustomerSR = (dishScore + patienceScore) / 2f;
 
-            if (_isTutorial)
-                PlayWrongDishServed();
+            StartCoroutine(Order.CO_HappyReaction());
+            Debug.LogWarning("Happy reaction");
+        }
+        else if (dish.DishPlatter != Order.WantedPlatter)
+        {
+            if (!_isTutorial)
+            {
+                Order.CustomerSR = 0f;
+                StartCoroutine(Order.CO_AngryReaction());
+                Debug.LogWarning("Angy reaction");
+            }
+            else PlayWrongDishServed();
         }
     }
     private void PlayExtraOnboarding()
