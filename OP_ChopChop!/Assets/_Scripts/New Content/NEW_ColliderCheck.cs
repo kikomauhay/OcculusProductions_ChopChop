@@ -64,7 +64,8 @@ public class NEW_ColliderCheck : MonoBehaviour
             // the player shouldn't get a Game Over in the tutorial
             if (GameManager.Instance.CurrentShift == GameShift.Training && _isTutorial)
             {
-                PlayWrongDishServed();
+                SoundManager.Instance.PlaySound("ingredient order");
+                // Debug.LogWarning("Player served an ingredient to the customer!");
             }
             else
             {
@@ -124,38 +125,38 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
     private void DoDishCollision(NEW_Dish dish)
     {
-        if (dish.FoodCondition != FoodCondition.CLEAN)
+        if (dish.FoodCondition != FoodCondition.CLEAN) // contaminated order
         {
             if (_isTutorial) 
             {
                 Order.CustomerSR = 0f;
                 StartCoroutine(Order.CO_DirtyReaction());
-                Debug.LogWarning("Game Over!");
+                // Debug.LogWarning("Game Over!");
             }
-            else PlayWrongDishServed();
+            else SoundManager.Instance.PlaySound("contaminated order");
         }
-        else if (dish.DishPlatter == Order.WantedPlatter)
-        {
-            if (_isTutorial)
-                PlayExtraOnboarding();
-                
+        else if (dish.DishPlatter == Order.WantedPlatter) // correct order
+        {               
             // dish quality has more focus becuase of CAPSTN
             float dishScore = dish.Score * _dishPercantage;
             float patienceScore = Order.PatienceRate * _patiencePercentage;
             Order.CustomerSR = (dishScore + patienceScore) / 2f;
 
             StartCoroutine(Order.CO_HappyReaction());
-            Debug.LogWarning("Happy reaction");
+            // Debug.LogWarning("Happy reaction");
+
+            if (_isTutorial)
+                PlayExtraOnboarding();
         }
-        else if (dish.DishPlatter != Order.WantedPlatter)
+        else if (dish.DishPlatter != Order.WantedPlatter) // wrong order
         {
             if (!_isTutorial)
             {
                 Order.CustomerSR = 0f;
                 StartCoroutine(Order.CO_AngryReaction());
-                Debug.LogWarning("Angy reaction");
+                // Debug.LogWarning("Angy reaction");
             }
-            else PlayWrongDishServed();
+            else SoundManager.Instance.PlaySound("wrong order");
         }
     }
     private void PlayExtraOnboarding()

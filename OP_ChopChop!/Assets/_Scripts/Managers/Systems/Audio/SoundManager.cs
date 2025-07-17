@@ -32,7 +32,7 @@ public class SoundManager : Singleton<SoundManager>
     {
         if (!_isDeveloperMode) return;
 
-         if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             _soundIndex++;
             Debug.Log(_soundIndex);
@@ -67,6 +67,7 @@ public class SoundManager : Singleton<SoundManager>
         if (_onboardingSource.isPlaying)
             _onboardingSource.Stop();
     }
+
     public void PlaySound(string title)
     {
         Sound s = Array.Find(_sfx, i => i.name == title);
