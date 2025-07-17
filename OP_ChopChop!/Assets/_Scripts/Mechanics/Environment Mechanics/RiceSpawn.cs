@@ -97,7 +97,7 @@ public class RiceSpawn : XRBaseInteractable
     }
     private IEnumerator ResetRiceSpawned()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
         _riceSpawned = false;
     }
 
