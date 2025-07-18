@@ -11,6 +11,7 @@ public class HandManager : Singleton<HandManager>
     [SerializeField] private Collider[] _handWashColliders;
     [SerializeField] private HandWashing[] _handWashingScripts;
     [SerializeField] private GameObject[] _vfxStinky;
+    [SerializeField] private GameObject[] _vfxBubbles;
     [SerializeField] private int _handUsage;
 
     private List<XRGrabInteractable> _grabbableGI = new List<XRGrabInteractable>();
@@ -51,11 +52,12 @@ public class HandManager : Singleton<HandManager>
             _handWashColliders[i] = _handWashingScripts[i].HandWashCollider;
         }
 
-        //QoL update this, attach stinky to hands and just toggle them
         for (int i = 0; i < _vfxStinky.Length; i++)
         {
             _vfxStinky[i].SetActive(false);
         }
+
+        ToggleBubblesOff();
     }
 
     private void FixedUpdate()
@@ -65,7 +67,6 @@ public class HandManager : Singleton<HandManager>
 
     private void ResetHandUsage(int _value)
     {
-        Debug.Log("Hello");
         _handUsage = _value;
     }
 
@@ -108,6 +109,21 @@ public class HandManager : Singleton<HandManager>
         }
     }
 
+    public void ToggleBubblesOn()
+    {
+        for (int i = 0; i < _vfxBubbles.Length; i++)
+        {
+            _vfxBubbles[i].SetActive(true);
+        }
+    }
+
+    public void ToggleBubblesOff()
+    {
+        for (int i = 0; i < _vfxBubbles.Length; i++)
+        {
+            _vfxBubbles[i].SetActive(false);
+        }
+    }
 
     public void DecrementUsage(SelectExitEventArgs args)
     {
