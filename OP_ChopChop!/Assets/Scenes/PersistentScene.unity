@@ -1083,6 +1083,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &758915497 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4467525188659021933, guid: 2a16f8b1d12770346a2562f7071ea701,
+    type: 3}
+  m_PrefabInstance: {fileID: 606152596}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &820884217
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1824,6 +1830,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2336919477517887479, guid: d9bb0abda740e5247b6a60a869661786,
     type: 3}
   m_PrefabInstance: {fileID: 1250099288}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1446541230 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4467525188659021933, guid: 2a16f8b1d12770346a2562f7071ea701,
+    type: 3}
+  m_PrefabInstance: {fileID: 1064877419}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1471621782
 PrefabInstance:
@@ -4858,6 +4870,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1138800542123962652, guid: ab95a20a6b1df2648b5aaa58e1058807,
         type: 3}
+      propertyPath: _vfxBubbles.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1138800542123962652, guid: ab95a20a6b1df2648b5aaa58e1058807,
+        type: 3}
       propertyPath: _grabbableGI.Array.size
       value: 11
       objectReference: {fileID: 0}
@@ -4871,6 +4888,16 @@ PrefabInstance:
       propertyPath: _vfxStinky.Array.data[1]
       value: 
       objectReference: {fileID: 2145257193}
+    - target: {fileID: 1138800542123962652, guid: ab95a20a6b1df2648b5aaa58e1058807,
+        type: 3}
+      propertyPath: _vfxBubbles.Array.data[0]
+      value: 
+      objectReference: {fileID: 758915497}
+    - target: {fileID: 1138800542123962652, guid: ab95a20a6b1df2648b5aaa58e1058807,
+        type: 3}
+      propertyPath: _vfxBubbles.Array.data[1]
+      value: 
+      objectReference: {fileID: 1446541230}
     - target: {fileID: 1138800542123962652, guid: ab95a20a6b1df2648b5aaa58e1058807,
         type: 3}
       propertyPath: _grabbableGI.Array.data[0]

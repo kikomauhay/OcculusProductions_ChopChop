@@ -198,6 +198,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: -7561628223210829928}
+        m_TargetAssemblyTypeName: Moldable, Assembly-CSharp
+        m_MethodName: RemoveInteractor
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -360,7 +372,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: ccd7bda732b63f74bbb2e891ec211ce3, type: 2}
   - {fileID: 2100000, guid: 0f9308779b87ea9409a85f099a321e99, type: 2}
   _dirtyOSM: {fileID: 2100000, guid: b784f8f0eacc120419c8612f8edfd35e, type: 2}
-  _isDevloperMode: 0
+  _isDeveloperMode: 0
   _foodPrefabs:
   - {fileID: 5778702139965393049, guid: ee59e60ddd11e66429b96b45594c629e, type: 3}
   - {fileID: 962565321575026586, guid: bc29908154ef6634d90d1996069d24e8, type: 3}
