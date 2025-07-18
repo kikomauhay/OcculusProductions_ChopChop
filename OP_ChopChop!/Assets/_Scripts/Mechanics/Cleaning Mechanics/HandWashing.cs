@@ -14,7 +14,6 @@ public class HandWashing : MonoBehaviour
     [SerializeField] private Material _handMaterial, _outlineTexture, _warningOutlineTexture;
 
     private float _timer;
-    private bool _hasSpawnedVFX;
 
 #endregion
 
@@ -27,7 +26,6 @@ public class HandWashing : MonoBehaviour
         
         _timer = 3f;
         _isDirty = false;
-        _hasSpawnedVFX = false;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -46,11 +44,8 @@ public class HandWashing : MonoBehaviour
 
         if (other.gameObject.GetComponent<HandWashing>() != null)
         {
-            Debug.LogWarning($"Hand is washing uwu, wash it for {_timer} more seconds");
-            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
-                                            HandWashCollider.transform, 
-                                            3f);
-            
+            HandManager.Instance.ToggleBubblesOn();
+
             _timer -= Time.deltaTime;
 
             if (_timer <= 0)
@@ -111,11 +106,6 @@ public class HandWashing : MonoBehaviour
 
     }
     public void ToggleWet() => IsWet = true;
-    public void PlayVFX()
-    {
-        if (_isDirty && !_hasSpawnedVFX)
-            StartCoroutine(SpawnVFXWithDelay());
-    }
     
 #endregion
 
@@ -125,14 +115,7 @@ public class HandWashing : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         IsWet = false;
-        Debug.LogWarning($" Hand Status: {IsWet}");
-    }
-    private IEnumerator SpawnVFXWithDelay()
-    {
-        _hasSpawnedVFX = true;
-        SpawnManager.Instance.SpawnVFX(VFXType.STINKY, HandWashCollider.transform, 3f);
-        yield return new WaitForSeconds(5f); // Delay before it can spawn again
-        _hasSpawnedVFX = false;
+        HandManager.Instance.ToggleBubblesOff();
     }
 
 #endregion
