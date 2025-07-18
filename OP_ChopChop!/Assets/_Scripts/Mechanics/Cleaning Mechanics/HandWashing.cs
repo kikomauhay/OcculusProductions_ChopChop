@@ -26,7 +26,6 @@ public class HandWashing : MonoBehaviour
         
         _timer = 3f;
         _isDirty = false;
-        _hasSpawnedVFX = false;
     }
     private void OnTriggerEnter(Collider other)
     {
