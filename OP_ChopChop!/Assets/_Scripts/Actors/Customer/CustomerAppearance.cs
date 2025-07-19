@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CustomerAppearance : MonoBehaviour 
 {
-#region Members
+    #region Members
 
     [Header("Customer Material Renderers")]
     [SerializeField] private SpriteRenderer _face;
@@ -16,12 +16,14 @@ public class CustomerAppearance : MonoBehaviour
     [SerializeField] private Sprite[] _reactionFaces; // 0 = neutral, 1 = happy, 2 = sus
     [SerializeField] private Sprite[] _chewingFaces;  // 0-1 = normal, 2-3 = sus
     [SerializeField] private Sprite[] _madFaces; // 0 = angry, 1 = angrier, 2 = angriest
-                                         // angry     = less than 50 pts in patience meter
-                                         // angrier   = got the wrong order 
-                                         // angriest  = customer lost all patience 
-#endregion
-
-    void Start()
+                                                 // angry     = less than 50 pts in patience meter
+                                                 // angrier   = got the wrong order 
+                                                 // angriest  = customer lost all patience 
+    #endregion
+    
+    #region Unity
+    
+    private void Start()
     {        
         int i = Random.Range(0, _skinVariants.Length);
 
@@ -32,7 +34,8 @@ public class CustomerAppearance : MonoBehaviour
         _face.sprite = _reactionFaces[0];
     }
 
-#region Reaction_Methods
+    #endregion
+    #region Customer Reactions 
 
     public void SetFacialEmotion(FaceVariant type)
     {
@@ -93,7 +96,7 @@ public class CustomerAppearance : MonoBehaviour
         yield return new WaitForSeconds(chewTime);
     }
 
-#endregion
+    #endregion
 }
 
 #region Structres
@@ -106,7 +109,6 @@ public struct SkinVariant
 }
 
 #endregion
-
 #region Enumerations
 
     public enum FaceVariant

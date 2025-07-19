@@ -5,19 +5,17 @@ using TMPro;
 [RequireComponent(typeof(CustomerAppearance), typeof(CustomerActions))]
 public class CustomerOrder : MonoBehaviour
 {
-#region Readers
+    #region Properties
 
     public DishPlatter WantedPlatter { get; private set; } // what dish the customer wants to order   
     public float CustomerSR { get; set; }                  // (FoodScore of dish + _patienceRate) / 2
-    public float PatienceRate => _patienceDecreaseRate;
     public bool IsLastCustomer { get; set; } = false;
-
+    public float PatienceRate => _patienceDecreaseRate;
     public bool IsTutorial => _isTutorial; 
     public bool IsTunaCustomer => _isTunaCustomer;
 
-#endregion
-
-#region Members
+    #endregion
+    #region Members
 
     [Header("Dish UI")]
     [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
@@ -43,6 +41,8 @@ public class CustomerOrder : MonoBehaviour
 
 #endregion
 
+    #region Unity
+
     private void Start()
     {
         if (!_isTutorial)
@@ -66,7 +66,7 @@ public class CustomerOrder : MonoBehaviour
                                DishPlatter.SASHIMI_TUNA : 
                                DishPlatter.NIGIRI_SALMON;
 
-            OnBoardingHandler.Instance.OnTutorialEnd += Cleanup;
+            OnBoardingHandler.Instance.OnTutorialEnd += DestoryGO;
         }
         else 
         {
@@ -81,7 +81,7 @@ public class CustomerOrder : MonoBehaviour
     {
         if (_isTutorial)
         {
-            OnBoardingHandler.Instance.OnTutorialEnd -= Cleanup;
+            OnBoardingHandler.Instance.OnTutorialEnd -= DestoryGO;
             Destroy(_customerOrderUI);
         }
         else GameManager.Instance.OnEndService -= DestroyOrderUI; 
@@ -102,9 +102,8 @@ public class CustomerOrder : MonoBehaviour
         }
     }
 
-    private void Cleanup() => Destroy(gameObject);
-
-#region Spawning_Helpers
+    #endregion
+    #region Helpers
 
     private void CreateCustomerUI()
     {
@@ -127,14 +126,14 @@ public class CustomerOrder : MonoBehaviour
 
         // destroys both the customer and its UI
         DestroyOrderUI();
-        Destroy(gameObject);
-        Debug.LogWarning($"Destroyed {this}");
+        DestoryGO();
     }
     private void DestroyOrderUI() => Destroy(_customerOrderUI);
+    private void DestoryGO() => Destroy(gameObject);
 
-#endregion
+    #endregion
 
-#region Enumerators
+    #region Enumerators
 
     private IEnumerator CO_PatienceCountdown()
     {
@@ -176,15 +175,12 @@ public class CustomerOrder : MonoBehaviour
     }
     public IEnumerator CO_HappyReaction() // customer got the correct order
     {
-        // inital reaction
         _appearance.SetFacialEmotion(FaceVariant.HAPPY);
         _actions.TriggerEating();
-
-        StartCoroutine(_appearance.DoChweing(_customerScore));
         SoundManager.Instance.PlaySound("cat happy");
+        // StartCoroutine(_appearance.DoChweing(_customerScore));
         yield return new WaitForSeconds(_reactionTimer);
 
-        // final actions
         GameManager.Instance.IncrementCustomersServed();
         GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
         MakeSeatEmpty();

@@ -75,7 +75,7 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake() // set starting money
     {
         base.Awake();
-
+        
         CurrentPlayerMoney = _startingPlayerMoney;
         CustomersServed = 0;
         MaxCustomerCount = 3;
@@ -89,6 +89,7 @@ public class GameManager : Singleton<GameManager>
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
     }
+    private void Start() => StartCoroutine(CO_DelayedEventBind());
     private void Update() => Test();
     private void Test()
     {
@@ -106,7 +107,6 @@ public class GameManager : Singleton<GameManager>
         {
             ChangeShift(GameShift.PostService);
         }
-
     }
 
     #endregion
@@ -217,7 +217,7 @@ public class GameManager : Singleton<GameManager>
         if (_isTutorial)
             EnableEODReceipt();
     }
-    public void DisableTutorial()
+    private void DisableTutorial()
     {
         if (!_isTutorial)
         {
@@ -227,6 +227,14 @@ public class GameManager : Singleton<GameManager>
 
         _isTutorial = false;
         OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
+
+        // removes uneccesary tutorial components
+        if (!_logoRemoved)
+        {
+            _logoRemoved = true;
+            _logo.SetActive(false);
+            Continue.action.performed += RemoveLogo;
+        }
     }
 
     #endregion
@@ -395,7 +403,7 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlaySound("change shift");
         ChangeShift(shift);
     }
-    IEnumerator CO_DelayedEventBind()
+    private IEnumerator CO_DelayedEventBind()
     {
         yield return new WaitForSeconds(1f);
         OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;

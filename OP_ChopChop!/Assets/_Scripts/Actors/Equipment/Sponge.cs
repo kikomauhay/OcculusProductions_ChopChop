@@ -5,26 +5,27 @@ using UnityEngine.XR.Interaction.Toolkit;
 [RequireComponent(typeof(Trashable))]
 public class Sponge : MonoBehaviour
 {
-#region Readers
+    #region Properties
 
     public bool IsWet => _isWet;
     public bool IsClean => _isClean;
 
-#endregion
-
-#region Members
+    #endregion
+    #region SerializeField
 
     [SerializeField] private bool _isClean, _isWet;
     [SerializeField] private Material _wetMat, _cleanMat, _dirtyMat, _dirtyOSM;
 
+    #endregion
+    #region Private
     private MeshRenderer _rend;
     private XRGrabInteractable _interactable;
     private Vector3 _startPosition;
     private const float WET_DURATION = 30f;
 
-#endregion
+    #endregion
 
-#region Unity
+    #region Unity
 
     private void Awake() 
     {
@@ -39,6 +40,9 @@ public class Sponge : MonoBehaviour
     }
     private void Start()
     {
+        GameManager.Instance.OnStartService += ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+
         name = "Sponge";
         _isWet = false;
         _isClean = true;
@@ -51,8 +55,8 @@ public class Sponge : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
+        GameManager.Instance.OnStartService -= ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
     }
 
 #endregion
