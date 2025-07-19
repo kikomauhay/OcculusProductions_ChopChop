@@ -127,12 +127,26 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     private void DoExtraOnboarding(int mode)
     {
         switch (mode)
-        {
-            case 0: SpawnManager.Instance.SpawnTutorialCustomer(true); break;
-            case 3: StartCoroutine(CO_EnableSlicingPanel()); break;
-            case 4: StartCoroutine(CO_EnableMoldingPanel()); break;
-            case 6: StartCoroutine(CO_SpawnBenny()); break;
-            case 7: _dirtyCollider.SetActive(true); break;
+        {   
+            case 0: 
+                SpawnManager.Instance.SpawnTutorialCustomer(true); 
+                break;
+            
+            case 3: 
+                StartCoroutine(CO_EnableSlicingPanel()); 
+                break;
+            
+            case 4: 
+                StartCoroutine(CO_EnableMoldingPanel()); 
+                break;
+            
+            case 6: 
+                StartCoroutine(CO_SpawnBenny()); 
+                break;
+            
+            case 7: 
+                _dirtyCollider.SetActive(true); 
+                break;
 
             case 8:
                 GameManager.Instance.EnableEOD();
@@ -239,10 +253,8 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         if (CurrentStep < _tutorialComponents.Length)
             _tutorialComponents[CurrentStep].EnableInteraction();
     }
-
     private IEnumerator CO_SpawnBenny()
     {
-        // 1 sec longer so that Atrium can despawn properly
         yield return new WaitForSeconds(10f);
         SpawnManager.Instance.SpawnTutorialCustomer(false);
     }
