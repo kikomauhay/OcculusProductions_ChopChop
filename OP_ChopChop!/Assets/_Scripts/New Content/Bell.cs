@@ -5,6 +5,7 @@ public class Bell : XRBaseInteractable
 {
     #region Members
     private GameManager _gameMgr;
+    private OnBoardingHandler _onbHandler;
 
     [SerializeField] private bool _isDeveloperMode;
 
@@ -22,7 +23,11 @@ public class Bell : XRBaseInteractable
         base.OnDisable();
         hoverEntered.RemoveListener(BellTrigger);
     }
-    private void Start() => _gameMgr = GameManager.Instance;
+    private void Start() 
+    {
+        _gameMgr = GameManager.Instance;
+        _onbHandler = OnBoardingHandler.Instance;
+    }
     private void Update()
     {
         if (!_isDeveloperMode) return;
@@ -49,17 +54,19 @@ public class Bell : XRBaseInteractable
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
 
-
+            // other triggers to remove any tutorial logic
             _gameMgr.ChangeShift(GameShift.PreService);
-            _gameMgr.DisableTutorial();
-            Debug.LogWarning("Loading to MGS");
+            _onbHandler.OnTutorialEnd?.Invoke();
+            
+            // Debug.LogWarning("Loading to MGS");
         }
-        else if (_gameMgr.CurrentShift == GameShift.Service)
+        else if (_gameMgr.CurrentShift != GameShift.Default) // player can now go back to training after pressing the bell
         {
             _gameMgr.ChangeShift(GameShift.Training);
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
-            Debug.LogWarning("Loading to TRS");
+            
+            // Debug.LogWarning("Loading to TRS");
         }
     }
     private void Keyboard_BellTrigger()
@@ -74,19 +81,20 @@ public class Bell : XRBaseInteractable
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
 
+            // other triggers to remove any tutorial logic
             _gameMgr.ChangeShift(GameShift.PreService);
-            _gameMgr.DisableTutorial();
-            Debug.LogWarning("Loading to MGS");
+            _onbHandler.OnTutorialEnd?.Invoke();
+            // Debug.LogWarning("Loading to MGS");
         }
-        else if (_gameMgr.CurrentShift == GameShift.Service)
+        else if (_gameMgr.CurrentShift != GameShift.Default) // player can now go back to training after pressing the bell
         {
             _gameMgr.ChangeShift(GameShift.Training);
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
-            Debug.LogWarning("Loading to TRS");
+            
+            // Debug.LogWarning("Loading to TRS");
         }
-    }
-    
+    }    
 
     #endregion
 }

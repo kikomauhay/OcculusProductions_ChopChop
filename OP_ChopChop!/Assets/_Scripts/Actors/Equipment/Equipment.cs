@@ -5,10 +5,13 @@ using UnityEngine.XR.Interaction.Toolkit;
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
 {
-    #region Members
+    #region Properties
 
     public bool IsClean => _isClean;
     public Material DirtyMaterial => _dirtyMat;
+
+    #endregion
+    #region Protected 
 
     [SerializeField] protected bool _isClean;
     [SerializeField] protected Material _dirtyOSM, _cleanMat, _dirtyMat;
@@ -19,10 +22,14 @@ public abstract class Equipment : MonoBehaviour
     // DIRTY MECHANIC
     [SerializeField] protected int _maxUsageCounter; // max counter before it gets dirty
     protected int _usageCounter;                     // counter to know how many times equipment has been used
-    private bool _coroutineRunning;
 
     [Header("Debugging")]
     [SerializeField] protected bool _isDeveloperMode;
+
+    #endregion
+    #region Private 
+    
+    private bool _coroutineRunning;
 
     #endregion
 
@@ -33,13 +40,17 @@ public abstract class Equipment : MonoBehaviour
         _rend = GetComponent<Renderer>();
         _interactable = GetComponent<XRGrabInteractable>();
 
-        GameManager.Instance.OnStartService += ResetPosition;
-
         if (_isDeveloperMode)
             Debug.LogWarning($"{this} is developer mode: {_isDeveloperMode}");
+
+        if (_interactable == null)
+            Debug.LogWarning($"Null reference for {_interactable}");
     }
     protected virtual void Start() 
     {
+        GameManager.Instance.OnStartService += ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+
         _isClean = true;
         _coroutineRunning = false;
         _startPosition = transform.position;
@@ -51,18 +62,12 @@ public abstract class Equipment : MonoBehaviour
 
         if (_interactable != null) 
             HandManager.Instance.RegisterGrabbable(_interactable);
-
     }
     protected virtual void Update() => Test();
     protected virtual void OnDestroy() 
     {
-        ResetPosition();
-
-        if (!_isDeveloperMode)
-            GameManager.Instance.OnStartService -= ResetPosition;
-
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
+        GameManager.Instance.OnStartService -= ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
     }
     protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
@@ -169,8 +174,6 @@ public abstract class Equipment : MonoBehaviour
     #endregion
     #region Public
 
-    #region Virtual
-
     public virtual void HitTheGround()
     {
         SetDirty();
@@ -182,9 +185,6 @@ public abstract class Equipment : MonoBehaviour
         ResetPosition();
     }
     public virtual void PickUpEquipment() {}
-
-#endregion
-
     public void IncrementUseCounter()
     {
         _usageCounter++;
@@ -199,7 +199,7 @@ public abstract class Equipment : MonoBehaviour
         _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
     }
 
-#endregion
+    #endregion
     #region Helpers
 
     protected void ResetPosition() 
