@@ -3,53 +3,72 @@ using UnityEngine;
 
 public class EnvironmentCleaning : MonoBehaviour
 {
-#region Members 
+    #region Members 
 
     [SerializeField] private bool _isTutorial;  
     [SerializeField] private Collider _col;
 
     private static bool _tutorialDone = false;
 
-#endregion
+    #endregion
 
-#region Unity
+    #region Unity
 
     private void OnEnable() 
     {
-        StartCoroutine(SpawnStinkyVFX());
+        StartCoroutine(CO_SpawnStinkyVFX());
         _col.enabled = true;
     }
-    private void OnDisable() => StopCoroutine(SpawnStinkyVFX());
-    
+    private void OnDisable() => StopCoroutine(CO_SpawnStinkyVFX());
     private void OnTriggerEnter(Collider other)
     {
         Sponge sponge = other.gameObject.GetComponent<Sponge>();
-     
-        if (sponge == null) return;
-        
+
+        if (sponge == null)
+        {
+            Debug.LogError($"{other.name} doens't have a Sponge Component!");
+            return;
+        }
+
         if (sponge.IsWet)
             SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, sponge.transform, 5f);
-        
-        if (_isTutorial && !_tutorialDone) 
+
+        if (_isTutorial && !_tutorialDone)
         {
             OnBoardingHandler.Instance.AddOnboardingIndex();
             OnBoardingHandler.Instance.PlayOnboarding();
-            
+
             _tutorialDone = true;
             gameObject.SetActive(false);
             Debug.LogWarning($"{this} is disabled!");
-            return; 
+            return;
         }
-        
+
+        // confirmation that the cleaning has been done
         KitchenCleaningManager.Instance.OnCleanedArea?.Invoke();
         gameObject.SetActive(false);
+        Debug.LogWarning($"{this} has been disabled!");
     }
 
-#endregion
+    #endregion
+    #region Helpers
 
-#region Enumerators
+    private Vector3 RandomColliderPoint(Collider col)
+    {
+        if (col == null) return transform.position;
 
-    private IEnumerator SpawnStinkyVFX()
+        Bounds bounds = col.bounds;
+
+        return new Vector3(Random.Range(bounds.min.x, bounds.max.x),
+                           bounds.center.y,
+                           Random.Range(bounds.min.z, bounds.max.z));
+    }
+
+    #endregion
+    
+    #region Enumerators
+
+    private IEnumerator CO_SpawnStinkyVFX()
     {
         // loops while it's still enabled
         while (gameObject.activeSelf)
@@ -66,20 +85,5 @@ public class EnvironmentCleaning : MonoBehaviour
         }
     }
 
-#endregion 
-
-#region Helpers
-
-    private Vector3 RandomColliderPoint(Collider col)
-    {
-        if (col == null) return transform.position;
-
-        Bounds bounds = col.bounds;
-
-        return new Vector3(Random.Range(bounds.min.x, bounds.max.x),
-                           bounds.center.y,
-                           Random.Range(bounds.min.z, bounds.max.z));
-    }
-
-#endregion 
+    #endregion     
 }

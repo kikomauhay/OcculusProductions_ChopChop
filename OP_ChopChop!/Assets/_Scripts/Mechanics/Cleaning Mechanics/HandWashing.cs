@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,13 +7,13 @@ public class HandWashing : MonoBehaviour
 #region Members
 
     public bool IsWet { get; private set; }
+    public static Action<int> OnHandCleaned;
 
     [SerializeField] private bool _isDirty;
     [SerializeField] public Collider HandWashCollider;
     [SerializeField] private Material _handMaterial, _outlineTexture, _warningOutlineTexture;
 
     private float _timer;
-    private bool _hasSpawnedVFX;
 
 #endregion
 
@@ -23,9 +24,8 @@ public class HandWashing : MonoBehaviour
         IsWet = false;
         HandWashCollider.enabled = false;
         
-        _timer = 20f;
+        _timer = 3f;
         _isDirty = false;
-        _hasSpawnedVFX = false;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -44,25 +44,21 @@ public class HandWashing : MonoBehaviour
 
         if (other.gameObject.GetComponent<HandWashing>() != null)
         {
-            if (GameManager.Instance.CurrentShift != GameShift.Training)
-            {
-                SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, 
-                                               HandWashCollider.transform, 
-                                               3f);
-            }
+            HandManager.Instance.ToggleBubblesOn();
+
             _timer -= Time.deltaTime;
 
             if (_timer <= 0)
             {
-                HandManager.Instance._handUsage = 30;
-                HandWashCollider.enabled = false;
+                Debug.LogWarning($"Hand Status: {_isDirty}");
+                OnHandCleaned?.Invoke(10);
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _timer = 20f;
+        _timer = 3f;
 
         if (IsWet)
             StartCoroutine(WetToggle());
@@ -98,13 +94,18 @@ public class HandWashing : MonoBehaviour
         }
     }
 
-    public void Cleaned() => _isDirty = false;
-    public void ToggleWet() => IsWet = true;
-    public void PlayVFX()
+    public void Cleaned()
     {
-        if (_isDirty && !_hasSpawnedVFX)
-            StartCoroutine(SpawnVFXWithDelay());
+        SkinnedMeshRenderer r = GetComponentInChildren<SkinnedMeshRenderer>();
+        _isDirty = false;
+
+        if (r != null && !_isDirty)
+        {
+            r.materials = new Material[] { _handMaterial};
+        }
+
     }
+    public void ToggleWet() => IsWet = true;
     
 #endregion
 
@@ -114,13 +115,7 @@ public class HandWashing : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         IsWet = false;
-    }
-    private IEnumerator SpawnVFXWithDelay()
-    {
-        _hasSpawnedVFX = true;
-        SpawnManager.Instance.SpawnVFX(VFXType.STINKY, HandWashCollider.transform, 3f);
-        yield return new WaitForSeconds(5f); // Delay before it can spawn again
-        _hasSpawnedVFX = false;
+        HandManager.Instance.ToggleBubblesOff();
     }
 
 #endregion

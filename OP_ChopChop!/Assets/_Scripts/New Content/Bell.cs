@@ -5,11 +5,12 @@ public class Bell : XRBaseInteractable
 {
     #region Members
     private GameManager _gameMgr;
+    private OnBoardingHandler _onbHandler;
 
     [SerializeField] private bool _isDeveloperMode;
 
     #endregion
-    
+
     #region Unity
 
     protected override void OnEnable()
@@ -22,7 +23,11 @@ public class Bell : XRBaseInteractable
         base.OnDisable();
         hoverEntered.RemoveListener(BellTrigger);
     }
-    private void Start() => _gameMgr = GameManager.Instance;
+    private void Start() 
+    {
+        _gameMgr = GameManager.Instance;
+        _onbHandler = OnBoardingHandler.Instance;
+    }
     private void Update()
     {
         if (!_isDeveloperMode) return;
@@ -38,7 +43,7 @@ public class Bell : XRBaseInteractable
     #region Private Functions
 
     private void BellTrigger(HoverEnterEventArgs args)
-    {   
+    {
         if (_gameMgr.CurrentShift == GameShift.Training)
         {
             // when you press the bell in TRS, the tutorial stops and you immediately go to MGS
@@ -49,21 +54,24 @@ public class Bell : XRBaseInteractable
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
 
-
+            // other triggers to remove any tutorial logic
             _gameMgr.ChangeShift(GameShift.PreService);
-            Debug.LogWarning("Loading to MGS");
+            _onbHandler.OnTutorialEnd?.Invoke();
+            
+            // Debug.LogWarning("Loading to MGS");
         }
-        else if (_gameMgr.CurrentShift == GameShift.Service)
+        else if (_gameMgr.CurrentShift != GameShift.Default) // player can now go back to training after pressing the bell
         {
             _gameMgr.ChangeShift(GameShift.Training);
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
-            Debug.LogWarning("Loading to TRS");
+            
+            // Debug.LogWarning("Loading to TRS");
         }
     }
     private void Keyboard_BellTrigger()
     {
-       if (_gameMgr.CurrentShift == GameShift.Training)
+        if (_gameMgr.CurrentShift == GameShift.Training)
         {
             // when you press the bell in TRS, the tutorial stops and you immediately go to MGS
             OnBoardingHandler.Instance.Disable();
@@ -73,18 +81,20 @@ public class Bell : XRBaseInteractable
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
 
-
+            // other triggers to remove any tutorial logic
             _gameMgr.ChangeShift(GameShift.PreService);
-            Debug.LogWarning("Loading to MGS");
+            _onbHandler.OnTutorialEnd?.Invoke();
+            // Debug.LogWarning("Loading to MGS");
         }
-        else if (_gameMgr.CurrentShift == GameShift.Service)
+        else if (_gameMgr.CurrentShift != GameShift.Default) // player can now go back to training after pressing the bell
         {
             _gameMgr.ChangeShift(GameShift.Training);
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
-            Debug.LogWarning("Loading to TRS");
+            
+            // Debug.LogWarning("Loading to TRS");
         }
-    }
+    }    
 
     #endregion
 }

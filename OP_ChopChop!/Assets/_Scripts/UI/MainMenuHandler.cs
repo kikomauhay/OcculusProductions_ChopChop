@@ -19,7 +19,6 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
     {
         playIcon.SetActive(toggle);
     }
-
     public void TogglePausePanel(bool isTrue)
     {
         pausePanel.SetActive(isTrue);
@@ -38,7 +37,6 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
         settingsPanel.SetActive(isTrue);
         pausePanel.SetActive(false);
     }
-
     public void UpdateNameOfPhaseTxt(string phase)
     {
         _currentPhaseTxt.text = phase;

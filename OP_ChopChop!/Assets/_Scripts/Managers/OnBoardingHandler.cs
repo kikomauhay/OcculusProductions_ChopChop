@@ -7,16 +7,17 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 {
     #region Properties
 
-    public System.Action OnTutorialEnd { get; set; }
+    public Action OnTutorialEnd { get; set; }
     public int CurrentStep { get; private set; }
     public bool IsTutorialPlaying { get; private set; }
 
     #endregion
     #region SerializeField  
 
-    [Header("Highlihght Objects"), Tooltip("This is sequentually organized.")]
+    [Header("Onboarding Components"), Tooltip("This is sequentually organized.")]
     [SerializeField] private OutlineMaterial[] _highlightObjects;
-    [SerializeField, Space(5f)] private GameObject _dirtyCollider; // should be deactivated by default
+    [SerializeField] private NEW_TutorialComponent[] _tutorialComponents; // some elements are repeated just to make the array work properly
+    [SerializeField] private GameObject _dirtyCollider; // should be deactivated by default
 
     [Header("Panels")]
     [SerializeField] private GameObject _friendlyTipPanel;
@@ -30,10 +31,10 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     [SerializeField] private bool _isDeveloperMode;
 
     #endregion
-    #region Private 
+    #region Private
 
     private bool _isTutorialPlaying;
-    private const float PANEL_TIMER = 30f, HIGHLIGHT_TIMER = 20f;
+    private const float PANEL_TIMER = 30f, HIGHLIGHT_TIMER = 15f;
     private string[] _voiceLines = new string[9]
     {
         "onb 01", "onb 02", "onb 03",
@@ -68,6 +69,12 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
 
         if (_isDeveloperMode)
             Debug.Log($"{this} is developer mode: {_isDeveloperMode}");
+
+        if (_highlightObjects.Length < 9)
+            Debug.LogWarning($"Missing elements in _highlightObjects. Current count: {_highlightObjects.Length}");
+
+        if (_tutorialComponents.Length < 9)
+            Debug.LogWarning($"Missing elements in _highlightObjects. Current count: {_tutorialComponents.Length}");       
     }
     private void Update() => Test();
 
@@ -120,18 +127,31 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     private void DoExtraOnboarding(int mode)
     {
         switch (mode)
-        {
-            case 0: SpawnManager.Instance.SpawnTutorialCustomer(true); break;
-            case 3: StartCoroutine(CO_EnableSlicingPanel()); break;
-            case 4: StartCoroutine(CO_EnableMoldingPanel()); break;
-            case 6: StartCoroutine(CO_SpawnBenny()); break;
-            case 7: _dirtyCollider.SetActive(true); break;
+        {   
+            case 0: 
+                SpawnManager.Instance.SpawnTutorialCustomer(true); 
+                break;
+            
+            case 3: 
+                StartCoroutine(CO_EnableSlicingPanel()); 
+                break;
+            
+            case 4: 
+                StartCoroutine(CO_EnableMoldingPanel()); 
+                break;
+            
+            case 6: 
+                StartCoroutine(CO_SpawnBenny()); 
+                break;
+            
+            case 7: 
+                _dirtyCollider.SetActive(true); 
+                break;
 
             case 8:
                 GameManager.Instance.EnableEOD();
                 StartCoroutine(CO_EnableFriendlyTipPanel());
                 GameManager.Instance.TutorialDone = true;
-
                 break;
 
             default: break;
@@ -222,17 +242,19 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     }
     private IEnumerator CO_ToggleHighlight()
     {
-        // highlights the object for a set amount of time
+        // highlights the current object for a set period
         _highlightObjects[CurrentStep].EnableHighlight();
         yield return new WaitForSeconds(HIGHLIGHT_TIMER);
 
-        // Idk when I should disable the highlight 
+        // disables the highlight of the current material 
         _highlightObjects[CurrentStep].DisableHighlight();
-    }
 
+        // prevents any index range errors
+        if (CurrentStep < _tutorialComponents.Length)
+            _tutorialComponents[CurrentStep].EnableInteraction();
+    }
     private IEnumerator CO_SpawnBenny()
     {
-        // 1 sec longer so that Atrium can despawn properly
         yield return new WaitForSeconds(10f);
         SpawnManager.Instance.SpawnTutorialCustomer(false);
     }

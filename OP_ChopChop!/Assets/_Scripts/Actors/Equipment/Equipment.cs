@@ -1,42 +1,56 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Trashable))]
 public abstract class Equipment : MonoBehaviour 
 {
-#region Members
+    #region Properties
 
     public bool IsClean => _isClean;
     public Material DirtyMaterial => _dirtyMat;
+
+    #endregion
+    #region Protected 
 
     [SerializeField] protected bool _isClean;
     [SerializeField] protected Material _dirtyOSM, _cleanMat, _dirtyMat;
     protected Vector3 _startPosition;
     protected Renderer _rend;
+    protected XRGrabInteractable _interactable;
 
     // DIRTY MECHANIC
     [SerializeField] protected int _maxUsageCounter; // max counter before it gets dirty
     protected int _usageCounter;                     // counter to know how many times equipment has been used
-    private bool _coroutineRunning;
 
     [Header("Debugging")]
     [SerializeField] protected bool _isDeveloperMode;
 
-#endregion
+    #endregion
+    #region Private 
+    
+    private bool _coroutineRunning;
 
-#region Unity
+    #endregion
+
+    #region Unity
 
     protected virtual void Awake()
     {
         _rend = GetComponent<Renderer>();
-
-        GameManager.Instance.OnStartService += ResetPosition;
+        _interactable = GetComponent<XRGrabInteractable>();
 
         if (_isDeveloperMode)
             Debug.LogWarning($"{this} is developer mode: {_isDeveloperMode}");
+
+        if (_interactable == null)
+            Debug.LogWarning($"Null reference for {_interactable}");
     }
     protected virtual void Start() 
     {
+        GameManager.Instance.OnStartService += ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+
         _isClean = true;
         _coroutineRunning = false;
         _startPosition = transform.position;
@@ -45,16 +59,15 @@ public abstract class Equipment : MonoBehaviour
 
         if (_maxUsageCounter == 0)
             Debug.LogError($"Current max use for {this} is 0");
+
+        if (_interactable != null) 
+            HandManager.Instance.RegisterGrabbable(_interactable);
     }
+    protected virtual void Update() => Test();
     protected virtual void OnDestroy() 
     {
-        ResetPosition();
-
-        if (!_isDeveloperMode)
-            GameManager.Instance.OnStartService -= ResetPosition;
-
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
+        GameManager.Instance.OnStartService -= ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
     }
     protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
@@ -149,9 +162,6 @@ public abstract class Equipment : MonoBehaviour
         }
     }
 
-#region Testing
-
-    protected virtual void Update() => Test();
     protected virtual void Test()
     {
         if (Input.GetKeyDown(KeyCode.Space) && _isDeveloperMode)
@@ -161,14 +171,8 @@ public abstract class Equipment : MonoBehaviour
         }
     }
 
-
-#endregion
-
-#endregion
-
-#region Public
-
-#region Virtual
+    #endregion
+    #region Public
 
     public virtual void HitTheGround()
     {
@@ -181,9 +185,6 @@ public abstract class Equipment : MonoBehaviour
         ResetPosition();
     }
     public virtual void PickUpEquipment() {}
-
-#endregion
-
     public void IncrementUseCounter()
     {
         _usageCounter++;
@@ -198,20 +199,13 @@ public abstract class Equipment : MonoBehaviour
         _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
     }
 
-#endregion
-
-#region Helpers
+    #endregion
+    #region Helpers
 
     protected void ResetPosition() 
     {
         transform.position = _startPosition;
         transform.rotation = Quaternion.identity;
-    }
-    protected IEnumerator CO_Clean(Sponge sponge)
-    {
-        _coroutineRunning = true;
-        yield return new WaitForSeconds(2f);
-        SetClean(sponge);
     }
     protected void SetClean(Sponge sponge)
     {
@@ -231,5 +225,16 @@ public abstract class Equipment : MonoBehaviour
         StartCoroutine(CO_Clean(sponge));
     }
 
-#endregion
+    #endregion
+
+    #region Enumerators
+
+    protected IEnumerator CO_Clean(Sponge sponge)
+    {
+        _coroutineRunning = true;
+        yield return new WaitForSeconds(2f);
+        SetClean(sponge);
+    }
+
+    #endregion
 }

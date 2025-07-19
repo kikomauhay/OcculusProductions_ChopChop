@@ -17,6 +17,9 @@ public class SalmonIngredient : Ingredient
             OnBoardingHandler.Instance.PlayOnboarding();
             _tutorialDone = true;
         }
+
+        if(_interactable != null)
+            HandManager.Instance.RegisterGrabbable(_interactable);
     } 
     protected override void OnTriggerEnter(Collider other) { }
 

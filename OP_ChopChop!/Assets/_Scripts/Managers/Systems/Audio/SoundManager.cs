@@ -1,4 +1,4 @@
-using UnityEngine;
+    using UnityEngine;
 using System;
 
 public class SoundManager : Singleton<SoundManager> 
@@ -12,12 +12,10 @@ public class SoundManager : Singleton<SoundManager>
     [SerializeField] private bool _isDeveloperMode;
     private int _soundIndex = 0;
 
-    #endregion 
-
-    #region Methods
+    #endregion
 
     #region Unity
-
+        
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
     protected override void Awake() 
     {
@@ -28,29 +26,26 @@ public class SoundManager : Singleton<SoundManager>
             Debug.Log($"{name} developer mode: {_isDeveloperMode}");
     }
     private void Start() => GameManager.Instance.OnEndService += StopAllSounds;
+    private void Update() => test();
     private void OnDestroy() => GameManager.Instance.OnEndService -= StopAllSounds;    
-
-    #region Testing
-
     private void test()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow) && _isDeveloperMode)
+        if (!_isDeveloperMode) return;
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             _soundIndex++;
             Debug.Log(_soundIndex);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && _isDeveloperMode)
+        if (Input.GetKeyDown(KeyCode.Space))
             PlaySound(_sfx[_soundIndex].name);
+
+        if (Input.GetKeyDown(KeyCode.Delete))
+            PlaySound("wrong order");
     }
 
-    private void Update() => test();
-
     #endregion
-
-    #endregion
-    #region Public
-
     #region Audio Playback
 
     public void TogglePauseMusic() 
@@ -72,8 +67,9 @@ public class SoundManager : Singleton<SoundManager>
         if (_onboardingSource.isPlaying)
             _onboardingSource.Stop();
     }
-    public void PlaySound(string title) 
-    {    
+
+    public void PlaySound(string title)
+    {
         Sound s = Array.Find(_sfx, i => i.name == title);
 
         if (s == null)
@@ -82,14 +78,18 @@ public class SoundManager : Singleton<SoundManager>
             return;
         }
 
+        // pitch variation for the customers
+        if (title == "cat enter 01" || title == "cat enter 02")
+            _soundSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+
+        else _soundSource.pitch = s.Pitch;
+
         // adds the properties of the Sound to the AudioSource
         _soundSource.volume = s.Volume;
-        _soundSource.pitch = s.Pitch;
         _soundSource.loop = s.Loop;
         _soundSource.clip = s.Clip;
         _soundSource.spatialBlend = 1f;
 
-        // loops the sound if needed
         if (s.Loop)
             _soundSource.Play();
 
@@ -132,18 +132,17 @@ public class SoundManager : Singleton<SoundManager>
         _onboardingSource.clip = s.Clip;
         _onboardingSource.spatialBlend = 1f;
 
-        _onboardingSource.PlayOneShot(s.Clip);
+        _onboardingSource.Play();
     }
     
     public void StopMusic() => _musicSource.Stop();
     public void StopSound() => _soundSource.Stop();
     public void StopOnboarding() => _onboardingSource.Stop();
 
+    #endregion
+    #region Audio Balancing
 
-#endregion
-#region Audio Balancing
-
-    public void ToggleMute() 
+    public void ToggleMute()
     {
         _soundSource.mute = !_soundSource.mute;
         _musicSource.mute = !_musicSource.mute;
@@ -153,9 +152,5 @@ public class SoundManager : Singleton<SoundManager>
     public void SetMusicVolume(float v) => _musicSource.volume = v;
     public void SetMusicPitch(float p) => _musicSource.pitch= p;
 
-#endregion
-
-#endregion
-
-#endregion
+    #endregion
 }
