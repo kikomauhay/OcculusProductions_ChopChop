@@ -247,13 +247,16 @@ public class GameManager : Singleton<GameManager>
         Debug.Log($"waiting {serviceTimer}s to change to service");
         StartCoroutine(CO_ShiftCountdown(serviceTimer, GameShift.Service));
 
+        SoundManager.Instance.PlayMusic("pre-service bgm");
         ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
         ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
     }
     private void DoService()
     {
+        SoundManager.Instance.StopMusic();
         float timer = _isDeveloperMode ? _testTimer * 3f: FIVE_MINUTES; 
 
+        SoundManager.Instance.PlayMusic("service bgm");
         ClockScript.Instance.UpdateTimeRemaining(timer);
         ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
         SoundManager.Instance.PlayMusic("bgm");
@@ -267,6 +270,9 @@ public class GameManager : Singleton<GameManager>
     }
     private void DoPostService() // rating calculations
     {
+        SoundManager.Instance.StopMusic();
+        SoundManager.Instance.PlayMusic("post-service bgm");
+
         OnEndService?.Invoke();
         EnableEODReceipt();
         ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
