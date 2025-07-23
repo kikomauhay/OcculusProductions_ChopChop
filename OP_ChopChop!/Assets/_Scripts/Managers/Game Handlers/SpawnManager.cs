@@ -240,7 +240,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         _customerSeats[idx].IsEmpty = true;
         _newColliderChecks[idx].Order = null;
     }   
-    int GiveAvaiableSeat() // sets the index where the customer should sit
+    private int GiveAvaiableSeat() // sets the index where the customer should sit
     {
         for (int i = 0; i < _customerSeats.Length; i++)
         {

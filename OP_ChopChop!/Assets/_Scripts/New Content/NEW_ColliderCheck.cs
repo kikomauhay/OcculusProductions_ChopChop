@@ -37,6 +37,8 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
     private void Start()
     {
+        OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;
+
         _collider.isTrigger = true;
         _collider.enabled = true;
         _disableTimer = 3f; 
@@ -72,6 +74,8 @@ public class NEW_ColliderCheck : MonoBehaviour
         }
         else DoDishCollision(dish, plate);
     }
+    private void OnDestroy() => 
+        OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
     
     private void test()
     {
@@ -114,54 +118,76 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
     private void CheckFoodConition(NEW_Dish dish)
     {
-        if (dish.FoodCondition != FoodCondition.CLEAN) // contaminared order
+        if (dish.FoodCondition != FoodCondition.CLEAN)
         {
-            if (!_isTutorial) 
-            {
-                Order.CustomerSR = 0f;
-                StartCoroutine(Order.CO_DirtyReaction());
-                // Debug.LogWarning("Game Over!");
-            }
-            else SoundManager.Instance.PlaySound("contaminated order");
-            
+            TriggerContainatedOrder();            
             return;
         }
-        if (dish.DishPlatter != Order.WantedPlatter) // wrong order
+        if (dish.DishPlatter != Order.WantedPlatter) 
         {   
-            if (!_isTutorial)
-            {
-                Order.CustomerSR = 0f;
-                StartCoroutine(Order.CO_AngryReaction());
-            }
-            else SoundManager.Instance.PlaySound("wrong order");
-            
+            TriggerWrongOrder();            
             return;
         }
 
+        TriggerCorrectOrder(dish);
+        TriggerOnboarding();
+    }
+    private void TriggerContainatedOrder()
+    {
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+        {       
+            SoundManager.Instance.PlaySound("wrong");
+            SoundManager.Instance.PlaySound("contaminated order");
+            return;
+        }
+        
+        Order.CustomerSR = 0f;
+        StartCoroutine(Order.CO_DirtyReaction());
+        Debug.LogError("Player served a dirty order!");        
+    }
+    private void TriggerWrongOrder()
+    {
+        if (GameManager.Instance.CurrentShift == GameShift.Training)
+        {
+            SoundManager.Instance.PlaySound("wrong");
+            SoundManager.Instance.PlaySound("wrong order");
+            return;
+        }
+
+        Order.CustomerSR = 0f;
+        GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
+        StartCoroutine(Order.CO_AngryReaction());
+        Debug.LogError("Player served the wrong order!");        
+    }
+    private void TriggerCorrectOrder(NEW_Dish dish)
+    {
         // UX after serving the customer
         float dishScore = dish.Score * _dishPercantage;
         float patienceScore = Order.PatienceRate * _patiencePercentage;
         Order.CustomerSR = (dishScore + patienceScore) / 2f; // dish quality has more focus becuase of CAPSTN
+        
+        GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
         StartCoroutine(Order.CO_HappyReaction());
+    }
+    private void TriggerOnboarding()
+    {
+        if (!_isTutorial) return;
 
-        if (_isTutorial)
+        OnBoardingHandler.Instance.AddOnboardingIndex();
+        OnBoardingHandler.Instance.PlayOnboarding();
+
+        if (Order.IsTunaCustomer)
         {
-            OnBoardingHandler.Instance.AddOnboardingIndex();
-            OnBoardingHandler.Instance.PlayOnboarding();
+            ShopManager.Instance.ClearList();
+            Debug.LogWarning("Benny was served!");
 
-            if (Order.IsTunaCustomer)
-            {
-                ShopManager.Instance.ClearList();
-                Debug.LogWarning("Benny was served!");
-
-                // in case we find a timing defect for the onboarding
-                // DisableTutorial();
-            }
-            else Debug.LogWarning("Atrium was served!");
+            // in case we find a timing defect for the onboarding
+            // DisableTutorial();
         }
+        else Debug.LogWarning("Atrium was served!");
     }
     public void DisableTutorial() => _isTutorial = false;
-    
+
     #endregion
     
     #region Enumerators
