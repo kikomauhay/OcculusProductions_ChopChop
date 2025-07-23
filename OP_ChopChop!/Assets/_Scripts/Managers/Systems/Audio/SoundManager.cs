@@ -95,6 +95,8 @@ public class SoundManager : Singleton<SoundManager>
 
         else
             _soundSource.PlayOneShot(s.Clip);
+
+        _soundSource.pitch = 1f;
     }
     public void PlayMusic(string title) 
     {
@@ -108,12 +110,13 @@ public class SoundManager : Singleton<SoundManager>
 
         // adds the properties of the Sound to the AudioSource
         _musicSource.volume = s.Volume;
-        _musicSource.pitch = s.Pitch;
+        _musicSource.pitch = 1f; // s.Pitch;
         _musicSource.loop = s.Loop;
         _musicSource.clip = s.Clip;
         _musicSource.spatialBlend = 1f;
 
         _musicSource.Play();
+        _musicSource.pitch = 1f;
     }
     public void PlayOnboarding(string title) 
     {
@@ -133,6 +136,7 @@ public class SoundManager : Singleton<SoundManager>
         _onboardingSource.spatialBlend = 1f;
 
         _onboardingSource.Play();
+        _onboardingSource.pitch = 1f;
     }
     
     public void StopMusic() => _musicSource.Stop();
@@ -148,9 +152,9 @@ public class SoundManager : Singleton<SoundManager>
         _musicSource.mute = !_musicSource.mute;
     }
     public void SetSoundVolume(float v) => _soundSource.volume = v;
-    public void SetSoundPitch(float p) => _soundSource.pitch= p;
+    public void SetSoundPitch(float p) => _soundSource.pitch = p;
     public void SetMusicVolume(float v) => _musicSource.volume = v;
-    public void SetMusicPitch(float p) => _musicSource.pitch= p;
+    public void SetMusicPitch(float p) => _musicSource.pitch = p;
 
     #endregion
 }
