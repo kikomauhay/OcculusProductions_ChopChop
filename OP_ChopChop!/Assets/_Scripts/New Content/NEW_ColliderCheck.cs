@@ -62,17 +62,11 @@ public class NEW_ColliderCheck : MonoBehaviour
         NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
 
         // makes sure that you have both a PLATE & DISH script
-        if (dish == null)
+        if (dish != null && plate != null)
         {
-            Debug.LogError($"{other.name} has a Dish script");
-            SoundManager.Instance.PlaySound("wrong");
+            DoDishCollision(dish, plate);
+            Debug.Log("Finished dish collision!");
         }
-        else if (plate == null)
-        {
-            Debug.LogError($"{other.name} has a Plate script");
-            SoundManager.Instance.PlaySound("wrong");
-        }
-        else DoDishCollision(dish, plate);
     }
     private void OnDestroy() => 
         OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
@@ -102,8 +96,9 @@ public class NEW_ColliderCheck : MonoBehaviour
         }
         else 
         {
+            SoundManager.Instance.PlaySound("wrong");
             SoundManager.Instance.PlaySound("ingredient order");
-            Debug.LogWarning("Player served a ingredient to the customer!");
+            Debug.LogError("Player served a ingredient to the customer!");
         }
     }
     private void DoDishCollision(NEW_Dish dish, NEW_Plate plate)
@@ -120,17 +115,20 @@ public class NEW_ColliderCheck : MonoBehaviour
     {
         if (dish.FoodCondition != FoodCondition.CLEAN)
         {
-            TriggerContainatedOrder();            
-            return;
+            TriggerContainatedOrder();  
+            Debug.LogError("Triggered dirty order!");         
         }
-        if (dish.DishPlatter != Order.WantedPlatter) 
-        {   
-            TriggerWrongOrder();            
-            return;
+        else if (dish.DishPlatter == Order.WantedPlatter) 
+        {
+            TriggerCorrectOrder(dish);
+            TriggerOnboarding();
+            Debug.LogWarning("Triggered correct order!");         
         }
-
-        TriggerCorrectOrder(dish);
-        TriggerOnboarding();
+        else
+        {
+            TriggerWrongOrder();                   
+            Debug.LogError("Triggered wrong order!");
+        }
     }
     private void TriggerContainatedOrder()
     {
@@ -180,9 +178,6 @@ public class NEW_ColliderCheck : MonoBehaviour
         {
             ShopManager.Instance.ClearList();
             Debug.LogWarning("Benny was served!");
-
-            // in case we find a timing defect for the onboarding
-            // DisableTutorial();
         }
         else Debug.LogWarning("Atrium was served!");
     }
