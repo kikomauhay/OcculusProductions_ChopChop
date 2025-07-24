@@ -63,6 +63,8 @@ public class CustomerOrder : MonoBehaviour
         DestroyCustomerUI();
         DeinitializeEvents();
 
+        SpawnManager.Instance.RemoveCustomer(gameObject);
+
         if (_isTunaCustomer) // only for onboarding
         {
             SpawnManager.Instance.DisableTutorial();
@@ -111,9 +113,6 @@ public class CustomerOrder : MonoBehaviour
     }
     private void MakeSeatEmpty() // clears the seat of any customer references 
     {
-        // de-links the customer order & the seat
-        SpawnManager.Instance.RemoveCustomer(gameObject);
-
         if (!_isTutorial)
             SpawnManager.Instance.StartCustomerSpawning();
     }
@@ -192,7 +191,6 @@ public class CustomerOrder : MonoBehaviour
         GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
         
         MakeSeatEmpty();
-        DestoryGO();
     }
     public IEnumerator CO_AngryReaction() // customer got the wrong order
     {
