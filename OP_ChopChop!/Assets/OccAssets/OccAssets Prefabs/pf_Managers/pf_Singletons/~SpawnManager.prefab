@@ -129,6 +129,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isTutorial: 0
+  _dishPercantage: 0.8
+  _patiencePercentage: 0.2
+  _disableTimer: 0
   _isDevloperMode: 0
 --- !u!1 &1597545420897823763
 GameObject:
@@ -233,6 +236,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isTutorial: 0
+  _dishPercantage: 0.8
+  _patiencePercentage: 0.2
+  _disableTimer: 0
   _isDevloperMode: 0
 --- !u!1 &1597545421573541968
 GameObject:
@@ -293,6 +299,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isTutorial: 1
+  _dishPercantage: 0.8
+  _patiencePercentage: 0.2
+  _disableTimer: 0
   _isDevloperMode: 0
 --- !u!1 &1597545421980820010
 GameObject:
@@ -485,6 +494,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isTutorial: 0
+  _dishPercantage: 0.8
+  _patiencePercentage: 0.2
+  _disableTimer: 0
   _isDevloperMode: 0
 --- !u!1 &7564253948246715538
 GameObject:
@@ -571,6 +583,8 @@ MonoBehaviour:
   - {fileID: 4467525188659021933, guid: 2a16f8b1d12770346a2562f7071ea701, type: 3}
   - {fileID: 1981580915582403093, guid: 247f3a9b29b2e7a43960b4b13aa0aa3f, type: 3}
   - {fileID: 7213758601407137198, guid: 17ae512bf627727499a5abe0553f38bb, type: 3}
+  - {fileID: 5962376372239207823, guid: a3ba2d35104c7264f83932dd4ae0e88d, type: 3}
+  - {fileID: 506921516265250709, guid: d7fc67fb25e1d7d4e8a2c3faa1af6d41, type: 3}
   _salmonSashiPrefab: {fileID: 8589455853079741865, guid: babd4f77cefd2be4794cf66bf84f318a,
     type: 3}
   _tunaSashimiPrefab: {fileID: 5618999308171318900, guid: 6f234b21a3eb86347a34b9bcf0cdb5b3,
@@ -600,6 +614,7 @@ MonoBehaviour:
   _spawnCountdown: 2
   _spawnInterval: 10
   _isDeveloperMode: 0
+  _fishSliceSpawnPoint: {fileID: 0}
 --- !u!1 &7564253948344922535
 GameObject:
   m_ObjectHideFlags: 0

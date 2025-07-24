@@ -105,11 +105,10 @@ public class NEW_ColliderCheck : MonoBehaviour
     {
         // customer's reaction when getting the dish
         CheckFoodConition(dish); 
+        StartCoroutine(CO_DisableCollider());
         
         dish.DisableDish();
         plate.Served();          
-
-        StartCoroutine(CO_DisableCollider());
     }
     private void CheckFoodConition(NEW_Dish dish)
     {
@@ -166,6 +165,7 @@ public class NEW_ColliderCheck : MonoBehaviour
         
         GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
         StartCoroutine(Order.CO_HappyReaction());
+        // Destroy(Order.gameObject);
     }
     private void TriggerOnboarding()
     {
@@ -200,5 +200,5 @@ public class NEW_ColliderCheck : MonoBehaviour
         Debug.LogWarning("CustomerOrder is now null!");
     }
 
-    #endregion
+    #endregion  
 }
