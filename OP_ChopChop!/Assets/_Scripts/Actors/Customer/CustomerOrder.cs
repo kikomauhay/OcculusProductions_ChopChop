@@ -53,9 +53,10 @@ public class CustomerOrder : MonoBehaviour
         _actions = GetComponent<CustomerActions>();
 
         InitializeEvents();
-        CreateCustomerUI();
-        InitializeCustomerScore();
         InitializeWantedPlatter();
+        InitializeCustomerScore();
+
+        CreateCustomerUI();
         StartCoroutine(CO_PatienceCountdown());
     }
     private void OnDestroy()
@@ -113,6 +114,8 @@ public class CustomerOrder : MonoBehaviour
     }
     private void MakeSeatEmpty() // clears the seat of any customer references 
     {
+        DestoryGO();
+
         if (!_isTutorial)
             SpawnManager.Instance.StartCustomerSpawning();
     }
@@ -177,7 +180,6 @@ public class CustomerOrder : MonoBehaviour
         yield return new WaitForSeconds(REACTION_TIME);
 
         MakeSeatEmpty();
-        DestoryGO();
     }
     public IEnumerator CO_HappyReaction() // customer got the correct order
     {
@@ -203,7 +205,6 @@ public class CustomerOrder : MonoBehaviour
         // final actions
         GameManager.Instance.IncrementCustomersServed();
         MakeSeatEmpty();
-        DestoryGO();
     }
     public IEnumerator CO_DirtyReaction() // customer got an expired order
     {
