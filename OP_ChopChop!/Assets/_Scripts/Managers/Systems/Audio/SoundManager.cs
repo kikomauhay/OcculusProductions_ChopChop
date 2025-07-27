@@ -1,4 +1,4 @@
-using UnityEngine;
+    using UnityEngine;
 using System;
 
 public class SoundManager : Singleton<SoundManager> 
@@ -7,11 +7,10 @@ public class SoundManager : Singleton<SoundManager>
 
     [SerializeField] private AudioSource _soundSource, _musicSource, _onboardingSource;
     [SerializeField] private Sound[] _sfx, _bgm, _onb;
-    private int _soundIndex = 0;
 
     [Header("Debugging")]
     [SerializeField] private bool _isDeveloperMode;
-    [SerializeField] private float _minPitch, _maxPitch;
+    private int _soundIndex = 0;
 
     #endregion
 
@@ -28,7 +27,7 @@ public class SoundManager : Singleton<SoundManager>
     }
     private void Start() => GameManager.Instance.OnEndService += StopAllSounds;
     private void Update() => test();
-    private void OnDestroy() => GameManager.Instance.OnEndService -= StopAllSounds;
+    private void OnDestroy() => GameManager.Instance.OnEndService -= StopAllSounds;    
     private void test()
     {
         if (!_isDeveloperMode) return;
@@ -42,8 +41,8 @@ public class SoundManager : Singleton<SoundManager>
         if (Input.GetKeyDown(KeyCode.Space))
             PlaySound(_sfx[_soundIndex].name);
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-            PlaySound(UnityEngine.Random.value > 0.5f ? "cat enter 01" : "cat enter 02");
+        if (Input.GetKeyDown(KeyCode.Delete))
+            PlaySound("wrong order");
     }
 
     #endregion
@@ -68,6 +67,7 @@ public class SoundManager : Singleton<SoundManager>
         if (_onboardingSource.isPlaying)
             _onboardingSource.Stop();
     }
+
     public void PlaySound(string title)
     {
         Sound s = Array.Find(_sfx, i => i.name == title);
@@ -78,23 +78,25 @@ public class SoundManager : Singleton<SoundManager>
             return;
         }
 
+        // pitch variation for the customers
+        if (title == "cat enter 01" || title == "cat enter 02")
+            _soundSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+
+        else _soundSource.pitch = s.Pitch;
+
         // adds the properties of the Sound to the AudioSource
         _soundSource.volume = s.Volume;
         _soundSource.loop = s.Loop;
         _soundSource.clip = s.Clip;
         _soundSource.spatialBlend = 1f;
 
-        // pitch variety for the cat meows
-        if (title == "cat enter 01" || title == "cat enter 02")
-            _soundSource.pitch = UnityEngine.Random.Range(_minPitch, _maxPitch);
-
-        else _soundSource.pitch = s.Pitch;
-
-        // faucet sometimes needs to loop for a long tinme when it's opened
         if (s.Loop)
             _soundSource.Play();
 
-        else _soundSource.PlayOneShot(s.Clip);
+        else
+            _soundSource.PlayOneShot(s.Clip);
+
+        _soundSource.pitch = 1f;
     }
     public void PlayMusic(string title) 
     {
@@ -108,12 +110,13 @@ public class SoundManager : Singleton<SoundManager>
 
         // adds the properties of the Sound to the AudioSource
         _musicSource.volume = s.Volume;
-        _musicSource.pitch = s.Pitch;
+        _musicSource.pitch = 1f; // s.Pitch;
         _musicSource.loop = s.Loop;
         _musicSource.clip = s.Clip;
         _musicSource.spatialBlend = 1f;
 
         _musicSource.Play();
+        _musicSource.pitch = 1f;
     }
     public void PlayOnboarding(string title) 
     {
@@ -133,6 +136,7 @@ public class SoundManager : Singleton<SoundManager>
         _onboardingSource.spatialBlend = 1f;
 
         _onboardingSource.Play();
+        _onboardingSource.pitch = 1f;
     }
     
     public void StopMusic() => _musicSource.Stop();
@@ -148,9 +152,9 @@ public class SoundManager : Singleton<SoundManager>
         _musicSource.mute = !_musicSource.mute;
     }
     public void SetSoundVolume(float v) => _soundSource.volume = v;
-    public void SetSoundPitch(float p) => _soundSource.pitch= p;
+    public void SetSoundPitch(float p) => _soundSource.pitch = p;
     public void SetMusicVolume(float v) => _musicSource.volume = v;
-    public void SetMusicPitch(float p) => _musicSource.pitch= p;
+    public void SetMusicPitch(float p) => _musicSource.pitch = p;
 
     #endregion
 }

@@ -22,10 +22,9 @@ using System;
 
 public class GameManager : Singleton<GameManager>
 {
+    #region Properties
     public Action OnStartService, OnEndService;
     public InputActionReference Continue;
-
-    #region Properties
     public GameShift CurrentShift { get; private set; } = GameShift.Default;
     
     // DIFFICULTY
@@ -76,7 +75,7 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake() // set starting money
     {
         base.Awake();
-
+        
         CurrentPlayerMoney = _startingPlayerMoney;
         CustomersServed = 0;
         MaxCustomerCount = 3;
@@ -90,6 +89,7 @@ public class GameManager : Singleton<GameManager>
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
     }
+    private void Start() => StartCoroutine(CO_DelayedEventBind());
     private void Update() => Test();
     private void Test()
     {
@@ -217,7 +217,7 @@ public class GameManager : Singleton<GameManager>
         if (_isTutorial)
             EnableEODReceipt();
     }
-    public void DisableTutorial()
+    private void DisableTutorial()
     {
         if (!_isTutorial)
         {
@@ -227,6 +227,14 @@ public class GameManager : Singleton<GameManager>
 
         _isTutorial = false;
         OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
+
+        // removes uneccesary tutorial components
+        if (!_logoRemoved)
+        {
+            _logoRemoved = true;
+            _logo.SetActive(false);
+            Continue.action.performed += RemoveLogo;
+        }
     }
 
     #endregion
@@ -234,21 +242,23 @@ public class GameManager : Singleton<GameManager>
 
     private void DoPreService() // change to 1 min when done testing
     {
-        ClockScript.Instance.UpdateNameOfPhaseTxt("Pre-Service");
-
         float serviceTimer = _isDeveloperMode ? _testTimer : ONE_MINUTE;
 
         Debug.Log($"waiting {serviceTimer}s to change to service");
         StartCoroutine(CO_ShiftCountdown(serviceTimer, GameShift.Service));
 
+        SoundManager.Instance.PlayMusic("pre-service bgm");
         ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
-    }     
+        ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
+    }
     private void DoService()
     {
+        SoundManager.Instance.StopMusic();
         float timer = _isDeveloperMode ? _testTimer * 3f: FIVE_MINUTES; 
 
+        SoundManager.Instance.PlayMusic("service bgm");
         ClockScript.Instance.UpdateTimeRemaining(timer);
-        ClockScript.Instance.UpdateNameOfPhaseTxt("Service");
+        ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
         SoundManager.Instance.PlayMusic("bgm");
 
         OnStartService?.Invoke(); // all ingredients start decaying
@@ -260,8 +270,12 @@ public class GameManager : Singleton<GameManager>
     }
     private void DoPostService() // rating calculations
     {
+        SoundManager.Instance.StopMusic();
+        SoundManager.Instance.PlayMusic("post-service bgm");
+
         OnEndService?.Invoke();
         EnableEODReceipt();
+        ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
     }
     private void ChangeDifficuty(int score)
     {
@@ -395,7 +409,7 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlaySound("change shift");
         ChangeShift(shift);
     }
-    IEnumerator CO_DelayedEventBind()
+    private IEnumerator CO_DelayedEventBind()
     {
         yield return new WaitForSeconds(1f);
         OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using UnityEngine.XR.Interaction.Toolkit;
 
 /// <summary>
 /// 
@@ -43,6 +44,7 @@ public abstract class Ingredient : MonoBehaviour
 
     protected Vector3 _startPosition;
     protected MeshRenderer _rend;
+    protected XRGrabInteractable _interactable;
 
     #endregion
     #region Private
@@ -60,6 +62,7 @@ public abstract class Ingredient : MonoBehaviour
     protected void Awake()
     {
         _rend = GetComponent<MeshRenderer>();
+        _interactable = GetComponent<XRGrabInteractable>();
 
         if (_materials.Length != 3)
             Debug.LogWarning("Missing elements in materials");

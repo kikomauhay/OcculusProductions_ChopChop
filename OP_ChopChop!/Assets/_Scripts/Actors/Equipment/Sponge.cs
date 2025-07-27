@@ -1,32 +1,36 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 [RequireComponent(typeof(Trashable))]
 public class Sponge : MonoBehaviour
 {
-#region Readers
+    #region Properties
 
     public bool IsWet => _isWet;
     public bool IsClean => _isClean;
 
-#endregion
-
-#region Members
+    #endregion
+    #region SerializeField
 
     [SerializeField] private bool _isClean, _isWet;
     [SerializeField] private Material _wetMat, _cleanMat, _dirtyMat, _dirtyOSM;
 
+    #endregion
+    #region Private
     private MeshRenderer _rend;
+    private XRGrabInteractable _interactable;
     private Vector3 _startPosition;
     private const float WET_DURATION = 30f;
 
-#endregion
+    #endregion
 
-#region Unity
+    #region Unity
 
     private void Awake() 
     {
         _rend = GetComponent<MeshRenderer>();
+        _interactable = GetComponent<XRGrabInteractable>();
 
         if (!_isClean)
             Debug.LogWarning($"{this} is clean: {_isClean}");
@@ -36,27 +40,34 @@ public class Sponge : MonoBehaviour
     }
     private void Start()
     {
+        GameManager.Instance.OnStartService += ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+
         name = "Sponge";
         _isWet = false;
         _isClean = true;
 
         _startPosition = transform.position;
+
+        if(_interactable != null)
+            HandManager.Instance.RegisterGrabbable(_interactable);
     }
 
     private void OnDestroy()
     {
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
-            OnBoardingHandler.Instance.OnTutorialEnd -= HitTheFloor;
+        GameManager.Instance.OnStartService -= ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
     }
 
-    #endregion
+#endregion
 
-    #region Public
+#region Public
 
-    public void HitTheFloor()
+    public void ResetPosition() => transform.position = _startPosition;
+    public void HitTheGround()
     {
-        transform.position = _startPosition;
         transform.rotation = Quaternion.identity;
+        ResetPosition();
         SetDirty();
     }
     public void SetWet() // making the sponge wet also makes it clean 

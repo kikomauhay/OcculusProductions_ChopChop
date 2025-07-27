@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class SpawnManager : StaticInstance<SpawnManager>
 {
-    #region SerializeField
+#region Members
 
     [Header("Onboarding")]
     [SerializeField] private bool _isTutorial;
@@ -30,6 +30,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [Header("Customer Components")]
     [SerializeField] private CustomerSeat[] _customerSeats;
     [SerializeField] private NEW_ColliderCheck[] _newColliderChecks;
+    private List<GameObject> _seatedCustomers = new List<GameObject>();
 
     [Header("Customer Spawning Timers"), Tooltip("Can be changed to use for testing")]
     [SerializeField] private float _spawnCountdown;
@@ -38,17 +39,18 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [Header("Debugging")]
     [SerializeField] private bool _isDeveloperMode;
 
-    #endregion
-    #region Private
+    [Header("Fish Slice Spawn Point")]
+    [SerializeField] Transform _fishSliceSpawnPoint;
 
-    private List<GameObject> _seatedCustomers = new List<GameObject>();
+    public Transform FishSliceSpawnPoint{ get => _fishSliceSpawnPoint; set => _fishSliceSpawnPoint = value; }
+
     private int _spawnedCustomers;
 
-    #endregion
+#endregion
 
-    #region Unity
+#region Unity
 
-    protected override void Awake()
+    protected override void Awake() 
     {
         base.Awake();
 
@@ -75,22 +77,13 @@ public class SpawnManager : StaticInstance<SpawnManager>
         }
 
         if (!_isDeveloperMode)
-            StartCoroutine(CO_DelayedEventBinding());
+            StartCoroutine(DelayedEventBinding());
 
         else
             Debug.Log($"{name} developer mode: {_isDeveloperMode}");
     }
-    private void OnDestroy() // UNBIND FROM EVENTS
-    {
-        if (_isDeveloperMode) return;
 
-        GameManager.Instance.OnStartService -= StartCustomerSpawning;
-        GameManager.Instance.OnEndService -= ClearCustomerSeats;
-        OnBoardingHandler.Instance.OnTutorialEnd -= ClearCustomerSeats;
-    }
-
-    private void Update() => test();
-    private void test()
+    void Update()
     {
         if (!_isDeveloperMode) return;
 
@@ -100,9 +93,43 @@ public class SpawnManager : StaticInstance<SpawnManager>
         if (Input.GetKeyDown(KeyCode.LeftControl))
             SpawnTutorialCustomer(false);
     }
+    private void OnDestroy() // UNBIND FROM EVENTS
+    {
+        if (_isDeveloperMode) return;
 
-    #endregion
-    #region Spawning
+        GameManager.Instance.OnStartService -= StartCustomerSpawning;
+        GameManager.Instance.OnEndService -= ClearCustomerSeats;
+        OnBoardingHandler.Instance.OnTutorialEnd -= ClearCustomerSeats;
+    } 
+    
+    private IEnumerator CreateCustomer()
+    {
+        // prevents from adding too many customers
+        if (_spawnedCustomers < GameManager.Instance.MaxCustomerCount) 
+        {
+            yield return new WaitForSeconds(_spawnCountdown);
+            SpawnCustomer(GiveAvaiableSeat());
+        }
+
+        while (GameManager.Instance.CurrentShift == GameShift.Service)
+        {
+            // coroutine should stop spawning once all seats are full
+            if (_spawnedCustomers >= GameManager.Instance.MaxCustomerCount) 
+                yield break;
+
+            yield return new WaitForSeconds(_spawnInterval);  
+            SpawnCustomer(GiveAvaiableSeat());
+        }
+    }
+    private IEnumerator DelayedEventBinding()
+    {
+        yield return new WaitForSeconds(2f);
+        OnBoardingHandler.Instance.OnTutorialEnd += ClearCustomerSeats;
+    }
+    
+#endregion
+
+#region Spawning
 
     public GameObject SpawnSashimi(IngredientType type, Transform t)
     {
@@ -116,10 +143,10 @@ public class SpawnManager : StaticInstance<SpawnManager>
         return Instantiate(obj,
                            t.position, t.rotation,
                            _bins[(int)type]);
-    }
+    }    
     public void SpawnVFX(VFXType type, Transform t, float destroyTime)
-    {
-        GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type],
+    {   
+        GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type], 
                                              t.position, t.rotation,
                                              _bins[4]);
 
@@ -130,9 +157,9 @@ public class SpawnManager : StaticInstance<SpawnManager>
         if (idx == -1) return;
 
         if (GameManager.Instance.CurrentShift != GameShift.Service) return;
-
-        GameObject customer = SpawnObject(_customerPrefab,
-                                          _customerSeats[idx].transform,
+        
+        GameObject customer = SpawnObject(_customerPrefab, 
+                                          _customerSeats[idx].transform, 
                                           SpawnObjectType.CUSTOMER);
 
         CustomerActions customerActions = customer.GetComponent<CustomerActions>();
@@ -143,7 +170,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // links a box collider & seat to the customer
         colliderCheck.Order = customer.GetComponent<CustomerOrder>();
-
+        
         _seatedCustomers.Add(customer);
         customerActions.SeatIndex = idx;
 
@@ -198,20 +225,21 @@ public class SpawnManager : StaticInstance<SpawnManager>
         Debug.Log($"{newCollider} wanted Order: {newCollider.Order.WantedPlatter}");
     }
 
-    #endregion
-    #region Helpers
+#endregion
 
-    public void RemoveCustomer(GameObject customer)
+#region Customer Helpers
+
+    public void RemoveCustomer(GameObject customer) 
     {
         int idx = customer.GetComponent<CustomerActions>().SeatIndex;
-
+        
         // removes the customer from the list
         _seatedCustomers.Remove(customer);
 
         // removed any link from the removed customer 
         _customerSeats[idx].IsEmpty = true;
         _newColliderChecks[idx].Order = null;
-    }
+    }   
     private int GiveAvaiableSeat() // sets the index where the customer should sit
     {
         for (int i = 0; i < _customerSeats.Length; i++)
@@ -220,31 +248,27 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
             if (seat.IsEmpty)
                 return i;
-
+            
             else continue;
         }
         return -1; // all seats are empty
     }
-    public void DisableTutorial()
-    {
-        _isTutorial = false;
-        _tutorialCollider.GetComponent<NEW_ColliderCheck>().DisableTutorial();
-    }
 
-    #endregion
-    #region Event Methods
+#endregion
+    
+#region Event Methods
 
-    public void StartCustomerSpawning()
+    public void StartCustomerSpawning() 
     {
         transform.position = Vector3.zero;
-        StartCoroutine(CO_CreateCustomer());
+        StartCoroutine(CreateCustomer());
     }
     private void ClearCustomerSeats()
     {
         if (_customerSeats.Length > 1)
             foreach (CustomerSeat seat in _customerSeats)
-                seat.IsEmpty = true;
-
+                seat.IsEmpty = true;        
+                
         if (_newColliderChecks.Length > 1)
             foreach (NEW_ColliderCheck col in _newColliderChecks)
                 col.Order = null;
@@ -256,39 +280,16 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
             _seatedCustomers.Clear();
         }
-        StopAllCoroutines();
-    }
-
-    #endregion
-  
-    #region Enumerators
-
-    private IEnumerator CO_CreateCustomer()
-    {
-        // prevents from adding too many customers
-        if (_spawnedCustomers < GameManager.Instance.MaxCustomerCount)
-        {
-            yield return new WaitForSeconds(_spawnCountdown);
-            SpawnCustomer(GiveAvaiableSeat());
-        }
-
-        while (GameManager.Instance.CurrentShift == GameShift.Service)
-        {
-            // coroutine should stop spawning once all seats are full
-            if (_spawnedCustomers >= GameManager.Instance.MaxCustomerCount)
-                yield break;
-
-            yield return new WaitForSeconds(_spawnInterval);
-            SpawnCustomer(GiveAvaiableSeat());
-        }
-    }
-    private IEnumerator CO_DelayedEventBinding()
-    {
-        yield return new WaitForSeconds(2f);
-        OnBoardingHandler.Instance.OnTutorialEnd += ClearCustomerSeats;
+        StopAllCoroutines(); 
     }
     
-    #endregion
+#endregion
+
+    public void DisableTutorial()
+    {
+        _isTutorial = false;
+        _tutorialCollider.GetComponent<NEW_ColliderCheck>().DisableTutorial();
+    }
 }
 
 #region Enumerations

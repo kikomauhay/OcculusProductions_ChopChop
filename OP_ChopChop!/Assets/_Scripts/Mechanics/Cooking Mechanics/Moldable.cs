@@ -10,32 +10,20 @@ public class Moldable : MonoBehaviour
    
     private int _moldCounter, _moldStageIndex;
     private HashSet<IXRSelectInteractor> _interactors = new HashSet<IXRSelectInteractor>();
-    
-
-/*    protected override void OnEnable()
-    {
-        base.OnEnable();
-        selectEntered.AddListener(InsertInteractor);
-        selectExited.AddListener(MoldEvent);
-    }
-
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-        selectEntered.RemoveListener(InsertInteractor);
-        selectExited.RemoveListener(MoldEvent);
-    }*/
+    private XRInteractionManager _interactionManager;
 
     void Start()
     {
         _moldCounter = 0;
         _moldStageIndex = 0;
+
+        if(_interactionManager == null)
+            _interactionManager = FindObjectOfType<XRInteractionManager>();
     }
 #region Functions
 
     public void InsertInteractor(SelectEnterEventArgs args)
     {
-        Debug.LogWarning("Meow interactor works");
         _interactors.Add(args.interactorObject);
     }
 
@@ -60,8 +48,13 @@ public class Moldable : MonoBehaviour
             }
         }
     }
+
+    public void RemoveInteractor(SelectExitEventArgs args)
+    {
+        _interactors.Remove(args.interactorObject);
+    }
     
-    void MoldInstantiate(GameObject moldPrefab)
+    private void MoldInstantiate(GameObject moldPrefab)
     {
         Vector3 pos = transform.position;
         Quaternion rot = transform.rotation;
@@ -76,7 +69,7 @@ public class Moldable : MonoBehaviour
         {
             foreach(var interactor in _interactors)
             {
-                //interactionManager.SelectEnter(interactor, _grabInteractable);
+                _interactionManager.SelectEnter(interactor, _grabInteractable);
             }
         }
     }

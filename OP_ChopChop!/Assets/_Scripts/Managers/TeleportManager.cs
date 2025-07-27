@@ -1,19 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.InputSystem;
-using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
+using UnityEngine.Events;
+using UnityEngine;
 
 public class TeleportManager : Singleton<TeleportManager>
 {
     #region Members
-    [SerializeField] private GameObject[] rays;
+    [SerializeField] private GameObject _leftRay, _rightRay;
     public InputActionReference RightTeleport, LeftTeleport;
 
     private bool raysAreActive = false;
+
     #endregion
 
     #region Unity
+
     protected override void Awake()
     {
         base.Awake();
@@ -21,8 +22,8 @@ public class TeleportManager : Singleton<TeleportManager>
         RightTeleport.action.Enable();
         LeftTeleport.action.Enable();
 
-        RightTeleport.action.performed += ToggleRays;
-        LeftTeleport.action.performed += ToggleRays;
+        RightTeleport.action.performed += RightRayToggle;
+        LeftTeleport.action.performed += LeftRayToggle;
     }
 
     protected override void OnApplicationQuit()
@@ -32,74 +33,40 @@ public class TeleportManager : Singleton<TeleportManager>
         RightTeleport.action.Disable();
         LeftTeleport.action.Disable();
 
-        RightTeleport.action.performed -= ToggleRays;
-        LeftTeleport.action.performed -= ToggleRays;
+        RightTeleport.action.performed -= RightRayToggle;
+        LeftTeleport.action.performed -= LeftRayToggle;
     }
 
     void Start()
     {
-        foreach (GameObject ray in rays)
-        {
-            ray.SetActive(false);
-        }
+        _leftRay.SetActive(false);
+        _rightRay.SetActive(false);
     }
 
-    private void Update()
-    {
-        //debug, don't remove til TP is verified to be fixed
-        if (rays == null || !raysAreActive) return;
-
-        foreach (GameObject rayGO in rays)
-        {
-            if (rayGO.activeInHierarchy)
-            {
-                XRRayInteractor rayInteractor = rayGO.GetComponent<XRRayInteractor>();
-
-                if (rayInteractor != null && rayInteractor.TryGetCurrent3DRaycastHit(out RaycastHit hit))
-                {
-                    GameObject hitObject = hit.collider.gameObject;
-                    Debug.Log($"Ray hit object: {hitObject.name} on Layer: {LayerMask.LayerToName(hitObject.layer)}");
-                }
-            }
-        }
-    }
     #endregion
 
     #region Functions
-    private void ToggleRays(InputAction.CallbackContext context)
+    private void LeftRayToggle(InputAction.CallbackContext context)
     {
-        raysAreActive = !raysAreActive;
-        foreach (GameObject ray in rays)
-        {
-            ray.SetActive(raysAreActive);
-        }
+        _leftRay.SetActive(true);
     }
 
-    /*
-    private void ToggleRays(InputAction.CallbackContext context)
+    private void RightRayToggle(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            raysAreActive = !raysAreActive;
+        _rightRay.SetActive(true);
+    }
 
-            foreach (GameObject ray in rays)
-                ray.SetActive(raysAreActive);
-        }
-        else if (context.canceled)
+    public void DeactivateRay(SelectExitEventArgs args)
+    {
+        if(_leftRay.activeSelf)
         {
-            foreach (GameObject ray in rays)
-                ray.SetActive(raysAreActive);
+            _leftRay.SetActive(false);
         }
-        /*
-        //Not running from this point
-        else
+        if (_rightRay.activeSelf)
         {
-            foreach(GameObject ray in rays)
-            {
-                ray.SetActive(false);
-            }
-        } 
-    }*/
+            _rightRay.SetActive(false);
+        }
+    }
     #endregion
 }
 
