@@ -3799,6 +3799,31 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5573612367992895046, guid: 5ab3e672be634b5419c451c218720ae4,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.619
+      objectReference: {fileID: 0}
+    - target: {fileID: 5573612367992895046, guid: 5ab3e672be634b5419c451c218720ae4,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7043318
+      objectReference: {fileID: 0}
+    - target: {fileID: 5573612367992895046, guid: 5ab3e672be634b5419c451c218720ae4,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.70987093
+      objectReference: {fileID: 0}
+    - target: {fileID: 5573612367992895046, guid: 5ab3e672be634b5419c451c218720ae4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -180
+      objectReference: {fileID: 0}
+    - target: {fileID: 5573612367992895046, guid: 5ab3e672be634b5419c451c218720ae4,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90.449
+      objectReference: {fileID: 0}
     - target: {fileID: 7269845803971795389, guid: 5ab3e672be634b5419c451c218720ae4,
         type: 3}
       propertyPath: m_IsTrigger
@@ -11064,8 +11089,8 @@ Transform:
   m_GameObject: {fileID: 9223341567253975225}
   m_LocalRotation: {x: -0, y: 0.65745384, z: -0, w: 0.7534949}
   m_LocalPosition: {x: 0.013804138, y: -0.02120018, z: 0.055300236}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1569784745}
   m_RootOrder: 2
@@ -11471,20 +11496,7 @@ MonoBehaviour:
       m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1138800542123962652, guid: ab95a20a6b1df2648b5aaa58e1058807,
-          type: 3}
-        m_TargetAssemblyTypeName: HandManager, Assembly-CSharp
-        m_MethodName: DecrementUsage
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
