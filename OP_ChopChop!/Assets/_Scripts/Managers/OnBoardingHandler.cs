@@ -77,6 +77,64 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             Debug.LogWarning($"Missing elements in _highlightObjects. Current count: {_tutorialComponents.Length}");       
     }
     private void Update() => Test();
+    private void Test()
+    {
+        if (!_isDeveloperMode) return;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PlayOnboarding();
+            Debug.Log($"Current step: 0{CurrentStep + 1}");
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Debug.Log($"{this} current step: 0{CurrentStep}");
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            CurrentStep = 0;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            CurrentStep = 1;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            CurrentStep = 2;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            CurrentStep = 3;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            CurrentStep = 4;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            CurrentStep = 5;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            CurrentStep = 6;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            CurrentStep = 7;
+            _isTutorialPlaying = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            CurrentStep = 8;
+            _isTutorialPlaying = false;
+        }
+    }
 
     #endregion
     #region Tutorial
@@ -157,64 +215,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             default: break;
         }
     }
-    private void Test()
-    {
-        if (!_isDeveloperMode) return;
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PlayOnboarding();
-            Debug.Log($"Current step: 0{CurrentStep + 1}");
-        }
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Debug.Log($"{this} current step: 0{CurrentStep}");
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            CurrentStep = 0;
-            _isTutorialPlaying = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            CurrentStep = 1;
-            _isTutorialPlaying = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            CurrentStep = 2;
-            _isTutorialPlaying = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            CurrentStep = 3;
-            _isTutorialPlaying = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            CurrentStep = 4;
-            _isTutorialPlaying = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            CurrentStep = 5;
-            _isTutorialPlaying = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            CurrentStep = 6;
-            _isTutorialPlaying = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            CurrentStep = 7;
-            _isTutorialPlaying = false;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            CurrentStep = 8;
-            _isTutorialPlaying = false;
-        }
-    }
+    
 
     #endregion
 

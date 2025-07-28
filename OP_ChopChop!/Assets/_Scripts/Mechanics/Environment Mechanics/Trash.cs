@@ -15,7 +15,7 @@ public class Trash : MonoBehaviour
         }
         if (obj.GetComponent<Sponge>() != null)
         {
-            obj.GetComponent<Sponge>().ResetPosition();
+            obj.GetComponent<Sponge>().HitTheFloor();
             return;
         }
         
