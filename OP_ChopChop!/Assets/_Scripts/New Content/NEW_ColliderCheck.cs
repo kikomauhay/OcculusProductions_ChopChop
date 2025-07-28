@@ -28,7 +28,7 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void Awake()
     {
         _collider = GetComponent<BoxCollider>();
-
+        s
         if (_isDevloperMode)
             Debug.Log($"{this} developer mode: {_isDevloperMode}");
 
@@ -84,9 +84,6 @@ public class NEW_ColliderCheck : MonoBehaviour
 
     private void DoIngredientCollision(Ingredient ing)
     {
-        Destroy(ing.gameObject);
-
-        // the player shouldn't get a Game Over in the tutorial
         if (GameManager.Instance.CurrentShift != GameShift.Training)
         {
             Order.CustomerSR = 0f;
@@ -117,44 +114,46 @@ public class NEW_ColliderCheck : MonoBehaviour
             TriggerContainatedOrder();  
             Debug.LogError("Triggered dirty order!");         
         }
-        else if (dish.DishPlatter == Order.WantedPlatter) 
+        else if (dish.DishPlatter != Order.WantedPlatter) 
+        {
+            TriggerWrongOrder();                   
+            Debug.LogError("Triggered wrong order!");
+        }
+        else
         {
             TriggerCorrectOrder(dish);
             TriggerOnboarding();
             Debug.LogWarning("Triggered correct order!");         
         }
-        else
-        {
-            TriggerWrongOrder();                   
-            Debug.LogError("Triggered wrong order!");
-        }
     }
     private void TriggerContainatedOrder()
     {
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
+        if (GameManager.Instance.CurrentShift != GameShift.Training)
         {       
+            Order.CustomerSR = 0f;
+            StartCoroutine(Order.CO_DirtyReaction());
+            Debug.LogError("Player served a dirty order!");        
+        }
+        else
+        {
             SoundManager.Instance.PlaySound("wrong");
             SoundManager.Instance.PlaySound("contaminated order");
-            return;
-        }
-        
-        Order.CustomerSR = 0f;
-        StartCoroutine(Order.CO_DirtyReaction());
-        Debug.LogError("Player served a dirty order!");        
+        }        
     }
     private void TriggerWrongOrder()
     {
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
+        if (GameManager.Instance.CurrentShift != GameShift.Training)
+        {
+            Order.CustomerSR = 0f;
+            GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
+            StartCoroutine(Order.CO_An gryReaction());
+            Debug.LogError("Player served the wrong order!");
+        }
+        else
         {
             SoundManager.Instance.PlaySound("wrong");
             SoundManager.Instance.PlaySound("wrong order");
-            return;
         }
-
-        Order.CustomerSR = 0f;
-        GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
-        StartCoroutine(Order.CO_AngryReaction());
-        Debug.LogError("Player served the wrong order!");        
     }
     private void TriggerCorrectOrder(NEW_Dish dish)
     {
