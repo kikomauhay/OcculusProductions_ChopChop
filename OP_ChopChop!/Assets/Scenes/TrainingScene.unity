@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isInteractable: 0
-  _tutorialIndex: 2
+  _tutorialIndex: 1
 --- !u!1 &11013436
 GameObject:
   m_ObjectHideFlags: 0
@@ -5684,21 +5684,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _highlightObjects:
   - {fileID: 1946015445}
-  - {fileID: 1837609475}
   - {fileID: 1964793981}
-  - {fileID: 0}
+  - {fileID: 2005790309}
   - {fileID: 997120328}
   - {fileID: 420081123}
+  - {fileID: 1837609475}
   - {fileID: 2119257857}
   - {fileID: 1454716489}
   - {fileID: 2119257857}
   _tutorialComponents:
   - {fileID: 1946015446}
-  - {fileID: 1837609474}
   - {fileID: 26}
-  - {fileID: 0}
+  - {fileID: 2005790310}
   - {fileID: 2022151610}
   - {fileID: 420081124}
+  - {fileID: 1837609474}
   - {fileID: 2119257858}
   - {fileID: 1454716490}
   - {fileID: 2119257858}
@@ -6162,7 +6162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isInteractable: 0
-  _tutorialIndex: 0
+  _tutorialIndex: 7
 --- !u!1 &1491011498
 GameObject:
   m_ObjectHideFlags: 0
@@ -7368,6 +7368,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 28898181}
     m_Modifications:
+    - target: {fileID: 1837609476, guid: 7a609331d762229458520779795f465a, type: 3}
+      propertyPath: _tutorialIndex
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7156260249628498118, guid: 7a609331d762229458520779795f465a,
         type: 3}
       propertyPath: m_RootOrder
@@ -8460,6 +8464,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _outlineMat: {fileID: 2100000, guid: 2c8b06da621f3dd42b2b5de686d96521, type: 2}
+--- !u!114 &2005790310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005790308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565c6f2ef42812a42b1e12206e872c47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isInteractable: 1
+  _tutorialIndex: 0
 --- !u!1 &2006880627
 GameObject:
   m_ObjectHideFlags: 0
@@ -8629,6 +8647,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171731960461472412, guid: 5dd979da196494d4087777069c5aa1b5,
+        type: 3}
+      propertyPath: _tutorialIndex
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7171731960461472412, guid: 5dd979da196494d4087777069c5aa1b5,
         type: 3}
