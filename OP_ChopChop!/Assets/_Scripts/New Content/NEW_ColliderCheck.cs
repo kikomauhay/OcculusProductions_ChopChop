@@ -28,7 +28,6 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void Awake()
     {
         _collider = GetComponent<BoxCollider>();
-        s
         if (_isDevloperMode)
             Debug.Log($"{this} developer mode: {_isDevloperMode}");
 
@@ -146,7 +145,7 @@ public class NEW_ColliderCheck : MonoBehaviour
         {
             Order.CustomerSR = 0f;
             GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
-            StartCoroutine(Order.CO_An gryReaction());
+            StartCoroutine(Order.CO_AngryReaction());
             Debug.LogError("Player served the wrong order!");
         }
         else
@@ -195,7 +194,7 @@ public class NEW_ColliderCheck : MonoBehaviour
         _collider.enabled = true;
         Debug.LogWarning("Collider enabled!");
 
-        Order = null;
+        //Order = null;
         Debug.LogWarning("CustomerOrder is now null!");
     }
 
