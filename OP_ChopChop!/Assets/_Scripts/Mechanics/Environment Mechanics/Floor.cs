@@ -21,7 +21,7 @@ public class Floor : MonoBehaviour
 
         if (obj.GetComponent<Sponge>() != null)
         {
-            obj.GetComponent<Sponge>().HitTheFloor();
+            obj.GetComponent<Sponge>().HitTheGround();
             return;
         }
 
