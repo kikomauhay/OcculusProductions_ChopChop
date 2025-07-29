@@ -238,7 +238,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // removed any link from the removed customer 
         _customerSeats[idx].IsEmpty = true;
-        _newColliderChecks[idx].Order = null;
+        // _newColliderChecks[idx].Order = null;
     }   
     private int GiveAvaiableSeat() // sets the index where the customer should sit
     {
