@@ -6,10 +6,9 @@ using UnityEngine;
 public class TeleportManager : Singleton<TeleportManager>
 {
     #region Members
+
     [SerializeField] private GameObject _leftRay, _rightRay;
     public InputActionReference RightTeleport, LeftTeleport;
-
-    private bool raysAreActive = false;
 
     #endregion
 

@@ -8,7 +8,7 @@ public class CustomerOrder : MonoBehaviour
     #region Properties
 
     public DishPlatter WantedPlatter { get; private set; } // what dish the customer wants to order   
-    public float CustomerSR { get; set; }                  // (FoodScore of dish + _patienceRate) / 2
+    public float CustomerSR { get; set; }                  // (FoodScore of dish * 0.8 + _patienceRate * 0.2) / 2
     public bool IsLastCustomer { get; set; } = false;
     public float PatienceRate => _patienceDecreaseRate;
     public bool IsTutorial => _isTutorial; 
@@ -34,68 +34,46 @@ public class CustomerOrder : MonoBehaviour
     [SerializeField] private bool _isTutorial;
     [SerializeField] private bool _isTunaCustomer;
    
+    #endregion
+    #region Private
+
     private CustomerAppearance _appearance;
     private CustomerActions _actions;
     private GameObject _customerOrderUI;
     private float _customerScore; // starts at 100 and decreases over time
+    private const float REACTION_TIME = 1f;
 
-#endregion
+    #endregion
 
     #region Unity
 
     private void Start()
     {
-        if (!_isTutorial)
-            GameManager.Instance.OnEndService += DestroyOrderUI;
-        
         _appearance = GetComponent<CustomerAppearance>();
         _actions = GetComponent<CustomerActions>();
 
-        switch (GameManager.Instance.Difficulty) // will decrease overtime
-        {
-            case GameDifficulty.EASY:   _customerScore = 110f; break;
-            case GameDifficulty.NORMAL: _customerScore = 100f; break;
-            case GameDifficulty.HARD:   _customerScore = 90f;  break;
-            default:                                           break;
-        }
-
-        if (_isTutorial)
-        {
-            _patienceDecreaseRate = 0f;
-            WantedPlatter = _isTunaCustomer ? 
-                               DishPlatter.SASHIMI_TUNA : 
-                               DishPlatter.NIGIRI_SALMON;
-
-            OnBoardingHandler.Instance.OnTutorialEnd += DestoryGO;
-        }
-        else 
-        {
-            _patienceDecreaseRate = 1.65f; // referenced from the document
-            WantedPlatter = (DishPlatter)Random.Range(0, _dishOrdersUI.Length);
-        }
+        InitializeEvents();
+        InitializeWantedPlatter();
+        InitializeCustomerScore();
 
         CreateCustomerUI();
         StartCoroutine(CO_PatienceCountdown());
     }
     private void OnDestroy()
-    {
-        if (_isTutorial)
-        {
-            OnBoardingHandler.Instance.OnTutorialEnd -= DestoryGO;
-            Destroy(_customerOrderUI);
-        }
-        else GameManager.Instance.OnEndService -= DestroyOrderUI; 
+    {        
+        DestroyCustomerUI();
+        DeinitializeEvents();
 
-        if (_isTunaCustomer)
+        SpawnManager.Instance.RemoveCustomer(gameObject);
+
+        if (_isTunaCustomer) // only for onboarding
         {
             SpawnManager.Instance.DisableTutorial();
             ShopManager.Instance.ClearList();
             return;
         }
 
-        if (!IsLastCustomer) return;
-
-        if (GameManager.Instance.CurrentShift == GameShift.Service)
+        if (GameManager.Instance.CurrentShift == GameShift.Service && IsLastCustomer)
         {
             GameManager.Instance.StopAllCoroutines();
             GameManager.Instance.ChangeShift(GameShift.PostService);
@@ -105,9 +83,30 @@ public class CustomerOrder : MonoBehaviour
     #endregion
     #region Helpers
 
-    private void CreateCustomerUI()
+    private void InitializeCustomerScore()
     {
-        // aligns customer UI & customer order
+        switch (GameManager.Instance.Difficulty) // will decrease overtime
+        {
+            // updated starting score to have an emphasis on food quality
+            case GameDifficulty.EASY:   _customerScore = 150f; break;
+            case GameDifficulty.NORMAL: _customerScore = 125f; break;
+            case GameDifficulty.HARD:   _customerScore = 110f; break;
+            default:                                           break;
+        }
+    }
+    private void InitializeWantedPlatter()
+    {
+        if (!_isTutorial)
+        {
+            WantedPlatter = (DishPlatter)Random.Range(0, _dishOrdersUI.Length);
+            return;
+        }
+        
+        WantedPlatter = _isTunaCustomer ? DishPlatter.SASHIMI_TUNA : 
+                                          DishPlatter.NIGIRI_SALMON;
+    }
+    private void CreateCustomerUI() // aligns Order UI & Customer Order
+    {
         _customerOrderUI = Instantiate(_dishOrdersUI[_isTutorial ? 0 : (int)WantedPlatter], 
                                        _orderUITransform.position,
                                        _orderUITransform.rotation,
@@ -115,20 +114,28 @@ public class CustomerOrder : MonoBehaviour
     }
     private void MakeSeatEmpty() // clears the seat of any customer references 
     {
-        // de-links the customer order & the seat
-        SpawnManager.Instance.RemoveCustomer(gameObject);
+        DestoryGO();
 
         if (!_isTutorial)
-        {
             SpawnManager.Instance.StartCustomerSpawning();
-            GameManager.Instance.AddToCustomerScores(CustomerSR);
-        }
-
-        // destroys both the customer and its UI
-        DestroyOrderUI();
-        DestoryGO();
     }
-    private void DestroyOrderUI() => Destroy(_customerOrderUI);
+    private void InitializeEvents()
+    {
+        if (_isTutorial)
+            OnBoardingHandler.Instance.OnTutorialEnd += DestoryGO;
+
+        else 
+            GameManager.Instance.OnEndService += DestroyCustomerUI;
+    }
+    private void DeinitializeEvents()
+    {
+        if (_isTutorial)
+            OnBoardingHandler.Instance.OnTutorialEnd -= DestoryGO;
+        
+        else 
+            GameManager.Instance.OnEndService -= DestroyCustomerUI; 
+    }
+    private void DestroyCustomerUI() => Destroy(_customerOrderUI);
     private void DestoryGO() => Destroy(gameObject);
 
     #endregion
@@ -169,7 +176,8 @@ public class CustomerOrder : MonoBehaviour
     {
         _appearance.SetAngryEmotion(2);
         SoundManager.Instance.PlaySound("cat angry");
-        yield return new WaitForSeconds(_reactionTimer);
+        // yield return new WaitForSeconds(_reactionTimer);
+        yield return new WaitForSeconds(REACTION_TIME);
 
         MakeSeatEmpty();
     }
@@ -178,20 +186,21 @@ public class CustomerOrder : MonoBehaviour
         _appearance.SetFacialEmotion(FaceVariant.HAPPY);
         _actions.TriggerEating();
         SoundManager.Instance.PlaySound("cat happy");
-        // StartCoroutine(_appearance.DoChweing(_customerScore));
-        yield return new WaitForSeconds(_reactionTimer);
+        // yield return new WaitForSeconds(_reactionTimer);
+        yield return new WaitForSeconds(REACTION_TIME);
 
         GameManager.Instance.IncrementCustomersServed();
         GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
+        
         MakeSeatEmpty();
     }
     public IEnumerator CO_AngryReaction() // customer got the wrong order
     {
-        // initial reaction
         _appearance.SetAngryEmotion(1);
         _customerScore = 0f;
         SoundManager.Instance.PlaySound("cat angry");
-        yield return new WaitForSeconds(_reactionTimer);
+        // yield return new WaitForSeconds(_reactionTimer);
+        yield return new WaitForSeconds(REACTION_TIME);
 
         // final actions
         GameManager.Instance.IncrementCustomersServed();
@@ -199,16 +208,15 @@ public class CustomerOrder : MonoBehaviour
     }
     public IEnumerator CO_DirtyReaction() // customer got an expired order
     {
-        // inital reaction
         _appearance.SetFacialEmotion(FaceVariant.SUS);
         _customerScore = 0f;
         SoundManager.Instance.PlaySound("cat yuck");
-        yield return new WaitForSeconds(_reactionTimer);
+        // yield return new WaitForSeconds(_reactionTimer);
+        yield return new WaitForSeconds(REACTION_TIME);
 
-        // final actions
         GameManager.Instance.IncrementCustomersServed();
         StartCoroutine(GameManager.Instance.CO_CloseDownShop());
     }       
 
-#endregion
+    #endregion
 }

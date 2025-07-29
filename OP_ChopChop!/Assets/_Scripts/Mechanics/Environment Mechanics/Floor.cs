@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
-#region Unity 
+    #region Unity 
 
     private void OnCollisionEnter(Collision other)
     {
@@ -16,6 +16,12 @@ public class Floor : MonoBehaviour
         if (obj.GetComponent<Trashable>() == null) 
         {
             Debug.LogError($"{obj.name} is not a trashable object!");
+            return;
+        }
+
+        if (obj.GetComponent<Sponge>() != null)
+        {
+            obj.GetComponent<Sponge>().HitTheGround();
             return;
         }
 
@@ -37,9 +43,9 @@ public class Floor : MonoBehaviour
         }
     }
 
-#endregion
+    #endregion
 
-#region Collision
+    #region Helpers
 
     private void DoIngredientLogic(Ingredient ing)
     {
@@ -69,7 +75,7 @@ public class Floor : MonoBehaviour
         Debug.LogWarning($"{food.name} landed on the floor!");
     }
     private void DoEquipmentLogic(Equipment eq)
-    {             
+    {
         if (eq == null)
         {
             Debug.LogError($"{eq.name} is not an equipment");
@@ -81,5 +87,5 @@ public class Floor : MonoBehaviour
         // Debug.LogWarning($"{eq.name} landed on the floor!");
     } 
 
-#endregion
+    #endregion
 }

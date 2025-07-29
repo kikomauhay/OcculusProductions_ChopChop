@@ -32,7 +32,6 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
     [SerializeField] private GameObject[] _dirtyColliders;
     private const float ONE_MINUTE = 60f;
-    private float _decayTimer, _decayRate, _cleanlinessThreshold;
     private int _maxDirtyColliders;
     private bool _canClean;
 
@@ -49,10 +48,7 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
 
         KitchenScore = 85f; // so that even if there's only 1 dirty collider (needs balance testing)
         HandUsageCounter = 30;
-        _decayTimer = 5f;
-        _decayRate = 5f;
         _maxDirtyColliders = 1;
-        _cleanlinessThreshold = 80f; // kitchen needs to go below this score to start cleaning 
         _canClean = false;           // prevents the player from cleaning too much
 
         if (_maxDirtyColliders < 1)
