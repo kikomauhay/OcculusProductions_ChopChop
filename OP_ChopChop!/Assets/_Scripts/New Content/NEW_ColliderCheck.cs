@@ -165,6 +165,9 @@ public class NEW_ColliderCheck : MonoBehaviour
         GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
         StartCoroutine(Order.CO_HappyReaction());
         // Destroy(Order.gameObject);
+
+        Order = null;
+        Debug.LogWarning("CustomerOrder is now null!");
     }
     private void TriggerOnboarding()
     {
@@ -194,9 +197,6 @@ public class NEW_ColliderCheck : MonoBehaviour
 
         _collider.enabled = true;
         Debug.LogWarning("Collider enabled!");
-
-        Order = null;
-        Debug.LogWarning("CustomerOrder is now null!");
     }
 
     #endregion  
