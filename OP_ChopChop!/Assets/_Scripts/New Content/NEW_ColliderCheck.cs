@@ -37,6 +37,7 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void Start()
     {
         OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;
+        GameManager.Instance.OnStartService += DisableTutorial;
 
         _collider.isTrigger = true;
         _collider.enabled = true;
@@ -67,8 +68,11 @@ public class NEW_ColliderCheck : MonoBehaviour
             Debug.Log("Finished dish collision!");
         }
     }
-    private void OnDestroy() =>
+    private void OnDestroy()
+    {
         OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
+        GameManager.Instance.OnStartService -= DisableTutorial;
+    }
 
     private void test()
     {
@@ -100,8 +104,8 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void DoDishCollision(NEW_Dish dish, NEW_Plate plate)
     {
         // customer's reaction when getting the dish
-        StartCoroutine(CO_DisableCollider());
         CheckFoodConition(dish);
+        StartCoroutine(CO_DisableCollider());
 
         dish.DisableDish();
         plate.Served();
@@ -133,7 +137,7 @@ public class NEW_ColliderCheck : MonoBehaviour
             StartCoroutine(Order.CO_DirtyReaction());
             Debug.LogError("Player served a dirty order!");
         }
-        else
+        else if (_isTutorial)
         {
             SoundManager.Instance.PlaySound("wrong");
             SoundManager.Instance.PlaySound("contaminated order");
