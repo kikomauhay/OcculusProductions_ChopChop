@@ -12,7 +12,7 @@ public class NEW_ColliderCheck : MonoBehaviour
     #region Private
 
     [SerializeField] private bool _isTutorial;
-    [SerializeField] private float _dishPercantage = 0.8f;
+    [SerializeField] private float _dishPercentage = 1.8f;
     [SerializeField] private float _patiencePercentage = 0.2f;
     [SerializeField] private float _disableTimer;
 
@@ -125,8 +125,13 @@ public class NEW_ColliderCheck : MonoBehaviour
         else
         {
             TriggerCorrectOrder(dish);
-            TriggerOnboarding();
-            Debug.LogWarning("Triggered correct order!");
+
+            if (GameManager.Instance.CurrentShift == GameShift.Training)
+            {
+                Order = null;
+                TriggerOnboarding();
+                Debug.LogWarning("Triggered correct order!");
+            }
         }
     }
     private void TriggerContainatedOrder()
@@ -161,9 +166,10 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void TriggerCorrectOrder(NEW_Dish dish)
     {
         // UX after serving the customer
-        float dishScore = dish.Score * _dishPercantage;
+        float dishScore = dish.Score * _dishPercentage;
         float patienceScore = Order.PatienceRate * _patiencePercentage;
         Order.CustomerSR = (dishScore + patienceScore) / 2f; // dish quality has more focus becuase of CAPSTN
+        Debug.Log($"{this}: {(dishScore + patienceScore) / 2f}");
 
         GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
         StartCoroutine(Order.CO_HappyReaction());
@@ -194,6 +200,9 @@ public class NEW_ColliderCheck : MonoBehaviour
         _collider.enabled = false;
         yield return new WaitForSeconds(_disableTimer);
         _collider.enabled = true;
+
+        if (GameManager.Instance.CurrentShift == GameShift.Service) 
+            Order = null; // need this here so it doesn't trigger a lot of times 
     }
 
     #endregion  

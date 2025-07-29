@@ -11,17 +11,14 @@ using UnityEngine;
 [RequireComponent(typeof(Trashable))]
 public class UPD_Food : MonoBehaviour
 {
-
-#region Members
-
-#region Properties
+    #region Properties
 
     public FoodCondition Condition => _foodCondition;
     public DishPlatter OrderType => _orderType;
     public float Score => _foodScore;
 
-#endregion
-#region Private
+    #endregion
+    #region Private
 
     [Header("Food Attrbutes")]
     [SerializeField] private FoodCondition _foodCondition;
@@ -34,13 +31,10 @@ public class UPD_Food : MonoBehaviour
 
     private Renderer _rend;
 
-#endregion
 
 #endregion
 
-#region Methods
-
-#region Unity
+    #region Unity
 
     private void Awake() 
     {
@@ -138,8 +132,8 @@ public class UPD_Food : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-#endregion
-#region Public
+    #endregion
+    #region Public
 
     public void SetRotten()
     {
@@ -179,13 +173,14 @@ public class UPD_Food : MonoBehaviour
         SoundManager.Instance.PlaySound(soundName);
     }
 
-#endregion
-
     #endregion
+    #region
 
     private IEnumerator CO_StartRotting()
     {
         yield return new WaitForSeconds(10f);
         SetRotten();
     }
+
+    #endregion
 }

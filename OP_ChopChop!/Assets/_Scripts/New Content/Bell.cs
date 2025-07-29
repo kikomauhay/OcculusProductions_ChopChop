@@ -52,16 +52,16 @@ public class Bell : XRBaseInteractable
         if (_gameMgr.CurrentShift == GameShift.Training)
         {
             // when you press the bell in TRS, the tutorial stops and you immediately go to MGS
-            OnBoardingHandler.Instance.Disable();
             Debug.LogWarning("Tutorial disabled!");
 
             // UX for the scene change
             SoundManager.Instance.PlaySound("change shift");
-            StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
 
             // other triggers to remove any tutorial logic
-            _gameMgr.ChangeShift(GameShift.PreService);
             _onbHandler.OnTutorialEnd?.Invoke();
+            OnBoardingHandler.Instance.Disable();
+            StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
+            _gameMgr.ChangeShift(GameShift.PreService);
             
             // Debug.LogWarning("Loading to MGS");
         }
