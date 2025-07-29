@@ -99,11 +99,10 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
     private void DoDishCollision(NEW_Dish dish, NEW_Plate plate)
     {
+        StartCoroutine(CO_DisableCollider());
         CheckFoodConition(dish);
         dish.DisableDish();
         plate.Served();         
-        
-        StartCoroutine(CO_DisableCollider());
     }
     private void CheckFoodConition(NEW_Dish dish)
     {
@@ -186,11 +185,8 @@ public class NEW_ColliderCheck : MonoBehaviour
     private IEnumerator CO_DisableCollider()
     {
         _collider.enabled = false;
-        Debug.LogWarning("Collider disabled!");
         yield return new WaitForSeconds(_disableTimer);
-
         _collider.enabled = true;
-        Debug.LogWarning("Collider enabled!");
     }
 
     #endregion  
