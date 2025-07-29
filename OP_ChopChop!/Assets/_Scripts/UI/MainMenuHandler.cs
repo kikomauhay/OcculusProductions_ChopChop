@@ -41,4 +41,7 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
     {
         _currentPhaseTxt.text = phase;
     }
+
+    public void BTN_ResetMGS() =>
+        GameManager.Instance.ResetMGS();
 }

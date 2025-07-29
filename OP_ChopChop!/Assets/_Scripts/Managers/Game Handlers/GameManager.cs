@@ -23,10 +23,11 @@ using System;
 public class GameManager : Singleton<GameManager>
 {
     #region Properties
+
     public Action OnStartService, OnEndService;
     public InputActionReference Continue;
     public GameShift CurrentShift { get; private set; } = GameShift.Default;
-    
+
     // DIFFICULTY
     public GameDifficulty Difficulty { get; private set; }
     public int MaxCustomerCount { get; private set; }
@@ -44,7 +45,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject _logo;
     [SerializeField] private bool _logoRemoved = false;
     [SerializeField] private bool _isTutorial;
-    
+
     [Header("Debugging")]
     [SerializeField] private bool _isDeveloperMode;
 
@@ -68,14 +69,16 @@ public class GameManager : Singleton<GameManager>
     {
         base.OnApplicationQuit();
         Continue.action.performed -= RemoveLogo;
-        
-         if (_isDeveloperMode)
+
+        if (_isDeveloperMode)
             Debug.Log($"{this} developer mode: {_isDeveloperMode}");
+
+        OnEndService -= ResetScores;
     }
     protected override void Awake() // set starting money
     {
         base.Awake();
-        
+
         CurrentPlayerMoney = _startingPlayerMoney;
         CustomersServed = 0;
         MaxCustomerCount = 3;
@@ -88,6 +91,7 @@ public class GameManager : Singleton<GameManager>
 
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
+        OnEndService += ResetScores;
     }
     private void Start() => StartCoroutine(CO_DelayedEventBind());
     private void Update() => Test();
@@ -217,6 +221,11 @@ public class GameManager : Singleton<GameManager>
         if (_isTutorial)
             EnableEODReceipt();
     }
+    public void ResetMGS()
+    {
+        ChangeShift(GameShift.PreService);
+        Debug.LogWarning("Resetting MGS");
+    }
     private void DisableTutorial()
     {
         if (!_isTutorial)
@@ -236,6 +245,15 @@ public class GameManager : Singleton<GameManager>
             Continue.action.performed += RemoveLogo;
         }
     }
+    private void ResetScores()
+    {
+        if (_customerSRScores.Count > 0)
+            _customerSRScores.Clear();
+
+        _finalScore = 0f;
+        CustomersServed = 0;
+        CurrentPlayerMoney = _startingPlayerMoney;
+    }
 
     #endregion
     #region Game Shifts
@@ -244,10 +262,12 @@ public class GameManager : Singleton<GameManager>
     {
         float serviceTimer = _isDeveloperMode ? _testTimer : ONE_MINUTE;
 
-        Debug.Log($"waiting {serviceTimer}s to change to service");
+        // Debug.Log($"waiting {serviceTimer}s to change to service");
         StartCoroutine(CO_ShiftCountdown(serviceTimer, GameShift.Service));
 
+        SoundManager.Instance.StopMusic();
         SoundManager.Instance.PlayMusic("pre-service bgm");
+
         ClockScript.Instance.UpdateTimeRemaining(serviceTimer);
         ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
     }
@@ -303,13 +323,6 @@ public class GameManager : Singleton<GameManager>
             StartCoroutine(CO_GameOver());
             return;
         }
-
-        // press continue in the UI button to go to the next shift
-            // fade in fade out
-            // change back to pre service
-
-        // player lifts the side counter door and goes back to training scene
-            // 
     }
 
     #endregion
