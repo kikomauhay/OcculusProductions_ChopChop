@@ -147,7 +147,7 @@ public class NEW_Dish : MonoBehaviour
 
     public void DisableDish()
     {
-        // if (!_hasFood) return;
+        if (!_hasFood) return;
 
         _dishScore = 0f;
         _hasFood = false;
@@ -155,8 +155,6 @@ public class NEW_Dish : MonoBehaviour
 
         _foodItems[(int)_dishPlatter].GetComponent<NEW_Platter>().ResetMaterial();
         _foodItems[(int)_dishPlatter].SetActive(false);
-
-        // Debug.LogWarning($"{gameObject.name} is an empty plate again!");
     }
     public void SetFoodCondition(FoodCondition chosenState)
     {
