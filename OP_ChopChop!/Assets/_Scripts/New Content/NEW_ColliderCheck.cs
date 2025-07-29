@@ -100,8 +100,8 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void DoDishCollision(NEW_Dish dish, NEW_Plate plate)
     {
         // customer's reaction when getting the dish
-        CheckFoodConition(dish);
         StartCoroutine(CO_DisableCollider());
+        CheckFoodConition(dish);
 
         dish.DisableDish();
         plate.Served();
