@@ -188,8 +188,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -7561628223210829928}
         m_TargetAssemblyTypeName: Moldable, Assembly-CSharp
-        m_MethodName: MoldEvent
-        m_Mode: 1
+        m_MethodName: RemoveInteractor
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -200,8 +200,8 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: -7561628223210829928}
         m_TargetAssemblyTypeName: Moldable, Assembly-CSharp
-        m_MethodName: RemoveInteractor
-        m_Mode: 0
+        m_MethodName: MoldEvent
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -58,7 +58,7 @@ public class Moldable : MonoBehaviour
     {
         Vector3 pos = transform.position;
         Quaternion rot = transform.rotation;
-        Destroy(gameObject);
+
         GameObject newRice = Instantiate(moldPrefab, pos, rot);
         XRGrabInteractable _grabInteractable = newRice.GetComponent<XRGrabInteractable>();
         SoundManager.Instance.PlaySound(Random.value > 0.5f ? 
@@ -72,6 +72,7 @@ public class Moldable : MonoBehaviour
                 _interactionManager.SelectEnter(interactor, _grabInteractable);
             }
         }
+        Destroy(gameObject);
     }
 
 #endregion
