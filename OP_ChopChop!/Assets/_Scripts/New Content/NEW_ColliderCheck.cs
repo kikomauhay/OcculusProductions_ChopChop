@@ -99,12 +99,11 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
     private void DoDishCollision(NEW_Dish dish, NEW_Plate plate)
     {
-        // customer's reaction when getting the dish
-        CheckFoodConition(dish); 
-        StartCoroutine(CO_DisableCollider());
-        
+        CheckFoodConition(dish);
         dish.DisableDish();
-        plate.Served();          
+        plate.Served();         
+        
+        StartCoroutine(CO_DisableCollider());
     }
     private void CheckFoodConition(NEW_Dish dish)
     {
@@ -113,17 +112,13 @@ public class NEW_ColliderCheck : MonoBehaviour
             TriggerContainatedOrder();  
             Debug.LogError("Triggered dirty order!");         
         }
-        else if (dish.DishPlatter != Order.WantedPlatter) 
-        {
-            TriggerWrongOrder();                   
-            Debug.LogError("Triggered wrong order!");
-        }
-        else
+        else if (dish.DishPlatter == Order.WantedPlatter) 
         {
             TriggerCorrectOrder(dish);
-            TriggerOnboarding();
+            TriggerCatOnboarding();
             Debug.LogWarning("Triggered correct order!");         
         }
+        else TriggerWrongOrder();
     }
     private void TriggerContainatedOrder()
     {
@@ -168,7 +163,7 @@ public class NEW_ColliderCheck : MonoBehaviour
         Order = null;
         Debug.LogWarning("CustomerOrder is now null!");
     }
-    private void TriggerOnboarding()
+    private void TriggerCatOnboarding()
     {
         if (!_isTutorial) return;
 
