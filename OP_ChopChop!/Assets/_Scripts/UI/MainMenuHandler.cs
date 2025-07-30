@@ -46,10 +46,9 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
     {
         _currentPhaseTxt.text = phase;
     }
-    //Do not panic if this is 0 Ref ( I am typing this at 12:30 AM)
-    public void BTN_ResetMGS()
+    public void BTN_ResetMGS() // this method has a button reference 
     {
         GameManager.Instance.ResetMGS();
+        SpawnManager.Instance.ClearSeats();
     }
-        
 }

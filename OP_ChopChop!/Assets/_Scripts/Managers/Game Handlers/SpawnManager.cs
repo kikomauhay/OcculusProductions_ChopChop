@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class SpawnManager : StaticInstance<SpawnManager>
 {
-#region Members
+    #region Members
 
     [Header("Onboarding")]
     [SerializeField] private bool _isTutorial;
@@ -43,12 +43,11 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [SerializeField] Transform _fishSliceSpawnPoint;
 
     public Transform FishSliceSpawnPoint{ get => _fishSliceSpawnPoint; set => _fishSliceSpawnPoint = value; }
-
     private int _spawnedCustomers;
 
-#endregion
+    #endregion
 
-#region Unity
+    #region Unity
 
     protected override void Awake() 
     {
@@ -83,8 +82,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         else
             Debug.Log($"{name} developer mode: {_isDeveloperMode}");
     }
-
-    void Update()
+    private void Update()
     {
         if (!_isDeveloperMode) return;
 
@@ -129,9 +127,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
         OnBoardingHandler.Instance.OnTutorialEnd += ClearCustomerSeats;
     }
     
-#endregion
-
-#region Spawning
+    #endregion
+    #region Spawning
 
     public GameObject SpawnSashimi(IngredientType type, Transform t)
     {
@@ -227,9 +224,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
         Debug.Log($"{newCollider} wanted Order: {newCollider.Order.WantedPlatter}");
     }
 
-#endregion
-
-#region Customer Helpers
+    #endregion
+    #region Customer Helpers
 
     public void RemoveCustomer(GameObject customer) 
     {
@@ -256,9 +252,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
         return -1; // all seats are empty
     }
 
-#endregion
-    
-#region Event Methods
+    #endregion
+    #region Event Methods
 
     public void StartCustomerSpawning() 
     {
@@ -266,13 +261,22 @@ public class SpawnManager : StaticInstance<SpawnManager>
         StartCoroutine(CreateCustomer());
     }
     private void StopCustomerSpawning() => StopCoroutine(CreateCustomer());
-
     private void ClearCustomerSeats()
+    {
+        ClearSeats();
+        StopAllCoroutines(); 
+    }
+    public void DisableTutorial()
+    {
+        _isTutorial = false;
+        _tutorialCollider.GetComponent<NEW_ColliderCheck>().DisableTutorial();
+    }
+    public void ClearSeats()
     {
         if (_customerSeats.Length > 1)
             foreach (CustomerSeat seat in _customerSeats)
-                seat.IsEmpty = true;        
-                
+                seat.IsEmpty = true;
+
         if (_newColliderChecks.Length > 1)
             foreach (NEW_ColliderCheck col in _newColliderChecks)
                 col.Order = null;
@@ -284,16 +288,9 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
             _seatedCustomers.Clear();
         }
-        StopAllCoroutines(); 
     }
-    
-#endregion
 
-    public void DisableTutorial()
-    {
-        _isTutorial = false;
-        _tutorialCollider.GetComponent<NEW_ColliderCheck>().DisableTutorial();
-    }
+    #endregion
 }
 
 #region Enumerations

@@ -3,23 +3,6 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
 using System;
-using UnityEngine.SocialPlatforms.Impl;
-
-/// <summary> -WHAT DOES THIS SCRIPT DO-
-///
-/// - Acts as the brains of the game.
-/// - Stores all the scores of the food served and customerSR.
-/// - Rates the Restaurant Quality once the shift ends.
-///
-/// </summary>
-
-/// <summary> -RATING PROCESS-
-/// 
-/// 1. Calculate the Food Score, then add it to the proper list
-/// 2. Calculate Customer SR, then add it to the proper list
-/// 3. At the end of the day, calculate the overall restaurant rate
-/// 
-/// </summary>
 
 public class GameManager : Singleton<GameManager>
 {
@@ -225,6 +208,7 @@ public class GameManager : Singleton<GameManager>
     public void ResetMGS()
     {
         ChangeShift(GameShift.PreService);
+        ResetScores();
         Debug.LogWarning("Resetting MGS");
     }
     private void DisableTutorial()
@@ -238,7 +222,6 @@ public class GameManager : Singleton<GameManager>
         _isTutorial = false;
         OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
 
-        // removes uneccesary tutorial components
         if (!_logoRemoved)
         {
             _logoRemoved = true;
@@ -253,7 +236,6 @@ public class GameManager : Singleton<GameManager>
 
         _finalScore = 0f;
         CustomersServed = 0;
-        CurrentPlayerMoney = _startingPlayerMoney;
     }
 
     #endregion
