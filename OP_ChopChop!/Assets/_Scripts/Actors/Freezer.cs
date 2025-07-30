@@ -8,6 +8,7 @@ public class Freezer : MonoBehaviour
 
     [SerializeField] private bool _isTutorial;
     [SerializeField] private List<Ingredient> _ingredients;
+    [SerializeField] private GameObject _icySmoke;
 
     [Header("Magnet Reaction")]
     [SerializeField] private Transform snapToPoint;
@@ -28,6 +29,12 @@ public class Freezer : MonoBehaviour
     {
         OnBoardingHandler.Instance.OnTutorialEnd += EndTutorial; // it's also getting unsubbed in the function
         _tutorialComponent = GetComponent<NEW_TutorialComponent>();
+        _icySmoke.SetActive(false);
+    }
+
+    private void Update()
+    {
+        ToggleVFX();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -99,6 +106,7 @@ public class Freezer : MonoBehaviour
 
         if (pointToPointDist <= distanceThreshold)
         {
+
             Rigidbody rb = pointToSnap.GetComponentInParent<Rigidbody>();
             XRGrabInteractable grab = pointToSnap.GetComponentInParent<XRGrabInteractable>();
 
@@ -116,7 +124,25 @@ public class Freezer : MonoBehaviour
                 rb.isKinematic = false;
             }
 
+            _icySmoke.gameObject.SetActive(false);
         }
+        else
+        {
+            _icySmoke.gameObject.SetActive(true);
+        }
+    }
+
+    private void ToggleVFX()
+    {
+        float pointToPointDist = Vector3.Distance(pointToSnap.position,
+                                          snapToPoint.position);
+        if (pointToPointDist < 0.5F)
+        {
+            _icySmoke.SetActive(false);
+        }
+        else
+            _icySmoke.SetActive(true);
+
     }
 
     private void EndTutorial() => StartCoroutine(CO_DisableTutorial());

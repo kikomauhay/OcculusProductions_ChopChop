@@ -39,7 +39,7 @@ public class HandManager : Singleton<HandManager>
 
     protected override void Awake()
     {
-        _handUsage = 5;
+        _handUsage = 10;
         base.Awake();
     }
 
@@ -87,7 +87,7 @@ public class HandManager : Singleton<HandManager>
                 _vfxStinky[i].SetActive(true);
             }
         }
-        else if (_handUsage <= 5)
+        else if (_handUsage <= 10)
         {
             foreach (Collider collider in _handWashColliders)
             {
@@ -95,7 +95,7 @@ public class HandManager : Singleton<HandManager>
                 collider.gameObject.GetComponent<HandWashing>().WarningIndicator();
             }
         }
-        else if (_handUsage > 5)
+        else if (_handUsage > 10)
         {
             foreach (Collider collider in _handWashColliders)
             {
