@@ -69,8 +69,14 @@ public class NEW_ColliderCheck : MonoBehaviour
         if (dish != null && plate != null)
         {
             DoDishCollision(dish, plate);
-            Debug.LogWarning($"Collided with {other.gameObject.name}");
+            // Debug.LogWarning($"Collided with {other.gameObject.name}");
             // Debug.LogWarning("Finished dish collision!");
+
+            if (GameManager.Instance.CurrentShift == GameShift.Training)
+            {
+                dish.DisableDish();
+                plate.Served();
+            }
         }
     }
     private void OnDestroy()
