@@ -65,6 +65,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
         GameManager.Instance.OnEndService += ClearCustomerSeats;
+        GameManager.Instance.OnEndService += StopCustomerSpawning;
 
         _spawnedCustomers = 0;
         _spawnCountdown = 2f;
@@ -99,6 +100,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         GameManager.Instance.OnStartService -= StartCustomerSpawning;
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
+        GameManager.Instance.OnEndService -= StopCustomerSpawning;
         OnBoardingHandler.Instance.OnTutorialEnd -= ClearCustomerSeats;
     } 
     
@@ -263,6 +265,8 @@ public class SpawnManager : StaticInstance<SpawnManager>
         transform.position = Vector3.zero;
         StartCoroutine(CreateCustomer());
     }
+    private void StopCustomerSpawning() => StopCoroutine(CreateCustomer());
+
     private void ClearCustomerSeats()
     {
         if (_customerSeats.Length > 1)

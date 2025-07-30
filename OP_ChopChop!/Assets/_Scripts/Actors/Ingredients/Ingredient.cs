@@ -50,7 +50,7 @@ public abstract class Ingredient : MonoBehaviour
     #region Private
     
     private const float GRACE_PERIOD = 10f;
-    private const float DECAY_SPEED = 4f;
+    private const float DECAY_SPEED = 8f;
     private const float STORED_RATE = 0.8f; 
     private const float NORMAL_RATE = 2f; 
     private const float DIRTY_RATE = 25f;
@@ -254,12 +254,15 @@ public abstract class Ingredient : MonoBehaviour
 
     #region Enumerators
 
-    protected IEnumerator CO_Decay() 
+    protected IEnumerator CO_Decay()
     {
+        Debug.LogWarning("10s before decaying starts!");
         yield return new WaitForSeconds(GRACE_PERIOD);
-        
+        Debug.LogWarning("Decaying start!");
+
         while (FreshnessRate > 0f)
         {
+
             yield return new WaitForSeconds(DECAY_SPEED);
 
             // reduces freshness rate based on the ingredient's state
@@ -288,7 +291,7 @@ public abstract class Ingredient : MonoBehaviour
                 ChangeMaterial();
             }
 
-            Debug.Log($"{name} freshness rate: {_freshnessRate}/100");
+            Debug.Log($"{this} freshness rate: {_freshnessRate}/100");
         }
     }
     protected IEnumerator Delay(float time)

@@ -44,11 +44,11 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
     private string[] _instructions = new string[9]
     {
         "Wash your hands at kitchen sink.",
-        "Order one (1) Tuna Slab from Shop Screen near the freezers.",
-        "Store the Tuna Slab in the freezer and get the Salmon Slab.",
-        "Chop Chop! the salmon slab!",
-        "Mold the rice three (3) times.",
-        "Combine the rice mold and the salmon slice!",
+        "Get the Salmon inside the freezer and bring it to the chopping board",
+        "Chop Chop! the Salmon Slab to thin pieces.",
+        "Mold the rice 3 times by grabbing it between your hands",
+        "Combine the Salmon slice and rice mold and serve it on a plate to cat customer",
+        "Order a Tuna slab from the Store near the freezers",
         "Serve the new customer!",
         "Cleaning time!",
         "Congratulations, you did it!!"
@@ -77,86 +77,6 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             Debug.LogWarning($"Missing elements in _highlightObjects. Current count: {_tutorialComponents.Length}");       
     }
     private void Update() => Test();
-
-    #endregion
-    #region Tutorial
-
-    public void PlayOnboarding()
-    {
-        if (_isTutorialPlaying)
-        {
-            ReadOverlapError();
-            return;
-        }
-
-        _isTutorialPlaying = true;
-
-        // plays the VOICE LINE and displays the INSTRUCTION for the tutorial
-        SoundManager.Instance.PlayOnboarding(_voiceLines[CurrentStep]);
-        _playerHUD.txtTopHUDUpdate(_instructions[CurrentStep]);
-
-        // some onboarding steps have extra actions
-        DoExtraOnboarding(CurrentStep);
-        StartCoroutine(CO_ToggleHighlight());
-
-        Debug.Log($"{this} is playing Onb 0{CurrentStep}");
-    }
-
-    public void AddOnboardingIndex()
-    {
-        if (_isTutorialPlaying)
-        {
-            CurrentStep++;
-            _isTutorialPlaying = false;
-        }
-    }
-
-    #endregion
-    #region Helpers
-
-    private void ReadOverlapError() => Debug.LogError("Onboarding is already playing!");
-    public void Disable()
-    {
-        OnTutorialEnd?.Invoke();
-        gameObject.SetActive(false);
-        SoundManager.Instance.StopOnboarding();
-        GameManager.Instance.TutorialDone = true;
-        _playerHUD.enabled = false;
-    }
-
-    private void DoExtraOnboarding(int mode)
-    {
-        switch (mode)
-        {   
-            case 0: 
-                SpawnManager.Instance.SpawnTutorialCustomer(true); 
-                break;
-            
-            case 3: 
-                StartCoroutine(CO_EnableSlicingPanel()); 
-                break;
-            
-            case 4: 
-                StartCoroutine(CO_EnableMoldingPanel()); 
-                break;
-            
-            case 6: 
-                StartCoroutine(CO_SpawnBenny()); 
-                break;
-            
-            case 7: 
-                _dirtyCollider.SetActive(true); 
-                break;
-
-            case 8:
-                GameManager.Instance.EnableEOD();
-                StartCoroutine(CO_EnableFriendlyTipPanel());
-                GameManager.Instance.TutorialDone = true;
-                break;
-
-            default: break;
-        }
-    }
     private void Test()
     {
         if (!_isDeveloperMode) return;
@@ -215,6 +135,87 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
             _isTutorialPlaying = false;
         }
     }
+
+    #endregion
+    #region Tutorial
+
+    public void PlayOnboarding()
+    {
+        if (_isTutorialPlaying)
+        {
+            ReadOverlapError();
+            return;
+        }
+
+        _isTutorialPlaying = true;
+
+        // plays the VOICE LINE and displays the INSTRUCTION for the tutorial
+        SoundManager.Instance.PlayOnboarding(_voiceLines[CurrentStep]);
+        _playerHUD.txtTopHUDUpdate(_instructions[CurrentStep]);
+
+        // some onboarding steps have extra actions
+        DoExtraOnboarding(CurrentStep);
+        StartCoroutine(CO_ToggleHighlight());
+
+        Debug.Log($"{this} is playing Onb 0{CurrentStep}");
+    }
+
+    public void AddOnboardingIndex()
+    {
+        if (_isTutorialPlaying)
+        {
+            CurrentStep++;
+            _isTutorialPlaying = false;
+        }
+    }
+
+    #endregion
+    #region Helpers
+
+    private void ReadOverlapError() => Debug.LogError("Onboarding is already playing!");
+    public void Disable()
+    {
+        OnTutorialEnd?.Invoke();
+        gameObject.SetActive(false);
+        SoundManager.Instance.StopOnboarding();
+        GameManager.Instance.TutorialDone = true;
+        _playerHUD.enabled = false;
+    }
+
+    private void DoExtraOnboarding(int mode)
+    {
+        switch (mode)
+        {   
+            case 0: 
+                SpawnManager.Instance.SpawnTutorialCustomer(true); 
+                break;
+            
+            case 2: 
+                StartCoroutine(CO_EnableSlicingPanel()); 
+                break;
+            
+            case 3: 
+                StartCoroutine(CO_EnableMoldingPanel()); 
+                break;
+            
+            case 6: 
+                StartCoroutine(CO_SpawnBenny()); 
+                break;
+            
+            case 7: 
+                _dirtyCollider.SetActive(true); 
+                break;
+
+            case 8:
+                GameManager.Instance.EnableEOD();
+                StartCoroutine(CO_EnableFriendlyTipPanel());
+                GameManager.Instance.TutorialDone = true;
+                break;
+
+            default: break;
+        }
+    }
+    
 
     #endregion
 

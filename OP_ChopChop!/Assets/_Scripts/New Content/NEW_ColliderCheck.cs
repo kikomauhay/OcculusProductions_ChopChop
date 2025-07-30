@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class NEW_ColliderCheck : MonoBehaviour 
+public class NEW_ColliderCheck : MonoBehaviour
 {
     #region Properties
 
@@ -12,7 +12,7 @@ public class NEW_ColliderCheck : MonoBehaviour
     #region Private
 
     [SerializeField] private bool _isTutorial;
-    [SerializeField] private float _dishPercantage = 0.8f;
+    [SerializeField] private float _dishPercentage = 1.8f;
     [SerializeField] private float _patiencePercentage = 0.2f;
     [SerializeField] private float _disableTimer;
 
@@ -28,20 +28,20 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void Awake()
     {
         _collider = GetComponent<BoxCollider>();
-
         if (_isDevloperMode)
             Debug.Log($"{this} developer mode: {_isDevloperMode}");
 
         if (_isTutorial)
-            Debug.Log($"{this} tutorial mode: {_isTutorial}"); 
+            Debug.Log($"{this} tutorial mode: {_isTutorial}");
     }
     private void Start()
     {
         OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;
+        GameManager.Instance.OnStartService += DisableTutorial;
 
         _collider.isTrigger = true;
         _collider.enabled = true;
-        _disableTimer = 3f; 
+        _disableTimer = 3f;
     }
     private void Update() => test();
     private void OnTriggerEnter(Collider other)
@@ -53,7 +53,7 @@ public class NEW_ColliderCheck : MonoBehaviour
             return;
         }
         if (other.gameObject.GetComponent<Ingredient>() != null)
-        {            
+        {
             DoIngredientCollision(other.gameObject.GetComponent<Ingredient>());
             return;
         }
@@ -68,15 +68,18 @@ public class NEW_ColliderCheck : MonoBehaviour
             Debug.Log("Finished dish collision!");
         }
     }
-    private void OnDestroy() => 
+    private void OnDestroy()
+    {
         OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
-    
+        GameManager.Instance.OnStartService -= DisableTutorial;
+    }
+
     private void test()
     {
         if (!_isDevloperMode) return;
 
         if (Input.GetKeyDown(KeyCode.Tab))
-            Debug.Log($"{this} wanted plater: {Order.WantedPlatter}");        
+            Debug.Log($"{this} wanted plater: {Order.WantedPlatter}");
     }
 
     #endregion
@@ -84,9 +87,6 @@ public class NEW_ColliderCheck : MonoBehaviour
 
     private void DoIngredientCollision(Ingredient ing)
     {
-        Destroy(ing.gameObject);
-
-        // the player shouldn't get a Game Over in the tutorial
         if (GameManager.Instance.CurrentShift != GameShift.Training)
         {
             Order.CustomerSR = 0f;
@@ -94,7 +94,7 @@ public class NEW_ColliderCheck : MonoBehaviour
             StartCoroutine(Order.CO_AngryReaction());
             StartCoroutine(GameManager.Instance.CO_GameOver());
         }
-        else 
+        else
         {
             SoundManager.Instance.PlaySound("wrong");
             SoundManager.Instance.PlaySound("ingredient order");
@@ -103,66 +103,71 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
     private void DoDishCollision(NEW_Dish dish, NEW_Plate plate)
     {
-        // customer's reaction when getting the dish
-        CheckFoodConition(dish); 
-        StartCoroutine(CO_DisableCollider());
-        
+        CheckFoodConition(dish);
         dish.DisableDish();
-        plate.Served();          
+        plate.Served();
     }
     private void CheckFoodConition(NEW_Dish dish)
     {
         if (dish.FoodCondition != FoodCondition.CLEAN)
         {
-            TriggerContainatedOrder();  
-            Debug.LogError("Triggered dirty order!");         
+            TriggerContainatedOrder();
+            Debug.LogError("Triggered dirty order!");
         }
-        else if (dish.DishPlatter == Order.WantedPlatter) 
+        else if (dish.DishPlatter != Order.WantedPlatter)
         {
-            TriggerCorrectOrder(dish);
-            TriggerOnboarding();
-            Debug.LogWarning("Triggered correct order!");         
+            TriggerWrongOrder();
+            Debug.LogError("Triggered wrong order!");
         }
         else
         {
-            TriggerWrongOrder();                   
-            Debug.LogError("Triggered wrong order!");
+            TriggerCorrectOrder(dish);
+
+            if (GameManager.Instance.CurrentShift == GameShift.Training)
+            {
+                Order = null;
+                TriggerOnboarding();
+                Debug.LogWarning("Triggered correct order!");
+            }
         }
     }
     private void TriggerContainatedOrder()
     {
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
-        {       
+        if (GameManager.Instance.CurrentShift != GameShift.Training)
+        {
+            Order.CustomerSR = 0f;
+            StartCoroutine(Order.CO_DirtyReaction());
+            Debug.LogError("Player served a dirty order!");
+        }
+        else if (_isTutorial)
+        {
             SoundManager.Instance.PlaySound("wrong");
             SoundManager.Instance.PlaySound("contaminated order");
-            return;
         }
-        
-        Order.CustomerSR = 0f;
-        StartCoroutine(Order.CO_DirtyReaction());
-        Debug.LogError("Player served a dirty order!");        
     }
     private void TriggerWrongOrder()
     {
-        if (GameManager.Instance.CurrentShift == GameShift.Training)
+        if (GameManager.Instance.CurrentShift != GameShift.Training)
+        {
+            Order.CustomerSR = 0f;
+            GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
+            StartCoroutine(Order.CO_AngryReaction());
+            Debug.LogError("Player served the wrong order!");
+        }
+        else
         {
             SoundManager.Instance.PlaySound("wrong");
             SoundManager.Instance.PlaySound("wrong order");
-            return;
         }
-
-        Order.CustomerSR = 0f;
-        GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
-        StartCoroutine(Order.CO_AngryReaction());
-        Debug.LogError("Player served the wrong order!");        
     }
     private void TriggerCorrectOrder(NEW_Dish dish)
     {
         // UX after serving the customer
-        float dishScore = dish.Score * _dishPercantage;
+        float dishScore = dish.Score * _dishPercentage;
         float patienceScore = Order.PatienceRate * _patiencePercentage;
         Order.CustomerSR = (dishScore + patienceScore) / 2f; // dish quality has more focus becuase of CAPSTN
-        
+        Debug.Log($"{this}: {(dishScore + patienceScore) / 2f}");
+
         GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
         StartCoroutine(Order.CO_HappyReaction());
         // Destroy(Order.gameObject);
@@ -184,20 +189,17 @@ public class NEW_ColliderCheck : MonoBehaviour
     public void DisableTutorial() => _isTutorial = false;
 
     #endregion
-    
+
     #region Enumerators
 
     private IEnumerator CO_DisableCollider()
     {
         _collider.enabled = false;
-        Debug.LogWarning("Collider disabled!");
         yield return new WaitForSeconds(_disableTimer);
-
         _collider.enabled = true;
-        Debug.LogWarning("Collider enabled!");
 
-        Order = null;
-        Debug.LogWarning("CustomerOrder is now null!");
+        if (GameManager.Instance.CurrentShift == GameShift.Service) 
+            Order = null; // need this here so it doesn't trigger a lot of times 
     }
 
     #endregion  
