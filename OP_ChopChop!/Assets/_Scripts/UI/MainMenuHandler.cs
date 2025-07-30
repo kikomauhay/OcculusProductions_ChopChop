@@ -7,6 +7,7 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
     [SerializeField] private GameObject playIcon;
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject settingsPanel, _eodPanel, _liveWallpaper;
+    [SerializeField] private GameObject btn_continue;
     [SerializeField] private TextMeshProUGUI _currentPhaseTxt;
 
     [SerializeField] private Slider masterSlider;  //We need to fix this slider for the volumeeeeee
@@ -24,7 +25,11 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
         pausePanel.SetActive(isTrue);
     }
 
-    public void ToggleEODPanel() => _eodPanel.SetActive(!_eodPanel.activeSelf);
+    public void ToggleEODPanel()
+    {
+        _eodPanel.SetActive(!_eodPanel.activeSelf);
+        btn_continue.SetActive(!btn_continue.activeSelf);
+    }
     public void ToggleLiveWallpaper() => _liveWallpaper.SetActive(!_liveWallpaper.activeSelf);
 
     public void ExitSettingsPanel()
@@ -40,5 +45,10 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
     public void UpdateNameOfPhaseTxt(string phase)
     {
         _currentPhaseTxt.text = phase;
+    }
+    public void BTN_ResetMGS() // this method has a button reference 
+    {
+        GameManager.Instance.ResetMGS();
+        SpawnManager.Instance.ClearSeats();
     }
 }

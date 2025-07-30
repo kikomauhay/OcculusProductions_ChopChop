@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
-public class NEW_ColliderCheck : MonoBehaviour 
+public class NEW_ColliderCheck : MonoBehaviour
 {
     #region Properties
 
@@ -12,8 +12,8 @@ public class NEW_ColliderCheck : MonoBehaviour
     #region Private
 
     [SerializeField] private bool _isTutorial;
-    [SerializeField] private float _dishPercantage = 0.8f;
-    [SerializeField] private float _patiencePercentage = 0.2f;
+    [SerializeField] private float _dishPercentage;
+    [SerializeField] private float _patiencePercentage;
     [SerializeField] private float _disableTimer;
 
     private Collider _collider;
@@ -28,19 +28,24 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void Awake()
     {
         _collider = GetComponent<BoxCollider>();
+
         if (_isDevloperMode)
             Debug.Log($"{this} developer mode: {_isDevloperMode}");
 
         if (_isTutorial)
-            Debug.Log($"{this} tutorial mode: {_isTutorial}"); 
+            Debug.Log($"{this} tutorial mode: {_isTutorial}");
     }
     private void Start()
     {
         OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;
+        GameManager.Instance.OnStartService += DisableTutorial;
 
         _collider.isTrigger = true;
         _collider.enabled = true;
-        _disableTimer = 3f; 
+
+        _dishPercentage = 1.8f;
+        _patiencePercentage = 0.2f;
+        _disableTimer = 3f;
     }
     private void Update() => test();
     private void OnTriggerEnter(Collider other)
@@ -52,7 +57,7 @@ public class NEW_ColliderCheck : MonoBehaviour
             return;
         }
         if (other.gameObject.GetComponent<Ingredient>() != null)
-        {            
+        {
             DoIngredientCollision(other.gameObject.GetComponent<Ingredient>());
             return;
         }
@@ -64,18 +69,28 @@ public class NEW_ColliderCheck : MonoBehaviour
         if (dish != null && plate != null)
         {
             DoDishCollision(dish, plate);
-            Debug.Log("Finished dish collision!");
+            // Debug.LogWarning($"Collided with {other.gameObject.name}");
+            // Debug.LogWarning("Finished dish collision!");
+
+            if (GameManager.Instance.CurrentShift == GameShift.Training)
+            {
+                dish.DisableDish();
+                plate.Served();
+            }
         }
     }
-    private void OnDestroy() => 
+    private void OnDestroy()
+    {
         OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
-    
+        GameManager.Instance.OnStartService -= DisableTutorial;
+    }
+
     private void test()
     {
         if (!_isDevloperMode) return;
 
         if (Input.GetKeyDown(KeyCode.Tab))
-            Debug.Log($"{this} wanted plater: {Order.WantedPlatter}");        
+            Debug.Log($"{this} wanted plater: {Order.WantedPlatter}");
     }
 
     #endregion
@@ -90,7 +105,7 @@ public class NEW_ColliderCheck : MonoBehaviour
             StartCoroutine(Order.CO_AngryReaction());
             StartCoroutine(GameManager.Instance.CO_GameOver());
         }
-        else 
+        else
         {
             SoundManager.Instance.PlaySound("wrong");
             SoundManager.Instance.PlaySound("ingredient order");
@@ -99,45 +114,48 @@ public class NEW_ColliderCheck : MonoBehaviour
     }
     private void DoDishCollision(NEW_Dish dish, NEW_Plate plate)
     {
-        // customer's reaction when getting the dish
-        CheckFoodConition(dish); 
-        StartCoroutine(CO_DisableCollider());
-        
+        CheckFoodConition(dish);
+
         dish.DisableDish();
-        plate.Served();          
+        plate.Served();
     }
     private void CheckFoodConition(NEW_Dish dish)
     {
         if (dish.FoodCondition != FoodCondition.CLEAN)
         {
-            TriggerContainatedOrder();  
-            Debug.LogError("Triggered dirty order!");         
+            TriggerContainatedOrder();
+            Debug.LogError("Triggered dirty order!");
         }
-        else if (dish.DishPlatter != Order.WantedPlatter) 
+        else if (dish.DishPlatter != Order.WantedPlatter)
         {
-            TriggerWrongOrder();                   
+            TriggerWrongOrder();
             Debug.LogError("Triggered wrong order!");
         }
         else
         {
             TriggerCorrectOrder(dish);
-            TriggerOnboarding();
-            Debug.LogWarning("Triggered correct order!");         
+
+            if (GameManager.Instance.CurrentShift == GameShift.Training)
+            {
+                Order = null;
+                TriggerOnboarding();
+                Debug.LogWarning("Triggered correct order!");
+            }
         }
     }
     private void TriggerContainatedOrder()
     {
         if (GameManager.Instance.CurrentShift != GameShift.Training)
-        {       
+        {
             Order.CustomerSR = 0f;
             StartCoroutine(Order.CO_DirtyReaction());
-            Debug.LogError("Player served a dirty order!");        
+            Debug.LogError("Player served a dirty order!");
         }
-        else
+        else if (_isTutorial)
         {
             SoundManager.Instance.PlaySound("wrong");
             SoundManager.Instance.PlaySound("contaminated order");
-        }        
+        }
     }
     private void TriggerWrongOrder()
     {
@@ -157,10 +175,11 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void TriggerCorrectOrder(NEW_Dish dish)
     {
         // UX after serving the customer
-        float dishScore = dish.Score * _dishPercantage;
+        float dishScore = dish.Score * _dishPercentage;
         float patienceScore = Order.PatienceRate * _patiencePercentage;
-        Order.CustomerSR = (dishScore + patienceScore) / 2f; // dish quality has more focus becuase of CAPSTN
-        
+        Order.CustomerSR = dishScore + patienceScore; // dish quality has more focus becuase of CAPSTN
+        Debug.LogWarning($"{this} Current Score: {Order.CustomerSR}!");
+
         GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
         StartCoroutine(Order.CO_HappyReaction());
         // Destroy(Order.gameObject);
@@ -182,20 +201,17 @@ public class NEW_ColliderCheck : MonoBehaviour
     public void DisableTutorial() => _isTutorial = false;
 
     #endregion
-    
+
     #region Enumerators
 
     private IEnumerator CO_DisableCollider()
     {
         _collider.enabled = false;
-        Debug.LogWarning("Collider disabled!");
         yield return new WaitForSeconds(_disableTimer);
-
         _collider.enabled = true;
-        Debug.LogWarning("Collider enabled!");
 
-        //Order = null;
-        Debug.LogWarning("CustomerOrder is now null!");
+        if (GameManager.Instance.CurrentShift == GameShift.Service) 
+            Order = null; // need this here so it doesn't trigger a lot of times 
     }
 
     #endregion  

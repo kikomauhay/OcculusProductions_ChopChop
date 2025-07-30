@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Trash : MonoBehaviour
 {
-#region Unity
+    #region Unity
 
     private void OnTriggerEnter(Collider other)
     {
@@ -37,9 +37,9 @@ public class Trash : MonoBehaviour
         }
     }
 
-#endregion
+    #endregion
 
-#region Collision
+    #region Collision
 
     private void DestroyIngredient(Ingredient ing)
     {
@@ -76,5 +76,5 @@ public class Trash : MonoBehaviour
         eq.GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
-#endregion
+    #endregion
 }

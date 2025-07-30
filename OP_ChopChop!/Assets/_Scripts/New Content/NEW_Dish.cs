@@ -1,34 +1,19 @@
 using System.Collections;
 using UnityEngine;
 using System;
-using System.Runtime.CompilerServices;
-
-/// <summary>
-/// 
-/// - Acts as the reworked version of Plate.cs.
-/// - Rather than spawning new dishes each time, this just enables the right dish.
-/// 
-/// WHAT THIS SCRIPT SHOULD DO: 
-///     - Enabling/disabling the type of food present in the plate.
-///     - Changes the state of the dish when interacting with the environment.
-///     - Contains the score needed for the Customer SR.
-/// 
-/// </summary>
 
 [RequireComponent(typeof(BoxCollider))]
 public class NEW_Dish : MonoBehaviour
 {
-#region Members
-
-#region Properties
+    #region Properties
 
     public FoodCondition FoodCondition => _foodCondition;
     public DishPlatter DishPlatter => _dishPlatter;
     public bool HasFood => _hasFood;
     public float Score => _dishScore;
 
-#endregion 
-#region Private
+    #endregion 
+    #region Private
 
     [Tooltip("0 = N. Salmon, 1 = N. Tuna, 2 = S. Salmon, 3 = S. Tuna")]
     [SerializeField] private GameObject[] _foodItems;
@@ -49,13 +34,9 @@ public class NEW_Dish : MonoBehaviour
     private NEW_Plate _plate;
     private const float DECAY_TIME = 30f;
     
-#endregion
+    #endregion
 
-#endregion
-
-#region Methods
-
-#region Unity
+    #region Unity
 
     private void Awake()
     {
@@ -84,11 +65,7 @@ public class NEW_Dish : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (_hasFood)
-        {
-            // Debug.LogError($"{name} already has food on the plate!");
-            return;
-        }
+        if (_hasFood) return;
 
         Ingredient ing = other.gameObject.GetComponent<Ingredient>();
         UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
@@ -124,7 +101,7 @@ public class NEW_Dish : MonoBehaviour
         }         
     }
 
-#region Testing
+    #region Testing
 
     private void Test()
     {
@@ -139,40 +116,31 @@ public class NEW_Dish : MonoBehaviour
     }
     private void Update() => Test();
 
-#endregion
+    #endregion
 
-#endregion
-
-#region Public
+    #endregion
+    #region Public
 
     public void DisableDish()
     {
-        if (!_hasFood)
-        {
-            Debug.LogWarning("There's no food currently!");
-            return;
-        }
-
-        _dishScore = 0f;
-        _hasFood = false;
-        _collider.enabled = true;
+        if (!_hasFood) return;
 
         _foodItems[(int)_dishPlatter].GetComponent<NEW_Platter>().ResetMaterial();
         _foodItems[(int)_dishPlatter].SetActive(false);
-
-        Debug.LogWarning($"{gameObject.name} is an empty plate again!");
+        
+        StartCoroutine(CO_DelayedDisable());
     }
     public void SetFoodCondition(FoodCondition chosenState)
     {
         // guard clauses
         if (_foodCondition != FoodCondition.CLEAN)    
         {
-            Debug.LogError("Dish is already bad!");
+            // Debug.LogError("Dish is already bad!");
             return;
         }
         if (_foodCondition == chosenState)
         {
-            Debug.LogError("You cannot set it to the same state again!");
+            // Debug.LogError("You cannot set it to the same state again!");
             return;
         }
 
@@ -186,11 +154,11 @@ public class NEW_Dish : MonoBehaviour
             case FoodCondition.ROTTEN: platter.SetRotten();     break;
             case FoodCondition.MOLDY:  platter.SetMoldy();      break;
         }        
-        Debug.LogWarning($"{name} has was set to {chosenState}");
+        // Debug.LogWarning($"{name} has was set to {chosenState}");
     }
 
-#endregion
-#region Collision
+    #endregion
+    #region Collision
 
     private void DoFoodCollision(UPD_Food food)
     {
@@ -259,8 +227,8 @@ public class NEW_Dish : MonoBehaviour
         // Debug.Log($"{name} has food: {_hasFood}");
     }
 
-#endregion
-#region Helpers
+    #endregion
+    #region Helpers
 
     private void SetActiveDish(DishPlatter activeDishChosen)
     {
@@ -287,11 +255,9 @@ public class NEW_Dish : MonoBehaviour
         }
     }
 
-#endregion
+    #endregion
 
-#endregion
-
-#region Enumerators
+    #region Enumerators
 
     private IEnumerator CO_StartRotting()
     { 
@@ -303,11 +269,19 @@ public class NEW_Dish : MonoBehaviour
             _plate.SetDirty();
         }
     }
+    private IEnumerator CO_DelayedDisable()
+    {
+        yield return new WaitForSeconds(1f);
 
-#endregion
-}   
+        _dishScore = 0f;
+        _hasFood = false;
+        _collider.enabled = true;
+    }
 
-#region Structure
+    #endregion
+}
+
+#region Structures
 
 [Serializable]
 public struct FoodMaterials
@@ -321,7 +295,6 @@ public struct FoodMaterials
 }
 
 #endregion
-
 #region Enumerations
 
     public enum FoodCondition
