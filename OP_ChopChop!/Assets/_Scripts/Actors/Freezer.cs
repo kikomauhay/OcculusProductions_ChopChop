@@ -136,7 +136,7 @@ public class Freezer : MonoBehaviour
     {
         float pointToPointDist = Vector3.Distance(pointToSnap.position,
                                           snapToPoint.position);
-        if (pointToPointDist < 0.5F)
+        if (pointToPointDist < 0.01F)
         {
             _icySmoke.SetActive(false);
         }
