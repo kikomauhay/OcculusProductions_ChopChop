@@ -51,7 +51,7 @@ public class HandWashing : MonoBehaviour
             if (_timer <= 0)
             {
                 Debug.LogWarning($"Hand Status: {_isDirty}");
-                OnHandCleaned?.Invoke(10);
+                OnHandCleaned?.Invoke(20);
             }
         }
     }
