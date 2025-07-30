@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using Unity.Mathematics;
 
 public class RestaurantReceipt : MonoBehaviour
 {

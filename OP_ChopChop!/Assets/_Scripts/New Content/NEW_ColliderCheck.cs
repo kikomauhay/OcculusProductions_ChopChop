@@ -101,7 +101,7 @@ public class NEW_ColliderCheck : MonoBehaviour
         if (GameManager.Instance.CurrentShift != GameShift.Training)
         {
             CustomerOrder.PatienceScore = 0f;
-            StartCoroutine(CO_DisableCollider());
+            // StartCoroutine(CO_DisableCollider());
             StartCoroutine(CustomerOrder.CO_AngryReaction());
             StartCoroutine(GameManager.Instance.CO_GameOver());
         }

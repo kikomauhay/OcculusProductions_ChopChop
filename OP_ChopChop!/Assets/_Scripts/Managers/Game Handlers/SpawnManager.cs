@@ -42,14 +42,14 @@ public class SpawnManager : StaticInstance<SpawnManager>
     [Header("Fish Slice Spawn Point")]
     [SerializeField] Transform _fishSliceSpawnPoint;
 
-    public Transform FishSliceSpawnPoint{ get => _fishSliceSpawnPoint; set => _fishSliceSpawnPoint = value; }
-    private int _spawnedCustomers;
+    public Transform FishSliceSpawnPoint { get => _fishSliceSpawnPoint; set => _fishSliceSpawnPoint = value; }
+    private int _customerCount;
 
     #endregion
 
     #region Unity
 
-    protected override void Awake() 
+    protected override void Awake()
     {
         base.Awake();
 
@@ -63,10 +63,10 @@ public class SpawnManager : StaticInstance<SpawnManager>
     private void Start() // BIND TO EVENTS
     {
         GameManager.Instance.OnStartService += StartCustomerSpawning;
-        GameManager.Instance.OnEndService += ClearCustomerSeats;
         GameManager.Instance.OnEndService += StopCustomerSpawning;
+        GameManager.Instance.OnEndService += ClearCustomerSeats;
 
-        _spawnedCustomers = 0;
+        _customerCount = 0;
         _spawnCountdown = 2f;
         _spawnInterval = 10f;
 
@@ -100,12 +100,11 @@ public class SpawnManager : StaticInstance<SpawnManager>
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
         GameManager.Instance.OnEndService -= StopCustomerSpawning;
         OnBoardingHandler.Instance.OnTutorialEnd -= ClearCustomerSeats;
-    } 
-    
+    }
+
     private IEnumerator CreateCustomer()
     {
-        // prevents from adding too many customers
-        if (_spawnedCustomers < GameManager.Instance.MaxCustomerCount) 
+        if (_customerCount < GameManager.Instance.MaxCustomerCount)
         {
             yield return new WaitForSeconds(_spawnCountdown);
             SpawnCustomer(GiveAvaiableSeat());
@@ -114,10 +113,10 @@ public class SpawnManager : StaticInstance<SpawnManager>
         while (GameManager.Instance.CurrentShift == GameShift.Service)
         {
             // coroutine should stop spawning once all seats are full
-            if (_spawnedCustomers >= GameManager.Instance.MaxCustomerCount) 
+            if (_customerCount >= GameManager.Instance.MaxCustomerCount)
                 yield break;
 
-            yield return new WaitForSeconds(_spawnInterval);  
+            yield return new WaitForSeconds(_spawnInterval);
             SpawnCustomer(GiveAvaiableSeat());
         }
     }
@@ -126,7 +125,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         yield return new WaitForSeconds(2f);
         OnBoardingHandler.Instance.OnTutorialEnd += ClearCustomerSeats;
     }
-    
+
     #endregion
     #region Spawning
 
@@ -142,10 +141,10 @@ public class SpawnManager : StaticInstance<SpawnManager>
         return Instantiate(obj,
                            t.position, t.rotation,
                            _bins[(int)type]);
-    }    
+    }
     public void SpawnVFX(VFXType type, Transform t, float destroyTime)
-    {   
-        GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type], 
+    {
+        GameObject vfxInstance = Instantiate(_vfxPrefabs[(int)type],
                                              t.position, t.rotation,
                                              _bins[4]);
 
@@ -156,9 +155,9 @@ public class SpawnManager : StaticInstance<SpawnManager>
         if (idx == -1) return;
 
         if (GameManager.Instance.CurrentShift != GameShift.Service) return;
-        
-        GameObject customer = SpawnObject(_customerPrefab, 
-                                          _customerSeats[idx].transform, 
+
+        GameObject customer = SpawnObject(_customerPrefab,
+                                          _customerSeats[idx].transform,
                                           SpawnObjectType.CUSTOMER);
 
         CustomerActions customerActions = customer.GetComponent<CustomerActions>();
@@ -169,7 +168,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // links a box collider & seat to the customer
         colliderCheck.CustomerOrder = customer.GetComponent<CustomerOrder>();
-        
+
         _seatedCustomers.Add(customer);
         customerActions.SeatIndex = idx;
 
@@ -178,18 +177,20 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         // adding random noises when the cats spawn
         StartCoroutine(customerActions.RandomMeowing());
-        _spawnedCustomers++;
+
+        _customerCount++;
+        Debug.LogWarning($"Added new customer! New customer count: {_customerCount}");
     }
     public void SpawnTutorialCustomer(bool isAtrium)
     {
         if (!_isTutorial)
         {
-            Debug.LogError("Cannot spawn this type of customer!");
+            // Debug.LogError("Cannot spawn this type of customer!");
             return;
         }
         if (GameManager.Instance.CurrentShift != GameShift.Training)
         {
-            Debug.LogError($"Current shift is not in training mode!");
+            // Debug.LogError($"Current shift is not in training mode!");
             return;
         }
 
@@ -218,23 +219,23 @@ public class SpawnManager : StaticInstance<SpawnManager>
         else
             Debug.LogWarning($"Spawned Tuna Customer!");
 
-        // Debug.LogWarning($"{newCollider} wanted Order: {newCollider.Order.WantedPlatter}");
+        // Debug.Log($"{newCollider} wanted Order: {newCollider.CustomerOrder.WantedPlatter}");
     }
 
     #endregion
     #region Customer Helpers
 
-    public void RemoveCustomer(GameObject customer) 
+    public void RemoveCustomer(GameObject customer)
     {
         int idx = customer.GetComponent<CustomerActions>().SeatIndex;
-        
+
         // removes the customer from the list
         _seatedCustomers.Remove(customer);
 
-        // removes any link from the removed customer 
+        // removed any link from the removed customer 
         _customerSeats[idx].IsEmpty = true;
         _newColliderChecks[idx].CustomerOrder = null;
-    }   
+    }
     private int GiveAvaiableSeat() // sets the index where the customer should sit
     {
         for (int i = 0; i < _customerSeats.Length; i++)
@@ -243,33 +244,26 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
             if (seat.IsEmpty)
                 return i;
-            
+
             else continue;
         }
         return -1; // all seats are empty
-    }
-    public void CheckRemainingCustomers()
-    {
-        if (_seatedCustomers.Count == 0)
-        {
-            GameManager.Instance.StopAllCoroutines();
-            GameManager.Instance.ChangeShift(GameShift.PostService);
-        }
     }
 
     #endregion
     #region Event Methods
 
-    public void StartCustomerSpawning() 
+    public void StartCustomerSpawning()
     {
         transform.position = Vector3.zero;
         StartCoroutine(CreateCustomer());
+        Debug.LogWarning("Spawning customers!");
     }
     private void StopCustomerSpawning() => StopCoroutine(CreateCustomer());
     private void ClearCustomerSeats()
     {
         ClearSeats();
-        StopAllCoroutines(); 
+        StopAllCoroutines();
     }
     public void DisableTutorial()
     {
@@ -293,9 +287,9 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
             _seatedCustomers.Clear();
         }
-
-        _spawnedCustomers = 0;
-        DisableTutorial();
+        
+        _customerCount = 0;
+        Debug.LogWarning($"Reset customer count! New count: {_customerCount}");
     }
 
     #endregion
@@ -303,22 +297,22 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
 #region Enumerations
 
-    public enum SpawnObjectType 
-    { 
-        INGREDIENT, 
-        FOOD, 
-        DISH, 
-        CUSTOMER, 
-        VFX 
-    }
-    public enum VFXType // & destroyTime
-    { 
-        SMOKE,   // 1s
-        BUBBLE,  // 3s
-        SPARKLE, // 5s
-        STINKY,  // 5s
-        RICE,    // 3s
-        SPLASH   // 4s
-    }
+public enum SpawnObjectType
+{
+    INGREDIENT,
+    FOOD,
+    DISH,
+    CUSTOMER,
+    VFX
+}
+public enum VFXType // & destroyTime
+{
+    SMOKE,   // 1s
+    BUBBLE,  // 3s
+    SPARKLE, // 5s
+    STINKY,  // 5s
+    RICE,    // 3s
+    SPLASH   // 4s
+}
 
 #endregion

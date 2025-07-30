@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager>
     public bool IsPaused { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
 
-    #endregion  
+    #endregion  c
     #region SerializeField
 
     [SerializeField] private float _testTimer;
@@ -235,6 +235,14 @@ public class GameManager : Singleton<GameManager>
             Continue.action.performed += RemoveLogo;
         }
     }
+    public void CheckRemainingCustomers()
+    {
+        if (CustomersServed == MaxCustomerCount)
+        {
+            StopAllCoroutines();
+            ChangeShift(GameShift.PostService);
+        }
+    }
     private void ResetScores()
     {
         if (_customerSRScores.Count > 0)
@@ -352,18 +360,12 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        float customerScore = 0f;
-
-        if (!IsGameOver)
-        {
-            customerScore = GetAverageOf(_customerSRScores);
-            _finalCustomerScore = customerScore;
-        }
-        
-        int indexCustomerRating = _endOfDayReceipt.ReturnScoretoIndexRating(customerScore);
+        // value changes if the game is over
+        _finalCustomerScore = IsGameOver ? 0f : GetAverageOf(_customerSRScores);
+        int indexCustomerRating = _endOfDayReceipt.ReturnScoretoIndexRating(_finalCustomerScore);
 
         _endOfDayReceipt.GiveCustomerRating(indexCustomerRating);
-        Debug.LogWarning($"{this} Total Customer Rating: {customerScore}");
+        Debug.LogWarning($"{this} Total Customer Rating: {_finalCustomerScore}");
     }
     private void DoKitchenRating() 
     {   
@@ -373,16 +375,12 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        int indexKitchenRating = 4;
-        
-        if (!IsGameOver)
-        {
-            _endOfDayReceipt.ReturnScoretoIndexRating(KitchenCleaningManager.Instance.KitchenScore);
-            _finalKitchenScore = KitchenCleaningManager.Instance.KitchenScore;
-        }
+        // value changes if the game is over
+        int indexKitchenRating = IsGameOver ? 4 : _endOfDayReceipt.ReturnScoretoIndexRating(KitchenCleaningManager.Instance.KitchenScore);
+        _finalKitchenScore = IsGameOver ? 0 : KitchenCleaningManager.Instance.KitchenScore;
 
         _endOfDayReceipt.GiveKitchenRating(indexKitchenRating);        
-        Debug.LogWarning($"{this} Total Kitchen Rating: {KitchenCleaningManager.Instance.KitchenScore}");
+        Debug.LogWarning($"{this} Total Kitchen Score: {_finalKitchenScore}");
     }
     private void DoPostServiceRating() // FINAL SCORE 
     {
@@ -392,11 +390,8 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        _finalScore = 4;
-
-        if (!IsGameOver)
-            _finalScore = (_finalKitchenScore + _finalCustomerScore)/2;   
-        
+        // value changes if the game is over
+        _finalScore = IsGameOver ? 4 : (_finalKitchenScore + _finalCustomerScore) / 2f;        
         int indexPostServiceRating = _endOfDayReceipt.ReturnScoretoIndexRating(_finalScore);
 
         _endOfDayReceipt.GiveRestaurantRating(indexPostServiceRating);
@@ -409,14 +404,10 @@ public class GameManager : Singleton<GameManager>
 
         float n = 0f;
 
-        Debug.LogWarning($"{this} Average Score: ");
-        for (int i = 0; i < list.Count; i++)
-        {            
+        for (int i = 0; i < list.Count; i++)       
             n += list[i];
-        }
-
-        Debug.LogWarning($"{n / list.Count}");
-        return n / list.Count;
+        
+        return n / CustomersServed;
     }
     
 
@@ -446,6 +437,7 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator CO_CloseDownShop()
     {
         IsGameOver = true;
+        SoundManager.Instance.StopMusic();
         SoundManager.Instance.PlaySound("game over 01");
         yield return new WaitForSeconds(4f);
 
@@ -456,12 +448,16 @@ public class GameManager : Singleton<GameManager>
     }
     public IEnumerator CO_GameOver()
     {
+        SoundManager.Instance.StopMusic();
+
         IsGameOver = true;
         SoundManager.Instance.PlaySound("game over 02");
         yield return new WaitForSeconds(2f);
 
-        SceneHandler.Instance.LoadScene("TrainingScene");
-        ChangeShift(GameShift.Training);
+        EnableEODReceipt();
+
+        // SceneHandler.Instance.LoadScene("TrainingScene");
+        // ChangeShift(GameShift.Training);
     }
 
 #endregion

@@ -7,10 +7,11 @@ public class CustomerOrder : MonoBehaviour
 {
     #region Properties
 
-    public DishPlatter WantedPlatter { get; private set; } 
-    public float PatienceScore { get; set; }   
+    public DishPlatter WantedPlatter { get; private set; } // what dish the customer wants to order   
+    public float PatienceScore { get; set; }                  // (FoodScore of dish * 0.8 + _patienceRate * 0.2) / 2
+    public bool IsLastCustomer { get; set; } = false;
     public float PatienceRate => _patienceDecreaseRate;
-    public bool IsTutorial => _isTutorial; 
+    public bool IsTutorial => _isTutorial;
     public bool IsTunaCustomer => _isTunaCustomer;
 
     #endregion
@@ -19,7 +20,7 @@ public class CustomerOrder : MonoBehaviour
     [Header("Dish UI")]
     [SerializeField] private GameObject[] _dishOrdersUI;  // the different order UI for the customer 
     [SerializeField] private Transform _orderUITransform; // Spawning of the order
-    
+
     [Header("Money-earned Range")]
     [SerializeField] private int _minCash;
     [SerializeField] private int _maxCash; // testing
@@ -29,10 +30,10 @@ public class CustomerOrder : MonoBehaviour
 
     [Space(10f), SerializeField] private float _reactionTimer;
 
-    [Header("Onboarding")] 
+    [Header("Onboarding")]
     [SerializeField] private bool _isTutorial;
     [SerializeField] private bool _isTunaCustomer;
-   
+
     #endregion
     #region Private
 
@@ -59,18 +60,27 @@ public class CustomerOrder : MonoBehaviour
         StartCoroutine(CO_PatienceCountdown());
     }
     private void OnDestroy()
-    {        
+    {
         DestroyCustomerUI();
         DeinitializeEvents();
 
         SpawnManager.Instance.RemoveCustomer(gameObject);
-        SpawnManager.Instance.CheckRemainingCustomers();
+        GameManager.Instance.CheckRemainingCustomers();
 
         if (_isTunaCustomer) // only for onboarding
         {
             SpawnManager.Instance.DisableTutorial();
             ShopManager.Instance.ClearList();
+            return;
         }
+
+        /*
+
+        if (GameManager.Instance.CurrentShift == GameShift.Service && IsLastCustomer)
+        {
+            GameManager.Instance.StopAllCoroutines();
+            GameManager.Instance.ChangeShift(GameShift.PostService);
+        } */
     }
 
     #endregion
@@ -81,10 +91,10 @@ public class CustomerOrder : MonoBehaviour
         switch (GameManager.Instance.Difficulty) // will decrease overtime
         {
             // updated starting score to have an emphasis on food quality
-            case GameDifficulty.EASY:   _customerScore = 150f; break;
+            case GameDifficulty.EASY: _customerScore = 150f; break;
             case GameDifficulty.NORMAL: _customerScore = 125f; break;
-            case GameDifficulty.HARD:   _customerScore = 110f; break;
-            default:                                           break;
+            case GameDifficulty.HARD: _customerScore = 110f; break;
+            default: break;
         }
     }
     private void InitializeWantedPlatter()
@@ -94,13 +104,13 @@ public class CustomerOrder : MonoBehaviour
             WantedPlatter = (DishPlatter)Random.Range(0, _dishOrdersUI.Length);
             return;
         }
-        
-        WantedPlatter = _isTunaCustomer ? DishPlatter.SASHIMI_TUNA : 
+
+        WantedPlatter = _isTunaCustomer ? DishPlatter.SASHIMI_TUNA :
                                           DishPlatter.NIGIRI_SALMON;
     }
     private void CreateCustomerUI() // aligns Order UI & Customer Order
     {
-        _customerOrderUI = Instantiate(_dishOrdersUI[_isTutorial ? 0 : (int)WantedPlatter], 
+        _customerOrderUI = Instantiate(_dishOrdersUI[_isTutorial ? 0 : (int)WantedPlatter],
                                        _orderUITransform.position,
                                        _orderUITransform.rotation,
                                        transform);
@@ -117,16 +127,16 @@ public class CustomerOrder : MonoBehaviour
         if (_isTutorial)
             OnBoardingHandler.Instance.OnTutorialEnd += DestoryGO;
 
-        else 
-            GameManager.Instance.OnEndService += DestoryGO;
+        else
+            GameManager.Instance.OnEndService += DestroyCustomerUI;
     }
     private void DeinitializeEvents()
     {
         if (_isTutorial)
             OnBoardingHandler.Instance.OnTutorialEnd -= DestoryGO;
-        
-        else 
-            GameManager.Instance.OnEndService -= DestoryGO; 
+
+        else
+            GameManager.Instance.OnEndService -= DestroyCustomerUI;
     }
     private void DestroyCustomerUI() => Destroy(_customerOrderUI);
     private void DestoryGO() => Destroy(gameObject);
@@ -138,12 +148,12 @@ public class CustomerOrder : MonoBehaviour
     private IEnumerator CO_PatienceCountdown()
     {
         // grace period before it actually starts counting down
-        yield return new WaitForSeconds(2f); 
+        yield return new WaitForSeconds(2f);
 
         while (_customerScore > 0f)
         {
             yield return new WaitForSeconds(1f);
-    
+
             _customerScore -= _patienceDecreaseRate;
 
             if (_customerScore < 1f)
@@ -151,18 +161,18 @@ public class CustomerOrder : MonoBehaviour
                 _customerScore = 0f;
                 PatienceScore = 0f;
             }
-            
+
             // face change
             if (_customerScore >= 80)
                 _appearance.SetFacialEmotion(FaceVariant.HAPPY);
 
             else if (_customerScore >= 50)
                 _appearance.SetFacialEmotion(FaceVariant.NEUTRAL);
-            
-            else     
-                _appearance.SetAngryEmotion(0);            
+
+            else
+                _appearance.SetAngryEmotion(0);
         }
-        
+
         yield return StartCoroutine(CO_CustomerLostPatience());
     }
     private IEnumerator CO_CustomerLostPatience() // customer wasn't served
@@ -184,7 +194,7 @@ public class CustomerOrder : MonoBehaviour
 
         GameManager.Instance.IncrementCustomersServed();
         GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
-        
+
         MakeSeatEmpty();
     }
     public IEnumerator CO_AngryReaction() // customer got the wrong order
@@ -209,7 +219,7 @@ public class CustomerOrder : MonoBehaviour
 
         GameManager.Instance.IncrementCustomersServed();
         StartCoroutine(GameManager.Instance.CO_CloseDownShop());
-    }       
+    }
 
     #endregion
 }
