@@ -160,100 +160,100 @@ public class NEW_Dish : MonoBehaviour
     #endregion
     #region Collision
 
-        private void DoFoodCollision(UPD_Food food)
+    private void DoFoodCollision(UPD_Food food)
+    {
+        SetActiveDish(food.OrderType);
+
+        switch (food.Condition)
         {
-            SetActiveDish(food.OrderType);
-
-            switch (food.Condition)
-            {
-                case FoodCondition.MOLDY:
-                    _dishScore = 0f;
-                    _plate.SetDirty();
-                    SetFoodCondition(FoodCondition.MOLDY);
-                    // Debug.LogWarning($"{food.gameObject.name} is moldy!");
-                    break;
-            
-                case FoodCondition.ROTTEN:
-                    _dishScore = 0f;
-                    _plate.SetDirty();
-                    SetFoodCondition(FoodCondition.ROTTEN);
-                    // Debug.LogError($"{food.gameObject.name} is rotten!");
-                    SetFoodCondition(FoodCondition.ROTTEN);
-                    break;
-
-                case FoodCondition.CLEAN:
-                    _dishScore = food.Score;
-                    // Debug.LogWarning($"{food.name} has been plated to {name}!");
-                    break;
-
-                default: break;
-            }   
-
-            _hasFood = true;
-            _collider.enabled = false;
-            Debug.Log($"{name} has food: {_hasFood}");
-        }
-        private void DoIngredientCollision(Ingredient ing)
-        { 
-            switch (ing.IngredientType)
-            {
-                case IngredientType.SALMON:
-                    SetActiveDish(DishPlatter.SASHIMI_SALMON);
-                    break;
-
-                case IngredientType.TUNA:
-                    SetActiveDish(DishPlatter.SASHIMI_TUNA);
-                    break;
-
-                default: break;
-            }
-
-            // checks if the ingredient still fresh
-            if (!ing.IsFresh)
-            {
+            case FoodCondition.MOLDY:
                 _dishScore = 0f;
                 _plate.SetDirty();
                 SetFoodCondition(FoodCondition.MOLDY);
-                // Debug.LogWarning($"{ing.name} is moldy!");
-            }
-            else 
-            {
-                _dishScore = ing.FreshnessRate;
-                // Debug.LogWarning($"{ing.name} has been plated to {name}!");
-            }
+                // Debug.LogWarning($"{food.gameObject.name} is moldy!");
+                break;
+            
+            case FoodCondition.ROTTEN:
+                _dishScore = 0f;
+                _plate.SetDirty();
+                SetFoodCondition(FoodCondition.ROTTEN);
+                // Debug.LogError($"{food.gameObject.name} is rotten!");
+                SetFoodCondition(FoodCondition.ROTTEN);
+                break;
 
-            _hasFood = true;
-            _collider.enabled = false;
-            // Debug.Log($"{name} has food: {_hasFood}");
+            case FoodCondition.CLEAN:
+                _dishScore = food.Score;
+                // Debug.LogWarning($"{food.name} has been plated to {name}!");
+                break;
+
+            default: break;
+        }   
+
+        _hasFood = true;
+        _collider.enabled = false;
+        Debug.Log($"{name} has food: {_hasFood}");
+    }
+    private void DoIngredientCollision(Ingredient ing)
+    { 
+        switch (ing.IngredientType)
+        {
+            case IngredientType.SALMON:
+                SetActiveDish(DishPlatter.SASHIMI_SALMON);
+                break;
+
+            case IngredientType.TUNA:
+                SetActiveDish(DishPlatter.SASHIMI_TUNA);
+                break;
+
+            default: break;
         }
+
+        // checks if the ingredient still fresh
+        if (!ing.IsFresh)
+        {
+            _dishScore = 0f;
+            _plate.SetDirty();
+            SetFoodCondition(FoodCondition.MOLDY);
+            // Debug.LogWarning($"{ing.name} is moldy!");
+        }
+        else 
+        {
+            _dishScore = ing.FreshnessRate;
+            // Debug.LogWarning($"{ing.name} has been plated to {name}!");
+        }
+
+        _hasFood = true;
+        _collider.enabled = false;
+        // Debug.Log($"{name} has food: {_hasFood}");
+    }
 
     #endregion
     #region Helpers
 
-        private void SetActiveDish(DishPlatter activeDishChosen)
+    private void SetActiveDish(DishPlatter activeDishChosen)
+    {
+        if (activeDishChosen == DishPlatter.EMPTY)
         {
-            if (activeDishChosen == DishPlatter.EMPTY)
-            {
-                _hasFood = false;
-                _collider.enabled = true;
-                Debug.LogError("Default mode chosen!");
-                return;
-            }
-
-            // enables the dish  
-            _dishPlatter = activeDishChosen;
-            _foodItems[(int)activeDishChosen].SetActive(true);
-               
-            // testing
-            // Debug.LogWarning($"{activeDishChosen} is visible");
-            // Debug.LogWarning($"{name} score: {_dishScore}");
-
-            if (!_isDevloperMode) 
-            {
-                StartCoroutine(CO_StartRotting());
-                // Debug.LogWarning($"{gameObject.name} is expiring!");    
-            }
+            _hasFood = false;
+            _collider.enabled = true;
+            Debug.LogError("Default mode chosen!");
+            return;
         }
+
+        // enables the dish  
+        _dishPlatter = activeDishChosen;
+        _foodItems[(int)activeDishChosen].SetActive(true);
+               
+        // testing
+        // Debug.LogWarning($"{activeDishChosen} is visible");
+        // Debug.LogWarning($"{name} score: {_dishScore}");
+
+        if (!_isDevloperMode) 
+        {
+            StartCoroutine(CO_StartRotting());
+            // Debug.LogWarning($"{gameObject.name} is expiring!");    
+        }
+    }
 
     #endregion
 
@@ -281,7 +281,7 @@ public class NEW_Dish : MonoBehaviour
     #endregion
 }
 
-#region Structure
+#region Structures
 
 [Serializable]
 public struct FoodMaterials
@@ -295,7 +295,6 @@ public struct FoodMaterials
 }
 
 #endregion
-
 #region Enumerations
 
     public enum FoodCondition
