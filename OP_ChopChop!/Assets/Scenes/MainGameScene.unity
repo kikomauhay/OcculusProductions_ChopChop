@@ -709,7 +709,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 132477390}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.13686383, y: 0.46906137, z: 0.04822588}
+  m_LocalPosition: {x: -0.0001, y: 0.46906137, z: 0.04822588}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1014,6 +1014,87 @@ Transform:
   m_Father: {fileID: 2030309114}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1001 &291524950
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 183183793281734128}
+    m_Modifications:
+    - target: {fileID: 5443950609122290169, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_Name
+      value: IcyFreezerSmokeVFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.018
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f25c445917a95b54cac154d48af58943, type: 3}
+--- !u!4 &291524951 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+    type: 3}
+  m_PrefabInstance: {fileID: 291524950}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &291524952 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5443950609122290169, guid: f25c445917a95b54cac154d48af58943,
+    type: 3}
+  m_PrefabInstance: {fileID: 291524950}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &326286703
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7392,6 +7473,87 @@ Transform:
   m_Father: {fileID: 2030309114}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1944335173
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 183183792873174217}
+    m_Modifications:
+    - target: {fileID: 5443950609122290169, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_Name
+      value: IcyFreezerSmokeVFX
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.093
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f25c445917a95b54cac154d48af58943, type: 3}
+--- !u!4 &1944335174 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7302578245281013712, guid: f25c445917a95b54cac154d48af58943,
+    type: 3}
+  m_PrefabInstance: {fileID: 1944335173}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1944335175 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5443950609122290169, guid: f25c445917a95b54cac154d48af58943,
+    type: 3}
+  m_PrefabInstance: {fileID: 1944335173}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1958461280
 GameObject:
   m_ObjectHideFlags: 0
@@ -8898,6 +9060,7 @@ Transform:
   - {fileID: 1248868012189748070}
   - {fileID: 6460615138593913125}
   - {fileID: 132477391}
+  - {fileID: 1944335174}
   m_Father: {fileID: 160180387}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8915,6 +9078,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isTutorial: 0
   _ingredients: []
+  _icySmoke: {fileID: 1944335175}
   snapToPoint: {fileID: 6460615138593913125}
   pointToSnap: {fileID: 1285653661905871941}
   _snapSpeed: 0
@@ -9185,6 +9349,7 @@ Transform:
   - {fileID: 1466854551}
   - {fileID: 1248868011756087903}
   - {fileID: 6460615138211551260}
+  - {fileID: 291524951}
   m_Father: {fileID: 160180387}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9215,6 +9380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isTutorial: 0
   _ingredients: []
+  _icySmoke: {fileID: 291524952}
   snapToPoint: {fileID: 6460615138211551260}
   pointToSnap: {fileID: 1285653661534291324}
   _snapSpeed: 0
