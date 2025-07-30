@@ -7,9 +7,8 @@ public class CustomerOrder : MonoBehaviour
 {
     #region Properties
 
-    public DishPlatter WantedPlatter { get; private set; } // what dish the customer wants to order   
-    public float CustomerSR { get; set; }                  // (FoodScore of dish * 0.8 + _patienceRate * 0.2) / 2
-    public bool IsLastCustomer { get; set; } = false;
+    public DishPlatter WantedPlatter { get; private set; } 
+    public float PatienceScore { get; set; }   
     public float PatienceRate => _patienceDecreaseRate;
     public bool IsTutorial => _isTutorial; 
     public bool IsTunaCustomer => _isTunaCustomer;
@@ -65,18 +64,12 @@ public class CustomerOrder : MonoBehaviour
         DeinitializeEvents();
 
         SpawnManager.Instance.RemoveCustomer(gameObject);
+        SpawnManager.Instance.CheckRemainingCustomers();
 
         if (_isTunaCustomer) // only for onboarding
         {
             SpawnManager.Instance.DisableTutorial();
             ShopManager.Instance.ClearList();
-            return;
-        }
-
-        if (GameManager.Instance.CurrentShift == GameShift.Service && IsLastCustomer)
-        {
-            GameManager.Instance.StopAllCoroutines();
-            GameManager.Instance.ChangeShift(GameShift.PostService);
         }
     }
 
@@ -125,7 +118,7 @@ public class CustomerOrder : MonoBehaviour
             OnBoardingHandler.Instance.OnTutorialEnd += DestoryGO;
 
         else 
-            GameManager.Instance.OnEndService += DestroyCustomerUI;
+            GameManager.Instance.OnEndService += DestoryGO;
     }
     private void DeinitializeEvents()
     {
@@ -133,7 +126,7 @@ public class CustomerOrder : MonoBehaviour
             OnBoardingHandler.Instance.OnTutorialEnd -= DestoryGO;
         
         else 
-            GameManager.Instance.OnEndService -= DestroyCustomerUI; 
+            GameManager.Instance.OnEndService -= DestoryGO; 
     }
     private void DestroyCustomerUI() => Destroy(_customerOrderUI);
     private void DestoryGO() => Destroy(gameObject);
@@ -156,7 +149,7 @@ public class CustomerOrder : MonoBehaviour
             if (_customerScore < 1f)
             {
                 _customerScore = 0f;
-                CustomerSR = 0f;
+                PatienceScore = 0f;
             }
             
             // face change

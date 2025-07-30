@@ -128,7 +128,7 @@ public class HandManager : Singleton<HandManager>
     public void DecrementUsage(SelectExitEventArgs args)
     {
         _handUsage--;
-        Debug.LogWarning($"Oh no, my hand is getting diry! {_handUsage}");
+        // Debug.LogWarning($"Oh no, my hand is getting diry! {_handUsage}");
     }
 
     public void RegisterGrabbable(XRGrabInteractable _interactable)

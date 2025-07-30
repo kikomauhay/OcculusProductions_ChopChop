@@ -168,7 +168,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         NEW_ColliderCheck colliderCheck = _newColliderChecks[idx];
 
         // links a box collider & seat to the customer
-        colliderCheck.Order = customer.GetComponent<CustomerOrder>();
+        colliderCheck.CustomerOrder = customer.GetComponent<CustomerOrder>();
         
         _seatedCustomers.Add(customer);
         customerActions.SeatIndex = idx;
@@ -179,9 +179,6 @@ public class SpawnManager : StaticInstance<SpawnManager>
         // adding random noises when the cats spawn
         StartCoroutine(customerActions.RandomMeowing());
         _spawnedCustomers++;
-
-        if (_spawnedCustomers == GameManager.Instance.MaxCustomerCount)
-            customer.GetComponent<CustomerOrder>().IsLastCustomer = true;
     }
     public void SpawnTutorialCustomer(bool isAtrium)
     {
@@ -208,7 +205,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         NEW_ColliderCheck newCollider = _newColliderChecks[0];
 
         // links the box collider & seat to the customer
-        newCollider.Order = tutorialCustomer.GetComponent<CustomerOrder>();
+        newCollider.CustomerOrder = tutorialCustomer.GetComponent<CustomerOrder>();
         _seatedCustomers.Add(tutorialCustomer);
         customerActions.SeatIndex = 0;
 
@@ -221,7 +218,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         else
             Debug.LogWarning($"Spawned Tuna Customer!");
 
-        Debug.Log($"{newCollider} wanted Order: {newCollider.Order.WantedPlatter}");
+        // Debug.LogWarning($"{newCollider} wanted Order: {newCollider.Order.WantedPlatter}");
     }
 
     #endregion
@@ -234,9 +231,9 @@ public class SpawnManager : StaticInstance<SpawnManager>
         // removes the customer from the list
         _seatedCustomers.Remove(customer);
 
-        // removed any link from the removed customer 
+        // removes any link from the removed customer 
         _customerSeats[idx].IsEmpty = true;
-        _newColliderChecks[idx].Order = null;
+        _newColliderChecks[idx].CustomerOrder = null;
     }   
     private int GiveAvaiableSeat() // sets the index where the customer should sit
     {
@@ -250,6 +247,14 @@ public class SpawnManager : StaticInstance<SpawnManager>
             else continue;
         }
         return -1; // all seats are empty
+    }
+    public void CheckRemainingCustomers()
+    {
+        if (_seatedCustomers.Count == 0)
+        {
+            GameManager.Instance.StopAllCoroutines();
+            GameManager.Instance.ChangeShift(GameShift.PostService);
+        }
     }
 
     #endregion
@@ -279,7 +284,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
         if (_newColliderChecks.Length > 1)
             foreach (NEW_ColliderCheck col in _newColliderChecks)
-                col.Order = null;
+                col.CustomerOrder = null;
 
         if (_seatedCustomers.Count > 1)
         {
@@ -288,6 +293,9 @@ public class SpawnManager : StaticInstance<SpawnManager>
 
             _seatedCustomers.Clear();
         }
+
+        _spawnedCustomers = 0;
+        DisableTutorial();
     }
 
     #endregion
