@@ -276,7 +276,9 @@ public class GameManager : Singleton<GameManager>
     private void EnterTraining()
     {
         SoundManager.Instance.StopMusic();
-        SoundManager.Instance.PlayMusic("training bgm");
+        
+        if (TutorialDone)
+            SoundManager.Instance.PlayMusic("training bgm");
     }
 
     #endregion
@@ -360,12 +362,6 @@ public class GameManager : Singleton<GameManager>
 
         MainMenuHandler.Instance.TogglePlayIcon(false);
         MainMenuHandler.Instance.ToggleLiveWallpaper(false);
-
-        /*
-        DoCustomerRating();
-        DoKitchenRating();
-        DoPostServiceRating();
-        */
 
         DoFinalRatings();
         _eodReceipt.GiveTotalCustomerServed();
