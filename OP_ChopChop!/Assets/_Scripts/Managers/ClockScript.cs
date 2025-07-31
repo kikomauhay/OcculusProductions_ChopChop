@@ -17,6 +17,8 @@ public class ClockScript : StaticInstance<ClockScript>
 
     private void Update()
     {
+        if (GameManager.Instance.IsGameOver) return;
+
         int minutes = Mathf.FloorToInt(_timeRemaining / 60);
         int seconds = Mathf.FloorToInt(_timeRemaining % 60);
         

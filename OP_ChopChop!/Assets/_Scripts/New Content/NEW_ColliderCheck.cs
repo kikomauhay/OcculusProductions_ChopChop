@@ -52,7 +52,7 @@ public class NEW_ColliderCheck : MonoBehaviour
     {
         if (CustomerOrder == null)
         {
-            Debug.LogError($"{CustomerOrder} is null!");
+            // Debug.LogError($"{CustomerOrder} is null!");
             SoundManager.Instance.PlaySound("wrong");
             return;
         }
@@ -68,6 +68,8 @@ public class NEW_ColliderCheck : MonoBehaviour
         // makes sure that you have both a PLATE & DISH script
         if (dish != null && plate != null)
         {
+            if (!dish.HasFood) return;
+
             DoDishCollision(dish, plate);
             // Debug.LogWarning($"Collided with {other.gameObject.name}");
             // Debug.LogWarning("Finished dish collision!");
@@ -103,7 +105,7 @@ public class NEW_ColliderCheck : MonoBehaviour
             CustomerOrder.PatienceScore = 0f;
             // StartCoroutine(CO_DisableCollider());
             StartCoroutine(CustomerOrder.CO_AngryReaction());
-            StartCoroutine(GameManager.Instance.CO_GameOver());
+            StartCoroutine(GameManager.Instance.CO_GameOver2());
         }
         else
         {
@@ -122,7 +124,7 @@ public class NEW_ColliderCheck : MonoBehaviour
     {
         if (dish.FoodCondition != FoodCondition.CLEAN)
         {
-            TriggerContainatedOrder();
+            TriggerContaminatedOrder();
             Debug.LogError("Triggered dirty order!");
         }
         else if (dish.DishPlatter != CustomerOrder.WantedPlatter)
@@ -142,13 +144,14 @@ public class NEW_ColliderCheck : MonoBehaviour
             }
         }
     }
-    private void TriggerContainatedOrder()
+    private void TriggerContaminatedOrder()
     {
         if (GameManager.Instance.CurrentShift != GameShift.Training)
         {
             CustomerOrder.PatienceScore = 0f;
             StartCoroutine(CustomerOrder.CO_DirtyReaction());
-            Debug.LogError("Player served a dirty order!");
+            StartCoroutine(GameManager.Instance.CO_GameOver2());
+            // Debug.LogError("Player served a dirty order!");
         }
         else if (_isTutorial)
         {
@@ -178,7 +181,7 @@ public class NEW_ColliderCheck : MonoBehaviour
         float patienceScore = CustomerOrder.PatienceScore * _patiencePercentage;
         CustomerOrder.PatienceScore = dishScore + patienceScore; // dish quality has more focus becuase of CAPSTN
         
-        Debug.LogWarning($"{this} Current Score: {CustomerOrder.PatienceScore}!");
+        // Debug.LogWarning($"{this} Current Score: {CustomerOrder.PatienceScore}!");
 
         GameManager.Instance.AddToCustomerScores(CustomerOrder.PatienceScore);
         StartCoroutine(CustomerOrder.CO_HappyReaction());
@@ -201,18 +204,4 @@ public class NEW_ColliderCheck : MonoBehaviour
     public void DisableTutorial() => _isTutorial = false;
 
     #endregion
-
-    #region Enumerators
-
-    private IEnumerator CO_DisableCollider()
-    {
-        _collider.enabled = false;
-        yield return new WaitForSeconds(_disableTimer);
-        _collider.enabled = true;
-
-        if (GameManager.Instance.CurrentShift == GameShift.Service) 
-            CustomerOrder = null; // need this here so it doesn't trigger a lot of times 
-    }
-
-    #endregion  
 }

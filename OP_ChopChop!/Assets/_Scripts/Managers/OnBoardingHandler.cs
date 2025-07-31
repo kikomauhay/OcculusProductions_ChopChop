@@ -157,7 +157,7 @@ public class OnBoardingHandler : Singleton<OnBoardingHandler>
         DoExtraOnboarding(CurrentStep);
         StartCoroutine(CO_ToggleHighlight());
 
-        Debug.Log($"{this} is playing Onb 0{CurrentStep}");
+        // Debug.Log($"{this} is playing Onb 0{CurrentStep}");
     }
 
     public void AddOnboardingIndex()

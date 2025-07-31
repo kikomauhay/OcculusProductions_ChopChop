@@ -54,12 +54,12 @@ public class RiceIngredient : Ingredient
         }
         if (_moldType != MoldType.PERFECT) 
         {
-            Debug.LogError($"Mold type of {name} is not perfect!");
+            // Debug.LogError($"Mold type of {name} is not perfect!");
             return;
         }       
         if (ing == null)
         {
-            Debug.LogError($"{other.name} is not an ingredient!");
+            // Debug.LogError($"{other.name} is not an ingredient!");
             return;
         }
         if (ing.SliceIndex != 4)

@@ -100,6 +100,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         GameManager.Instance.OnEndService -= ClearCustomerSeats;
         GameManager.Instance.OnEndService -= StopCustomerSpawning;
         OnBoardingHandler.Instance.OnTutorialEnd -= ClearCustomerSeats;
+        MainMenuHandler.Instance.OnResetMGS -= ClearCustomerSeats;
     }
 
     private IEnumerator CreateCustomer()
@@ -124,6 +125,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
     {
         yield return new WaitForSeconds(2f);
         OnBoardingHandler.Instance.OnTutorialEnd += ClearCustomerSeats;
+        MainMenuHandler.Instance.OnResetMGS += ClearCustomerSeats;
     }
 
     #endregion
@@ -213,11 +215,12 @@ public class SpawnManager : StaticInstance<SpawnManager>
         // prevents multiple customers getting the same seat 
         seat.IsEmpty = false;
 
+        /*
         if (isAtrium)
             Debug.LogWarning($"Spawned Atrium!");
 
         else
-            Debug.LogWarning($"Spawned Tuna Customer!");
+            Debug.LogWarning($"Spawned Tuna Customer!"); */
 
         // Debug.Log($"{newCollider} wanted Order: {newCollider.CustomerOrder.WantedPlatter}");
     }
@@ -289,7 +292,7 @@ public class SpawnManager : StaticInstance<SpawnManager>
         }
         
         _customerCount = 0;
-        Debug.LogWarning($"Reset customer count! New count: {_customerCount}");
+        // Debug.LogWarning($"Reset customer count! New count: {_customerCount}");
     }
 
     #endregion
