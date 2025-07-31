@@ -361,12 +361,6 @@ public class GameManager : Singleton<GameManager>
         MainMenuHandler.Instance.TogglePlayIcon(false);
         MainMenuHandler.Instance.ToggleLiveWallpaper(false);
 
-        /*
-        DoCustomerRating();
-        DoKitchenRating();
-        DoPostServiceRating();
-        */
-
         DoFinalRatings();
         _eodReceipt.GiveTotalCustomerServed();
     }

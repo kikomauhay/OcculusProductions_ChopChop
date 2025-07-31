@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class RestaurantReceipt : MonoBehaviour
 {
@@ -16,6 +17,19 @@ public class RestaurantReceipt : MonoBehaviour
 
     //index is set according to order of rating which is S to F.
     //0 = S....4 = F.
+    #endregion
+
+    #region Unity
+
+    private void OnEnable()
+    {
+        GameManager.Instance.OnStartService += DisableScores;
+    }
+    private void OnDisable()
+    {
+        GameManager.Instance.OnStartService -= DisableScores;
+    }
+
     #endregion
     #region Ratings
 
@@ -55,5 +69,20 @@ public class RestaurantReceipt : MonoBehaviour
             Debug.LogWarning("Resulted in a negative number!");
             return -1;
         }            
+    }
+
+    private void DisableScores()
+    {
+        if (customerRatings.Length > 0)
+            foreach (GameObject ratings in customerRatings)
+                ratings.SetActive(false);
+
+        if (kicthenRatings.Length > 0)
+            foreach (GameObject ratings in kicthenRatings)
+                ratings.SetActive(false);
+
+        if (restaurantRatings.Length > 0)
+            foreach (GameObject ratings in restaurantRatings)
+                ratings.SetActive(false);
     }
 }
