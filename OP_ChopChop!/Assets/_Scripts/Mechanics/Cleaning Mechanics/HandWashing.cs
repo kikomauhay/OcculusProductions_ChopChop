@@ -14,21 +14,26 @@ public class HandWashing : MonoBehaviour
     [SerializeField] private Material _handMaterial, _outlineTexture, _warningOutlineTexture;
 
     private float _timer;
+    private bool _washLogicRunning;
 
 #endregion
 
 #region Methods
 
-    void Start()
+    private void Start()
     { 
         IsWet = false;
         HandWashCollider.enabled = false;
         
-        _timer = 3f;
+        _timer = 5f;
         _isDirty = false;
+        _washLogicRunning = false;
     }
+
     private void OnTriggerEnter(Collider other)
     {
+        HandWashing otherHand = other.gameObject.GetComponent<HandWashing>();
+
         if (other.gameObject.GetComponent<Ingredient>() != null)
         {
             if (_isDirty)
@@ -36,32 +41,29 @@ public class HandWashing : MonoBehaviour
                 other.gameObject.GetComponent<Ingredient>().SetMoldy();
             }
         }
-    }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (!IsWet) return;
-
-        if (other.gameObject.GetComponent<HandWashing>() != null)
+        if(otherHand != null)
         {
-            HandManager.Instance.ToggleBubblesOn();
-
-            _timer -= Time.deltaTime;
-
-            if (_timer <= 0)
+            if (!IsWet || !otherHand.IsWet) return;
+            
+            if(!_washLogicRunning)
             {
-                // Debug.LogWarning($"Hand Status: {_isDirty}");
-                OnHandCleaned?.Invoke(20);
+                HandManager.Instance.ToggleBubblesOn();
+                StartCoroutine(WashLogic());
+                StartCoroutine(WetToggle());
             }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _timer = 3f;
+        if(other.gameObject.GetComponent<HandWashing>() != null)
+        {
+            if (!IsWet) return;
 
-        if (IsWet)
-            StartCoroutine(WetToggle());
+            _washLogicRunning = false ;
+            StopCoroutine(WashLogic());
+        }
     }
 
 #endregion
@@ -105,7 +107,10 @@ public class HandWashing : MonoBehaviour
         }
 
     }
-    public void ToggleWet() => IsWet = true;
+
+    public void Wet() => IsWet = true;
+
+    public void Dry() => StartCoroutine(WetToggle());
     
 #endregion
 
@@ -113,9 +118,17 @@ public class HandWashing : MonoBehaviour
 
     private IEnumerator WetToggle()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(7f);
         IsWet = false;
         HandManager.Instance.ToggleBubblesOff();
+    }
+
+    private IEnumerator WashLogic()
+    {
+        _washLogicRunning = true;
+        yield return new WaitForSeconds(_timer);
+        OnHandCleaned?.Invoke(20);
+        _washLogicRunning = false;
     }
 
 #endregion
