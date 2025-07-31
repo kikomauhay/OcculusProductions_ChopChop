@@ -51,28 +51,26 @@ public class Bell : XRBaseInteractable
     {
         if (_gameMgr.CurrentShift == GameShift.Training)
         {
-            // when you press the bell in TRS, the tutorial stops and you immediately go to MGS
-            Debug.LogWarning("Tutorial disabled!");
-
-            // UX for the scene change
             SoundManager.Instance.PlaySound("change shift");
 
-            // other triggers to remove any tutorial logic
             _onbHandler.OnTutorialEnd?.Invoke();
             OnBoardingHandler.Instance.Disable();
             StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
             _gameMgr.ChangeShift(GameShift.PreService);
-            
-            // Debug.LogWarning("Loading to MGS");
         }
-        else if (_gameMgr.CurrentShift != GameShift.Default) // player can now go back to training after pressing the bell
+        else if (_gameMgr.CurrentShift != GameShift.Default) // player can only go back to training when it's game over
         {
+            if (!GameManager.Instance.IsGameOver)
+            {
+                SoundManager.Instance.PlaySound("wrong");
+                return;
+            }
+
             _gameMgr.ChangeShift(GameShift.Training);
             _gameMgr.OnEndService?.Invoke();
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
-            
-            // Debug.LogWarning("Loading to TRS");
+
         }
     }
     private void Keyboard_BellTrigger()
@@ -82,26 +80,24 @@ public class Bell : XRBaseInteractable
 
         if (_gameMgr.CurrentShift == GameShift.Training)
         {
-            // when you press the bell in TRS, the tutorial stops and you immediately go to MGS
             OnBoardingHandler.Instance.Disable();
-            Debug.LogWarning("Tutorial disabled!");
-
-            // UX for the scene change
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("MainGameScene"));
 
-            // other triggers to remove any tutorial logic
             _gameMgr.ChangeShift(GameShift.PreService);
             _onbHandler.OnTutorialEnd?.Invoke();
-            // Debug.LogWarning("Loading to MGS");
         }
-        else // player can now go back to training after pressing the bell
+        else // player can only go back to training when it's game over
         {
+            if (!_gameMgr.IsGameOver)
+            {
+                SoundManager.Instance.PlaySound("wrong");
+                return;
+            }
+
             _gameMgr.ChangeShift(GameShift.Training);
             SoundManager.Instance.PlaySound("change shift");
             StartCoroutine(SceneHandler.Instance.LoadScene("TrainingScene"));
-
-            // Debug.LogWarning("Loading to TRS");
         }
     }
     #endregion

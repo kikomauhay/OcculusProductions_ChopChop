@@ -228,7 +228,7 @@ public abstract class Ingredient : MonoBehaviour
     private void StartDecay() => StartCoroutine(CO_Decay());
     private void DestroyGameObject()
     {
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
     protected virtual void ChangeMaterial()
     {
@@ -256,9 +256,9 @@ public abstract class Ingredient : MonoBehaviour
 
     protected IEnumerator CO_Decay()
     {
-        Debug.LogWarning("10s before decaying starts!");
+        // Debug.LogWarning("10s before decaying starts!");
         yield return new WaitForSeconds(GRACE_PERIOD);
-        Debug.LogWarning("Decaying start!");
+        // Debug.LogWarning("Decaying start!");
 
         while (FreshnessRate > 0f)
         {
@@ -291,14 +291,14 @@ public abstract class Ingredient : MonoBehaviour
                 ChangeMaterial();
             }
 
-            Debug.Log($"{this} freshness rate: {_freshnessRate}/100");
+            // Debug.Log($"{this} freshness rate: {_freshnessRate}/100");
         }
     }
     protected IEnumerator Delay(float time)
     {
         if (time < 0f)
         {
-            Debug.LogError("Given time was a negative number!");
+            // Debug.LogError("Given time was a negative number!");
             yield break;
         }
 

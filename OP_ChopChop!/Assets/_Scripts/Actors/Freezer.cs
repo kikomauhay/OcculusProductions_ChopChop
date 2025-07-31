@@ -102,7 +102,7 @@ public class Freezer : MonoBehaviour
         float pointToPointDist = Vector3.Distance(pointToSnap.position,
                                                   snapToPoint.position);
 
-        Debug.Log($"Distance Calculated: {pointToPointDist}");
+        // Debug.Log($"Distance Calculated: {pointToPointDist}");
 
         if (pointToPointDist <= distanceThreshold)
         {

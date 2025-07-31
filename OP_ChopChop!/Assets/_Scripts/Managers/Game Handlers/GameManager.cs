@@ -8,7 +8,7 @@ public class GameManager : Singleton<GameManager>
 {
     #region Properties
 
-    public Action OnStartService, OnEndService;
+    public Action OnStartService, OnEndService, OnGameOver;
     public InputActionReference Continue;
     public GameShift CurrentShift { get; private set; } = GameShift.Default;
 
@@ -20,12 +20,12 @@ public class GameManager : Singleton<GameManager>
     public bool IsPaused { get; private set; }
     public float CurrentPlayerMoney { get; private set; }
 
-    #endregion  
+    #endregion
     #region SerializeField
 
     [SerializeField] private float _testTimer;
     [SerializeField] private float _startingPlayerMoney;
-    [SerializeField] private RestaurantReceipt _endOfDayReceipt;
+    [SerializeField] private RestaurantReceipt _eodReceipt;
     [SerializeField] private GameObject _logo;
     [SerializeField] private bool _logoRemoved = false;
     [SerializeField] private bool _isTutorial;
@@ -40,6 +40,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private List<float> _customerSRScores;
     public int CustomersServed; // will be used for difficulty increase
     private float _finalScore;
+    private float _finalKitchenScore, _finalCustomerScore;
 
     private const float MAX_MONEY = 9999f;
     private const float FIVE_MINUTES = 300f; // shift duration for Service
@@ -52,30 +53,35 @@ public class GameManager : Singleton<GameManager>
     protected override void OnApplicationQuit()
     {
         base.OnApplicationQuit();
+
         Continue.action.performed -= RemoveLogo;
 
         if (_isDeveloperMode)
             Debug.Log($"{this} developer mode: {_isDeveloperMode}");
 
-        OnEndService -= ResetScores;
+        OnStartService -= ResetScores;
     }
     protected override void Awake() // set starting money
     {
         base.Awake();
 
+        Difficulty = GameDifficulty.EASY;
         CurrentPlayerMoney = _startingPlayerMoney;
         CustomersServed = 0;
         MaxCustomerCount = 3;
+
+        _finalCustomerScore = 0;
+        _finalKitchenScore = 0;
+        _finalScore = 0;
+
         IsPaused = false;
         IsGameOver = false;
-        Difficulty = GameDifficulty.EASY;
-
-        // these should be empty when testing is done
-        _customerSRScores = new List<float>(); // { 100f, 90f, 80f, 80f };
+        
+        _customerSRScores = new List<float>(); 
 
         Continue.action.Enable();
         Continue.action.performed += RemoveLogo;
-        OnEndService += ResetScores;
+        OnStartService += ResetScores;
     }
     private void Start() => StartCoroutine(CO_DelayedEventBind());
     private void Update() => Test();
@@ -113,7 +119,7 @@ public class GameManager : Singleton<GameManager>
 
         if (_logoRemoved)
         {
-            Debug.Log("LOGO REMOVED");
+            // Debug.Log("LOGO REMOVED");
             Continue.action.performed -= RemoveLogo;
         }
     }
@@ -154,7 +160,11 @@ public class GameManager : Singleton<GameManager>
         }
     }
     public void AddToCustomerScores(float n) => _customerSRScores.Add(n);
-    public void IncrementCustomersServed() => CustomersServed++;
+    public void IncrementCustomersServed()
+    {
+        CustomersServed++;
+        MainMenuHandler.Instance.UpdateCustomerCountUI();
+    }
     public void AddMoney(float amt)
     {
         if (amt < 0f) return;
@@ -166,7 +176,7 @@ public class GameManager : Singleton<GameManager>
     }
     public void DeductMoney(float amt)
     {
-        Debug.Log("Minus Player Money");
+        // Debug.Log("Minus Player Money");
         if (amt < 0f) return;
 
         CurrentPlayerMoney -= amt;
@@ -180,7 +190,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (chosenShift == CurrentShift)
         {
-            Debug.LogError("You cannot go to the same shift again!");
+            // Debug.LogError("You cannot go to the same shift again!");
             return;
         }
 
@@ -188,7 +198,7 @@ public class GameManager : Singleton<GameManager>
 
         switch (chosenShift)
         {
-            case GameShift.Training: break;
+            case GameShift.Training: ResetScores(); break;
             case GameShift.PreService: DoPreService(); break;
             case GameShift.Service: DoService(); break;
             case GameShift.PostService: DoPostService(); break;
@@ -198,7 +208,7 @@ public class GameManager : Singleton<GameManager>
                 break;
         }
         SoundManager.Instance.PlaySound("change shift");
-        Debug.LogWarning($"Shifted to {CurrentShift}"!);
+        // Debug.LogWarning($"Shifted to {CurrentShift}"!);
     }
     public void EnableEOD()
     {
@@ -209,8 +219,25 @@ public class GameManager : Singleton<GameManager>
     {
         ChangeShift(GameShift.PreService);
         ResetScores();
+
+        MainMenuHandler.Instance.ToggleEODPanel(false);
+        MainMenuHandler.Instance.TogglePlayIcon(true);
+        MainMenuHandler.Instance.ToggleLiveWallpaper(true);
+
         Debug.LogWarning("Resetting MGS");
     }
+    public void CheckRemainingCustomers()
+    {
+        if (CustomersServed == MaxCustomerCount)
+        {
+            StopAllCoroutines();
+            ChangeShift(GameShift.PostService);
+        }
+    }
+
+    #endregion
+    #region Private
+
     private void DisableTutorial()
     {
         if (!_isTutorial)
@@ -229,13 +256,18 @@ public class GameManager : Singleton<GameManager>
             Continue.action.performed += RemoveLogo;
         }
     }
+   
     private void ResetScores()
     {
         if (_customerSRScores.Count > 0)
             _customerSRScores.Clear();
 
+        _finalCustomerScore = 0f;
+        _finalKitchenScore = 0f;
         _finalScore = 0f;
+
         CustomersServed = 0;
+        DisableGameOver();
     }
 
     #endregion
@@ -274,10 +306,9 @@ public class GameManager : Singleton<GameManager>
     private void DoPostService() // rating calculations
     {
         SoundManager.Instance.StopMusic();
-        SoundManager.Instance.PlayMusic("post-service bgm");
 
-        OnEndService?.Invoke();
         EnableEODReceipt();
+        OnEndService?.Invoke();
         ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
     }
     private void ChangeDifficuty(int score)
@@ -303,7 +334,7 @@ public class GameManager : Singleton<GameManager>
         }
         else // player scored below C
         {
-            StartCoroutine(CO_GameOver());
+            StartCoroutine(CO_GameOver2());
             return;
         }
     }
@@ -313,66 +344,103 @@ public class GameManager : Singleton<GameManager>
 
     private void EnableEODReceipt()
     {
-        // enables the EOD receipt
-        MainMenuHandler.Instance.ToggleEODPanel();
-        _endOfDayReceipt = MainMenuHandler.Instance.gameObject?.
-                           GetComponentInChildren<RestaurantReceipt>();
+        MainMenuHandler.Instance.ToggleEODPanel(true);
+        _eodReceipt = MainMenuHandler.Instance.gameObject?.
+                      GetComponentInChildren<RestaurantReceipt>();
 
-        // disables both the play button & live wallpaper
         MainMenuHandler.Instance.TogglePlayIcon(false);
-        MainMenuHandler.Instance.ToggleLiveWallpaper();
+        MainMenuHandler.Instance.ToggleLiveWallpaper(false);
 
-        // prints the important stuff in the EOD receipt  
+        /*
         DoCustomerRating();
         DoKitchenRating();
         DoPostServiceRating();
-        
-        // add the customers served in the EOD receipt
-        CustomersServed = _isTutorial ? 2 : _endOfDayReceipt.totalcustomerServed;
-        _endOfDayReceipt.GiveTotalCustomerServed();
+        */
+
+        DoFinalRatings();
+        _eodReceipt.GiveTotalCustomerServed();
     }
+    private void DoFinalRatings()
+    {
+        if (_isTutorial)
+        {
+            _eodReceipt.SetCustomerRating(0);
+            _eodReceipt.SetKitchenRating(0);
+            _eodReceipt.SetRestaurantRating(0);
+            CustomersServed = 2;
+            return;
+        }
+
+        if (IsGameOver)
+        {
+            _finalCustomerScore = 0f;
+            _finalKitchenScore = 0f;
+            _finalScore = 0f;
+
+            // no need to convert to the index since it's game over
+            _eodReceipt.SetCustomerRating(4);
+            _eodReceipt.SetKitchenRating(4);
+            _eodReceipt.SetRestaurantRating(4);
+        }
+        else
+        {
+            _finalCustomerScore = GetAverageOf(_customerSRScores);
+            _finalKitchenScore = KitchenCleaningManager.Instance.KitchenScore;
+            _finalScore = (_finalKitchenScore + _finalCustomerScore) / 2f;
+
+            _eodReceipt.SetCustomerRating(_eodReceipt.ConvertToScoreIndex(_finalCustomerScore));
+            _eodReceipt.SetKitchenRating(_eodReceipt.ConvertToScoreIndex(_finalKitchenScore));
+            _eodReceipt.SetRestaurantRating(_eodReceipt.ConvertToScoreIndex(_finalScore));
+        }
+        
+    }
+    /*
     private void DoCustomerRating()
     {
         if (_isTutorial) 
         {
-            _endOfDayReceipt.GiveCustomerRating(0); // automatically gets a perfect score
+            _eodReceipt.SetCustomerRating(0); // automatically gets a perfect score
             return;
         }
 
-        float customerScore = IsGameOver ? 0f : GetAverageOf(_customerSRScores);
-        int indexCustomerRating = _endOfDayReceipt.ReturnScoretoIndexRating(customerScore);
-        
-        _endOfDayReceipt.GiveCustomerRating(indexCustomerRating);
+        // value changes if the game is over
+        _finalCustomerScore = IsGameOver ? 0f : GetAverageOf(_customerSRScores);
+        int indexCustomerRating = _eodReceipt.ConvertToScoreIndex(_finalCustomerScore);
+
+        _eodReceipt.SetCustomerRating(indexCustomerRating);
+        Debug.LogWarning($"{this} Total Customer Rating: {_finalCustomerScore}");
     }
     private void DoKitchenRating() 
     {   
         if (_isTutorial) 
         {
-            _endOfDayReceipt.GiveKitchenRating(0); // automatically gets a perfect score
+            _eodReceipt.SetKitchenRating(0); // automatically gets a perfect score
             return;
         }
 
-        int indexKitchenRating = IsGameOver ? 4 :
-            _endOfDayReceipt.ReturnScoretoIndexRating(KitchenCleaningManager.Instance.KitchenScore);
-    
-        _endOfDayReceipt.GiveKitchenRating(indexKitchenRating);
+        // value changes if the game is over
+        int indexKitchenRating = IsGameOver ? 4 : _eodReceipt.ConvertToScoreIndex(KitchenCleaningManager.Instance.KitchenScore);
+        _finalKitchenScore = IsGameOver ? 0 : KitchenCleaningManager.Instance.KitchenScore;
+
+        _eodReceipt.SetKitchenRating(indexKitchenRating);        
+        Debug.LogWarning($"{this} Total Kitchen Score: {_finalKitchenScore}");
     }
     private void DoPostServiceRating() // FINAL SCORE 
     {
         if (_isTutorial) 
         {
-            _endOfDayReceipt.GiveRestaurantRating(0); // automatically gets a perfect score
+            _eodReceipt.SetRestaurantRating(0); // automatically gets a perfect score
             return;
         }
 
-        _finalScore = IsGameOver ? 4 : (KitchenCleaningManager.Instance.KitchenScore + 
-                                        GetAverageOf(_customerSRScores)) / 2f;   
-        
-        int indexPostServiceRating = _endOfDayReceipt.ReturnScoretoIndexRating(_finalScore);
+        // value changes if the game is over
+        _finalScore = IsGameOver ? 4 : (_finalKitchenScore + _finalCustomerScore) / 2f;        
+        int indexPostServiceRating = _eodReceipt.ConvertToScoreIndex(_finalScore);
 
-        _endOfDayReceipt.GiveRestaurantRating(indexPostServiceRating);
+        _eodReceipt.SetRestaurantRating(indexPostServiceRating);
         ChangeDifficuty(indexPostServiceRating);
     }
+    */
     private float GetAverageOf(List<float> list)
     {
         // prevents a div/0 case
@@ -380,19 +448,50 @@ public class GameManager : Singleton<GameManager>
 
         float n = 0f;
 
-        Debug.LogWarning("Scores: ");
-        for (int i = 0; i < list.Count; i++)
-        {            
-            Debug.LogWarning($"{list[i]}");
+        for (int i = 0; i < list.Count; i++)       
             n += list[i];
-        }
-
-        return n / list.Count;
+        
+        return n / CustomersServed; 
     }
-    
+
 
     #endregion
+    #region Game Over
+    public void DisableGameOver()
+    {
+        IsGameOver = false;
+        Debug.LogWarning("Removed game over!");
+    }
+    public IEnumerator CO_GameOver1()
+    {
+        IsGameOver = true;
+        StopAllCoroutines();
 
+        SoundManager.Instance.StopMusic();
+        SoundManager.Instance.PlaySound("game over 01");
+
+        yield return new WaitForSeconds(14f);
+        yield return StartCoroutine(CO_GameOver2());
+    }
+    public IEnumerator CO_GameOver2()
+    {
+        if (!IsGameOver)
+        {
+            IsGameOver = true;
+            SoundManager.Instance.StopMusic();
+        }
+
+        OnGameOver?.Invoke();
+        SoundManager.Instance.PlaySound("game over 02");
+        yield return new WaitForSeconds(2f);
+
+        ChangeShift(GameShift.PostService);
+
+        // SceneHandler.Instance.LoadScene("TrainingScene");
+        // ChangeShift(GameShift.Training);
+    }
+
+    #endregion
     #region Enumerators
 
     IEnumerator CO_ShiftCountdown(float timer, GameShift shift)
@@ -414,26 +513,7 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(1f);
         OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;
     }
-    public IEnumerator CO_CloseDownShop()
-    {
-        IsGameOver = true;
-        SoundManager.Instance.PlaySound("game over 01");
-        yield return new WaitForSeconds(4f);
-
-        StopAllCoroutines();
-        ChangeShift(GameShift.PostService);
-
-        yield return StartCoroutine(CO_GameOver());
-    }
-    public IEnumerator CO_GameOver()
-    {
-        IsGameOver = true;
-        SoundManager.Instance.PlaySound("game over 02");
-        yield return new WaitForSeconds(2f);
-
-        SceneHandler.Instance.LoadScene("TrainingScene");
-        ChangeShift(GameShift.Training);
-    }
+    
 
 #endregion
 }
@@ -457,209 +537,3 @@ public class GameManager : Singleton<GameManager>
     }
 
 #endregion
-
-
-/* -07.28.25- version
-using System.Collections;
-using UnityEngine;
-
-[RequireComponent(typeof(BoxCollider))]
-public class NEW_ColliderCheck : MonoBehaviour 
-{
-    #region Properties
-
-    public CustomerOrder Order { get; set; }
-
-    #endregion
-    #region Private
-
-    [SerializeField] private bool _isTutorial;
-    [SerializeField] private float _dishPercantage = 0.8f;
-    [SerializeField] private float _patiencePercentage = 0.2f;
-    [SerializeField] private float _disableTimer;
-
-    private Collider _collider;
-
-    [Header("Debugging")]
-    [SerializeField] private bool _isDevloperMode;
-
-    #endregion
-
-    #region Unity
-
-    private void Awake()
-    {
-        _collider = GetComponent<BoxCollider>();
-        if (_isDevloperMode)
-            Debug.Log($"{this} developer mode: {_isDevloperMode}");
-
-        if (_isTutorial)
-            Debug.Log($"{this} tutorial mode: {_isTutorial}"); 
-    }
-    private void Start()
-    {
-        OnBoardingHandler.Instance.OnTutorialEnd += DisableTutorial;
-
-        _collider.isTrigger = true;
-        _collider.enabled = true;
-        _disableTimer = 3f; 
-    }
-    private void Update() => test();
-    private void OnTriggerEnter(Collider other)
-    {
-        if (Order == null)
-        {
-            Debug.LogError($"{Order} is null!");
-            SoundManager.Instance.PlaySound("wrong");
-            return;
-        }
-        if (other.gameObject.GetComponent<Ingredient>() != null)
-        {            
-            DoIngredientCollision(other.gameObject.GetComponent<Ingredient>());
-            return;
-        }
-
-        NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
-        NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
-
-        // makes sure that you have both a PLATE & DISH script
-        if (dish != null && plate != null)
-        {
-            DoDishCollision(dish, plate);
-            Debug.Log("Finished dish collision!");
-        }
-    }
-    private void OnDestroy() => 
-        OnBoardingHandler.Instance.OnTutorialEnd -= DisableTutorial;
-    
-    private void test()
-    {
-        if (!_isDevloperMode) return;
-
-        if (Input.GetKeyDown(KeyCode.Tab))
-            Debug.Log($"{this} wanted plater: {Order.WantedPlatter}");        
-    }
-
-    #endregion
-    #region Helpers
-
-    private void DoIngredientCollision(Ingredient ing)
-    {
-        if (GameManager.Instance.CurrentShift != GameShift.Training)
-        {
-            Order.CustomerSR = 0f;
-            StartCoroutine(CO_DisableCollider());
-            StartCoroutine(Order.CO_AngryReaction());
-            StartCoroutine(GameManager.Instance.CO_GameOver());
-        }
-        else 
-        {
-            SoundManager.Instance.PlaySound("wrong");
-            SoundManager.Instance.PlaySound("ingredient order");
-            Debug.LogError("Player served a ingredient to the customer!");
-        }
-    }
-    private void DoDishCollision(NEW_Dish dish, NEW_Plate plate)
-    {
-        // customer's reaction when getting the dish
-        CheckFoodConition(dish); 
-        StartCoroutine(CO_DisableCollider());
-        
-        dish.DisableDish();
-        plate.Served();          
-    }
-    private void CheckFoodConition(NEW_Dish dish)
-    {
-        if (dish.FoodCondition != FoodCondition.CLEAN)
-        {
-            TriggerContainatedOrder();  
-            Debug.LogError("Triggered dirty order!");         
-        }
-        else if (dish.DishPlatter != Order.WantedPlatter) 
-        {
-            TriggerWrongOrder();                   
-            Debug.LogError("Triggered wrong order!");
-        }
-        else
-        {
-            TriggerCorrectOrder(dish);
-            TriggerOnboarding();
-            Debug.LogWarning("Triggered correct order!");         
-        }
-    }
-    private void TriggerContainatedOrder()
-    {
-        if (GameManager.Instance.CurrentShift != GameShift.Training)
-        {       
-            Order.CustomerSR = 0f;
-            StartCoroutine(Order.CO_DirtyReaction());
-            Debug.LogError("Player served a dirty order!");        
-        }
-        else
-        {
-            SoundManager.Instance.PlaySound("wrong");
-            SoundManager.Instance.PlaySound("contaminated order");
-        }        
-    }
-    private void TriggerWrongOrder()
-    {
-        if (GameManager.Instance.CurrentShift != GameShift.Training)
-        {
-            Order.CustomerSR = 0f;
-            GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
-            StartCoroutine(Order.CO_AngryReaction());
-            Debug.LogError("Player served the wrong order!");
-        }
-        else
-        {
-            SoundManager.Instance.PlaySound("wrong");
-            SoundManager.Instance.PlaySound("wrong order");
-        }
-    }
-    private void TriggerCorrectOrder(NEW_Dish dish)
-    {
-        // UX after serving the customer
-        float dishScore = dish.Score * _dishPercantage;
-        float patienceScore = Order.PatienceRate * _patiencePercentage;
-        Order.CustomerSR = (dishScore + patienceScore) / 2f; // dish quality has more focus becuase of CAPSTN
-        
-        GameManager.Instance.AddToCustomerScores(Order.CustomerSR);
-        StartCoroutine(Order.CO_HappyReaction());
-        // Destroy(Order.gameObject);
-    }
-    private void TriggerOnboarding()
-    {
-        if (!_isTutorial) return;
-
-        OnBoardingHandler.Instance.AddOnboardingIndex();
-        OnBoardingHandler.Instance.PlayOnboarding();
-
-        if (Order.IsTunaCustomer)
-        {
-            ShopManager.Instance.ClearList();
-            Debug.LogWarning("Benny was served!");
-        }
-        else Debug.LogWarning("Atrium was served!");
-    }
-    public void DisableTutorial() => _isTutorial = false;
-
-    #endregion
-    
-    #region Enumerators
-
-    private IEnumerator CO_DisableCollider()
-    {
-        _collider.enabled = false;
-        Debug.LogWarning("Collider disabled!");
-        yield return new WaitForSeconds(_disableTimer);
-
-        _collider.enabled = true;
-        Debug.LogWarning("Collider enabled!");
-
-        //Order = null;
-        Debug.LogWarning("CustomerOrder is now null!");
-    }
-
-    #endregion  
-}
-*/

@@ -26,14 +26,17 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
                 _maxDirtyColliders = value;
         }
     }
-
+    
     #endregion
     #region Members
 
     [SerializeField] private GameObject[] _dirtyColliders;
-    private const float ONE_MINUTE = 60f;
+    private const float GRACE_PERIOD = 10f;
+    private const float DIRTY_INTERVAL = 20f;
+    private const float DIRTY_RATE = 8f;
     private int _maxDirtyColliders;
-    private bool _canClean;
+
+    [SerializeField] private bool _isDeveloperMode;
 
     #endregion
 
@@ -44,20 +47,27 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
     private void Start()
     {
         OnCleanedArea += IncreaseCleanRate;
+        GameManager.Instance.OnStartService += StartDirtifying;
         GameManager.Instance.OnEndService += StopAllCoroutines;
+        GameManager.Instance.OnEndService += DisableAllColliders;
 
         KitchenScore = 85f; // so that even if there's only 1 dirty collider (needs balance testing)
         HandUsageCounter = 30;
         _maxDirtyColliders = 1;
-        _canClean = false;           // prevents the player from cleaning too much
 
         if (_maxDirtyColliders < 1)
-            Debug.LogWarning($"There will only be {_maxDirtyColliders} colliders available!");  
+            Debug.LogWarning($"There will only be {_maxDirtyColliders} colliders available!");
+
+        if (_isDeveloperMode)
+            InvokeRepeating("PrintScore", 0f, 1f);
     }
+
     private void OnDestroy()
     {
         OnCleanedArea -= IncreaseCleanRate;
+        GameManager.Instance.OnStartService -= StartDirtifying;
         GameManager.Instance.OnEndService -= StopAllCoroutines;
+        GameManager.Instance.OnEndService -= DisableAllColliders;
     }
 
     #endregion
@@ -72,45 +82,19 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
             for (int i = 0; i < _maxDirtyColliders; i++)
             {
                 _dirtyColliders[i].SetActive(true);
-                Debug.LogWarning($"{this}: a dirty collider has spawned!");
+                // Debug.LogWarning($"{this}: a dirty collider has spawned!");
             }
         }
         else EnableAllColliders(true);    
-
-        /* -OLD SPAWNING LOGIC-
-        do
-        {
-            for (int i = 0; i < _dirtyColliders.Length; i++)
-            {
-                if (counter == MaxDirtyColliders) break;
-
-                if (UnityEngine.Random.value > 0.5f &&
-                    !_dirtyColliders[i].activeSelf)
-                {
-                    _dirtyColliders[i].SetActive(true);
-                    counter++;
-                    Debug.LogWarning($"{this}: a dirty collider has spawned!");
-                }
-            }
-        }
-        while (counter != MaxDirtyColliders); // in case of bad odds 
-        */
     }
     public void IncreaseCleanRate()
     {
-        if (!_canClean) // no need to focus too much on cleaning
-        {
-            Debug.LogWarning("You can't clean yet!");
-            return;
-        }
-
-        // enables the decay mechanic to start again
-        // if (KitchenScore < 1) StartCoroutine(CO_DecayKitchen());
-
-        KitchenScore += UnityEngine.Random.Range(5, 10); // test value for now
+        KitchenScore += UnityEngine.Random.Range(10, 20); 
 
         if (KitchenScore > 100)
             KitchenScore = 100;
+
+        Debug.LogWarning($"Cleaned the kitchen! Current score: {KitchenScore}");
     }
 
     #endregion
@@ -122,41 +106,45 @@ public class KitchenCleaningManager : Singleton<KitchenCleaningManager>
         foreach (GameObject gameObject in _dirtyColliders)
             gameObject.SetActive(isActive);
     }
+    private void PrintScore() => Debug.Log($"{this} Kitchen Score: {KitchenScore}!");
 
     #endregion
     #region Enumerators
 
-    /* -OLD KITCHEN DECAY LOGIC- 
-    private IEnumerator CO_DecayKitchen()
+    public IEnumerator CO_EnableDirtyColliders()
     {
-        KitchenScore = 100;
+        yield return new WaitForSeconds(UnityEngine.Random.Range(20f, 30f));
+        
+        EnableRandomColliders();
+        
+        // Debug.LogWarning($"{this}: dirty colliders done spawning!");
+    }
 
-        yield return new WaitForSeconds(10f);
+    private IEnumerator CO_DirtifyKitchen()
+    {
+        yield return new WaitForSeconds(GRACE_PERIOD);
 
         while (KitchenScore > 0)
         {
-            yield return new WaitForSeconds(_decayTimer);
-            KitchenScore -= _decayRate;
+            yield return new WaitForSeconds(DIRTY_INTERVAL);
+            KitchenScore -= DIRTY_RATE;
+            Debug.LogWarning($"Current kitchen score: {KitchenScore}");
 
-            if (KitchenScore < 70f && !_canClean)
+
+            if (KitchenScore < 0)
             {
-                _canClean = true;
-                EnableAllColliders(true);
-            }
-            else if (KitchenScore > _cleanlinessThreshold)
-            {
-                _canClean = false;
-                EnableAllColliders(false);
+                KitchenScore = 0f;
+                Debug.LogWarning("Kitchen is fully dirty!");
             }
         }
     }
-    */
-    public IEnumerator CO_EnableDirtyColliders()
-    {
-        yield return new WaitForSeconds(ONE_MINUTE);
-        EnableRandomColliders();
-        Debug.LogWarning($"{this}: dirty colliders done spawning!");
-    }
+
+    #region Helpers
+
+    private void StartDirtifying() => StartCoroutine(CO_DirtifyKitchen());
+    private void DisableAllColliders() => EnableAllColliders(false);
+    
+    #endregion
 
     #endregion
 }

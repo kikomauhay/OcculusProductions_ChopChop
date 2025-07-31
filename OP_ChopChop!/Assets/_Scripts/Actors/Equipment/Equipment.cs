@@ -43,8 +43,7 @@ public abstract class Equipment : MonoBehaviour
         if (_isDeveloperMode)
             Debug.LogWarning($"{this} is developer mode: {_isDeveloperMode}");
 
-        if (_interactable == null)
-            Debug.LogWarning($"Null reference for {_interactable}");
+        // if (_interactable == null) Debug.LogWarning($"Null reference for {_interactable}");
     }
     protected virtual void Start() 
     {
