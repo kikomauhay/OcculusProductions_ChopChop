@@ -16,32 +16,27 @@ public class Water : MonoBehaviour
     private void OnDisable() => SoundManager.Instance.StopSound();
     private void OnTriggerEnter(Collider other)
     {
+        HandWashing handWash = other.gameObject.GetComponent<HandWashing>();
+
         if (other.gameObject.GetComponent<Sponge>() != null)
             other.gameObject.GetComponent<Sponge>().SetWet();
             
-        if (other.gameObject.GetComponent<HandWashing>() != null)
+        if (handWash != null)
         {
-            HandWashing handWash = other.gameObject.GetComponent<HandWashing>();
-
             if (!handWash.IsWet)
-                handWash.ToggleWet();
-                // Debug.LogWarning($" Hand Status: {handWash.IsWet}");
+                handWash.Wet();
         }
     }
-    private void OnTriggerStay(Collider other)
+
+    private void OnTriggerExit(Collider other)
     {
-        if (!_isTutorial) return;
+        HandWashing handWash = other.gameObject.GetComponent<HandWashing>();
 
-        if (other.gameObject.GetComponent<HandWashing>() == null) return;
-
-        // spanwning bubbles at an interval
-        _cooldownTimer -= Time.deltaTime;
-        if (_cooldownTimer <= 0f)
+        if (handWash != null)
         {
-            SpawnManager.Instance.SpawnVFX(VFXType.BUBBLE, transform, 2f);
-            _cooldownTimer = _cooldownInterval;
+            handWash.Dry();
         }
     }
 
-#endregion
+    #endregion
 }
