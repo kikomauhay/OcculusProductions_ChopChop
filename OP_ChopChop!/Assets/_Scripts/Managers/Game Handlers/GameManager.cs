@@ -276,7 +276,9 @@ public class GameManager : Singleton<GameManager>
     private void EnterTraining()
     {
         SoundManager.Instance.StopMusic();
-        SoundManager.Instance.PlayMusic("training bgm");
+        
+        if (TutorialDone)
+            SoundManager.Instance.PlayMusic("training bgm");
     }
 
     #endregion
