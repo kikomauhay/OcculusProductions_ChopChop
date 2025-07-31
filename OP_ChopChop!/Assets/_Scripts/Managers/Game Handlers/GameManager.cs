@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -198,7 +199,11 @@ public class GameManager : Singleton<GameManager>
 
         switch (chosenShift)
         {
-            case GameShift.Training: ResetScores(); break;
+            case GameShift.Training: 
+                ResetScores();
+                EnterTraining();
+                break;
+            
             case GameShift.PreService: DoPreService(); break;
             case GameShift.Service: DoService(); break;
             case GameShift.PostService: DoPostService(); break;
@@ -224,7 +229,7 @@ public class GameManager : Singleton<GameManager>
         MainMenuHandler.Instance.TogglePlayIcon(true);
         MainMenuHandler.Instance.ToggleLiveWallpaper(true);
 
-        Debug.LogWarning("Resetting MGS");
+        // Debug.LogWarning("Resetting MGS");
     }
     public void CheckRemainingCustomers()
     {
@@ -256,7 +261,6 @@ public class GameManager : Singleton<GameManager>
             Continue.action.performed += RemoveLogo;
         }
     }
-   
     private void ResetScores()
     {
         if (_customerSRScores.Count > 0)
@@ -268,6 +272,11 @@ public class GameManager : Singleton<GameManager>
 
         CustomersServed = 0;
         DisableGameOver();
+    }
+    private void EnterTraining()
+    {
+        SoundManager.Instance.StopMusic();
+        SoundManager.Instance.PlayMusic("training bgm");
     }
 
     #endregion
@@ -288,13 +297,13 @@ public class GameManager : Singleton<GameManager>
     }
     private void DoService()
     {
-        SoundManager.Instance.StopMusic();
         float timer = _isDeveloperMode ? _testTimer * 3f: FIVE_MINUTES; 
 
+        SoundManager.Instance.StopMusic();
         SoundManager.Instance.PlayMusic("service bgm");
+
         ClockScript.Instance.UpdateTimeRemaining(timer);
         ClockScript.Instance.UpdateNameOfPhaseTxt($"{CurrentShift}");
-        SoundManager.Instance.PlayMusic("bgm");
 
         OnStartService?.Invoke(); // all ingredients start decaying
         _finalScore = 0;
@@ -303,9 +312,10 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(KitchenCleaningManager.Instance.CO_EnableDirtyColliders());
         StartCoroutine(CO_ShiftCountdown(timer, GameShift.PostService));
     }
-    private void DoPostService() // rating calculations
+    private void DoPostService()
     {
         SoundManager.Instance.StopMusic();
+        SoundManager.Instance.PlayMusic("post-service bgm");
 
         EnableEODReceipt();
         OnEndService?.Invoke();
@@ -390,57 +400,13 @@ public class GameManager : Singleton<GameManager>
 
             _eodReceipt.SetCustomerRating(_eodReceipt.ConvertToScoreIndex(_finalCustomerScore));
             _eodReceipt.SetKitchenRating(_eodReceipt.ConvertToScoreIndex(_finalKitchenScore));
-            _eodReceipt.SetRestaurantRating(_eodReceipt.ConvertToScoreIndex(_finalScore));
-        }
-        
+
+            // changes difficulty once service ends
+            int finalIndexScore = _eodReceipt.ConvertToScoreIndex(_finalScore);
+            _eodReceipt.SetRestaurantRating(finalIndexScore);
+            ChangeDifficuty(finalIndexScore);
+        }        
     }
-    /*
-    private void DoCustomerRating()
-    {
-        if (_isTutorial) 
-        {
-            _eodReceipt.SetCustomerRating(0); // automatically gets a perfect score
-            return;
-        }
-
-        // value changes if the game is over
-        _finalCustomerScore = IsGameOver ? 0f : GetAverageOf(_customerSRScores);
-        int indexCustomerRating = _eodReceipt.ConvertToScoreIndex(_finalCustomerScore);
-
-        _eodReceipt.SetCustomerRating(indexCustomerRating);
-        Debug.LogWarning($"{this} Total Customer Rating: {_finalCustomerScore}");
-    }
-    private void DoKitchenRating() 
-    {   
-        if (_isTutorial) 
-        {
-            _eodReceipt.SetKitchenRating(0); // automatically gets a perfect score
-            return;
-        }
-
-        // value changes if the game is over
-        int indexKitchenRating = IsGameOver ? 4 : _eodReceipt.ConvertToScoreIndex(KitchenCleaningManager.Instance.KitchenScore);
-        _finalKitchenScore = IsGameOver ? 0 : KitchenCleaningManager.Instance.KitchenScore;
-
-        _eodReceipt.SetKitchenRating(indexKitchenRating);        
-        Debug.LogWarning($"{this} Total Kitchen Score: {_finalKitchenScore}");
-    }
-    private void DoPostServiceRating() // FINAL SCORE 
-    {
-        if (_isTutorial) 
-        {
-            _eodReceipt.SetRestaurantRating(0); // automatically gets a perfect score
-            return;
-        }
-
-        // value changes if the game is over
-        _finalScore = IsGameOver ? 4 : (_finalKitchenScore + _finalCustomerScore) / 2f;        
-        int indexPostServiceRating = _eodReceipt.ConvertToScoreIndex(_finalScore);
-
-        _eodReceipt.SetRestaurantRating(indexPostServiceRating);
-        ChangeDifficuty(indexPostServiceRating);
-    }
-    */
     private float GetAverageOf(List<float> list)
     {
         // prevents a div/0 case

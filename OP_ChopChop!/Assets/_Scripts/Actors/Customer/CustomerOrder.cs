@@ -128,15 +128,15 @@ public class CustomerOrder : MonoBehaviour
             OnBoardingHandler.Instance.OnTutorialEnd += DestoryGO;
 
         else
-            GameManager.Instance.OnEndService += DestroyCustomerUI;
+            GameManager.Instance.OnEndService += DestoryGO;
     }
     private void DeinitializeEvents()
     {
         if (_isTutorial)
             OnBoardingHandler.Instance.OnTutorialEnd -= DestoryGO;
 
-        else
-            GameManager.Instance.OnEndService -= DestroyCustomerUI;
+        else        
+            GameManager.Instance.OnEndService -= DestoryGO;
     }
     private void DestroyCustomerUI() => Destroy(_customerOrderUI);
     private void DestoryGO() => Destroy(gameObject);
