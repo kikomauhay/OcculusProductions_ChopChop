@@ -194,6 +194,7 @@ public class CustomerOrder : MonoBehaviour
 
         GameManager.Instance.IncrementCustomersServed();
         GameManager.Instance.AddMoney(Random.Range(_minCash, _maxCash));
+        ShopManager.Instance.UpatePlayerMoneyUI();
 
         MakeSeatEmpty();
     }
@@ -218,7 +219,7 @@ public class CustomerOrder : MonoBehaviour
         yield return new WaitForSeconds(REACTION_TIME);
 
         GameManager.Instance.IncrementCustomersServed();
-        StartCoroutine(GameManager.Instance.CO_CloseDownShop());
+        StartCoroutine(GameManager.Instance.CO_GameOver1());
     }
 
     #endregion

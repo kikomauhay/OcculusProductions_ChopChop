@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using System;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
 
 [RequireComponent(typeof(BoxCollider))]
 public class NEW_Dish : MonoBehaviour
@@ -33,10 +35,15 @@ public class NEW_Dish : MonoBehaviour
     private BoxCollider _collider;
     private NEW_Plate _plate;
     private const float DECAY_TIME = 30f;
-    
+
     #endregion
 
     #region Unity
+    private void OnEnable()
+    {
+        MainMenuHandler.Instance.OnResetMGS += ResetDish;
+        GameManager.Instance.OnStartService += ResetDish;
+    }
 
     private void Awake()
     {
@@ -47,10 +54,13 @@ public class NEW_Dish : MonoBehaviour
             Debug.LogWarning($"Missing elements in {_foodItems}");
 
         if (_isDevloperMode)
+        {
             Debug.Log($"{this} developer mode: {_isDevloperMode}");
+            InvokeRepeating("PrintState", 0f, 1f);
+        }
             
         if (_hasFood)
-            Debug.Log($"{this} developer mode: {_hasFood}");
+            Debug.Log($"{this} has food: {_hasFood}");
         
         foreach (GameObject item in _foodItems)
             item.SetActive(false);
@@ -65,14 +75,13 @@ public class NEW_Dish : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (_hasFood) return;
-
-        Ingredient ing = other.gameObject.GetComponent<Ingredient>();
-        UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
+        if (_hasFood) return;        
         
-        // nigiri creation
-        if (food != null)
+        // NIGIRI MAKING
+        if (other.gameObject.GetComponent<UPD_Food>() != null)
         {
+            UPD_Food food = other.gameObject.GetComponent<UPD_Food>();
+
             DoFoodCollision(food);
             Destroy(food.gameObject);
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform, 1f);
@@ -80,17 +89,19 @@ public class NEW_Dish : MonoBehaviour
             return;
         }
 
-        // sashimi creation
-        if (ing != null) 
+        // SASHIMI MAKING
+        if (other.gameObject.GetComponent<Ingredient>() != null) 
         {
+            Ingredient ing = other.gameObject.GetComponent<Ingredient>();
+
             if (ing.IngredientType == IngredientType.RICE)
             {
-                Debug.LogError("There is no option for onigiri yet!");
+                // Debug.LogError("There is no option for onigiri yet!");
                 return;
             }
             if (ing.SliceIndex != 3)
             {
-                Debug.LogError("Not the proper slice!");
+                // Debug.LogError("Not the proper slice!");
                 return;
             }
 
@@ -99,6 +110,11 @@ public class NEW_Dish : MonoBehaviour
             SpawnManager.Instance.SpawnVFX(VFXType.SMOKE, other.transform, 1f);
             SoundManager.Instance.PlaySound("poof");
         }         
+    }
+    private void OnDisable()
+    {
+        MainMenuHandler.Instance.OnResetMGS -= ResetDish;
+        GameManager.Instance.OnStartService -= ResetDish;
     }
 
     #region Testing
@@ -116,6 +132,12 @@ public class NEW_Dish : MonoBehaviour
     }
     private void Update() => Test();
 
+    private void PrintState()
+    {
+        Debug.Log($"{this} food condition: {FoodCondition}");
+        Debug.Log($"{this} food in plate: {DishPlatter}");
+    }
+
     #endregion
 
     #endregion
@@ -125,14 +147,21 @@ public class NEW_Dish : MonoBehaviour
     {
         if (!_hasFood) return;
 
-        _foodItems[(int)_dishPlatter].GetComponent<NEW_Platter>().ResetMaterial();
-        _foodItems[(int)_dishPlatter].SetActive(false);
-        
+        if ((int)_dishPlatter != -1)
+        {
+            _foodItems[(int)_dishPlatter].GetComponent<NEW_Platter>().ResetMaterial();
+            _foodItems[(int)_dishPlatter].SetActive(false);
+        }
+        else
+        {
+
+        }
+
+            ResetDish();
         StartCoroutine(CO_DelayedDisable());
     }
     public void SetFoodCondition(FoodCondition chosenState)
     {
-        // guard clauses
         if (_foodCondition != FoodCondition.CLEAN)    
         {
             // Debug.LogError("Dish is already bad!");
@@ -191,7 +220,7 @@ public class NEW_Dish : MonoBehaviour
 
         _hasFood = true;
         _collider.enabled = false;
-        Debug.Log($"{name} has food: {_hasFood}");
+        // Debug.Log($"{name} has food: {_hasFood}");
     }
     private void DoIngredientCollision(Ingredient ing)
     { 
@@ -229,6 +258,14 @@ public class NEW_Dish : MonoBehaviour
 
     #endregion
     #region Helpers
+    private void ResetDish()
+    {
+        _foodCondition = FoodCondition.CLEAN;
+        _dishPlatter = DishPlatter.EMPTY;
+
+        if (_isDevloperMode)
+            Debug.LogWarning($"{this} food condition is {_foodCondition}; dish platter is {_dishPlatter}");
+    }
 
     private void SetActiveDish(DishPlatter activeDishChosen)
     {
@@ -249,10 +286,7 @@ public class NEW_Dish : MonoBehaviour
         // Debug.LogWarning($"{name} score: {_dishScore}");
 
         if (!_isDevloperMode) 
-        {
             StartCoroutine(CO_StartRotting());
-            // Debug.LogWarning($"{gameObject.name} is expiring!");    
-        }
     }
 
     #endregion
@@ -260,7 +294,26 @@ public class NEW_Dish : MonoBehaviour
     #region Enumerators
 
     private IEnumerator CO_StartRotting()
-    { 
+    {
+        float counter = DECAY_TIME;
+
+        while (counter > 0)
+        {
+            if (_hasFood)
+            {
+                yield return new WaitForSeconds(1f);
+                counter--;
+            }
+            else yield break; // the coroutine stops once the player serves the food
+        }
+
+        if (_foodCondition == FoodCondition.CLEAN && _hasFood)
+        {
+            SetFoodCondition(FoodCondition.ROTTEN);
+            _plate.SetDirty();
+        }
+
+        /* -OLD LOGIC- 
         yield return new WaitForSeconds(DECAY_TIME);
 
         if (_foodCondition != FoodCondition.MOLDY)
@@ -268,6 +321,7 @@ public class NEW_Dish : MonoBehaviour
             SetFoodCondition(FoodCondition.ROTTEN);
             _plate.SetDirty();
         }
+        */
     }
     private IEnumerator CO_DelayedDisable()
     {

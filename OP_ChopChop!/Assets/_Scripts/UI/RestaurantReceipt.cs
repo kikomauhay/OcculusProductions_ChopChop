@@ -3,7 +3,10 @@ using TMPro;
 
 public class RestaurantReceipt : MonoBehaviour
 {
+    #region Members
+
     public int CustomersServed { get; set; }
+
     [SerializeField] private GameObject[] customerRatings;
     [SerializeField] private GameObject[] kicthenRatings;
     [SerializeField] private GameObject[] restaurantRatings;
@@ -13,24 +16,24 @@ public class RestaurantReceipt : MonoBehaviour
 
     //index is set according to order of rating which is S to F.
     //0 = S....4 = F.
-
-#region Ratings
+    #endregion
+    #region Ratings
 
     public void GiveTotalCustomerServed() => //Gives the text for the total customer Served;
-        totalCustomerServedTxt.text = CustomersServed.ToString();
+        totalCustomerServedTxt.text = $"{GameManager.Instance.CustomersServed}";
     
-    public void GiveCustomerRating(int index) =>
+    public void SetCustomerRating(int index) =>
         customerRatings[index].gameObject.SetActive(true);  
 
-    public void GiveKitchenRating(int index) => 
+    public void SetKitchenRating(int index) => 
         kicthenRatings[index].gameObject.SetActive(true);
 
-    public void GiveRestaurantRating(int index) => 
+    public void SetRestaurantRating(int index) => 
         restaurantRatings[index].gameObject.SetActive(true);
 
-#endregion
+    #endregion
 
-    public int ReturnScoretoIndexRating(float scoreToCheck) // return the int index for the rating for score to check
+    public int ConvertToScoreIndex(float scoreToCheck) // return the int index for the rating for score to check
     {
         if (scoreToCheck >= 90f) 
             return 0; // S
@@ -47,6 +50,10 @@ public class RestaurantReceipt : MonoBehaviour
         else if (scoreToCheck <= 59f)
             return 4; // F
         
-        else return -1;
+        else
+        {
+            Debug.LogWarning("Resulted in a negative number!");
+            return -1;
+        }            
     }
 }

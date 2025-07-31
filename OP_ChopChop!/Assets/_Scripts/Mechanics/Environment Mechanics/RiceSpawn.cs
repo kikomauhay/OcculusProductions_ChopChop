@@ -68,7 +68,7 @@ public class RiceSpawn : XRBaseInteractable
     }
     private void RiceEvent(SelectEnterEventArgs args)
     {
-        Debug.LogWarning($"Rice left: {_spawnCount}");
+        // Debug.LogWarning($"Rice left: {_spawnCount}");
 
         if(_tutorialComponent.IsCorrectIndex())
         {

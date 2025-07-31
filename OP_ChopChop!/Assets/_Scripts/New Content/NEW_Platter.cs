@@ -1,18 +1,8 @@
 using UnityEngine;
 
-/// <summary>
-/// 
-/// - Used for the child GameObjects in the reworked dish
-/// 
-/// WHAT THIS SCRIPT SHOULD DO:
-///     - Changes the material of the food bases on the dish's state.
-///     - 
-/// 
-/// </summary>
-
 public class NEW_Platter : MonoBehaviour
 {
-#region Members
+    #region Members
 
     [Tooltip("0 = clean, 1 = Rotten, 2 = Moldy")]
     [SerializeField] private Material[] _materials;
@@ -21,8 +11,9 @@ public class NEW_Platter : MonoBehaviour
 
     private Renderer _rend;
 
-#endregion 
-    
+    #endregion
+    #region Methods
+
     private void Awake()
     {
         _rend = GetComponent<Renderer>();
@@ -34,8 +25,6 @@ public class NEW_Platter : MonoBehaviour
             Debug.Log($"{name} developer mode: {_isDevloperMode}");
     }
 
-#region Testing
-
     private void Update() 
     {
         test();
@@ -46,9 +35,6 @@ public class NEW_Platter : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W) && _isDevloperMode) SetRotten();
         if (Input.GetKeyDown(KeyCode.E) && _isDevloperMode) SetMoldy();
     }
-#endregion
-
-#region Public
 
     public void ResetMaterial() // just makes the material clean again
     {
@@ -58,13 +44,13 @@ public class NEW_Platter : MonoBehaviour
     public void SetRotten()
     {
         _rend.materials = new Material[] { _materials[1], _dirtyOSM };
-        Debug.LogWarning($"{name} is rotten!");
+        // Debug.LogWarning($"{name} is rotten!");
     }        
     public void SetMoldy() 
     {
         _rend.materials = new Material[] { _materials[2], _dirtyOSM };
-        Debug.LogWarning($"{name} is moldy!");
+        // Debug.LogWarning($"{name} is moldy!");
     }
 
-#endregion
+    #endregion
 }

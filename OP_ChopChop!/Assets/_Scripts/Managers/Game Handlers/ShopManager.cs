@@ -177,7 +177,7 @@ public class ShopManager : StaticInstance<ShopManager>
         _orderBoxes.Clear();        
     }
 
-    private void UpatePlayerMoneyUI() => 
+    public void UpatePlayerMoneyUI() => 
         _txtPlayerMoney.text = GameManager.Instance.CurrentPlayerMoney.ToString();
 
 #endregion

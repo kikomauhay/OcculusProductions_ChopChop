@@ -6943,6 +6943,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 907829512341345655, guid: 737eec0da604cd246bb199bd9ceda74c,
+        type: 3}
+      propertyPath: _isTutorial
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1253274942555502584, guid: 737eec0da604cd246bb199bd9ceda74c,
         type: 3}
       propertyPath: m_RootOrder
