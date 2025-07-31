@@ -30,7 +30,7 @@ public class MainMenuHandler : StaticInstance<MainMenuHandler>
         _eodPanel.SetActive(!_eodPanel.activeSelf);
         btn_continue.SetActive(!btn_continue.activeSelf);
     }
-    public void ToggleLiveWallpaper() => _liveWallpaper.SetActive(!_liveWallpaper.activeSelf);
+    public void ToggleLiveWallpaper(bool isLive) => _liveWallpaper.SetActive(isLive);
 
     public void ExitSettingsPanel()
     {

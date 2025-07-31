@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using Unity.Mathematics;
 
 public class RestaurantReceipt : MonoBehaviour
 {
@@ -33,19 +32,19 @@ public class RestaurantReceipt : MonoBehaviour
 
     public int ReturnScoretoIndexRating(float scoreToCheck) // return the int index for the rating for score to check
     {
-        if (scoreToCheck >= 97f) 
+        if (scoreToCheck >= 90f) 
             return 0; // S
 
-        else if (scoreToCheck >= 93f &&  scoreToCheck <= 96f)
+        else if (scoreToCheck >= 80f &&  scoreToCheck <= 89f)
             return 1; // A
         
-        else if (scoreToCheck >= 89f && scoreToCheck <= 92f)
+        else if (scoreToCheck >= 70f && scoreToCheck <= 79f)
             return 2; // B
         
-        else if (scoreToCheck >= 85f && scoreToCheck <= 88f)
+        else if (scoreToCheck >= 60f && scoreToCheck <= 69f)
             return 3; // C
         
-        else if (scoreToCheck <= 84f)
+        else if (scoreToCheck <= 59f)
             return 4; // F
         
         else return -1;

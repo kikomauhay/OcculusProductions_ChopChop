@@ -53,7 +53,7 @@ public class NEW_Platter : MonoBehaviour
     public void ResetMaterial() // just makes the material clean again
     {
         _rend.materials = new Material[] { _materials[0] };
-        Debug.LogWarning($"{name} is clean!");
+        // Debug.LogWarning($"{name} is clean!");
     }
     public void SetRotten()
     {
