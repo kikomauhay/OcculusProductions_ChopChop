@@ -42,11 +42,11 @@ public class HandWashing : MonoBehaviour
             }
         }
 
-        if(otherHand != null)
+        if (otherHand != null)
         {
             if (!IsWet || !otherHand.IsWet) return;
             
-            if(!_washLogicRunning)
+            if (!_washLogicRunning)
             {
                 HandManager.Instance.ToggleBubblesOn();
                 StartCoroutine(WashLogic());
@@ -105,11 +105,9 @@ public class HandWashing : MonoBehaviour
         {
             r.materials = new Material[] { _handMaterial};
         }
-
     }
 
     public void Wet() => IsWet = true;
-
     public void Dry() => StartCoroutine(WetToggle());
     
 #endregion
@@ -122,12 +120,11 @@ public class HandWashing : MonoBehaviour
         IsWet = false;
         HandManager.Instance.ToggleBubblesOff();
     }
-
     private IEnumerator WashLogic()
     {
         _washLogicRunning = true;
         yield return new WaitForSeconds(_timer);
-        OnHandCleaned?.Invoke(20);
+        OnHandCleaned?.Invoke(30);
         _washLogicRunning = false;
     }
 

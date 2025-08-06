@@ -91,9 +91,9 @@ public class CustomerOrder : MonoBehaviour
         switch (GameManager.Instance.Difficulty) // will decrease overtime
         {
             // updated starting score to have an emphasis on food quality
-            case GameDifficulty.EASY: _customerScore = 150f; break;
-            case GameDifficulty.NORMAL: _customerScore = 125f; break;
-            case GameDifficulty.HARD: _customerScore = 110f; break;
+            case GameDifficulty.EASY: _customerScore = 250f; break;
+            case GameDifficulty.NORMAL: _customerScore = 225f; break;
+            case GameDifficulty.HARD: _customerScore = 200f; break;
             default: break;
         }
     }
