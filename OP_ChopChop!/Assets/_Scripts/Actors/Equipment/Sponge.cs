@@ -18,16 +18,18 @@ public class Sponge : MonoBehaviour
 
     #endregion
     #region Private
+
     private MeshRenderer _rend;
     private XRGrabInteractable _interactable;
     private Vector3 _startPosition;
+    private Quaternion _startRotation;
     private const float WET_DURATION = 30f;
 
     #endregion
 
     #region Unity
 
-    private void Awake() 
+    private void Awake()
     {
         _rend = GetComponent<MeshRenderer>();
         _interactable = GetComponent<XRGrabInteractable>();
@@ -36,7 +38,7 @@ public class Sponge : MonoBehaviour
             Debug.LogWarning($"{this} is clean: {_isClean}");
 
         if (_isWet)
-           Debug.LogWarning($"{this} is wet: {_isWet}");
+            Debug.LogWarning($"{this} is wet: {_isWet}");
     }
     private void Start()
     {
@@ -48,22 +50,25 @@ public class Sponge : MonoBehaviour
         _isClean = true;
 
         _startPosition = transform.position;
+        _startRotation = transform.rotation;
 
-        if(_interactable != null)
+        if (_interactable != null)
             HandManager.Instance.RegisterGrabbable(_interactable);
     }
-
     private void OnDestroy()
     {
         GameManager.Instance.OnStartService -= ResetPosition;
         OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
     }
 
-#endregion
+    #endregion
+    #region Public
 
-#region Public
-
-    public void ResetPosition() => transform.position = _startPosition;
+    public void ResetPosition()
+    {
+        transform.position = _startPosition;
+        transform.rotation = _startRotation;
+    }
     public void HitTheGround()
     {
         transform.rotation = Quaternion.identity;
@@ -82,9 +87,10 @@ public class Sponge : MonoBehaviour
         _isWet = false;
         _isClean = false;
         _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
-    } 
+    }
 
-#endregion
+    #endregion
+    #region Enumerators
 
     private IEnumerator DrySponge()
     {
@@ -95,4 +101,6 @@ public class Sponge : MonoBehaviour
         _rend.materials = new Material[] { _cleanMat };
         _isWet = false;
     }
+    
+    #endregion
 }

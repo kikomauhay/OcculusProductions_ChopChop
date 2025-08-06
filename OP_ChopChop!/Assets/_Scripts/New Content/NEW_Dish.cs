@@ -1,8 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using System;
-using System.Runtime.CompilerServices;
-using System.ComponentModel;
 
 [RequireComponent(typeof(BoxCollider))]
 public class NEW_Dish : MonoBehaviour
@@ -152,12 +150,8 @@ public class NEW_Dish : MonoBehaviour
             _foodItems[(int)_dishPlatter].GetComponent<NEW_Platter>().ResetMaterial();
             _foodItems[(int)_dishPlatter].SetActive(false);
         }
-        else
-        {
 
-        }
-
-            ResetDish();
+        ResetDish();
         StartCoroutine(CO_DelayedDisable());
     }
     public void SetFoodCondition(FoodCondition chosenState)
