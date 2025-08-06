@@ -224,6 +224,7 @@ public class GameManager : Singleton<GameManager>
     {
         ChangeShift(GameShift.PreService);
         ResetScores();
+        _eodReceipt.ClearRatings();
 
         MainMenuHandler.Instance.ToggleEODPanel(false);
         MainMenuHandler.Instance.TogglePlayIcon(true);

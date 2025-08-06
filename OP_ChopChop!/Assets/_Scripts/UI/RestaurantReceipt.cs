@@ -45,6 +45,24 @@ public class RestaurantReceipt : MonoBehaviour
     public void SetRestaurantRating(int index) => 
         restaurantRatings[index].gameObject.SetActive(true);
 
+    public void ClearRatings()
+    {
+        for(int i = 0; i< customerRatings.Length; i++)
+        {
+            customerRatings[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < kicthenRatings.Length; i++)
+        {
+            kicthenRatings[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < restaurantRatings.Length; i++)
+        {
+            restaurantRatings[i].gameObject.SetActive(false);
+        }
+    }
+
     #endregion
 
     public int ConvertToScoreIndex(float scoreToCheck) // return the int index for the rating for score to check
