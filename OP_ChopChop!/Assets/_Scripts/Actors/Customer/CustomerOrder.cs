@@ -178,10 +178,12 @@ public class CustomerOrder : MonoBehaviour
     private IEnumerator CO_CustomerLostPatience() // customer wasn't served
     {
         _appearance.SetAngryEmotion(2);
+        _customerScore = 0f;
         SoundManager.Instance.PlaySound("cat angry");
         // yield return new WaitForSeconds(_reactionTimer);
         yield return new WaitForSeconds(REACTION_TIME);
 
+        GameManager.Instance.IncrementCustomersServed();
         MakeSeatEmpty();
     }
     public IEnumerator CO_HappyReaction() // customer got the correct order
