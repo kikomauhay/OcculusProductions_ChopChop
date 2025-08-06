@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -21,12 +20,10 @@ public class HandManager : Singleton<HandManager>
     #region Unity
 
     protected override void OnApplicationQuit() => base.OnApplicationQuit();
-
     private void OnEnable()
     {
         HandWashing.OnHandCleaned += ResetHandUsage;
     }
-
     private void OnDisable()
     {
         HandWashing.OnHandCleaned -= ResetHandUsage;
@@ -39,7 +36,7 @@ public class HandManager : Singleton<HandManager>
 
     protected override void Awake()
     {
-        _handUsage = 10;
+        _handUsage = 15;
         base.Awake();
     }
 
@@ -87,7 +84,7 @@ public class HandManager : Singleton<HandManager>
                 _vfxStinky[i].SetActive(true);
             }
         }
-        else if (_handUsage <= 10)
+        else if (_handUsage <= 15)
         {
             foreach (Collider collider in _handWashColliders)
             {
@@ -95,7 +92,7 @@ public class HandManager : Singleton<HandManager>
                 collider.gameObject.GetComponent<HandWashing>().WarningIndicator();
             }
         }
-        else if (_handUsage > 10)
+        else if (_handUsage > 15)
         {
             foreach (Collider collider in _handWashColliders)
             {
