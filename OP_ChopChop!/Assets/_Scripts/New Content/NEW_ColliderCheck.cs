@@ -76,8 +76,8 @@ public class NEW_ColliderCheck : MonoBehaviour
 
             if (GameManager.Instance.CurrentShift == GameShift.Training)
             {
-                dish.DisableDish();
                 plate.Served();
+                dish.DisableDish();
             }
         }
     }
@@ -117,8 +117,8 @@ public class NEW_ColliderCheck : MonoBehaviour
     private void DoDishCollision(NEW_Dish dish, NEW_Plate plate)
     {
         CheckFoodConition(dish);
-        dish.DisableDish();
         plate.Served();
+        dish.DisableDish();
     }
     private void CheckFoodConition(NEW_Dish dish)
     {

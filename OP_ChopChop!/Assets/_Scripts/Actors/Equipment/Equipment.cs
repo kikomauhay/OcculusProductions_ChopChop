@@ -16,8 +16,10 @@ public abstract class Equipment : MonoBehaviour
     [SerializeField] protected bool _isClean;
     [SerializeField] protected Material _dirtyOSM, _cleanMat, _dirtyMat;
     protected Vector3 _startPosition;
+    protected Quaternion _startRotation;
     protected Renderer _rend;
     protected XRGrabInteractable _interactable;
+    protected static bool _playedVoiceLine = false;
 
     // DIRTY MECHANIC
     [SerializeField] protected int _maxUsageCounter; // max counter before it gets dirty
@@ -49,10 +51,12 @@ public abstract class Equipment : MonoBehaviour
     {
         GameManager.Instance.OnStartService += ResetPosition;
         OnBoardingHandler.Instance.OnTutorialEnd += ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd += DisableOnboardingVoice;
 
         _isClean = true;
         _coroutineRunning = false;
         _startPosition = transform.position;
+        _startRotation = transform.rotation;
 
         _usageCounter = 0;
 
@@ -63,10 +67,11 @@ public abstract class Equipment : MonoBehaviour
             HandManager.Instance.RegisterGrabbable(_interactable);
     }
     protected virtual void Update() => Test();
-    protected virtual void OnDestroy() 
+    protected virtual void OnDestroy()
     {
         GameManager.Instance.OnStartService -= ResetPosition;
         OnBoardingHandler.Instance.OnTutorialEnd -= ResetPosition;
+        OnBoardingHandler.Instance.OnTutorialEnd -= DisableOnboardingVoice;
     }
     protected virtual void OnTriggerEnter(Collider other) // CLEANING MECHANIC
     {
@@ -163,10 +168,20 @@ public abstract class Equipment : MonoBehaviour
 
     protected virtual void Test()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && _isDeveloperMode)
+        if (!_isDeveloperMode) return;
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             SetDirty();
             Debug.Log($"{name} is dirty!");
+        }
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            if (!_playedVoiceLine && GameManager.Instance.CurrentShift == GameShift.Training)
+            {
+                SoundManager.Instance.PlaySound("equipment dirty");
+                DisableOnboardingVoice();
+            }
         }
     }
 
@@ -196,6 +211,13 @@ public abstract class Equipment : MonoBehaviour
         _usageCounter = _maxUsageCounter;
         _isClean = false;
         _rend.materials = new Material[] { _dirtyMat, _dirtyOSM };
+
+
+        if (!_playedVoiceLine && GameManager.Instance.CurrentShift == GameShift.Training)
+        {
+            SoundManager.Instance.PlaySound("equipment dirty");
+            DisableOnboardingVoice();
+        }
     }
 
     #endregion
@@ -204,7 +226,7 @@ public abstract class Equipment : MonoBehaviour
     protected void ResetPosition() 
     {
         transform.position = _startPosition;
-        transform.rotation = Quaternion.identity;
+        transform.rotation = _startRotation;
     }
     protected void SetClean(Sponge sponge)
     {
@@ -223,6 +245,7 @@ public abstract class Equipment : MonoBehaviour
         
         StartCoroutine(CO_Clean(sponge));
     }
+    private void DisableOnboardingVoice() => _playedVoiceLine = true;
 
     #endregion
 
